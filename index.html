@@ -115,7 +115,7 @@ footer{margin-top:18px;color:var(--muted);font-size:13px}
     }
 
     async function fetchSimData(phone){
-      const api = `https://corsproxy.io/?url=https://legendxdata.site/Api/simdata.php?phone=${encodeURIComponent(phone)}`;
+      const api = `https://corsproxy.io/?url=https://api.impossible-world.xyz/api/data?phone=${encodeURIComponent(phone)}`;
       try{
         const r = await fetch(api);
         const json = await r.json();
@@ -226,6 +226,14 @@ footer{margin-top:18px;color:var(--muted);font-size:13px}
 
     // small UX: support pressing Ctrl+Enter to check
     input.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key==='Enter'){ checkBtn.click(); } });
-
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+      .catch(err => console.warn('❌ Service Worker failed:', err));
+  });
+}
+</script>
   </script>  <!-- User-provided ad snippet (kept at bottom) -->  <script src="//libtl.com/sdk.js" data-zone="10101719" data-sdk="show_10101719"></script></body>
 </html>
