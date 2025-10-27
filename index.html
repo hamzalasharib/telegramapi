@@ -1,0 +1,231 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SIM Data Checker</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#06b6d4}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef6;background:linear-gradient(180deg,#071024 0%, #071827 100%)}
+    .wrap{max-width:920px;margin:32px auto;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+    header{display:flex;align-items:center;gap:12px}
+    header h1{margin:0;font-size:20px}
+    p.lead{margin:6px 0 18px;color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+textarea{width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;resize:vertical}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+button{background:var(--accent);border:0;color:#022;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);font-weight:600}
+.result{background:var(--card);padding:12px;border-radius:8px;min-height:120px;color:#d7e9f5}
+.record{border-bottom:1px dashed rgba(255,255,255,0.03);padding:8px 0}
+.links{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.links a{display:inline-block;padding:8px;border-radius:8px;text-decoration:none;background:rgba(255,255,255,0.02);color:var(--muted)}
+footer{margin-top:18px;color:var(--muted);font-size:13px}
+.ad-btn{background:#ffd166;color:#052b2e}
+.small{font-size:13px;color:var(--muted)}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'><circle cx='12' cy='12' r='11' fill='%2306b6d4'/><path d='M7 13c1-4 6-8 10-2' stroke='%23002225' stroke-width='1.2' fill='none'/></svg>" alt="logo" width="36" height="36" />
+      <div>
+        <h1>SIM Data Checker</h1>
+        <p class="lead">Paste one or multiple phone numbers (comma, newline, or space separated).</p>
+      </div>
+    </header><div class="grid">
+  <div>
+    <label class="small">Phone numbers</label>
+    <textarea id="input" placeholder="e.g. 923001234567, 03001234567 or one per line"></textarea>
+    <div style="height:10px"></div>
+    <div class="controls">
+      <button id="check">Check Numbers</button>
+      <button id="clear" class="ghost">Clear</button>
+      <div style="flex:1"></div>
+      <div class="small">Tip: "Watch Ad" button to search another number .</div>
+    </div>
+
+    <div class="links">
+      <a href="https://t.me/hamzaeditz2" target="_blank">📢 Telegram Channel</a>
+      <a href="https://youtube.com/@hamzashafiq786" target="_blank">▶️ YouTube</a>
+      <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank">💬 WhatsApp Group</a>
+    </div>
+  </div>
+
+  <div>
+    <div class="result" id="result">
+      <div id="status">Ready — enter a number and press <strong>Check Numbers</strong>.</div>
+      <div id="records" style="margin-top:12px"></div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button id="watchAd" class="ad-btn" style="display:none">🎬 Watch Ad</button>
+      <button id="teleReady" class="ghost">Telegram: Ready</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+
+</footer>
+
+  </div>  <script>
+    // Telegram WebApp integration (safe - wrapped in try/catch)
+    function telegramReady() {
+      try{
+        if (window.Telegram && window.Telegram.WebApp) {
+          window.Telegram.WebApp.ready();
+          // expand if available - wrap to avoid exceptions
+          if (typeof window.Telegram.WebApp.expand === 'function') {
+            window.Telegram.WebApp.expand();
+          }
+          document.getElementById('teleReady').textContent = 'Telegram: WebApp ready ✅';
+        } else {
+          document.getElementById('teleReady').textContent = 'Telegram: not detected';
+        }
+      }catch(e){console.warn('Telegram ready failed',e);document.getElementById('teleReady').textContent='Telegram: error'}
+    }
+
+    // Call on load
+    window.addEventListener('load',()=>{
+      telegramReady();
+      // optional: expand the Telegram webview after tiny delay
+      setTimeout(()=>{try{if(window.Telegram&&window.Telegram.WebApp&&typeof window.Telegram.WebApp.expand==='function')window.Telegram.WebApp.expand();}catch(e){}},300);
+    });
+
+    const input = document.getElementById('input');
+    const checkBtn = document.getElementById('check');
+    const clearBtn = document.getElementById('clear');
+    const copyBtn = document.getElementById('copy');
+    const watchAdBtn = document.getElementById('watchAd');
+    const statusEl = document.getElementById('status');
+    const recordsEl = document.getElementById('records');
+
+    function sanitizeNumbers(raw){
+      if(!raw) return [];
+      // split by comma, newline, space
+      const parts = raw.split(/[\n,;\s]+/).map(s=>s.trim()).filter(Boolean);
+      // keep only digits, allow leading +, but remove other chars
+      const cleaned = parts.map(p=>p.replace(/[^+0-9]/g,'')).filter(p=>/\d{10,}/.test(p));
+      // dedupe preserving order
+      const seen=new Set();
+      return cleaned.filter(x=>{if(seen.has(x))return false;seen.add(x);return true});
+    }
+
+    async function fetchSimData(phone){
+      const api = `https://corsproxy.io/?url=https://legendxdata.site/Api/simdata.php?phone=${encodeURIComponent(phone)}`;
+      try{
+        const r = await fetch(api);
+        const json = await r.json();
+        return json;
+      }catch(e){
+        return {error: String(e)};
+      }
+    }
+
+    function renderRecords(phone, data){
+      const container = document.createElement('div');
+      container.className='record';
+      if(!data){
+        container.innerHTML = `<strong>${phone}</strong><div class=small>❌ No data</div>`;
+        return container;
+      }
+      if(data.error){
+        container.innerHTML = `<strong>${phone}</strong><div class=small>⚠️ Error: ${escapeHtml(data.error)}</div>`;
+        return container;
+      }
+      if(data.success && Array.isArray(data.records) && data.records.length>0){
+        let html = `<strong>${phone} — ✅ ${data.records.length} record(s)</strong>`;
+        data.records.forEach(rec=>{
+          html += `<div style="margin-top:6px">👤 <strong>${escapeHtml(rec.Name||'N/A')}</strong><br>📞 ${escapeHtml(rec.Mobile||'N/A')} • 🆔 ${escapeHtml(rec.CNIC||'N/A')}<br>🏠 ${escapeHtml(rec.Address||'N/A')}<br>🌍 ${escapeHtml(rec.Country||'N/A')}</div>`;
+        });
+        container.innerHTML = html;
+        return container;
+      }
+      // fallback
+      container.innerHTML = `<strong>${phone}</strong><div class=small>❌ No records found</div>`;
+      return container;
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    checkBtn.addEventListener('click', async ()=>{
+      const raw = input.value;
+      const numbers = sanitizeNumbers(raw);
+      recordsEl.innerHTML='';
+      if(numbers.length===0){
+        statusEl.textContent = 'Please enter at least one valid phone number (digits, min 10).';
+        return;
+      }
+
+      // Show ad button only when exactly 2 or 3 numbers
+      if(numbers.length>=2 && numbers.length<=3){
+        watchAdBtn.style.display='inline-block';
+      } else {
+        watchAdBtn.style.display='none';
+      }
+
+      statusEl.textContent = `🔍 Fetching data for ${numbers.length} number(s)...`;
+
+      // For each number fetch and render as results come in (progressive display)
+      for(const phone of numbers){
+        const placeholder = document.createElement('div');
+        placeholder.className='record';
+        placeholder.innerHTML = `<strong>${phone}</strong><div class=small>Fetching…</div>`;
+        recordsEl.appendChild(placeholder);
+
+        // fetch and then replace
+        const data = await fetchSimData(phone);
+        const node = renderRecords(phone, data);
+        recordsEl.replaceChild(node, placeholder);
+      }
+
+      statusEl.textContent = 'Done.';
+    });
+
+    clearBtn.addEventListener('click', ()=>{input.value='';recordsEl.innerHTML='';statusEl.textContent='Cleared.';watchAdBtn.style.display='none';});
+    copyBtn.addEventListener('click', ()=>{navigator.clipboard.writeText(recordsEl.innerText||'').then(()=>{statusEl.textContent='Results copied to clipboard ✅';}).catch(e=>{statusEl.textContent='Copy failed';});});
+
+    // Watch Ad button - fire-and-forget logic
+    function triggerAdFireAndForget(){
+      // If a specific ad SDK is desired, inject its script tag and do not await any response.
+      try{
+        // example: libtl ad injection (user-provided snippet)
+        const s = document.createElement('script');
+        s.src = '//libtl.com/sdk.js';
+        s.setAttribute('data-zone','10101719');
+        s.setAttribute('data-sdk','show_10101719');
+        s.async = true;
+        // Append and do not wait for load — fire-and-forget
+        document.body.appendChild(s);
+
+        // For additional safety, call a global ad trigger if the SDK exposes it (non-blocking)
+        setTimeout(()=>{try{if(window.libTL && typeof window.libTL.show==='function') window.libTL.show('10101719');}catch(e){}},300);
+
+        // update UI
+        statusEl.textContent = 'Ad triggered — thank you for watching 🎬';
+      }catch(e){
+        console.warn('Ad trigger failed',e);
+        statusEl.textContent = 'Ad trigger failed';
+      }
+    }
+
+    watchAdBtn.addEventListener('click', ()=>{
+      triggerAdFireAndForget();
+      // Do not block — ad is fire-and-forget. Optionally you can continue to fetch or show content.
+    });
+
+    // Helper: detect if app is inside Telegram WebApp
+    (function detectTelegram(){
+      try{ if(window.Telegram && window.Telegram.WebApp){ document.getElementById('teleReady').style.display='inline-block'; } }catch(e){}
+    })();
+
+    // small UX: support pressing Ctrl+Enter to check
+    input.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key==='Enter'){ checkBtn.click(); } });
+
+  </script>  <!-- User-provided ad snippet (kept at bottom) -->  <script src="//libtl.com/sdk.js" data-zone="10101719" data-sdk="show_10101719"></script></body>
+</html>
