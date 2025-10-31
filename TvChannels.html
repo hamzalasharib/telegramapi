@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📺 IPTV Player</title>
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- Basic Setup --- */
+    * { 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      margin: 0;
+      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f12; /* Screenshot jaisa dark background */
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* --- Professional Purple Gradient --- */
+    :root {
+      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+      --primary-color: #8E2DE2;
+      --bg-dark: #0f0f12;
+      --bg-light: #1f1f1f;
+      --bg-lighter: #2a2a2a;
+      --border-color: #333;
+    }
+
+    /* --- Header & Filters --- */
+    header {
+      background: var(--bg-dark);
+      padding: 15px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    header h1 { 
+      font-size: 1.5rem; 
+      margin: 0;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* --- Screenshot Style Inputs & Selects --- */
+    select, input[type="text"] {
+      background: var(--bg-light);
+      color: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: "Poppins", sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(142, 45, 226, 0.5); /* Glowing effect jaisa screenshot mein hai */
+    }
+
+    /* --- Player Container --- */
+    #playerContainer {
+      position: sticky;
+      top: 80px; /* Header ke height ke hisab se adjust karein */
+      z-index: 90;
+      background: #000;
+      padding: 10px;
+      border-radius: 12px;
+      margin: 10px 15px 0 15px;
+      border: 1px solid var(--border-color);
+    }
+
+    .video-js {
+      width: 100% !important;
+      height: auto !important;
+      max-height: 55vh;
+      border-radius: 8px; /* Rounded corners for player */
+    }
+
+    /* * ===================================
+     * === ✅ FULLSCREEN FIX YAHAN HAI ===
+     * ===================================
+     */
+    .video-js.vjs-fullscreen,
+    .vjs-fullscreen video {
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      /* * 'cover' (jo pehle tha) video ko zoom/crop karta hai.
+       * 'contain' video ko poora dikhata hai (black bars ke saath).
+       */
+      object-fit: contain !important; /* YEH FIX HAI */
+      border-radius: 0 !important;
+    }
+
+    .video-js video {
+      object-fit: contain; /* Normal mode mein bhi contain rakhein */
+    }
+
+    /* --- Channel Grid --- */
+    #channelContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    /* --- Screenshot Style Channel Cards --- */
+    .channel {
+      position: relative;
+      background: var(--bg-light);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      border: 2px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .channel:hover {
+      transform: translateY(-5px);
+      background: var(--bg-lighter);
+      border-color: #555;
+    }
+
+    .channel img {
+      width: 100%;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 6px;
+      background: #333; /* Placeholder background agar logo transparent ho */
+      margin-bottom: 10px;
+    }
+
+    .channel p {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 5px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .channel small {
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    /* --- "Now Playing" (Purple Glow) --- */
+    .now-playing {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 15px rgba(142, 45, 226, 0.7); /* Purple glow */
+      transform: translateY(-5px);
+    }
+
+    .live-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: var(--primary-gradient); /* Purple gradient badge */
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    /* --- Screenshot Style "Load More" Button --- */
+    #loadMore {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      margin: 10px auto 30px auto; /* Bottom margin */
+      display: block;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    #loadMore:hover { 
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    /* --- Mobile Responsive --- */
+    @media (max-width: 768px) {
+      #channelContainer {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        padding: 15px;
+        gap: 10px;
+      }
+      header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #playerContainer {
+        top: 190px; /* Mobile header ke hisab se */
+        margin: 10px 10px 0 10px;
+      }
+      .video-js {
+        max-height: 35vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <h1>📺 IPTV Player</h1>
+    <input id="searchBox" type="text" placeholder="🔍 Search channels..." />
+    <select id="countrySelect"></select>
+    <select id="languageSelect"></select>
+  </header>
+
+  <div id="playerContainer">
+    <video id="videoPlayer" class="video-js vjs-fluid vjs-big-play-centered" autoplay muted controls></video>
+  </div>
+
+  <main id="channelContainer"></main>
+  <button id="loadMore">Load More</button>
+
+  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    // Aapka JavaScript code yahan bilkul waise hi rahega
+    // ... (Same JavaScript as before) ...
+    const channelContainer = document.getElementById("channelContainer");
+    const videoElement = document.getElementById("videoPlayer");
+    const videoPlayer = videojs(videoElement, { controls: true, preload: "auto" });
+    const loadMoreBtn = document.getElementById("loadMore");
+    const searchBox = document.getElementById("searchBox");
+    const countrySelect = document.getElementById("countrySelect");
+    const languageSelect = document.getElementById("languageSelect");
+
+    let channels = [];
+    let logos = [];
+    let countries = [];
+    let streams = [];
+    let hls;
+    let displayed = 0;
+    const perPage = 20; 
+    let currentChannelDiv = null;
+
+    async function loadData() {
+      try {
+        const [channelRes, logoRes, countryRes, streamRes] = await Promise.all([
+          fetch("https://iptv-org.github.io/api/channels.json"),
+          fetch("https://iptv-org.github.io/api/logos.json"),
+          fetch("https://iptv-org.github.io/api/countries.json"),
+          fetch("https://iptv-org.github.io/api/streams.json")
+        ]);
+
+        channels = await channelRes.json();
+        logos = await logoRes.json();
+        countries = await countryRes.json();
+        streams = await streamRes.json();
+
+        populateFilters();
+        renderChannels();
+      } catch (error) {
+        console.error("Failed to load data:", error);
+        channelContainer.innerHTML = "<p style='text-align: center; color: #ff5555;'>Error loading channels. Please try refreshing.</p>";
+      }
+    }
+
+    function populateFilters() {
+      countrySelect.innerHTML =
+        '<option value="">🌍 All Countries</option>' +
+        countries.map(c => `<option value="${c.code}">${c.flag} ${c.name}</option>`).join("");
+
+      // Unique languages from countries list
+      const allLangs = [...new Set(countries.flatMap(c => c.languages))].sort((a, b) => a.name.localeCompare(b.name));
+      languageSelect.innerHTML =
+        '<option value="">🈯 All Languages</option>' +
+        allLangs.map(l => `<option value="${l.code}">${l.name}</option>`).join("");
+    }
+
+    function renderChannels(reset = true) {
+      if (reset) {
+        channelContainer.innerHTML = "";
+        displayed = 0;
+      }
+
+      const search = searchBox.value.toLowerCase();
+      const country = countrySelect.value;
+      const language = languageSelect.value;
+
+      const filtered = channels.filter(ch => {
+        const matchName = ch.name.toLowerCase().includes(search);
+        const matchCountry = !country || ch.country === country;
+        
+        const countryData = countries.find(c => c.code === ch.country);
+        const channelLangs = countryData ? countryData.languages.map(l => l.code) : [];
+        const matchLang = !language || channelLangs.includes(language);
+
+        return matchName && matchCountry && matchLang;
+      });
+
+      const slice = filtered.slice(displayed, displayed + perPage);
+      slice.forEach(ch => {
+        const logo = logos.find(l => l.channel === ch.id);
+        const div = document.createElement("div");
+        div.className = "channel";
+        div.setAttribute("title", ch.name); // Tooltip for long names
+
+        div.innerHTML = `
+          <img src="${logo ? logo.url : 'https://i.imgur.com/v1hGHYE.png'}" alt="${ch.name} logo" onerror="this.src='https://i.imgur.com/v1hGHYE.png';">
+          <p>${ch.name}</p>
+          <small>${getFlag(ch.country)} ${ch.country}</small>
+        `;
+
+        const stream = streams.find(s => s.channel === ch.id && s.status === 'online' && s.url) || 
+                       streams.find(s => s.channel === ch.id && s.url); // Fallback
+
+        const streamUrl = stream ? stream.url : "";
+        div.onclick = () => playChannel(streamUrl, ch.name, div);
+        channelContainer.appendChild(div);
+      });
+
+      displayed += perPage;
+      loadMoreBtn.style.display = displayed < filtered.length ? "block" : "none";
+      
+      if (filtered.length === 0 && reset) {
+         channelContainer.innerHTML = "<p style='text-align: center;'>No channels found matching your criteria.</p>";
+      }
+    }
+
+    function getFlag(code) {
+      const c = countries.find(x => x.code === code);
+      return c ? c.flag : "🏳️";
+    }
+
+    function playChannel(url, name, div) {
+      if (!url) {
+        alert("⚠️ No working stream available for this channel.");
+        return;
+      }
+
+      // Remove existing "now-playing"
+      if (currentChannelDiv) {
+        currentChannelDiv.classList.remove("now-playing");
+        const badge = currentChannelDiv.querySelector(".live-badge");
+        if (badge) badge.remove();
+      }
+
+      // Add to new channel
+      div.classList.add("now-playing");
+      const liveTag = document.createElement("div");
+      liveTag.className = "live-badge";
+      liveTag.textContent = "PLAYING";
+      div.appendChild(liveTag);
+      currentChannelDiv = div;
+
+      // Scroll player into view on mobile
+      if (window.innerWidth <= 768) {
+        document.getElementById("playerContainer").scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Destroy previous HLS instance
+      if (hls) { 
+        hls.destroy(); 
+        hls = null; 
+      }
+
+      if (url.endsWith(".m3u8")) {
+        if (Hls.isSupported()) {
+          hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(videoElement);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            videoElement.muted = false;
+            videoElement.play().catch((e) => console.error("Play error:", e));
+          });
+          hls.on(Hls.Events.ERROR, (event, data) => {
+            console.error("HLS Error:", data);
+            // Agar stream fail ho toh player ko direct source se try karwaein
+            videoPlayer.src({ src: url });
+            videoPlayer.play();
+          });
+        } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+          videoElement.src = url;
+          videoElement.muted = false;
+          videoElement.play().catch((e) => console.error("Play error:", e));
+        } else {
+          alert("Your browser doesn't support HLS playback.");
+        }
+      } else {
+        // For non-HLS streams (like MP4, etc.)
+        videoPlayer.src({ src: url });
+        videoPlayer.muted(false);
+        videoPlayer.play().catch((e) => console.error("Play error:", e));
+      }
+
+      document.title = `▶️ ${name}`;
+    }
+
+    // Debounce search input to avoid too many re-renders
+    let searchTimeout;
+    searchBox.oninput = () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => renderChannels(), 300); // 300ms delay
+    };
+
+    loadMoreBtn.onclick = () => renderChannels(false);
+    countrySelect.onchange = () => renderChannels();
+    languageSelect.onchange = ()d
+  </script>
+</body>
+</html>

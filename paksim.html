@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Search</title>
+    <style>
+        /* --- Basic Setup (Inspired by your image) --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #1a1a2e; /* Dark Blue/Purple Background */
+            color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #ffffff;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        /* --- Search Box --- */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        #phoneInput {
+            flex-grow: 1;
+            padding: 15px;
+            font-size: 1rem;
+            border: 1px solid #4a4a6a;
+            background-color: #2a2a3e;
+            color: #ffffff;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        #phoneInput:focus {
+            border-color: #7b5aff;
+            box-shadow: 0 0 10px rgba(123, 90, 255, 0.5);
+        }
+
+        #searchButton {
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            background-color: #6a11cb; /* Purple Accent */
+            background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #searchButton:hover {
+            opacity: 0.9;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Results Area --- */
+        #loading {
+            display: none; /* Hidden by default */
+            text-align: center;
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            margin: 20px 0;
+        }
+
+        #resultsContainer {
+            display: grid;
+            gap: 15px;
+        }
+
+        .result-card {
+            background-color: #2a2a3e;
+            border: 1px solid #4a4a6a;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-card h3 {
+            margin-top: 0;
+            color: #9bf;
+            border-bottom: 1px solid #4a4a6a;
+            padding-bottom: 10px;
+        }
+
+        .result-card p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .result-card p strong {
+            color: #b0b0b0; /* Light gray for labels */
+            display: inline-block;
+            width: 80px; /* Aligns the values */
+        }
+
+        /* --- Social Links (Styled like buttons) --- */
+        .links {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #4a4a6a;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .links a {
+            display: inline-block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #2a2a3e;
+            border: 1px solid #4a4a6a;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .links a:hover {
+            background-color: #4a4a6a;
+            border-color: #7b5aff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Phone Number Search</h1>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="phoneInput" placeholder="Enter phone number (e.g., 0309...)">
+            <button id="searchButton">Search</button>
+        </div>
+
+        <div id="loading">Loading...</div>
+        <div id="resultsContainer">
+            </div>
+
+        <div class="links">
+            <a href="https://t.me/hamzaeditz2" target="_blank">📢 Telegram Channel</a>
+            <a href="https://youtube.com/@hamzashafiq786" target="_blank">▶️ YouTube</a>
+            <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank">💬 WhatsApp Group</a>
+        </div>
+    </div>
+
+    <script>
+        const phoneInput = document.getElementById('phoneInput');
+        const searchButton = document.getElementById('searchButton');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const loading = document.getElementById('loading');
+
+        searchButton.addEventListener('click', searchPhone);
+        
+        // Allow pressing Enter to search
+        phoneInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPhone();
+            }
+        });
+
+        async function searchPhone() {
+            let query = phoneInput.value.trim();
+            if (!query) {
+                resultsContainer.innerHTML = '<p style="text-align:center; color: #ff8a8a;">Please enter a phone number.</p>';
+                return;
+            }
+
+            // --- Phone Number Normalization ---
+            // Converts +923..., 923..., 3... formats to 03...
+            if (query.startsWith('+92')) {
+                query = '0' + query.substring(3);
+            } else if (query.startsWith('92')) {
+                query = '0' + query.substring(2);
+            } else if (query.startsWith('3') && query.length === 10) {
+                query = '0' + query;
+            }
+            // Now 'query' should be in '03...' format if possible
+
+            const apiUrl = 'https://corsproxy.io/?url=https://kami-database.vercel.app/api/search?phone=' + encodeURIComponent(query);
+
+            // --- Show loading, hide old results ---
+            loading.style.display = 'block';
+            resultsContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                const data = await response.json();
+
+                // Hide loading
+                loading.style.display = 'none';
+
+                // --- Display Results ---
+                if (data.success && data.records && data.records.length > 0) {
+                    displayResults(data.records);
+                } else {
+                    resultsContainer.innerHTML = '<p style="text-align:center; color: #a0a0a0;">No records found for this number.</p>';
+                }
+
+            } catch (error) {
+                loading.style.display = 'none';
+                console.error('Fetch Error:', error);
+                resultsContainer.innerHTML = '<p style="text-align:center; color: #ff8a8a;">An error occurred while fetching data. Please try again.</p>';
+            }
+        }
+
+        function displayResults(records) {
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+
+            // Create a card for each record
+            records.forEach(record => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+
+                card.innerHTML = `
+                    <h3>${escapeHTML(record.Name)}</h3>
+                    <p><strong>Mobile:</strong> ${escapeHTML(record.Mobile)}</p>
+                    <p><strong>CNIC:</strong> ${escapeHTML(record.CNIC)}</p>
+                    <p><strong>Address:</strong> ${escapeHTML(record.Address)}</p>
+                `;
+                
+                resultsContainer.appendChild(card);
+            });
+        }
+        
+        // Helper function to prevent XSS (Security best practice)
+        function escapeHTML(str) {
+            return str.replace(/[&<>"']/g, function(match) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[match];
+            });
+        }
+
+    </script>
+
+</body>
+</html>

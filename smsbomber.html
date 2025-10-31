@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🚀 SMS Bomber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- Basic Setup --- */
+    * { 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      margin: 0;
+      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f12; /* Dark background */
+      color: #f0f0f0;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* --- Professional Purple Gradient --- */
+    :root {
+      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+      --primary-color: #8E2DE2;
+      --bg-dark: #0f0f12;
+      --bg-light: #1f1f1f;
+      --bg-lighter: #2a2a2a;
+      --border-color: #333;
+      --error-color: #ff4757;
+      --success-color: #2ed573;
+    }
+
+    /* --- Main App Container --- */
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 25px 30px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    h1 { 
+      font-size: 1.75rem; 
+      margin: 0 0 20px 0;
+      font-weight: 700;
+      text-align: center;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* --- Form --- */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ccc;
+    }
+
+    /* --- Inputs --- */
+    input[type="tel"] {
+      background: var(--bg-lighter);
+      color: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="tel"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(142, 45, 226, 0.5); /* Glowing effect */
+    }
+    
+    /* --- Validation Hint --- */
+    #formatHint {
+      display: none; /* Default hidden */
+      font-size: 0.8rem;
+      color: var(--error-color);
+      margin-top: -10px; /* Input ke qareeb */
+      margin-bottom: 5px;
+    }
+
+    /* --- Button --- */
+    button {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      margin-top: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    button:hover { 
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* --- Message Box --- */
+    #messageBox {
+      display: none;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      word-wrap: break-word; /* Message lamba ho toh break hojaye */
+    }
+    
+    #messageBox.success {
+      background: rgba(46, 213, 115, 0.1);
+      color: var(--success-color);
+      border: 1px solid var(--success-color);
+    }
+    
+    #messageBox.error {
+      background: rgba(255, 71, 87, 0.1);
+      color: var(--error-color);
+      border: 1px solid var(--error-color);
+    }
+    
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <h1>🚀 SMS Bomber</h1>
+    
+    <form id="bomberForm">
+      <div>
+        <label for="number">Phone Number</label>
+        <input type="tel" id="number" placeholder="e.g., 923091645255" required>
+        <!-- Validation Hint yahan show hoga -->
+        <small id="formatHint"></small>
+      </div>
+      <button type="submit" id="submitButton">Start Attack</button>
+    </form>
+    
+    <!-- Message Area -->
+    <div id="messageBox"></div>
+  </div>
+
+  <script>
+    // --- API URL ---
+    const API_BASE_URL = "https://shadowscriptz.xyz/shadowapisv4/smsbomberapi.php?number=";
+
+    // --- DOM Elements ---
+    const bomberForm = document.getElementById("bomberForm");
+    const numberInput = document.getElementById("number");
+    const submitButton = document.getElementById("submitButton");
+    const messageBox = document.getElementById("messageBox");
+    const formatHint = document.getElementById("formatHint");
+
+    // --- Validation Logic ---
+    const VALID_REGEX = /^923\d{9}$/; // Starts with 923, followed by 9 digits (Total 12)
+
+    numberInput.addEventListener("input", () => {
+      const number = numberInput.value;
+      
+      if (number.length === 0) {
+        formatHint.style.display = "none";
+      } else if (number.startsWith("920")) {
+        formatHint.textContent = "Error: '0' mat lagayein 92 ke baad. Sahi format: 923...";
+        formatHint.style.display = "block";
+      } else if (!/^\d*$/.test(number)) {
+        formatHint.textContent = "Sirf digits (0-9) istemal karein.";
+        formatHint.style.display = "block";
+      } else if (number.length > 0 && !/^92.*/.test(number)) {
+        formatHint.textContent = "Number 92 se shuru hona chahiye.";
+        formatHint.style.display = "block";
+      } else if (number.length > 12) {
+        formatHint.textContent = "Number 12 digits se zyada nahi ho sakta.";
+        formatHint.style.display = "block";
+      } else {
+        formatHint.style.display = "none";
+      }
+    });
+
+    // --- Helper function to show messages ---
+    function showMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.className = isError ? 'error' : 'success';
+      messageBox.style.display = 'block';
+    }
+
+    // --- Form Submission ---
+    bomberForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const number = numberInput.value;
+
+      // Final validation check on submit
+      if (!VALID_REGEX.test(number)) {
+        showMessage("Please enter a valid number (e.g., 923091645255). Format 923... (total 12 digits).", true);
+        formatHint.style.display = "block";
+        return;
+      }
+      
+      // Disable button
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+      showMessage("Sending requests, please wait...", false);
+      formatHint.style.display = "none"; // Hide hint
+
+      const fullApiUrl = API_BASE_URL + number;
+
+      try {
+        const response = await fetch(fullApiUrl);
+        
+        let data;
+        const text = await response.text();
+        
+        // Check if response is JSON or plain text
+        try { 
+          data = JSON.parse(text); 
+        } catch { 
+          // Agar response JSON nahi hai (jaisa ke error ho sakta hai)
+          data = { status: "error", message: text }; 
+        }
+
+        if (response.ok && data.status === 'success') {
+          showMessage(`✅ Success: ${data.message}`, false);
+        } else {
+          showMessage(`❌ Error: ${data.message || 'An unknown error occurred'}`, true);
+        }
+        
+      } catch (error) {
+        console.error("API Error:", error);
+        showMessage(`❌ Network Error: ${error.message}`, true);
+      } finally {
+        // Re-enable button
+        submitButton.disabled = false;
+        submitButton.textContent = "Start Attack";
+      }
+    });
+  </script>
+</body>
+</html>

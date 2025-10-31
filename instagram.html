@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HamzaEditz 2.0 - Insta Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+      --primary-color: #8E2DE2;
+      --bg-dark: #0f0f12;
+      --bg-light: #1f1f1f;
+      --bg-lighter: #2a2a2a;
+      --border-color: #333;
+      --error-color: #ff4757;
+      --success-color: #2ed573;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-dark);
+      color: #f0f0f0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .card {
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 25px 30px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    h1 {
+      font-size: 1.75rem; 
+      margin: 0 0 20px 0;
+      font-weight: 700;
+      text-align: center;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .input-group {
+      position: relative;
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="url"] {
+      background: var(--bg-lighter);
+      color: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      flex-grow: 1;
+    }
+
+    input[type="url"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(142, 45, 226, 0.5);
+    }
+    
+    /* Button Styles (Ripple Effect) */
+    .btn {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, opacity 0.2s;
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none; /* For <a> tags */
+    }
+    .btn:hover { 
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    .btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-effect 0.6s linear;
+    }
+    @keyframes ripple-effect {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spinning {
+      animation: spin 1s linear infinite;
+    }
+
+    /* Message Box */
+    #messageBox {
+      display: none;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    #messageBox.success {
+      background: rgba(46, 213, 115, 0.1);
+      color: var(--success-color);
+      border: 1px solid var(--success-color);
+    }
+    #messageBox.error {
+      background: rgba(255, 71, 87, 0.1);
+      color: var(--error-color);
+      border: 1px solid var(--error-color);
+    }
+    
+    /* Results */
+    #resultsContainer {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+    #thumbnailImage {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .download-links {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .download-links .btn {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <div class="card">
+      <h1>Insta Downloader</h1>
+      
+      <form id="downloadForm">
+        <div class="input-group">
+          <input type="url" id="urlInput" placeholder="Paste Instagram URL here..." required>
+          <button type="submit" class="btn" id="searchButton">
+            <i data-feather="download"></i>
+          </button>
+        </div>
+      </form>
+      
+      <!-- Message Area -->
+      <div id="messageBox"></div>
+
+      <!-- Results Area -->
+      <div id="resultsContainer">
+        <img id="thumbnailImage" src="" alt="Video Thumbnail">
+        <div class="download-links">
+          <a href="#" id="downloadVideoBtn" class="btn" download>
+            <i data-feather="video"></i> Download Video
+          </a>
+          <a href="#" id="downloadThumbBtn" class="btn" download>
+            <i data-feather="image"></i> Download Image
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // --- Elements ---
+      const downloadForm = document.getElementById("downloadForm");
+      const urlInput = document.getElementById("urlInput");
+      const searchButton = document.getElementById("searchButton");
+      const messageBox = document.getElementById("messageBox");
+      const resultsContainer = document.getElementById("resultsContainer");
+      const thumbnailImage = document.getElementById("thumbnailImage");
+      const downloadVideoBtn = document.getElementById("downloadVideoBtn");
+      const downloadThumbBtn = document.getElementById("downloadThumbBtn");
+
+      // --- CORS Proxy ---
+      const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=';
+
+      // --- Helper: Show Message ---
+      function showMessage(message, isError = false) {
+        messageBox.textContent = message;
+        messageBox.className = isError ? 'error' : 'success';
+        messageBox.style.display = 'block';
+      }
+
+      // --- Helper: Decode HTML Entities (like &amp;) ---
+      function decodeEntities(encodedString) {
+        try {
+          var textArea = document.createElement('textarea');
+          textArea.innerHTML = encodedString;
+          return textArea.value;
+        } catch(e) {
+          return encodedString; // Fallback
+        }
+      }
+
+      // --- Form Submit Handler ---
+      downloadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const url = urlInput.value.trim();
+        if (!url) {
+          showMessage("Please paste a URL first.", true);
+          return;
+        }
+
+        // 1. Show Loading State
+        searchButton.disabled = true;
+        searchButton.innerHTML = '<i data-feather="loader" class="spinning"></i>';
+        feather.replace();
+        messageBox.style.display = 'none';
+        resultsContainer.style.display = 'none';
+
+        try {
+          // 2. Call Snapdownloader via proxy (PHP logic moved here)
+          const targetApiUrl = `https://snapdownloader.com/tools/instagram-reels-downloader/download?url=${encodeURIComponent(url)}`;
+          const response = await fetch(proxyUrl + encodeURIComponent(targetApiUrl));
+          
+          if (!response.ok) {
+            throw new Error(`Failed to fetch from proxy: ${response.statusText}`);
+          }
+          const htmlText = await response.text();
+          
+          // 3. Parse HTML text in JavaScript (mimicking PHP regex)
+          const videoRegex = /<a[^>]+href="([^"]+\.mp4[^"]*)"[^>]+download[^>]*>/;
+          const thumbRegex = /<img[^>]+class="[^"]*img-thumbnail[^"]*"[^>]+src="([^"]+)"/;
+
+          const videoMatch = htmlText.match(videoRegex);
+          const thumbMatch = htmlText.match(thumbRegex);
+
+          const videoUrl = videoMatch ? decodeEntities(videoMatch[1]) : null;
+          const thumbUrl = thumbMatch ? decodeEntities(thumbMatch[1]) : null;
+
+          // 4. Handle Response
+          if (videoUrl) {
+            showMessage("Success! Your download is ready.", false);
+            resultsContainer.style.display = 'block';
+            
+            // Proxy image and video links to prevent CORS errors on download
+            if (thumbUrl) {
+              thumbnailImage.src = proxyUrl + encodeURIComponent(thumbUrl);
+              downloadThumbBtn.href = proxyUrl + encodeURIComponent(thumbUrl);
+              downloadThumbBtn.download = "instagram_thumbnail.jpg";
+              downloadThumbBtn.style.display = 'inline-flex';
+            } else {
+              thumbnailImage.src = "";
+              downloadThumbBtn.style.display = 'none';
+            }
+
+            downloadVideoBtn.href = proxyUrl + encodeURIComponent(videoUrl);
+            downloadVideoBtn.download = "instagram_video.mp4";
+
+          } else {
+            throw new Error("Unable to extract video. The URL might be private or invalid.");
+          }
+
+        } catch (error) {
+          console.error("Fetch Error:", error);
+          showMessage(`Error: ${error.message}`, true);
+        } finally {
+          // 5. Hide Loading State
+          searchButton.disabled = false;
+          searchButton.innerHTML = '<i data-feather="download"></i>';
+          feather.replace();
+        }
+      });
+
+      // --- Ripple Effect ---
+      function createRipple(event) {
+        const button = event.currentTarget;
+        const circle = document.createElement("span");
+        const diameter = Math.max(button.clientWidth, button.clientHeight);
+        const radius = diameter / 2;
+        circle.style.width = circle.style.height = `${diameter}px`;
+        circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+        circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+        circle.classList.add("ripple");
+        const ripple = button.getElementsByClassName("ripple")[0];
+        if (ripple) {
+          ripple.remove();
+        }
+        button.appendChild(circle);
+      }
+      const buttons = document.getElementsByClassName("btn");
+      for (const button of buttons) {
+        button.addEventListener("click", createRipple);
+      }
+      
+      // --- Initial Icon Load ---
+      feather.replace();
+    });
+  </script>
+</body>
+</html>
+

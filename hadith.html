@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Hadith Generator</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a clean, scholarly look */
+        .hadith-card {
+            border-left: 6px solid #fbbf24; /* amber-400 border */
+        }
+        .collection-button {
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .collection-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'scholarly-green': '#10b981', /* emerald-500 */
+                        'scholarly-dark': '#111827', /* gray-900 */
+                        'scholarly-light': '#f3f4f6', /* gray-100 */
+                        'accent': '#fbbf24', /* amber-400 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-scholarly-dark text-scholarly-light min-h-screen p-4 sm:p-8 font-sans">
+
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <header class="text-center py-4 border-b border-gray-700">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-accent">
+                Hadith
+            </h1>
+            <p class="text-gray-400 mt-2 text-lg">Random Hadith from Major Collections</p>
+        </header>
+
+        <!-- Collection Selection Buttons -->
+        <div id="buttonContainer" class="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Buttons will be generated here by JS -->
+        </div>
+
+        <!-- Hadith Display Card -->
+        <main id="hadithContainer" class="bg-gray-800 p-6 sm:p-10 rounded-xl shadow-2xl hadith-card space-y-6">
+            <p id="loadingMessage" class="text-center text-xl text-scholarly-green font-medium">
+                Loading a random Hadith...
+            </p>
+            
+            <div id="hadithContent" class="hidden space-y-6">
+                <!-- Hadith content will be displayed here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // API Endpoints for the Hadith collections
+        const API_BASE_URL = "https://random-hadith-generator.vercel.app/";
+        const COLLECTIONS = {
+            'Bukhari': 'bukhari',
+            'Muslim': 'muslim',
+            'Tirmidhi': 'tirmidhi',
+            'IbnMajah': 'ibnmajah',
+            'Abu Dawud': 'abudawud'
+        };
+
+        // UI Elements
+        const hadithContainer = document.getElementById('hadithContainer');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const hadithContent = document.getElementById('hadithContent');
+        const buttonContainer = document.getElementById('buttonContainer');
+        
+        let currentCollection = 'Bukhari'; // Default to Bukhari on load
+
+        /**
+         * Cleans up newline and tab characters from API strings.
+         * @param {string} str - The input string.
+         * @returns {string} The cleaned string.
+         */
+        function cleanString(str) {
+            return str ? str.replace(/[\n\t]/g, '').trim() : '';
+        }
+
+        /**
+         * Sets the loading state of the UI and buttons.
+         * @param {boolean} isLoading - True to show spinner/disable buttons.
+         */
+        function setLoading(isLoading) {
+            const buttons = buttonContainer.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.disabled = isLoading;
+                if (btn.classList.contains('active')) {
+                     // Keep active state but disable clicks
+                }
+            });
+
+            if (isLoading) {
+                hadithContent.classList.add('hidden');
+                loadingMessage.classList.remove('hidden');
+                loadingMessage.innerHTML = `
+                    <svg class="animate-spin h-6 w-6 inline mr-3 text-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading a random ${currentCollection} Hadith...
+                `;
+            } else {
+                loadingMessage.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Displays the fetched Hadith data in the UI.
+         * @param {object} hadithData - The 'data' object from the API response.
+         */
+        function displayHadith(hadithData) {
+            setLoading(false);
+            
+            const bookName = cleanString(hadithData.bookName);
+            const chapterName = cleanString(hadithData.chapterName);
+            const header = cleanString(hadithData.header);
+            const hadithText = cleanString(hadithData.hadith_english);
+            const refNo = hadithData.refno;
+            const collection = hadithData.book;
+
+            hadithContent.innerHTML = `
+                <!-- Reference & Book -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-700 pb-3">
+                    <p class="text-2xl font-bold text-scholarly-green">${collection}</p>
+                    <p class="text-lg font-mono text-gray-400 mt-1 sm:mt-0">${refNo}</p>
+                </div>
+
+                <!-- Book and Chapter -->
+                <div class="space-y-2">
+                    <h3 class="text-xl font-semibold text-accent">
+                        ${bookName}
+                    </h3>
+                    <p class="text-gray-300 italic text-md">
+                        <span class="font-bold text-gray-400">Chapter:</span> ${chapterName}
+                    </p>
+                </div>
+
+                <!-- Hadith Text -->
+                <div class="space-y-4 pt-4 border-t border-gray-700">
+                    <p class="text-gray-300 font-medium">${header}</p>
+                    <p class="text-2xl font-serif leading-relaxed text-scholarly-light">
+                        "${hadithText}"
+                    </p>
+                </div>
+            `;
+            hadithContent.classList.remove('hidden');
+        }
+
+        /**
+         * Fetches a random Hadith from the specified collection.
+         * @param {string} collection - The collection key (e.g., 'bukhari').
+         */
+        async function fetchHadith(collection) {
+            currentCollection = Object.keys(COLLECTIONS).find(key => COLLECTIONS[key] === collection);
+            setLoading(true);
+            
+            // Highlight the active button
+            document.querySelectorAll('.collection-button').forEach(btn => {
+                btn.classList.remove('bg-accent', 'text-scholarly-dark', 'active');
+                if (btn.dataset.collection === collection) {
+                    btn.classList.add('bg-accent', 'text-scholarly-dark', 'active');
+                }
+            });
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${collection}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const json = await response.json();
+                
+                if (json && json.data) {
+                    displayHadith(json.data);
+                } else {
+                    throw new Error("Invalid response structure or missing data.");
+                }
+
+            } catch (error) {
+                setLoading(false);
+                hadithContent.classList.add('hidden');
+                loadingMessage.classList.remove('hidden');
+                loadingMessage.innerHTML = `
+                    <p class="text-red-500 text-center text-xl">
+                        Error fetching Hadith: ${error.message}. Please try again.
+                    </p>
+                `;
+                console.error("Fetch Hadith Error:", error);
+            }
+        }
+
+        /**
+         * Initializes the buttons and attaches event listeners.
+         */
+        function initializeButtons() {
+            Object.entries(COLLECTIONS).forEach(([name, key]) => {
+                const button = document.createElement('button');
+                button.textContent = name;
+                button.className = `collection-button w-full p-3 font-semibold rounded-lg bg-scholarly-green text-scholarly-light hover:bg-scholarly-green/80 disabled:opacity-50 disabled:cursor-not-allowed text-base`;
+                button.dataset.collection = key;
+                button.onclick = () => fetchHadith(key);
+                buttonContainer.appendChild(button);
+            });
+        }
+
+        // Initialize and load the first Hadith on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeButtons();
+            // Load a random Hadith from Bukhari by default
+            fetchHadith(COLLECTIONS['Bukhari']);
+        });
+
+    </script>
+</body>
+</html>

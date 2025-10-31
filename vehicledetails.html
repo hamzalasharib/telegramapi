@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔍 Vehicle RC Details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- Basic Setup --- */
+    * { 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      margin: 0;
+      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f12; /* Dark background */
+      color: #f0f0f0;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* --- Professional Purple Gradient --- */
+    :root {
+      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+      --primary-color: #8E2DE2;
+      --bg-dark: #0f0f12;
+      --bg-light: #1f1f1f;
+      --bg-lighter: #2a2a2a;
+      --border-color: #333;
+      --error-color: #ff4757;
+      --success-color: #2ed573;
+    }
+
+    /* --- Main App Container --- */
+    .container {
+      width: 100%;
+      max-width: 500px; 
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 25px 30px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    h1 { 
+      font-size: 1.75rem; 
+      margin: 0 0 20px 0;
+      font-weight: 700;
+      text-align: center;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* --- Form --- */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ccc;
+    }
+
+    /* --- Inputs --- */
+    input[type="text"] {
+      background: var(--bg-lighter);
+      color: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      text-transform: uppercase; 
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(142, 45, 226, 0.5); 
+    }
+
+    /* --- Button --- */
+    button {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      margin-top: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    button:hover { 
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* --- Message Box --- */
+    #messageBox {
+      display: none;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      word-wrap: break-word;
+    }
+    
+    #messageBox.success {
+      background: rgba(46, 213, 115, 0.1);
+      color: var(--success-color);
+      border: 1px solid var(--success-color);
+    }
+    
+    #messageBox.error {
+      background: rgba(255, 71, 87, 0.1);
+      color: var(--error-color);
+      border: 1px solid var(--error-color);
+    }
+    
+    /* --- Results Area --- */
+    #resultsContainer {
+      display: none;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    #vehicleDetails {
+      display: grid;
+      grid-template-columns: auto 1fr; /* Key-Value columns */
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+    
+    .detail-key {
+      font-weight: 600;
+      color: #aaa;
+      white-space: nowrap;
+    }
+    
+    .detail-value {
+      color: #fff;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    /* --- Loading Spinner --- */
+    .loader {
+      display: none;
+      margin: 20px auto;
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <h1>🔍 Vehicle RC Details</h1>
+    
+    <form id="vehicleForm">
+      <div>
+        <label for="rcNumber">Enter Vehicle Number (RC)</label>
+        <input type="text" id="rcNumber" placeholder="e.g., KL43G1669" required>
+      </div>
+      <button type="submit" id="searchButton">Search Details</button>
+    </form>
+    
+    <!-- Loading Spinner -->
+    <div class="loader" id="loader"></div>
+    
+    <!-- Message Area -->
+    <div id="messageBox"></div>
+
+    <!-- Results Area -->
+    <div id="resultsContainer">
+      <!-- ✅ Image Container Hata Diya Hai -->
+      <div id="vehicleDetails">
+        <!-- Details yahan inject honge -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- API URL ---
+    const API_BASE_URL = "https://vehicle-eight-vert.vercel.app/api?rc=";
+
+    // --- DOM Elements ---
+    const vehicleForm = document.getElementById("vehicleForm");
+    const rcNumberInput = document.getElementById("rcNumber");
+    const searchButton = document.getElementById("searchButton");
+    const messageBox = document.getElementById("messageBox");
+    const loader = document.getElementById("loader");
+    const resultsContainer = document.getElementById("resultsContainer");
+    // ✅ vehicleImage variable hata diya hai
+    const vehicleDetails = document.getElementById("vehicleDetails");
+
+    // --- Helper function to show messages ---
+    function showMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.className = isError ? 'error' : 'success';
+      messageBox.style.display = 'block';
+    }
+
+    // --- Form Submission ---
+    vehicleForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const rcNumber = rcNumberInput.value.trim().toUpperCase();
+
+      if (!rcNumber) {
+        showMessage("Please enter a vehicle number.", true);
+        return;
+      }
+      
+      // Reset UI
+      searchButton.disabled = true;
+      searchButton.textContent = "Searching...";
+      loader.style.display = "block";
+      messageBox.style.display = "none";
+      resultsContainer.style.display = "none";
+
+      try {
+        // --- Using CORS proxy ---
+        const targetUrl = API_BASE_URL + rcNumber;
+        const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`;
+        
+        const response = await fetch(proxyUrl); 
+        
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+
+        if (data.error || !data.details) {
+          showMessage(data.error || "No details found for this RC number.", true);
+        } else {
+          // Success! Display results
+          displayResults(data.details);
+        }
+        
+      } catch (error) {
+        console.error("API Error:", error);
+        console.error("Fetch failed. This is often a CORS issue or network problem.", error.message);
+        showMessage(`❌ Network Error or Invalid RC. Please try again.`, true);
+      } finally {
+        // Re-enable button and hide loader
+        searchButton.disabled = false;
+        searchButton.textContent = "Search Details";
+        loader.style.display = "none";
+      }
+    });
+
+    // --- Function to display results ---
+    function displayResults(details) {
+      // Clear previous details
+      vehicleDetails.innerHTML = "";
+      
+      // --- ✅ Vehicle Image Code Hata Diya Hai ---
+      
+      // --- Vehicle Details ---
+      const displayOrder = [
+        "Owner Name",
+        "Maker Model",
+        "Registered RTO",
+        "Registration Date",
+        "Vehicle Class",
+        "Fuel Type",
+        "Fitness Upto",
+        "Tax Upto",
+        "Insurance Expiry",
+        "Insurance Company",
+        "PUC Upto",
+        "Address",
+        "City Name",
+        "Phone"
+      ];
+      
+      for (const key of displayOrder) {
+        if (details[key]) {
+          addDetailRow(key, details[key]);
+        }
+      }
+      
+      for (const [key, value] of Object.entries(details)) {
+        if (!displayOrder.includes(key) && value) {
+          addDetailRow(key, value);
+        }
+      }
+
+      // Show the results
+      resultsContainer.style.display = "block";
+    }
+
+    // Helper function to add a row in the details grid
+    function addDetailRow(key, value) {
+      const keyDiv = document.createElement('div');
+      keyDiv.className = 'detail-key';
+      keyDiv.textContent = key + ":";
+      
+      const valueDiv = document.createElement('div');
+      valueDiv.className = 'detail-value';
+      valueDiv.textContent = value;
+      
+      vehicleDetails.appendChild(keyDiv);
+      vehicleDetails.appendChild(valueDiv);
+    }
+  </script>
+</body>
+</html>
+
