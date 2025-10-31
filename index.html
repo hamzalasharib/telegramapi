@@ -1,40 +1,267 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SIM Data Checker</title>
-  <script src="https://fpyf8.com/88/tag.min.js" data-zone="180992" async data-cfasync="false"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HamzaEditz 2.0 - All Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  
   <style>
-    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#06b6d4}
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef6;background:linear-gradient(180deg,#071024 0%, #071827 100%)}
-    .wrap{max-width:920px;margin:32px auto;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;box-shadow:0 6px 30px rgba(2,6,23,0.6)}
-    header{display:flex;align-items:center;gap:12px}
-    header h1{margin:0;font-size:20px}
-    p.lead{margin:6px 0 18px;color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
-textarea{width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;resize:vertical}
-.controls{display:flex;gap:8px;flex-wrap:wrap}
-button{background:var(--accent);border:0;color:#022;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600}
-button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);font-weight:600}
-.result{background:var(--card);padding:12px;border-radius:8px;min-height:120px;color:#d7e9f5}
-.record{border-bottom:1px dashed rgba(255,255,255,0.03);padding:8px 0}
-.links{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-.links a{display:inline-block;padding:8px;border-radius:8px;text-decoration:none;background:rgba(255,255,255,0.02);color:var(--muted)}
-footer{margin-top:18px;color:var(--muted);font-size:13px}
-.ad-btn{background:#ffd166;color:#052b2e}
-.small{font-size:13px;color:var(--muted)}
-@media (max-width:900px){.grid{grid-template-columns:1fr}}
+    /* --- Basic Setup --- */
+    * { 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      margin: 0;
+      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f12; /* Dark background */
+      color: #f0f0f0;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
+    /* --- Professional Purple Gradient --- */
+    :root {
+      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+      --primary-color: #8E2DE2;
+      --bg-dark: #0f0f12;
+      --bg-light: #1f1f1f;
+      --bg-lighter: #2a2a2a;
+      --border-color: #333;
+      --ripple-color: rgba(142, 45, 226, 0.4); 
+    }
+
+    /* --- Main App Container --- */
+    .container {
+      width: 100%;
+      max-width: 450px;
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 30px 35px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* * === ✅ CHANGE 1: MODIFIED THE H1 STYLING ===
+     * We replaced the static 'background: var(--primary-gradient)'
+     * with the new animated gradient properties.
+    */
+    h1 { 
+      font-size: 2.25rem; 
+      margin: 0 0 10px 0;
+      font-weight: 700;
+      text-align: center;
+      
+      /* New Animated Gradient */
+      background: linear-gradient(
+          90deg, 
+          #4f46e5, /* Indigo */
+          #a855f7, /* Purple */
+          #ec4899, /* Pink */
+          #f59e0b, /* Orange */
+          #4f46e5  /* Loop back */
+      );
+      background-size: 400% 400%; /* Make gradient huge */
+      animation: gradient-flow 8s ease infinite; /* Apply animation */
+
+      /* These lines were already in your code and are correct! */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* * === ✅ CHANGE 2: ADDED THE KEYFRAMES ===
+     * This is the animation definition for 'gradient-flow'
+    */
+    @keyframes gradient-flow {
+      0% {
+        background-position: 0% 50%; /* Start at the left */
+      }
+      50% {
+        background-position: 100% 50%; /* Move to the right */
+      }
+      100% {
+        background-position: 0% 50%; /* Loop back to the left */
+      }
+    }
+    
+    .subtitle {
+      text-align: center;
+      font-size: 1rem;
+      color: #aaa;
+      margin-top: 0;
+      margin-bottom: 30px;
+    }
+    
+    /* --- Links Container --- */
+    .links-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px; /* Buttons ke beech space */
+    }
+    
+    /* --- Styled Link Buttons --- */
+    .link-button {
+      display: flex; 
+      align-items: center;
+      justify-content: center;
+      gap: 10px; 
+      
+      background: var(--bg-lighter);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      text-decoration: none;
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+      
+      position: relative;
+      overflow: hidden; 
+    }
+
+    .link-button:hover { 
+      transform: translateY(-3px);
+      border-color: var(--primary-color); 
+      box-shadow: 0 4px 15px rgba(142, 45, 226, 0.3); 
+    }
+    
+    /* Icon style */
+    .link-button i {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.5;
+      z-index: 2; /* Icon ko ripple ke upar rakhein */
+    }
+    .link-button span {
+      z-index: 2; /* Text ko ripple ke upar rakhein */
+    }
+
+    /* ===================================
+     * === ✅ LIQUID RIPPLE EFFECT CSS ===
+     * ===================================
+     */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background-color: var(--ripple-color);
+      transform: scale(0);
+      animation: ripple-effect 0.6s linear;
+      z-index: 1; /* Ripple ko text ke neeche rakhein */
+    }
+
+    @keyframes ripple-effect {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'><circle cx='12' cy='12' r='11' fill='%2306b6d4'/><path d='M7 13c1-4 6-8 10-2' stroke='%23002225' stroke-width='1.2' fill='none'/></svg>" alt="logo" width="36" height="36" />
-      <div>
-        <h1>SIM Data Checker</h1>
-        <p class="lead">Paste one or multiple phone numbers (comma, newline, or space separated).</p>
+  
+  <div class="container">
+    <h1>HamzaEditz 2.0</h1>
+    <p class="subtitle">Welcome to our site!</p>
+    
+    <div class="links-container">
+      
+      <a href="paksim.html" class="link-button">
+        <i data-feather="database"></i>
+        <span>Pak Sim Details</span>
+      </a>
+      
+      <a href="smsbomber.html" class="link-button">
+        <i data-feather="send"></i>
+        <span>SMS Tool</span>
+      </a>
+      
+      <a href="Spotify.html" class="link-button">
+        <i data-feather="music"></i>
+        <span>Spotify Downloader</span>
+      </a>
+      
+     <a href="instagram.html" class="link-button">
+        <i data-feather="instagram"></i>
+        <span>Instagram Downloader</span>
+      </a>
+      
+           <a href="tiktok.html" class="link-button">
+        <i data-feather="notes"></i>
+        <span>TikTok Downloader</span>
+      </a>
+      
+      <a href="tamasha.html" class="link-button">
+        <i data-feather="gift"></i>
+        <span>Free Tamasha Package</span>
+      </a>
+      
+      <a href="TvChannels.html" class="link-button">
+        <i data-feather="tv"></i>
+        <span>IPTV Player</span>
+      </a>
+      
+      <a href="vehicledetails.html" class="link-button">
+        <i data-feather="search"></i>
+        <span>Vehicle Details</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Pehle icons ko replace karein
+    feather.replace();
+
+    /* ===================================
+     * === ✅ LIQUID RIPPLE EFFECT JS ===
+     * ===================================
+     */
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const buttons = document.querySelectorAll('.link-button');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', function (e) {
+          // Click position get karein
+          const rect = button.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          // Ripple element banayein
+          const ripple = document.createElement('span');
+          ripple.classList.add('ripple');
+          
+          // Button ke size ke hisab se ripple ka size set karein
+          const size = Math.max(rect.width, rect.height);
+          ripple.style.width = ripple.style.height = `${size}px`;
+          
+          // Ripple ko click position par set karein
+          ripple.style.left = `${x - size / 2}px`;
+          ripple.style.top = `${y - size / 2}px`;
+
+          // Ripple ko button mein add karein
+          this.appendChild(ripple);
+
+          // Animation khatam hone par ripple ko remove karein
+          setTimeout(() => {
+            ripple.remove();
+          }, 600); // Animation duration 0.6s hai
+        });
+      });
+    });
+  </script>
+</body>
+</html>        <p class="lead">Paste one or multiple phone numbers (comma, newline, or space separated).</p>
       </div>
     </header><div class="grid">
   <div>
