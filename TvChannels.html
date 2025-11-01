@@ -1,440 +1,951 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>📺 IPTV Player</title>
-  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    /* --- Basic Setup --- */
-    * { 
-      box-sizing: border-box; 
-    }
-    
-    body {
-      margin: 0;
-      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f0f12; /* Screenshot jaisa dark background */
-      color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HamzaEditz 2.0 - Jazz TV</title>
+    <!-- HLS.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
-    /* --- Professional Purple Gradient --- */
-    :root {
-      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
-      --primary-color: #8E2DE2;
-      --bg-dark: #0f0f12;
-      --bg-light: #1f1f1f;
-      --bg-lighter: #2a2a2a;
-      --border-color: #333;
-    }
+    <style>
+        /* --- NEW: Red & Black Theme --- */
+        :root {
+            --primary-gradient: linear-gradient(90deg, #ef4444, #b91c1c); /* Red-500 to Red-700 */
+            --primary-color: #ef4444; /* Red-500 */
+            --bg-dark: #0f0f12;
+            --bg-light: #1f1f1f;
+            --bg-lighter: #2a2a2a;
+            --border-color: #333;
+        }
 
-    /* --- Header & Filters --- */
-    header {
-      background: var(--bg-dark);
-      padding: 15px 20px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    header h1 { 
-      font-size: 1.5rem; 
-      margin: 0;
-      font-weight: 700;
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    /* --- Screenshot Style Inputs & Selects --- */
-    select, input[type="text"] {
-      background: var(--bg-light);
-      color: white;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-family: "Poppins", sans-serif;
-      font-size: 0.9rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: var(--bg-dark);
+            color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-    select:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 10px rgba(142, 45, 226, 0.5); /* Glowing effect jaisa screenshot mein hai */
-    }
+        /* --- NEW: "Fire" Text Effect --- */
+        .gemini-title {
+            font-weight: 800;
+            background: linear-gradient(90deg, #ef4444, #f59e0b, #eab308, #ef4444);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gemini-shimmer 8s linear infinite;
+        }
+        @keyframes gemini-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
 
-    /* --- Player Container --- */
-    #playerContainer {
-      position: sticky;
-      top: 80px; /* Header ke height ke hisab se adjust karein */
-      z-index: 90;
-      background: #000;
-      padding: 10px;
-      border-radius: 12px;
-      margin: 10px 15px 0 15px;
-      border: 1px solid var(--border-color);
-    }
+        /* Header */
+        h1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
 
-    .video-js {
-      width: 100% !important;
-      height: auto !important;
-      max-height: 55vh;
-      border-radius: 8px; /* Rounded corners for player */
-    }
+        /* Back Button */
+        #backBtn {
+            position: static;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-light);
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        #backBtn:hover {
+            border-color: var(--primary-color);
+        }
 
-    /* * ===================================
-     * === ✅ FULLSCREEN FIX YAHAN HAI ===
-     * ===================================
-     */
-    .video-js.vjs-fullscreen,
-    .vjs-fullscreen video {
-      width: 100% !important;
-      height: 100% !important;
-      max-height: 100% !important;
-      /* * 'cover' (jo pehle tha) video ko zoom/crop karta hai.
-       * 'contain' video ko poora dikhata hai (black bars ke saath).
-       */
-      object-fit: contain !important; /* YEH FIX HAI */
-      border-radius: 0 !important;
-    }
+        /* Player */
+        .player-box {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            background: black;
+            border-radius: 12px;
+            overflow: hidden;
+            position: sticky;
+            top: 10px;
+            z-index: 50;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
 
-    .video-js video {
-      object-fit: contain; /* Normal mode mein bhi contain rakhein */
-    }
+        /* Loader */
+        #loader {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #loader.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .loader-spin {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--primary-color); /* Red spinner */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
 
-    /* --- Channel Grid --- */
-    #channelContainer {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 15px;
-      padding: 20px;
-      flex: 1;
-    }
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 40px; left: 0; right: 0;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 1; transition: opacity 0.4s;
+            flex-wrap: wrap; z-index: 20;
+            gap: 10px;
+        }
+        .controls.hidden { opacity: 0; pointer-events: none; }
+        .control-btn {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid var(--border-color);
+        }
+        .control-btn:hover { background: rgba(255, 255, 255, 0.1); }
 
-    /* --- Screenshot Style Channel Cards --- */
-    .channel {
-      position: relative;
-      background: var(--bg-light);
-      border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      border: 2px solid var(--border-color);
-      overflow: hidden;
-    }
+        #channelName {
+            position: absolute; top: 10px; left: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 25;
+            transition: opacity 0.4s;
+        }
 
-    .channel:hover {
-      transform: translateY(-5px);
-      background: var(--bg-lighter);
-      border-color: #555;
-    }
+        /* Quality menu */
+        #qualityMenu {
+            position: absolute;
+            bottom: 90px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            padding: 6px;
+            display: none;
+            z-index: 30;
+            border: 1px solid var(--border-color);
+        }
+        #qualityMenu button {
+            display: block; width: 100%; padding: 5px 12px; color: white;
+            background: transparent; border: none; text-align: left; cursor: pointer;
+            border-radius: 6px; margin-bottom: 4px;
+        }
+        #qualityMenu button:hover { background: rgba(255, 255, 255, 0.1); }
+        #qualityMenu button.active-quality {
+            background: var(--primary-gradient); /* Red active */
+            color: white;
+        }
 
-    .channel img {
-      width: 100%;
-      height: 80px;
-      object-fit: contain;
-      border-radius: 6px;
-      background: #333; /* Placeholder background agar logo transparent ho */
-      margin-bottom: 10px;
-    }
+        /* Progress bar */
+        #progressContainer {
+            position: absolute; bottom: 10px; left: 10px; right: 10px;
+            height: 8px; background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            cursor: pointer; z-index: 20;
+            transition: opacity 0.4s;
+        }
+        #progressBar {
+            width: 0%; height: 100%;
+            background: var(--primary-color); /* Red progress */
+            border-radius: 4px;
+            position: relative;
+        }
+        #progressHandle {
+            position: absolute; top: 50%; right: 0;
+            width: 16px; height: 16px; background: #fff;
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        #progressContainer:hover #progressHandle { opacity: 1; }
 
-    .channel p {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin: 5px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .channel small {
-      font-size: 0.8rem;
-      color: #aaa;
-    }
-
-    /* --- "Now Playing" (Purple Glow) --- */
-    .now-playing {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 15px rgba(142, 45, 226, 0.7); /* Purple glow */
-      transform: translateY(-5px);
-    }
-
-    .live-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: var(--primary-gradient); /* Purple gradient badge */
-      color: #fff;
-      font-size: 0.7rem;
-      padding: 3px 6px;
-      border-radius: 4px;
-      font-weight: bold;
-      animation: pulse 1.2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.7; }
-      100% { opacity: 1; }
-    }
-
-    /* --- Screenshot Style "Load More" Button --- */
-    #loadMore {
-      background: var(--primary-gradient);
-      border: none;
-      color: white;
-      padding: 12px 30px;
-      margin: 10px auto 30px auto; /* Bottom margin */
-      display: block;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: transform 0.2s, opacity 0.2s;
-    }
-
-    #loadMore:hover { 
-      opacity: 0.9;
-      transform: scale(1.03);
-    }
-
-    /* --- Mobile Responsive --- */
-    @media (max-width: 768px) {
-      #channelContainer {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        padding: 15px;
-        gap: 10px;
-      }
-      header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      #playerContainer {
-        top: 190px; /* Mobile header ke hisab se */
-        margin: 10px 10px 0 10px;
-      }
-      .video-js {
-        max-height: 35vh;
-      }
-    }
-  </style>
+        #timeDisplay {
+            position: absolute; bottom: 22px; right: 15px; color: white;
+            font-size: 12px; background: rgba(0, 0, 0, 0.5); padding: 2px 5px;
+            border-radius: 4px; z-index: 20;
+            transition: opacity 0.4s;
+        }
+        
+        /* Channels Grid - New Card Style */
+        #channelGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            padding: 10px;
+            max-width: 900px;
+            width: 100%;
+        }
+        .channel-card {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .channel-card:hover {
+            transform: translateY(-5px);
+            border-color: #555;
+        }
+        .channel-card img {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 6px;
+            background: #333;
+            margin-bottom: 10px;
+        }
+        .channel-card p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            text-align: center;
+        }
+        .active-channel {
+            border-color: var(--primary-color); /* Red active */
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); /* Red glow */
+            transform: translateY(-5px);
+        }
+        
+        .hidden { opacity: 0; pointer-events: none; }
+    </style>
 </head>
 <body>
-  
-  <header>
-    <h1>📺 IPTV Player</h1>
-    <input id="searchBox" type="text" placeholder="🔍 Search channels..." />
-    <select id="countrySelect"></select>
-    <select id="languageSelect"></select>
-  </header>
 
-  <div id="playerContainer">
-    <video id="videoPlayer" class="video-js vjs-fluid vjs-big-play-centered" autoplay muted controls></video>
-  </div>
+    <h1>
+        <span class="gemini-title">HamzaEditz 2.0 - Jazz TV</span>
+    </h1>
 
-  <main id="channelContainer"></main>
-  <button id="loadMore">Load More</button>
+    <div class="player-box" id="playerBox">
+        <video id="videoPlayer" class="w-full h-full" autoplay poster="https://i.postimg.cc/KzB0sKV9/jazztv.png"></video>
 
-  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script>
-    // Aapka JavaScript code yahan bilkul waise hi rahega
-    // ... (Same JavaScript as before) ...
-    const channelContainer = document.getElementById("channelContainer");
-    const videoElement = document.getElementById("videoPlayer");
-    const videoPlayer = videojs(videoElement, { controls: true, preload: "auto" });
-    const loadMoreBtn = document.getElementById("loadMore");
-    const searchBox = document.getElementById("searchBox");
-    const countrySelect = document.getElementById("countrySelect");
-    const languageSelect = document.getElementById("languageSelect");
+        <div id="loader">
+            <div class="loader-spin"></div>
+        </div>
 
-    let channels = [];
-    let logos = [];
-    let countries = [];
-    let streams = [];
-    let hls;
-    let displayed = 0;
-    const perPage = 20; 
-    let currentChannelDiv = null;
+        <div id="controls" class="controls hidden">
+            <button onclick="prevChannel()" class="control-btn" title="Previous"><i data-feather="skip-back"></i></button>
+            <button id="playBtn" onclick="togglePlay(event)" class="control-btn" title="Play/Pause"><i data-feather="pause"></i></button>
+            <button id="muteBtn" onclick="toggleMute(event)" class="control-btn" title="Mute/Unmute"><i data-feather="volume-2"></i></button>
+            <button onclick="nextChannel()" class="control-btn" title="Next"><i data-feather="skip-forward"></i></button>
+            <button onclick="toggleFullScreen(event)" class="control-btn" title="Fullscreen"><i data-feather="maximize"></i></button>
+            <button onclick="toggleSizeMode(event)" class="control-btn" title="Fit/Fill"><i data-feather="fit-screen"></i></button>
+            <button onclick="toggleQualityMenu(event)" class="control-btn" title="Quality"><i data-feather="settings"></i></button>
+        </div>
 
-    async function loadData() {
-      try {
-        const [channelRes, logoRes, countryRes, streamRes] = await Promise.all([
-          fetch("https://iptv-org.github.io/api/channels.json"),
-          fetch("https://iptv-org.github.io/api/logos.json"),
-          fetch("https://iptv-org.github.io/api/countries.json"),
-          fetch("https://iptv-org.github.io/api/streams.json")
-        ]);
+        <div id="qualityMenu"></div>
+        <div id="progressContainer" class="hidden">
+            <div id="progressBar">
+                <div id="progressHandle"></div>
+            </div>
+        </div>
+        <div id="timeDisplay" class="hidden">00:00 / 00:00</div>
+        <div id="channelName">Select a channel</div>
+    </div>
 
-        channels = await channelRes.json();
-        logos = await logoRes.json();
-        countries = await countryRes.json();
-        streams = await streamRes.json();
+    <div id="channelGrid">
+        <!-- Channels ko naye card format mein daal diya hai -->
+        <div class="channel-card" onclick="playChannel(this,'Green Entertainment','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Green_Entertainment-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1702552123-logo.webp?id=17" alt="Green Entertainment">
+            <p>Green Ent.</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'ARY Digital','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/ARYdigital-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/ary-digital-live-logo.webp?id=51" alt="ARY Digital">
+            <p>ARY Digital</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Geo Entertainment','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/GeoEntertainment-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/geo-entertainment-live.webp?id=98" alt="Geo Entertainment">
+            <p>Geo Ent.</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Hum TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/humTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/HUM-TV-Channel-logo.webp?id=30" alt="Hum TV">
+            <p>Hum TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'ARY Zindagi','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/ARYzindagi-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/ary-zindagi-live-logo.webp?id=58" alt="ARY Zindagi">
+            <p>ARY Zindagi</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Play TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/play-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/play-tv-live.webp?id=18" alt="Play TV">
+            <p>Play TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'AajEntertainment','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/AajEntertainment-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/aaj-entertainment-live.webp?id=75" alt="AajEntertainment">
+            <p>Aaj Ent.</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'See Tv','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/seeTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/see-tv-live.webp?id=71" alt="See Tv">
+            <p>See Tv</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Urdu1','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/urdu-1-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/urdu-1-live.webp?id=64" alt="Urdu1">
+            <p>Urdu1</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'AurLife ','https://cdn12isb.tamashaweb.com:8087/jazzauth/AurLife-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1745518766547.webp?id=81" alt="AurLife ">
+            <p>AurLife</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'BolEntertainment','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/BolEntertainment-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/bol-entertainment-live.webp?id=33" alt="BolEntertainment">
+            <p>Bol Ent.</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'ExpressEntertainment','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/ExpressEntertainment-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/express-entertainment-live.webp?id=64" alt="ExpressEntertainment">
+            <p>Express Ent.</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Sab Tv','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/SabTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1686044497-logo.webp?id=59" alt="Sab Tv">
+            <p>Sab Tv</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'AAN TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/AAN-TV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1681977574-logo.webp?id=23" alt="AAN TV">
+            <p>AAN TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Hum Sitaray','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/HumSitaray-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/HUM-Sitaray-Channel-logo.webp?id=27" alt="Hum Sitaray">
+            <p>Hum Sitaray</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Set Entertainment','https://cdn23lhr.tamashaweb.com:8087/YlUHeDQb7a/SetEntertainment-abr/live/vsat-setent-L/chunks.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1730720761397.webp?id=65" alt="Set Entertainment">
+            <p>Set Ent.</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'TV One','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/TVOne-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/tv-one-live.webp?id=92" alt="TV One">
+            <p>TV One</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'A Plus','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Aplus-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/a-plus-live.webp?id=86" alt="A Plus">
+            <p>A Plus</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'KTN Entertainment','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/ktnEntertainment-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/ktn-entertainment-live.webp?id=40" alt="KTN Entertainment">
+            <p>KTN Ent.</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Kashish TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/KashishTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/kashish-live.webp?id=12" alt="Kashish TV">
+            <p>Kashish TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Sindh TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/sindhTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/sindh-tv-live.webp?id=56" alt="Sindh TV">
+            <p>Sindh TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'LTN Family','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/LTNFamily-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/ltn-family-live.webp?id=49" alt="LTN Family">
+            <p>LTN Family</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Apna TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Apna-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/apna-tv-live.webp?id=61" alt="Apna TV">
+            <p>Apna TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Film World','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/filmworld-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/filmworld-live.webp?id=27" alt="Film World">
+            <p>Film World</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Filmax','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Filmax-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/filmax-live.webp?id=58" alt="Filmax">
+            <p>Filmax</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'ARY News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/ARYnews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1684242189-logo.webp?id=58" alt="ARY News">
+            <p>ARY News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Geo News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/geoNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/geo-news-live.webp?id=80" alt="Geo News">
+            <p>Geo News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'HUM News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/humnews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/HUM-News-Channel-logo.webp?id=84" alt="HUM News">
+            <p>HUM News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Tamasha News','https://cdn12isb.tamashaweb.com:8087/jazzauth/Tamasha-News-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1744124970890.webp?id=100" alt="Tamasha News">
+            <p>Tamasha News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Samaa TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/samaaTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/samaa-tv-live.webp?id=13" alt="Samaa TV">
+            <p>Samaa TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Bol News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/BolNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/bol-news-live.webp?id=87" alt="Bol News">
+            <p>Bol News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Express News','https.cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/expressnews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/express-news-live.webp?id=84" alt="Express News">
+            <p>Express News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Aaj News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/AajNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/aaj-news-live.webp?id=70" alt="Aaj News">
+            <p>Aaj News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'KTN News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/ktnNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/ktn-news-live.webp?id=41" alt="KTN News">
+            <p>KTN News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Sindh News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/SindhNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/sindh-tv-news-live.webp?id=30" alt="Sindh News">
+            <p>Sindh News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'PTV Home','https://cdn23lhr.tamashaweb.com:8087/jazzauth/PTVHome-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1750321510303.webp?id=52" alt="PTV Home">
+            <p>PTV Home</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'PTV World','https://cdn22lhr.tamashaweb.com:8087/jazzauth/PTVWorld-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1750322208140.webp?id=36" alt="PTV World">
+            <p>PTV World</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'PTV National','https://cdn22lhr.tamashaweb.com:8087/jazzauth/PTVNational-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1750322366525.webp?id=55" alt="PTV National">
+            <p>PTV National</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'PTV Sports','https://cdn21lhr.tamashaweb.com:8087/jazzauth/PTVSports-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1750321954030.webp?id=31" alt="PTV Sports">
+            <p>PTV Sports</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'PTV News','https://cdn23lhr.tamashaweb.com:8087/jazzauth/PTVNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1750321735602.webp?id=97" alt="PTV News">
+            <p>PTV News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'365 News','https://cdn22lhr.tamashaweb.com:8087/jazzauth/365News-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1745518926422.webp?id=34" alt="365 News">
+            <p>365 News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'A1 TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/A1TV-abr/live/vsat-124L/chunks.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/a1-tv-live.webp?id=60" alt="A1 TV">
+            <p>A1 TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'8XM','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/8xm-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/8xm-live.webp?id=92" alt="8XM">
+            <p>8XM</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Jalwa','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/jalwa-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/jalwa-tv-live.webp?id=82" alt="Jalwa">
+            <p>Jalwa</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Mehran TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/MehranTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/mehran-tv-logo.webp?id=100" alt="Mehran TV">
+            <p>Mehran TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Nick Jr','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Nick-Jr-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1729547438288.webp?id=32" alt="Nick Jr">
+            <p>Nick Jr</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Nick India','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Nick-India-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/TMSH-1720190626301.webp?id=31" alt="Nick India">
+            <p>Nick India</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Nick Jr Hindi','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Nick-Jr-Hindi-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/1729547557701.webp?id=77" alt="Nick Jr Hindi">
+            <p>Nick Jr Hindi</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Animal Planet','https://cdn07isb.tamashaweb.com:8087/YlUHeDQb7a/AnimalPlanet-abr/playlist.m3u8')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/2018_Animal_Planet_logo.svg/1200px-2018_Animal_Planet_logo.svg.png" alt="Animal Planet">
+            <p>Animal Planet</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Cartoon Network','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/cartoonnetwork-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/cartoon-network-live.webp?id=41" alt="Cartoon Network">
+            <p>Cartoon Network</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Minimax','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Minimax-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1702633459-logo.webp?id=70" alt="Minimax">
+            <p>Minimax</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Baby TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/BabyTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/baby-tv-live.webp?id=71" alt="Baby TV">
+            <p>Baby TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Movie One','https://cdn21lhr.tamashaweb.com:8087/jazzauth/MovieOne-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/movie-one-live.webp?id=82" alt="Movie One">
+            <p>Movie One</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Ten Sports HD','https://cdn07isb.tamashaweb.com:8087/YlUHeDQb7a/157-3H/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/ten-sports-hd-logo.webp?id=64" alt="Ten Sports HD">
+            <p>Ten Sports HD</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'EPL','https://cdn06khi.tamashaweb.com:8087/YlUHeDQb7a/EPL-A-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/TMSH-1724158879315.webp?id=28" alt="EPL">
+            <p>EPL</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Eurosport','https://cdn22lhr.tamashaweb.com:8087/jazzauth/Eurosport-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1686912440-logo.webp?id=37" alt="Eurosport">
+            <p>Eurosport</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Al Jazeera','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/AL-Jazeera-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1706163791-logo.webp?id=57" alt="Al Jazeera">
+            <p>Al Jazeera</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Dawn News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/DawnNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/dawn-news-live.webp?id=44" alt="Dawn News">
+            <p>Dawn News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Suno News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Suno_News-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1709545345-logo.webp?id=42" alt="Suno News">
+            <p>Suno News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Neo News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/NeoNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/neo-tv-live.webp?id=11" alt="Neo News">
+            <p>Neo News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'CNN','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Livecnn-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/cnn-news-live.webp?id=34" alt="CNN">
+            <p>CNN</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Hum Masala','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/hummasala-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/HUM-Masala-Channel-logo.webp?id=13" alt="Hum Masala">
+            <p>Hum Masala</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'ABN News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/ABNnews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1686912075-logo.webp?id=10" alt="ABN News">
+            <p>ABN News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Madni Channel','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Madni-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/madani-channel-live.webp?id=59" alt="Madni Channel">
+            <p>Madni Channel</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Abb Takk','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/abbtak-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/abb-takk-news-live.webp?id=78" alt="Abb Takk">
+            <p>Abb Takk</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'GNN','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/GNN-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/gnn-live.webp?id=68" alt="GNN">
+            <p>GNN</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'24 News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/24News-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/channel-24-live.webp?id=60" alt="24 News">
+            <p>24 News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Such TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/SachTV/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/such-tv-live.webp?id=96" alt="Such TV">
+            <p>Such TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Roz News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/RozNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/roze-news-live.webp?id=92" alt="Roz News">
+            <p>Roz News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Discover Pakistan','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/DiscoveryPakistan-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/discover-pakistan-live-logo.webp?id=100" alt="Discover Pakistan">
+            <p>Discover Pak</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Lahore Rang','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/LahoreRung-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/lahore-rang-logo.webp?id=75" alt="Lahore Rang">
+            <p>Lahore Rang</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'News One','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/NewsOne-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/news-one-live.webp?id=32" alt="News One">
+            <p>News One</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Public TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/PublicTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/public-news-live.webp?id=37" alt="Public TV">
+            <p>Public TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'AVT Khyber','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/AVTkhyberTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1685537734-logo.webp?id=53" alt="AVT Khyber">
+            <p>AVT Khyber</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Channel 5','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Channel5-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/channel-five-live.webp?id=79" alt="Channel 5">
+            <p>Channel 5</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'City 42','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/city42(vnw)-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/city-42-live.webp?id=97" alt="City 42">
+            <p>City 42</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Metro 1 News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Metro1News-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/metro-1-news-live.webp?id=98" alt="Metro 1 News">
+            <p>Metro 1 News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Afghan TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/AfghanTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/afghan-tv-live.webp?id=37" alt="Afghan TV">
+            <p>Afghan TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Time News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/TimeNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/time-news-live.webp?id=19" alt="Time News">
+            <p>Time News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Rohi TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/RohiTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/rohi-live.webp?id=46" alt="Rohi TV">
+            <p>Rohi TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Khyber News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/KhyberNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1685537412-logo.webp?id=51" alt="Khyber News">
+            <p>Khyber News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'K21','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/K21-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/k21-news-live.webp?id=84" alt="K21">
+            <p>K21</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Saudi Sunnah','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/SaudiSunnah(NW)-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/saudi-sunnah-madinah-tv-hd-live.webp?id=38" alt="Saudi Sunnah">
+            <p>Saudi Sunnah</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Waseeb','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/waseeb-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/waseb-live.webp?id=100" alt="Waseeb">
+            <p>Waseeb</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'City 41','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/city41News-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/city41-live.webp?id=72" alt="City 41">
+            <p>City 41</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Saudi Makkah','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Saudimakkah(nw)-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/saudi-quran-makkah-tv-hd-live.webp?id=43" alt="Saudi Makkah">
+            <p>Saudi Makkah</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Mashriq TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/mashriqtv-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/mashriq-tv-live.webp?id=53" alt="Mashriq TV">
+            <p>Mashriq TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'DW News','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/DWNews-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/DW-english-live.webp?id=21" alt="DW News">
+            <p>DW News</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Kohinoor TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/KohinoorTV-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/kohenoor-tv-live.webp?id=16" alt="Kohinoor TV">
+            <p>Kohinoor TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Champion TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/championtv-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/champion-tv-live.webp?id=65" alt="Champion TV">
+            <p>Champion TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Kay2 TV','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Kay2-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/1685535127-logo.webp?id=48" alt="Kay2 TV">
+            <p>Kay2 TV</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'PNN','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/PNN-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/AIKNEWS-LOGO.webp?id=60" alt="PNN">
+            <p>PNN</p>
+        </div>
+        <div class="channel-card" onclick="playChannel(this,'Pashto 1','https://cdn12isb.tamashaweb.com:8087/YlUHeDQb7a/Pashto1-abr/playlist.m3u8')">
+            <img src="https://canvas.tamashaweb.com/jazzlive/uploads/channels/logo/HUM-Pashto-Channel-logo.webp?id=29" alt="Pashto 1">
+            <p>Pashto 1</p>
+        </div>
+    </div>
 
-        populateFilters();
-        renderChannels();
-      } catch (error) {
-        console.error("Failed to load data:", error);
-        channelContainer.innerHTML = "<p style='text-align: center; color: #ff5555;'>Error loading channels. Please try refreshing.</p>";
-      }
-    }
+<script>
+let hls, currentIndex = -1, sizeMode = "fit", controlsTimeout;
+const video = document.getElementById("videoPlayer");
+const playBtn = document.getElementById("playBtn").querySelector('i');
+const muteBtn = document.getElementById("muteBtn").querySelector('i');
+const qualityMenu = document.getElementById("qualityMenu");
+const controls = document.getElementById("controls");
+const playerBox = document.getElementById("playerBox");
+const channels = Array.from(document.querySelectorAll(".channel-card"));
+const progressBar = document.getElementById("progressBar");
+const progressContainer = document.getElementById("progressContainer");
+const progressHandle = document.getElementById("progressHandle");
+const timeDisplay = document.getElementById("timeDisplay");
+const loader = document.getElementById("loader");
+const channelName = document.getElementById("channelName");
 
-    function populateFilters() {
-      countrySelect.innerHTML =
-        '<option value="">🌍 All Countries</option>' +
-        countries.map(c => `<option value="${c.code}">${c.flag} ${c.name}</option>`).join("");
+async function playChannel(el, name, url) {
+    loader.classList.add("show");
+    currentIndex = channels.indexOf(el);
+    channelName.innerText = name;
+    channels.forEach(c => c.classList.remove("active-channel"));
+    el.classList.add("active-channel");
 
-      // Unique languages from countries list
-      const allLangs = [...new Set(countries.flatMap(c => c.languages))].sort((a, b) => a.name.localeCompare(b.name));
-      languageSelect.innerHTML =
-        '<option value="">🈯 All Languages</option>' +
-        allLangs.map(l => `<option value="${l.code}">${l.name}</option>`).join("");
-    }
-
-    function renderChannels(reset = true) {
-      if (reset) {
-        channelContainer.innerHTML = "";
-        displayed = 0;
-      }
-
-      const search = searchBox.value.toLowerCase();
-      const country = countrySelect.value;
-      const language = languageSelect.value;
-
-      const filtered = channels.filter(ch => {
-        const matchName = ch.name.toLowerCase().includes(search);
-        const matchCountry = !country || ch.country === country;
-        
-        const countryData = countries.find(c => c.code === ch.country);
-        const channelLangs = countryData ? countryData.languages.map(l => l.code) : [];
-        const matchLang = !language || channelLangs.includes(language);
-
-        return matchName && matchCountry && matchLang;
-      });
-
-      const slice = filtered.slice(displayed, displayed + perPage);
-      slice.forEach(ch => {
-        const logo = logos.find(l => l.channel === ch.id);
-        const div = document.createElement("div");
-        div.className = "channel";
-        div.setAttribute("title", ch.name); // Tooltip for long names
-
-        div.innerHTML = `
-          <img src="${logo ? logo.url : 'https://i.imgur.com/v1hGHYE.png'}" alt="${ch.name} logo" onerror="this.src='https://i.imgur.com/v1hGHYE.png';">
-          <p>${ch.name}</p>
-          <small>${getFlag(ch.country)} ${ch.country}</small>
-        `;
-
-        const stream = streams.find(s => s.channel === ch.id && s.status === 'online' && s.url) || 
-                       streams.find(s => s.channel === ch.id && s.url); // Fallback
-
-        const streamUrl = stream ? stream.url : "";
-        div.onclick = () => playChannel(streamUrl, ch.name, div);
-        channelContainer.appendChild(div);
-      });
-
-      displayed += perPage;
-      loadMoreBtn.style.display = displayed < filtered.length ? "block" : "none";
-      
-      if (filtered.length === 0 && reset) {
-         channelContainer.innerHTML = "<p style='text-align: center;'>No channels found matching your criteria.</p>";
-      }
-    }
-
-    function getFlag(code) {
-      const c = countries.find(x => x.code === code);
-      return c ? c.flag : "🏳️";
-    }
-
-    function playChannel(url, name, div) {
-      if (!url) {
-        alert("⚠️ No working stream available for this channel.");
-        return;
-      }
-
-      // Remove existing "now-playing"
-      if (currentChannelDiv) {
-        currentChannelDiv.classList.remove("now-playing");
-        const badge = currentChannelDiv.querySelector(".live-badge");
-        if (badge) badge.remove();
-      }
-
-      // Add to new channel
-      div.classList.add("now-playing");
-      const liveTag = document.createElement("div");
-      liveTag.className = "live-badge";
-      liveTag.textContent = "PLAYING";
-      div.appendChild(liveTag);
-      currentChannelDiv = div;
-
-      // Scroll player into view on mobile
-      if (window.innerWidth <= 768) {
-        document.getElementById("playerContainer").scrollIntoView({ behavior: 'smooth' });
-      }
-
-      // Destroy previous HLS instance
-      if (hls) { 
-        hls.destroy(); 
-        hls = null; 
-      }
-
-      if (url.endsWith(".m3u8")) {
-        if (Hls.isSupported()) {
-          hls = new Hls();
-          hls.loadSource(url);
-          hls.attachMedia(videoElement);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            videoElement.muted = false;
-            videoElement.play().catch((e) => console.error("Play error:", e));
-          });
-          hls.on(Hls.Events.ERROR, (event, data) => {
+    if (hls) { hls.destroy(); qualityMenu.innerHTML = ""; }
+    if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, async function (event, data) {
+            setupQualityMenu(data.levels);
+            loader.classList.remove("show");
+            try {
+                await video.play(); // Await play
+                playBtn.setAttribute("data-feather", "pause");
+            } catch (e) {
+                console.warn("Autoplay was prevented:", e);
+                playBtn.setAttribute("data-feather", "play");
+            }
+            feather.replace();
+        });
+        hls.on(Hls.Events.ERROR, function (event, data) {
             console.error("HLS Error:", data);
-            // Agar stream fail ho toh player ko direct source se try karwaein
-            videoPlayer.src({ src: url });
-            videoPlayer.play();
-          });
-        } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-          videoElement.src = url;
-          videoElement.muted = false;
-          videoElement.play().catch((e) => console.error("Play error:", e));
-        } else {
-          alert("Your browser doesn't support HLS playback.");
-        }
-      } else {
-        // For non-HLS streams (like MP4, etc.)
-        videoPlayer.src({ src: url });
-        videoPlayer.muted(false);
-        videoPlayer.play().catch((e) => console.error("Play error:", e));
-      }
-
-      document.title = `▶️ ${name}`;
+            loader.classList.remove("show");
+            // Show error message on player
+            channelName.innerText = "Error: Link failed (404)";
+            playBtn.setAttribute("data-feather", "play");
+            feather.replace();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener("canplay", async () => { // make async
+            loader.classList.remove("show");
+             try {
+                await video.play(); // Await play
+                playBtn.setAttribute("data-feather", "pause");
+            } catch (e) {
+                console.warn("Autoplay was prevented:", e);
+                playBtn.setAttribute("data-feather", "play");
+            }
+            feather.replace();
+        }, { once: true });
     }
+}
 
-    // Debounce search input to avoid too many re-renders
-    let searchTimeout;
-    searchBox.oninput = () => {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => renderChannels(), 300); // 300ms delay
-    };
+function setupQualityMenu(levels) {
+    qualityMenu.innerHTML = "";
+    let autoBtn = document.createElement("button");
+    autoBtn.innerText = "Auto";
+    autoBtn.onclick = () => { hls.currentLevel = -1; updateQualityActive(autoBtn); };
+    qualityMenu.appendChild(autoBtn);
 
-    loadMoreBtn.onclick = () => renderChannels(false);
-    countrySelect.onchange = () => renderChannels();
-    languageSelect.onchange = ()d
-  </script>
+    levels.sort((a,b) => b.height - a.height).forEach((lvl, i) => {
+        let btn = document.createElement("button");
+        btn.innerText = lvl.height + "p";
+        btn.onclick = () => {
+            hls.currentLevel = levels.indexOf(lvl); // Use original index if needed, but sorting is fine
+            updateQualityActive(btn);
+        };
+        qualityMenu.appendChild(btn);
+    });
+    updateQualityActive(autoBtn);
+}
+
+function updateQualityActive(activeBtn) {
+    Array.from(qualityMenu.children).forEach(btn => btn.classList.remove("active-quality"));
+    activeBtn.classList.add("active-quality");
+    toggleQualityMenu(false); // Hide menu on selection
+}
+
+function prevChannel() { if (currentIndex > 0) channels[currentIndex - 1].click(); }
+function nextChannel() { if (currentIndex < channels.length - 1) channels[currentIndex + 1].click(); }
+
+async function togglePlay(e) { // make async
+    if(e) e.stopPropagation();
+    if (video.paused) {
+        try { 
+            await video.play(); // Await play
+            playBtn.setAttribute("data-feather", "pause");
+        } catch(e){
+            console.warn("Play interrupted", e);
+            playBtn.setAttribute("data-feather", "play");
+        }
+    } else {
+        video.pause();
+        playBtn.setAttribute("data-feather", "play");
+    }
+    feather.replace();
+}
+
+function toggleMute(e) {
+    if(e) e.stopPropagation();
+    video.muted = !video.muted;
+    muteBtn.setAttribute("data-feather", video.muted ? "volume-x" : "volume-2");
+    feather.replace();
+}
+
+function toggleFullScreen(e) {
+    if(e) e.stopPropagation();
+    if (!document.fullscreenElement) {
+        playerBox.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+function toggleQualityMenu(e) {
+    if(e) e.stopPropagation();
+    var forceShow = (e === false) ? false : null; // Check for explicit false
+    if (typeof forceShow === 'boolean') {
+        qualityMenu.style.display = forceShow ? "block" : "none";
+    } else {
+        qualityMenu.style.display = (qualityMenu.style.display === "block") ? "none" : "block";
+    }
+}
+
+function toggleSizeMode(e) {
+    if(e) e.stopPropagation();
+    if (sizeMode === "fit") { setSize("fill"); }
+    else if (sizeMode === "fill") { setSize("stretch"); }
+    else { setSize("fit"); }
+}
+
+function setSize(mode) {
+    sizeMode = mode;
+    video.style.objectFit = (mode === "fit") ? "contain" : (mode === "fill") ? "cover" : "fill";
+}
+
+function showControls() {
+    controls.classList.remove("hidden");
+    channelName.classList.remove("hidden");
+    progressContainer.classList.remove("hidden");
+    timeDisplay.classList.remove("hidden");
+    playerBox.style.cursor = "default";
+    
+    clearTimeout(controlsTimeout);
+    controlsTimeout = setTimeout(() => {
+        if (!video.paused) { // Don't hide if paused
+            hideControls();
+        }
+    }, 3000); // Hide after 3 seconds
+}
+
+function hideControls() {
+    if (qualityMenu.style.display === 'block') return; // Don't hide if quality menu is open
+    controls.classList.add("hidden");
+    channelName.classList.add("hidden");
+    progressContainer.classList.add("hidden");
+    timeDisplay.classList.add("hidden");
+    playerBox.style.cursor = "none";
+}
+
+// Show/hide controls
+playerBox.addEventListener("mousemove", showControls);
+playerBox.addEventListener("click", (e) => {
+    // Prevent click on progress bar from toggling controls
+    if (e.target.id === 'progressContainer' || e.target.id === 'progressBar' || e.target.id === 'progressHandle') return;
+    
+    if (controls.classList.contains('hidden')) {
+        showControls();
+    } else {
+        hideControls();
+    }
+});
+// Keep controls visible when paused
+video.addEventListener("play", showControls);
+video.addEventListener("pause", showControls);
+
+
+function goBack() { window.history.back(); } // Use history back instead
+
+// Update progress bar
+video.addEventListener('timeupdate', () => {
+    if (video.duration) {
+        const percent = (video.currentTime / video.duration) * 100;
+        progressBar.style.width = percent + "%";
+        progressHandle.style.left = percent + "%";
+        
+        const curMin = Math.floor(video.currentTime / 60).toString().padStart(2, '0');
+        const curSec = Math.floor(video.currentTime % 60).toString().padStart(2, '0');
+        const durMin = isNaN(video.duration) ? '00' : Math.floor(video.duration / 60).toString().padStart(2, '0');
+        const durSec = isNaN(video.duration) ? '00' : Math.floor(video.duration % 60).toString().padStart(2, '0');
+        
+        timeDisplay.innerText = `${curMin}:${curSec} / ${durMin}:${durSec}`;
+    }
+});
+
+// --- Seek Logic (Click + Drag for Mouse & Touch) ---
+let isDragging = false;
+
+function seekVideo(e) {
+    if (isNaN(video.duration)) return;
+    const rect = progressContainer.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    video.currentTime = Math.max(0, Math.min(1, pos)) * video.duration;
+}
+
+function startDrag(e) {
+    isDragging = true;
+    video.pause(); // Pause while scrubbing
+}
+
+async function stopDrag(e) { // make async
+    if (isDragging) {
+        isDragging = false;
+        try {
+            await video.play(); // Await play
+        } catch (e) {
+            console.warn("Play after scrub failed", e);
+        }
+    }
+}
+
+function onDrag(e) {
+    if (!isDragging || isNaN(video.duration)) return;
+    // Use clientX for mouse, and touches[0].clientX for touch
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    if (clientX === undefined) return;
+    
+    const rect = progressContainer.getBoundingClientRect();
+    let pos = (clientX - rect.left) / rect.width;
+    pos = Math.max(0, Math.min(1, pos)); // Clamp between 0 and 1
+    video.currentTime = pos * video.duration;
+    
+    // Update UI immediately
+    const percent = pos * 100;
+    progressBar.style.width = percent + "%";
+    progressHandle.style.left = percent + "%";
+}
+
+// Mouse events
+progressContainer.addEventListener("click", seekVideo);
+progressHandle.addEventListener("mousedown", startDrag);
+document.addEventListener("mouseup", stopDrag);
+document.addEventListener("mousemove", onDrag);
+
+// Touch events
+progressHandle.addEventListener("touchstart", startDrag, { passive: true });
+document.addEventListener("touchend", stopDrag, { passive: true });
+document.addEventListener("touchmove", onDrag, { passive: true });
+
+// Initial setup
+document.addEventListener("DOMContentLoaded", () => {
+    feather.replace();
+    // Show controls on load
+    setTimeout(showControls, 500);
+});
+</script>
 </body>
 </html>
+
