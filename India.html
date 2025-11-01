@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamzaEditz 2.0 - Number Lookup</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --primary-color: #8E2DE2;
+            --bg-dark: #0f0f12;
+            --bg-light: #1f1f1f;
+            --bg-lighter: #2a2a2a;
+            --border-color: #333;
+        }
+
+        /* --- Gemini Text Effect --- */
+        .gemini-title {
+            font-weight: 800;
+            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gemini-shimmer 8s linear infinite;
+        }
+        @keyframes gemini-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+        /* --- End Gemini Effect --- */
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: var(--primary-gradient);
+            transition: opacity 0.2s;
+        }
+        .btn-gradient:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+        
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'], // Use Poppins
+                    },
+                    colors: {
+                        'primary-color': 'var(--primary-color)',
+                        'bg-dark': 'var(--bg-dark)',
+                        'bg-light': 'var(--bg-light)',
+                        'bg-lighter': 'var(--bg-lighter)',
+                        'border-color': 'var(--border-color)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-dark text-gray-100 min-h-screen p-4 sm:p-8 font-sans">
+
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <header class="text-center py-4 border-b border-border-color">
+            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">
+                Sim Number Info
+            </h1>
+            <p class="text-gray-400 mt-2 text-lg">Find details associated with a number.</p>
+        </header>
+
+        <!-- Search Form Card -->
+        <form id="lookupForm" class="bg-bg-light p-6 rounded-xl shadow-xl border-t-4 border-primary-color">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <input type="tel" id="numberInput" 
+                       class="flex-1 bg-bg-lighter border border-border-color text-gray-200 text-lg rounded-lg focus:ring-primary-color focus:border-primary-color p-4" 
+                       placeholder="e.g., 918373838566" required>
+                
+                <button type="submit" id="searchButton" 
+                        class="btn-gradient text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center text-lg disabled:opacity-50 disabled:cursor-wait">
+                    <i id="searchIcon" data-feather="search" class="w-6 h-6 mr-2"></i>
+                    <span id="buttonText">Search</span>
+                </button>
+            </div>
+        </form>
+
+        <!-- Results Display Card -->
+        <main id="resultsContainer" class="bg-bg-light p-6 sm:p-8 rounded-xl shadow-2xl border-t-4 border-primary-color hidden">
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center hidden">
+                <i data-feather="loader" class="animate-spin h-10 w-10 inline-block text-primary-color"></i>
+                <p class="text-lg mt-4">Fetching details...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="errorState" class="text-center hidden">
+                <i data-feather="alert-triangle" class="h-10 w-10 inline-block text-red-500"></i>
+                <p id="errorMessage" class="text-lg mt-4 text-red-400">Error</p>
+            </div>
+            
+            <!-- Success State -->
+            <div id="successState" class="hidden space-y-6">
+                <!-- Content will be injected here by JS -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // API Endpoint
+        const API_URL = "https://jsr-number-info.onrender.com/lookup";
+        // CORS Proxy to bypass browser restrictions
+        const PROXIED_API_URL = "https://corsproxy.io/?" + encodeURIComponent(API_URL);
+
+        // UI Elements
+        const lookupForm = document.getElementById('lookupForm');
+        const numberInput = document.getElementById('numberInput');
+        const searchButton = document.getElementById('searchButton');
+        const buttonText = document.getElementById('buttonText');
+        const searchIcon = document.getElementById('searchIcon');
+        
+        const resultsContainer = document.getElementById('resultsContainer');
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const errorMessage = document.getElementById('errorMessage');
+        const successState = document.getElementById('successState');
+
+        /**
+         * Sets the loading state of the UI.
+         */
+        function setLoading(isLoading) {
+            searchButton.disabled = isLoading;
+            if (isLoading) {
+                buttonText.textContent = "Searching...";
+                searchIcon.classList.add('spinning');
+                
+                resultsContainer.classList.remove('hidden');
+                loadingState.classList.remove('hidden');
+                successState.classList.add('hidden');
+                errorState.classList.add('hidden');
+            } else {
+                buttonText.textContent = "Search";
+                searchIcon.classList.remove('spinning');
+                loadingState.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Displays the fetched data in the UI.
+         */
+        function displayResults(data) {
+            if (!data || !data.result || data.result.length === 0) {
+                displayError("No results found for this number.");
+                return;
+            }
+            
+            const result = data.result[0];
+            
+            successState.innerHTML = `
+                <div class="pb-3 border-b border-border-color">
+                    <p class="text-3xl font-bold text-primary-color">${result.name || 'N/A'}</p>
+                    <p class="text-lg font-mono text-gray-400">${result.mobile || 'N/A'}</p>
+                </div>
+                
+                <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <div>
+                        <dt class="text-sm font-medium text-gray-400">Father's Name</dt>
+                        <dd class="text-lg font-semibold text-gray-100">${result.father_name || 'N/A'}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-400">Circle</dt>
+                        <dd class="text-lg font-semibold text-gray-100">${result.circle || 'N/A'}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-400">ID Number</dt>
+                        <dd class="text-lg font-mono text-gray-100">${result.id_number || 'N/A'}</dd>
+                    </div>
+                     <div>
+                        <dt class="text-sm font-medium text-gray-400">Alternate Mobile</dt>
+                        <dd class="text-lg font-mono text-gray-100">${result.alt_mobile || 'N/A'}</dd>
+                    </div>
+                    <div class="md:col-span-2">
+                        <dt class="text-sm font-medium text-gray-400">Address</dt>
+                        <dd class="text-md font-mono text-gray-300">${result.address || 'N/A'}</dd>
+                    </div>
+                </dl>
+            `;
+            successState.classList.remove('hidden');
+        }
+
+        /**
+         * Displays an error message in the UI.
+         */
+        function displayError(message) {
+            errorMessage.textContent = message;
+            errorState.classList.remove('hidden');
+        }
+
+        /**
+         * Form submission handler.
+         */
+        lookupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const number = numberInput.value;
+            if (!number) return;
+            
+            setLoading(true);
+
+            try {
+                const response = await fetch(PROXIED_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ number: number })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `API Error: ${response.status}`);
+                }
+
+                const json = await response.json();
+
+                if (json.success && json.data && json.data.success) {
+                    displayResults(json.data);
+                } else {
+                    throw new Error(json.message || json.data.message || "Failed to find details.");
+                }
+
+            } catch (error) {
+                console.error("Lookup Error:", error);
+                displayError(error.message || "An unknown error occurred.");
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Initialize icons
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+        });
+
+    </script>
+</body>
+  </html>
+  
