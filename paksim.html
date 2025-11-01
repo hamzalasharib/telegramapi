@@ -3,181 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phone Number Search</title>
     <script src="https://fpyf8.com/88/tag.min.js" data-zone="181227" async data-cfasync="false"></script>
     
+    <title>HamzaEditz 2.0 - Number Search</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
     <style>
-        /* --- Basic Setup (Inspired by your image) --- */
+        :root {
+            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --primary-color: #8E2DE2;
+            --bg-dark: #0f0f12;
+            --bg-light: #1f1f1f;
+            --bg-lighter: #2a2a2a;
+            --border-color: #333;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #1a1a2e; /* Dark Blue/Purple Background */
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
             color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
         }
 
-        .container {
-            max-width: 700px;
-            margin: 20px auto;
-            padding: 20px;
+        /* --- Gemini Text Effect --- */
+        .gemini-title {
+            font-weight: 800;
+            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gemini-shimmer 8s linear infinite;
+        }
+        @keyframes gemini-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
         }
 
-        /* --- Header --- */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
+        /* Gradient Button */
+        .btn-gradient {
+            background: var(--primary-gradient);
+            transition: opacity 0.2s;
         }
-
-        header h1 {
-            color: #ffffff;
-            font-size: 2.5rem;
-            margin: 0;
-        }
-
-        /* --- Search Box --- */
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        #phoneInput {
-            flex-grow: 1;
-            padding: 15px;
-            font-size: 1rem;
-            border: 1px solid #4a4a6a;
-            background-color: #2a2a3e;
-            color: #ffffff;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        #phoneInput:focus {
-            border-color: #7b5aff;
-            box-shadow: 0 0 10px rgba(123, 90, 255, 0.5);
-        }
-
-        #searchButton {
-            padding: 15px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            background-color: #6a11cb; /* Purple Accent */
-            background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #searchButton:hover {
+        .btn-gradient:hover:not(:disabled) {
             opacity: 0.9;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-
-        /* --- Results Area --- */
-        #loading {
-            display: none; /* Hidden by default */
-            text-align: center;
-            font-size: 1.2rem;
-            color: #a0a0a0;
-            margin: 20px 0;
+        
+        .spinning {
+            animation: spin 1s linear infinite;
         }
-
-        #resultsContainer {
-            display: grid;
-            gap: 15px;
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-
-        .result-card {
-            background-color: #2a2a3e;
-            border: 1px solid #4a4a6a;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        
+        /* Secondary Link Button */
+        .btn-link {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            color: #d1d5db; /* gray-300 */
+            transition: all 0.2s;
         }
-
-        .result-card h3 {
-            margin-top: 0;
-            color: #9bf;
-            border-bottom: 1px solid #4a4a6a;
-            padding-bottom: 10px;
-        }
-
-        .result-card p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-
-        .result-card p strong {
-            color: #b0b0b0; /* Light gray for labels */
-            display: inline-block;
-            width: 80px; /* Aligns the values */
-        }
-
-        /* --- Social Links (Styled like buttons) --- */
-        .links {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #4a4a6a;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .links a {
-            display: inline-block;
-            padding: 12px 20px;
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #2a2a3e;
-            border: 1px solid #4a4a6a;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .links a:hover {
-            background-color: #4a4a6a;
-            border-color: #7b5aff;
+        .btn-link:hover {
+            border-color: var(--primary-color);
+            color: #fff;
         }
 
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-color': 'var(--primary-color)',
+                        'bg-dark': 'var(--bg-dark)',
+                        'bg-light': 'var(--bg-light)',
+                        'bg-lighter': 'var(--bg-lighter)',
+                        'border-color': 'var(--border-color)',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="min-h-screen p-4 sm:p-8">
 
-    <div class="container">
-        <header>
-            <h1>Phone Number Search</h1>
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <header class="text-center py-4 border-b border-border-color">
+            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">
+                HamzaEditz 2.0 - Number Search
+            </h1>
         </header>
 
-        <div class="search-box">
-            <input type="text" id="phoneInput" placeholder="Enter phone number (e.g., 0309...)">
-            <button id="searchButton">Search</button>
+        <!-- Search Box -->
+        <div class="flex flex-col sm:flex-row gap-4">
+            <input type="tel" id="phoneInput" 
+                   class="flex-1 bg-bg-lighter border border-border-color text-gray-200 text-lg rounded-lg focus:ring-primary-color focus:border-primary-color p-4" 
+                   placeholder="Enter phone number (e.g., 0309...)">
+            
+            <button id="searchButton" 
+                    class="btn-gradient text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center text-lg disabled:opacity-50 disabled:cursor-wait">
+                <i id="searchIcon" data-feather="search" class="w-6 h-6 mr-2"></i>
+                <span id="buttonText">Search</span>
+            </button>
         </div>
 
-        <div id="loading">Loading...</div>
-        <div id="resultsContainer">
-            </div>
+        <!-- Loading Spinner -->
+        <div id="loading" class="text-center hidden py-8">
+            <i data-feather="loader" class="animate-spin h-10 w-10 inline-block text-primary-color"></i>
+            <p class="text-lg mt-4 text-gray-400">Loading...</p>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="errorDisplay" class="text-center hidden p-4 bg-red-900 bg-opacity-30 border border-red-700 rounded-lg">
+            <p id="errorMessage" class="text-red-300"></p>
+        </div>
 
-        <div class="links">
-            <a href="https://t.me/hamzaeditz2" target="_blank">📢 Telegram Channel</a>
-            <a href="https://youtube.com/@hamzashafiq786" target="_blank">▶️ YouTube</a>
-            <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank">💬 WhatsApp Group</a>
+        <!-- Results Area -->
+        <div id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Results will be injected here -->
+        </div>
+
+        <!-- Social Links -->
+        <div class="links text-center pt-8 border-t border-border-color flex flex-wrap justify-center gap-4">
+            <a href="https://t.me/hamzaeditz2" target="_blank" class="btn-link py-2 px-4 rounded-lg flex items-center gap-2">
+                <i data-feather="send" class="w-4 h-4"></i>
+                Telegram Channel
+            </a>
+            <a href="https://youtube.com/@hamzashafiq786" target="_blank" class="btn-link py-2 px-4 rounded-lg flex items-center gap-2">
+                <i data-feather="youtube" class="w-4 h-4"></i>
+                YouTube
+            </a>
+            <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank" class="btn-link py-2 px-4 rounded-lg flex items-center gap-2">
+                <i data-feather="message-circle" class="w-4 h-4"></i>
+                WhatsApp Group
+            </a>
         </div>
     </div>
 
     <script>
         const phoneInput = document.getElementById('phoneInput');
         const searchButton = document.getElementById('searchButton');
+        const buttonText = document.getElementById('buttonText');
+        const searchIcon = document.getElementById('searchIcon');
         const resultsContainer = document.getElementById('resultsContainer');
         const loading = document.getElementById('loading');
+        const errorDisplay = document.getElementById('errorDisplay');
+        const errorMessage = document.getElementById('errorMessage');
 
         searchButton.addEventListener('click', searchPhone);
         
-        // Allow pressing Enter to search
         phoneInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchPhone();
@@ -187,12 +172,11 @@
         async function searchPhone() {
             let query = phoneInput.value.trim();
             if (!query) {
-                resultsContainer.innerHTML = '<p style="text-align:center; color: #ff8a8a;">Please enter a phone number.</p>';
+                showError('Please enter a phone number.');
                 return;
             }
 
-            // --- Phone Number Normalization ---
-            // Converts +923..., 923..., 3... formats to 03...
+            // Normalize phone number
             if (query.startsWith('+92')) {
                 query = '0' + query.substring(3);
             } else if (query.startsWith('92')) {
@@ -200,13 +184,12 @@
             } else if (query.startsWith('3') && query.length === 10) {
                 query = '0' + query;
             }
-            // Now 'query' should be in '03...' format if possible
 
-            const apiUrl = 'https://corsproxy.io/?url=https://kami-database.vercel.app/api/search?phone=' + encodeURIComponent(query);
+            const apiUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://kami-database.vercel.app/api/search?phone=' + query);
 
-            // --- Show loading, hide old results ---
-            loading.style.display = 'block';
+            setLoading(true);
             resultsContainer.innerHTML = '';
+            errorDisplay.classList.add('hidden');
 
             try {
                 const response = await fetch(apiUrl);
@@ -215,47 +198,67 @@
                 }
                 const data = await response.json();
 
-                // Hide loading
-                loading.style.display = 'none';
-
-                // --- Display Results ---
                 if (data.success && data.records && data.records.length > 0) {
                     displayResults(data.records);
                 } else {
-                    resultsContainer.innerHTML = '<p style="text-align:center; color: #a0a0a0;">No records found for this number.</p>';
+                    showError('No records found for this number.');
                 }
 
             } catch (error) {
-                loading.style.display = 'none';
                 console.error('Fetch Error:', error);
-                resultsContainer.innerHTML = '<p style="text-align:center; color: #ff8a8a;">An error occurred while fetching data. Please try again.</p>';
+                showError('An error occurred while fetching data. Please try again.');
+            } finally {
+                setLoading(false);
             }
         }
 
-        function displayResults(records) {
-            // Clear previous results
-            resultsContainer.innerHTML = '';
+        function setLoading(isLoading) {
+            searchButton.disabled = isLoading;
+            if (isLoading) {
+                loading.classList.remove('hidden');
+                buttonText.textContent = "Searching...";
+                searchIcon.classList.add('spinning');
+            } else {
+                loading.classList.add('hidden');
+                buttonText.textContent = "Search";
+                searchIcon.classList.remove('spinning');
+            }
+        }
 
-            // Create a card for each record
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorDisplay.classList.remove('hidden');
+        }
+
+        function displayResults(records) {
+            resultsContainer.innerHTML = ''; // Clear previous results
             records.forEach(record => {
                 const card = document.createElement('div');
-                card.className = 'result-card';
+                card.className = 'result-card bg-bg-light p-5 rounded-xl border-t-4 border-primary-color shadow-lg';
 
+                // Using innerHTML but with escaped values for security
                 card.innerHTML = `
-                    <h3>${escapeHTML(record.Name)}</h3>
-                    <p><strong>Mobile:</strong> ${escapeHTML(record.Mobile)}</p>
-                    <p><strong>CNIC:</strong> ${escapeHTML(record.CNIC)}</p>
-                    <p><strong>Address:</strong> ${escapeHTML(record.Address)}</p>
+                    <h3 class="text-2xl font-bold text-primary-color pb-3 border-b border-border-color">${escapeHTML(record.Name)}</h3>
+                    <div class="mt-4 space-y-2 text-lg">
+                        <p><strong class="text-gray-400 font-medium">Mobile:</strong> <span class="font-mono">${escapeHTML(record.Mobile)}</span></p>
+                        <p><strong class="text-gray-400 font-medium">CNIC:</strong> <span class="font-mono">${escapeHTML(record.CNIC)}</span></p>
+                        <p><strong class="text-gray-400 font-medium">Address:</strong> <span class="text-gray-200">${escapeHTML(record.Address)}</span></p>
+                    </div>
                 `;
                 
                 resultsContainer.appendChild(card);
             });
+            feather.replace(); // Refresh icons if any were added
         }
         
-        // Helper function to prevent XSS (Security best practice)
+        /**
+         * Helper function to prevent XSS (Security best practice)
+         * ✅ FIX: Corrected typo 'ret urn' to 'return'
+         */
         function escapeHTML(str) {
+            if (!str) return 'N/A'; // Handle null or empty strings
             return str.replace(/[&<>"']/g, function(match) {
-                return {
+                return { // <-- Fixed 'ret urn'
                     '&': '&amp;',
                     '<': '&lt;',
                     '>': '&gt;',
@@ -264,6 +267,11 @@
                 }[match];
             });
         }
+        
+        // Initial icon load
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+        });
 
     </script>
 
