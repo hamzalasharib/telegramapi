@@ -1,279 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://fpyf8.com/88/tag.min.js" data-zone="181227" async data-cfasync="false"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🚀 SMS Bomber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://fpyf8.com/88/tag.min.js" data-zone="181227" async data-cfasync="false"></script>
+  
+  <style>
+    /* --- Basic Setup --- */
+    * { 
+      box-sizing: border-box; 
+    }
     
-    <title>HamzaEditz 2.0 - Number Search</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Poppins Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Feather Icons -->
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    body {
+      margin: 0;
+      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f12; /* Dark background */
+      color: #f0f0f0;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* --- Professional Purple Gradient --- */
+    :root {
+      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+      --primary-color: #8E2DE2;
+      --bg-dark: #0f0f12;
+      --bg-light: #1f1f1f;
+      --bg-lighter: #2a2a2a;
+      --border-color: #333;
+      --error-color: #ff4757;
+      --success-color: #2ed573;
+    }
+
+    /* --- Main App Container --- */
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 25px 30px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
     
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
-            --primary-color: #8E2DE2;
-            --bg-dark: #0f0f12;
-            --bg-light: #1f1f1f;
-            --bg-lighter: #2a2a2a;
-            --border-color: #333;
-        }
+    h1 { 
+      font-size: 1.75rem; 
+      margin: 0 0 20px 0;
+      font-weight: 700;
+      text-align: center;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* --- Form --- */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-dark);
-            color: #f0f0f0;
-        }
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ccc;
+    }
 
-        /* --- Gemini Text Effect --- */
-        .gemini-title {
-            font-weight: 800;
-            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
-            background-size: 400% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gemini-shimmer 8s linear infinite;
-        }
-        @keyframes gemini-shimmer {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 400% 50%; }
-        }
+    /* --- Inputs --- */
+    input[type="tel"] {
+      background: var(--bg-lighter);
+      color: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
 
-        /* Gradient Button */
-        .btn-gradient {
-            background: var(--primary-gradient);
-            transition: opacity 0.2s;
-        }
-        .btn-gradient:hover:not(:disabled) {
-            opacity: 0.9;
-        }
-        
-        .spinning {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Secondary Link Button */
-        .btn-link {
-            background-color: var(--bg-light);
-            border: 1px solid var(--border-color);
-            color: #d1d5db; /* gray-300 */
-            transition: all 0.2s;
-        }
-        .btn-link:hover {
-            border-color: var(--primary-color);
-            color: #fff;
-        }
+    input[type="tel"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(142, 45, 226, 0.5); /* Glowing effect */
+    }
+    
+    /* --- Validation Hint --- */
+    #formatHint {
+      display: none; /* Default hidden */
+      font-size: 0.8rem;
+      color: var(--error-color);
+      margin-top: -10px; /* Input ke qareeb */
+      margin-bottom: 5px;
+    }
 
-    </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        'primary-color': 'var(--primary-color)',
-                        'bg-dark': 'var(--bg-dark)',
-                        'bg-light': 'var(--bg-light)',
-                        'bg-lighter': 'var(--bg-lighter)',
-                        'border-color': 'var(--border-color)',
-                    }
-                }
-            }
-        }
-    </script>
+    /* --- Button --- */
+    button {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      margin-top: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    button:hover { 
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* --- Message Box --- */
+    #messageBox {
+      display: none;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      word-wrap: break-word; /* Message lamba ho toh break hojaye */
+    }
+    
+    #messageBox.success {
+      background: rgba(46, 213, 115, 0.1);
+      color: var(--success-color);
+      border: 1px solid var(--success-color);
+    }
+    
+    #messageBox.error {
+      background: rgba(255, 71, 87, 0.1);
+      color: var(--error-color);
+      border: 1px solid var(--error-color);
+    }
+    
+  </style>
 </head>
-<body class="min-h-screen p-4 sm:p-8">
+<body>
+  
+  <div class="container">
+    <h1>🚀 SMS Bomber</h1>
+    
+    <form id="bomberForm">
+      <div>
+        <label for="number">Phone Number</label>
+        <input type="tel" id="number" placeholder="e.g., 923091645255" required>
+        <!-- Validation Hint yahan show hoga -->
+        <small id="formatHint"></small>
+      </div>
+      <button type="submit" id="submitButton">Start Attack</button>
+    </form>
+    
+    <!-- Message Area -->
+    <div id="messageBox"></div>
+  </div>
 
-    <div class="max-w-4xl mx-auto space-y-8">
+  <script>
+    // --- API URL ---
+    const API_BASE_URL = "https://shadowscriptz.xyz/shadowapisv4/smsbomberapi.php?number=";
+
+    // --- DOM Elements ---
+    const bomberForm = document.getElementById("bomberForm");
+    const numberInput = document.getElementById("number");
+    const submitButton = document.getElementById("submitButton");
+    const messageBox = document.getElementById("messageBox");
+    const formatHint = document.getElementById("formatHint");
+
+    // --- Validation Logic ---
+    const VALID_REGEX = /^923\d{9}$/; // Starts with 923, followed by 9 digits (Total 12)
+
+    numberInput.addEventListener("input", () => {
+      const number = numberInput.value;
+      
+      if (number.length === 0) {
+        formatHint.style.display = "none";
+      } else if (number.startsWith("920")) {
+        formatHint.textContent = "Error: '0' mat lagayein 92 ke baad. Sahi format: 923...";
+        formatHint.style.display = "block";
+      } else if (!/^\d*$/.test(number)) {
+        formatHint.textContent = "Sirf digits (0-9) istemal karein.";
+        formatHint.style.display = "block";
+      } else if (number.length > 0 && !/^92.*/.test(number)) {
+        formatHint.textContent = "Number 92 se shuru hona chahiye.";
+        formatHint.style.display = "block";
+      } else if (number.length > 12) {
+        formatHint.textContent = "Number 12 digits se zyada nahi ho sakta.";
+        formatHint.style.display = "block";
+      } else {
+        formatHint.style.display = "none";
+      }
+    });
+
+    // --- Helper function to show messages ---
+    function showMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.className = isError ? 'error' : 'success';
+      messageBox.style.display = 'block';
+    }
+
+    // --- Form Submission ---
+    bomberForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const number = numberInput.value;
+
+      // Final validation check on submit
+      if (!VALID_REGEX.test(number)) {
+        showMessage("Please enter a valid number (e.g., 923091645255). Format 923... (total 12 digits).", true);
+        formatHint.style.display = "block";
+        return;
+      }
+      
+      // Disable button
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+      showMessage("Sending requests, please wait...", false);
+      formatHint.style.display = "none"; // Hide hint
+
+      const fullApiUrl = API_BASE_URL + number;
+
+      try {
+        const response = await fetch(fullApiUrl);
         
-        <header class="text-center py-4 border-b border-border-color">
-            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">
-                HamzaEditz 2.0 - Number Search
-            </h1>
-        </header>
-
-        <!-- Search Box -->
-        <div class="flex flex-col sm:flex-row gap-4">
-            <input type="tel" id="phoneInput" 
-                   class="flex-1 bg-bg-lighter border border-border-color text-gray-200 text-lg rounded-lg focus:ring-primary-color focus:border-primary-color p-4" 
-                   placeholder="Enter phone number (e.g., 0309...)">
-            
-            <button id="searchButton" 
-                    class="btn-gradient text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center text-lg disabled:opacity-50 disabled:cursor-wait">
-                <i id="searchIcon" data-feather="search" class="w-6 h-6 mr-2"></i>
-                <span id="buttonText">Search</span>
-            </button>
-        </div>
-
-        <!-- Loading Spinner -->
-        <div id="loading" class="text-center hidden py-8">
-            <i data-feather="loader" class="animate-spin h-10 w-10 inline-block text-primary-color"></i>
-            <p class="text-lg mt-4 text-gray-400">Loading...</p>
-        </div>
+        let data;
+        const text = await response.text();
         
-        <!-- Error Message -->
-        <div id="errorDisplay" class="text-center hidden p-4 bg-red-900 bg-opacity-30 border border-red-700 rounded-lg">
-            <p id="errorMessage" class="text-red-300"></p>
-        </div>
-
-        <!-- Results Area -->
-        <div id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Results will be injected here -->
-        </div>
-
-        <!-- Social Links -->
-        <div class="links text-center pt-8 border-t border-border-color flex flex-wrap justify-center gap-4">
-            <a href="https://t.me/hamzaeditz2" target="_blank" class="btn-link py-2 px-4 rounded-lg flex items-center gap-2">
-                <i data-feather="send" class="w-4 h-4"></i>
-                Telegram Channel
-            </a>
-            <a href="https://youtube.com/@hamzashafiq786" target="_blank" class="btn-link py-2 px-4 rounded-lg flex items-center gap-2">
-                <i data-feather="youtube" class="w-4 h-4"></i>
-                YouTube
-            </a>
-            <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank" class="btn-link py-2 px-4 rounded-lg flex items-center gap-2">
-                <i data-feather="message-circle" class="w-4 h-4"></i>
-                WhatsApp Group
-            </a>
-        </div>
-    </div>
-
-    <script>
-        const phoneInput = document.getElementById('phoneInput');
-        const searchButton = document.getElementById('searchButton');
-        const buttonText = document.getElementById('buttonText');
-        const searchIcon = document.getElementById('searchIcon');
-        const resultsContainer = document.getElementById('resultsContainer');
-        const loading = document.getElementById('loading');
-        const errorDisplay = document.getElementById('errorDisplay');
-        const errorMessage = document.getElementById('errorMessage');
-
-        searchButton.addEventListener('click', searchPhone);
-        
-        phoneInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchPhone();
-            }
-        });
-
-        async function searchPhone() {
-            let query = phoneInput.value.trim();
-            if (!query) {
-                showError('Please enter a phone number.');
-                return;
-            }
-
-            // Normalize phone number
-            if (query.startsWith('+92')) {
-                query = '0' + query.substring(3);
-            } else if (query.startsWith('92')) {
-                query = '0' + query.substring(2);
-            } else if (query.startsWith('3') && query.length === 10) {
-                query = '0' + query;
-            }
-
-            const apiUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://kami-database.vercel.app/api/search?phone=' + query);
-
-            setLoading(true);
-            resultsContainer.innerHTML = '';
-            errorDisplay.classList.add('hidden');
-
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok.');
-                }
-                const data = await response.json();
-
-                if (data.success && data.records && data.records.length > 0) {
-                    displayResults(data.records);
-                } else {
-                    showError('No records found for this number.');
-                }
-
-            } catch (error) {
-                console.error('Fetch Error:', error);
-                showError('An error occurred while fetching data. Please try again.');
-            } finally {
-                setLoading(false);
-            }
+        // Check if response is JSON or plain text
+        try { 
+          data = JSON.parse(text); 
+        } catch { 
+          // Agar response JSON nahi hai (jaisa ke error ho sakta hai)
+          data = { status: "error", message: text }; 
         }
 
-        function setLoading(isLoading) {
-            searchButton.disabled = isLoading;
-            if (isLoading) {
-                loading.classList.remove('hidden');
-                buttonText.textContent = "Searching...";
-                searchIcon.classList.add('spinning');
-            } else {
-                loading.classList.add('hidden');
-                buttonText.textContent = "Search";
-                searchIcon.classList.remove('spinning');
-            }
-        }
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorDisplay.classList.remove('hidden');
-        }
-
-        function displayResults(records) {
-            resultsContainer.innerHTML = ''; // Clear previous results
-            records.forEach(record => {
-                const card = document.createElement('div');
-                card.className = 'result-card bg-bg-light p-5 rounded-xl border-t-4 border-primary-color shadow-lg';
-
-                // Using innerHTML but with escaped values for security
-                card.innerHTML = `
-                    <h3 class="text-2xl font-bold text-primary-color pb-3 border-b border-border-color">${escapeHTML(record.Name)}</h3>
-                    <div class="mt-4 space-y-2 text-lg">
-                        <p><strong class="text-gray-400 font-medium">Mobile:</strong> <span class="font-mono">${escapeHTML(record.Mobile)}</span></p>
-                        <p><strong class="text-gray-400 font-medium">CNIC:</strong> <span class="font-mono">${escapeHTML(record.CNIC)}</span></p>
-                        <p><strong class="text-gray-400 font-medium">Address:</strong> <span class="text-gray-200">${escapeHTML(record.Address)}</span></p>
-                    </div>
-                `;
-                
-                resultsContainer.appendChild(card);
-            });
-            feather.replace(); // Refresh icons if any were added
+        if (response.ok && data.status === 'success') {
+          showMessage(`✅ Success: ${data.message}`, false);
+        } else {
+          showMessage(`❌ Error: ${data.message || 'An unknown error occurred'}`, true);
         }
         
-        /**
-         * Helper function to prevent XSS (Security best practice)
-         * ✅ FIX: Corrected typo 'ret urn' to 'return'
-         */
-        function escapeHTML(str) {
-            if (!str) return 'N/A'; // Handle null or empty strings
-            return str.replace(/[&<>"']/g, function(match) {
-                return { // <-- Fixed 'ret urn'
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#39;'
-                }[match];
-            });
-        }
-        
-        // Initial icon load
-        document.addEventListener('DOMContentLoaded', () => {
-            feather.replace();
-        });
-
-    </script>
-
+      } catch (error) {
+        console.error("API Error:", error);
+        showMessage(`❌ Network Error: ${error.message}`, true);
+      } finally {
+        // Re-enable button
+        submitButton.disabled = false;
+        submitButton.textContent = "Start Attack";
+      }
+    });
+  </script>
 </body>
 </html>
