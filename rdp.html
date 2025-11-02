@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Github RDP</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --primary-color: #8E2DE2;
+            --bg-dark: #0f0f12;
+            --bg-light: #1f1f1f;
+            --bg-lighter: #2a2a2a;
+            --border-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f0f0f0;
+        }
+
+        /* --- Gemini Text Effect --- */
+        .gemini-title {
+            font-weight: 800;
+            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gemini-shimmer 8s linear infinite;
+        }
+        @keyframes gemini-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+        /* --- End Gemini Effect --- */
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: var(--primary-gradient);
+            transition: opacity 0.2s;
+        }
+        .btn-gradient:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        /* Video Embed Container */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Code Block Styling */
+        pre {
+            background: var(--bg-lighter);
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 12px 12px; /* Top corners are handled by the header */
+            padding: 20px;
+            overflow-x: auto;
+            white-space: pre;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #d1d5db; /* gray-300 */
+            max-height: 600px;
+        }
+        /* Simple YAML Syntax Highlighting */
+        .yaml-key { color: var(--primary-color); font-weight: 600; }
+        .yaml-string { color: #a5b4fc; } /* Indigo-300 */
+        .yaml-comment { color: #6b7280; font-style: italic; } /* Gray-500 */
+
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-color': 'var(--primary-color)',
+                        'bg-dark': 'var(--bg-dark)',
+                        'bg-light': 'var(--bg-light)',
+                        'bg-lighter': 'var(--bg-lighter)',
+                        'border-color': 'var(--border-color)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <header class="text-center py-4 border-b border-border-color">
+            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">
+                Free Github RDP
+            </h1>
+            <p class="text-gray-400 mt-2 text-lg">Setup a Windows RDP connection using GitHub Actions & Tailscale</p>
+        </header>
+
+        <!-- Video Section -->
+        <section class="bg-bg-light p-6 rounded-xl shadow-2xl border-t-4 border-primary-color">
+            <h2 class="text-2xl font-bold text-gray-100 mb-4">
+                How To Setup This Code
+            </h2>
+            <div class="video-container">
+             <iframe width="560" height="315" src="https://www.youtube.com/embed/WlzROnuv3JU?si=364WfPe9kOx4qTrR&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <!-- Code Section -->
+        <section>
+            <!-- Code Header -->
+            <div class="flex justify-between items-center bg-bg-light p-4 rounded-t-xl border-t-4 border-primary-color border-x border-b border-border-color">
+                <h2 class="text-xl font-bold text-gray-100">
+                    GitHub Actions Workflow (RDP.yml)
+                </h2>
+                <button id="copyButton" class="btn-gradient text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2">
+                    <i data-feather="copy" class="w-4 h-4"></i>
+                    <span id="copyText">Copy Code</span>
+                </button>
+            </div>
+            
+            <!-- Code Block -->
+            <pre><code id="codeBlock">
+{/* Raw code will be inserted here by JavaScript */}
+            </code></pre>
+        </section>
+
+    </div>
+
+    <script>
+        // The raw YAML code
+        const rawCode = `
+name: RDP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  secure-rdp:
+    runs-on: windows-latest
+    timeout-minutes: 3600
+
+    steps:
+      - name: Configure Core RDP Settings
+        run: |
+          # Enable Remote Desktop and disable Network Level Authentication (if needed)
+          Set-ItemProperty -Path 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server' \`
+                             -Name "fDenyTSConnections" -Value 0 -Force
+          Set-ItemProperty -Path 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp' \`
+                             -Name "UserAuthentication" -Value 0 -Force
+          Set-ItemProperty -Path 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp' \`
+                             -Name "SecurityLayer" -Value 0 -Force
+
+          # Remove any existing rule with the same name to avoid duplication
+          netsh advfirewall firewall delete rule name="RDP-Tailscale"
+          
+          # For testing, allow any incoming connection on port 3389
+          netsh advfirewall firewall add rule name="RDP-Tailscale" \`
+            dir=in action=allow protocol=TCP localport=3389
+
+          # (Optional) Restart the Remote Desktop service to ensure changes take effect
+          Restart-Service -Name TermService -Force
+
+      - name: Create RDP User with Secure Password
+        run: |
+          Add-Type -AssemblyName System.Security
+          $charSet = @{
+              Upper   = [char[]](65..90)      # A-Z
+              Lower   = [char[]](97..122)     # a-z
+              Number  = [char[]](48..57)      # 0-9
+              Special = ([char[]](33..47) + [char[]](58..64) +
+                         [char[]](91..96) + [char[]](123..126)) # Special characters
+          }
+          $rawPassword = @()
+          $rawPassword += $charSet.Upper | Get-Random -Count 4
+          $rawPassword += $charSet.Lower | Get-Random -Count 4
+          $rawPassword += $charSet.Number | Get-Random -Count 4
+          $rawPassword += $charSet.Special | Get-Random -Count 4
+          $password = -join ($rawPassword | Sort-Object { Get-Random })
+          $securePass = ConvertTo-SecureString $password -AsPlainText -Force
+          New-LocalUser -Name "RDP" -Password $securePass -AccountNeverExpires
+          Add-LocalGroupMember -Group "Administrators" -Member "RDP"
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "RDP"
+          
+          echo "RDP_CREDS=User: RDP | Password: $password" >> $env:GITHUB_ENV
+          
+          if (-not (Get-LocalUser -Name "RDP")) {
+              Write-Error "User creation failed"
+              exit 1
+          }
+
+      - name: Install Tailscale
+        run: |
+          $tsUrl = "https://pkgs.tailscale.com/stable/tailscale-setup-1.82.0-amd64.msi"
+          $installerPath = "$env:TEMP\\tailscale.msi"
+          
+          Invoke-WebRequest -Uri $tsUrl -OutFile $installerPath
+          Start-Process msiexec.exe -ArgumentList "/i", "\`"$installerPath\`"", "/quiet", "/norestart" -Wait
+          Remove-Item $installerPath -Force
+
+      - name: Establish Tailscale Connection
+        run: |
+          # Bring up Tailscale with the provided auth key and set a unique hostname
+          & "$env:ProgramFiles\\Tailscale\\tailscale.exe" up --authkey=\${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-$env:GITHUB_RUN_ID
+          
+          # Wait for Tailscale to assign an IP
+          $tsIP = $null
+          $retries = 0
+          while (-not $tsIP -and $retries -lt 10) {
+              $tsIP = & "$env:ProgramFiles\\Tailscale\\tailscale.exe" ip -4
+              Start-Sleep -Seconds 5
+              $retries++
+          }
+          
+          if (-not $tsIP) {
+              Write-Error "Tailscale IP not assigned. Exiting."
+              exit 1
+          }
+          echo "TAILSCALE_IP=$tsIP" >> $env:GITHUB_ENV
+      
+      - name: Verify RDP Accessibility
+        run: |
+          Write-Host "Tailscale IP: $env:TAILSCALE_IP"
+          
+          # Test connectivity using Test-NetConnection against the Tailscale IP on port 3389
+          $testResult = Test-NetConnection -ComputerName $env:TAILSCALE_IP -Port 3389
+          if (-not $testResult.TcpTestSucceeded) {
+              Write-Error "TCP connection to RDP port 3389 failed"
+              exit 1
+          }
+          Write-Host "TCP connectivity successful!"
+
+      - name: Maintain Connection
+        run: |
+          Write-Host "\`n=== RDP ACCESS ==="
+          Write-Host "Address: $env:TAILSCALE_IP"
+          Write-Host "Username: RDP"
+          Write-Host "Password: $(echo $env:RDP_CREDS)"
+          Write-Host "==================\`n"
+          
+          # Keep runner active indefinitely (or until manually cancelled)
+          while ($true) {
+              Write-Host "[$(Get-Date)] RDP Active - Use Ctrl+C in workflow to terminate"
+              Start-Sleep -Seconds 300
+          }
+`;
+
+        /**
+         * Applies basic syntax highlighting to the YAML code.
+         */
+        function highlightYAML(code) {
+            // Escape HTML
+            let escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            // Highlight keys (e.g., "name:", "on:", "jobs:")
+            escaped = escaped.replace(/^(\s*)(\w+):/gm, '$1<span class="yaml-key">$2</span>:');
+            
+            // Highlight strings (after a colon)
+            escaped = escaped.replace(/: (\|)?\s*([^\n]+)/g, (match, p1, p2) => {
+                // Don't highlight comments
+                if (p2.startsWith('#')) return match;
+                return `: ${p1 || ''} <span class="yaml-string">${p2}</span>`;
+            });
+
+            // Highlight comments (starting with #)
+            escaped = escaped.replace(/(\n\s*)(#.*)/g, '$1<span class="yaml-comment">$2</span>');
+
+            return escaped;
+        }
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialize Feather Icons
+            feather.replace();
+            
+            // 2. Get code block element
+            const codeBlock = document.getElementById('codeBlock');
+            // 3. Highlight and insert the code
+            codeBlock.innerHTML = highlightYAML(rawCode.trim());
+
+            // 4. Setup Copy Button
+            const copyButton = document.getElementById('copyButton');
+            const copyText = document.getElementById('copyText');
+            
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(rawCode.trim())
+                    .then(() => {
+                        copyText.textContent = "Copied!";
+                        copyButton.classList.add('bg-green-600');
+                        setTimeout(() => {
+                            copyText.textContent = "Copy Code";
+                            copyButton.classList.remove('bg-green-600');
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        copyText.textContent = "Error";
+                        setTimeout(() => {
+                            copyText.textContent = "Copy Code";
+                        }, 2000);
+                    });
+            });
+        });
+
+    </script>
+</body>
+</html>
