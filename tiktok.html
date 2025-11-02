@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamzaEditz 2.0 - TikTok Downloader</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --primary-color: #8E2DE2;
+            --bg-dark: #0f0f12;
+            --bg-light: #1f1f1f;
+            --bg-lighter: #2a2a2a;
+            --border-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f0f0f0;
+        }
+
+        /* --- Gemini Text Effect --- */
+        .gemini-title {
+            font-weight: 800;
+            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gemini-shimmer 8s linear infinite;
+        }
+        @keyframes gemini-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: var(--primary-gradient);
+            transition: opacity 0.2s;
+        }
+        .btn-gradient:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+        
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-color': 'var(--primary-color)',
+                        'bg-dark': 'var(--bg-dark)',
+                        'bg-light': 'var(--bg-light)',
+                        'bg-lighter': 'var(--bg-lighter)',
+                        'border-color': 'var(--border-color)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-bg-light p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg border-t-4 border-primary-color">
+        
+        <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6 gemini-title">
+            TikTok Downloader
+        </h1>
+
+        <!-- Input Form -->
+        <form id="video-form" class="space-y-4">
+            <div>
+                <label for="tiktok-url" class="block text-sm font-medium text-gray-300 mb-2">TikTok URL</label>
+                <input 
+                    type="text" 
+                    id="tiktok-url" 
+                    placeholder="Paste your TikTok video URL here..." 
+                    class="w-full p-3 bg-bg-lighter border border-border-color rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-color focus:border-transparent"
+                    value="https://vt.tiktok.com/ZSyhLm3Fx/"
+                >
+            </div>
+            <button 
+                type="submit" 
+                id="submit-button"
+                class="w-full btn-gradient text-white font-bold p-3 rounded-lg transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-wait"
+            >
+                <!-- Feather Icon Spinner (hidden by default) -->
+                <i id="loading-spinner" data-feather="loader" class="spinning -ml-1 mr-3 h-5 w-5 text-white hidden"></i>
+                <span id="button-text">Get Video</span>
+            </button>
+        </form>
+
+        <!-- Error Message Box (hidden by default) -->
+        <div id="error-message" class="mt-6 p-4 bg-red-900 bg-opacity-30 border border-red-700 text-red-300 rounded-lg hidden">
+            <h3 class="font-bold">Error</h3>
+            <p id="error-text"></p>
+        </div>
+
+        <!-- Results Section (hidden by default) -->
+        <div id="results" class="mt-8 hidden">
+            
+            <!-- Result Header -->
+            <div class="flex items-center gap-4 mb-4">
+                <img 
+                    id="thumbnail" 
+                    src="" 
+                    alt="Video Thumbnail" 
+                    class="w-20 h-20 rounded-lg object-cover border-2 border-border-color"
+                    onerror="this.src='https://placehold.co/80x80/1f1f1f/e2e8f0?text=Error'"
+                >
+                <div>
+                    <h2 id="video-title" class="text-lg font-semibold leading-tight text-gray-100"></h2>
+                    <p class="text-sm text-gray-400">Video found! Preview or download below.</p>
+                </div>
+            </div>
+
+            <!-- Video Player -->
+            <div class="mb-4">
+                <video 
+                    id="video-player" 
+                    controls 
+                    class="w-full rounded-lg bg-black"
+                >
+                    <source id="video-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Download Button -->
+            <a 
+                id="download-link"
+                href=""
+                download="tiktok_video.mp4"
+                class="w-full btn-gradient text-white font-bold p-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+            >
+                <i data-feather="download" class="w-5 h-5"></i>
+                <span>Download Video</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Get references to all the elements
+        const videoForm = document.getElementById('video-form');
+        const tiktokUrlInput = document.getElementById('tiktok-url');
+        const submitButton = document.getElementById('submit-button');
+        const buttonText = document.getElementById('button-text');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        
+        const resultsSection = document.getElementById('results');
+        const thumbnailImg = document.getElementById('thumbnail');
+        const videoTitle = document.getElementById('video-title');
+        const videoPlayer = document.getElementById('video-player');
+        const videoSource = document.getElementById('video-source');
+        const downloadLink = document.getElementById('download-link');
+
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+
+        // The base URL for the API
+        const API_URL = 'https://api.siputzx.my.id/api/d/tiktok?url=';
+        // --- FIX: Add CORS Proxy ---
+        const PROXIED_API_URL = 'https://corsproxy.io/?' + encodeURIComponent(API_URL);
+
+        // Listen for the form to be submitted
+        videoForm.addEventListener('submit', async function(event) {
+            event.preventDefault(); 
+            
+            const tiktokUrl = tiktokUrlInput.value.trim();
+            if (!tiktokUrl) {
+                showError("Please paste a TikTok URL first.");
+                return;
+            }
+
+            // --- Set loading state ---
+            buttonText.textContent = 'Fetching...';
+            loadingSpinner.classList.remove('hidden');
+            submitButton.disabled = true;
+            
+            // Hide previous results and errors
+            resultsSection.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            try {
+                // --- FIX: Use the proxied URL ---
+                const response = await fetch(PROXIED_API_URL + encodeURIComponent(tiktokUrl));
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === true && data.data && data.data.urls && data.data.urls.length > 0) {
+                    // --- Success! Populate the UI ---
+                    const videoData = data.data;
+                    
+                    videoTitle.textContent = videoData.metadata.title || "No title found";
+                    thumbnailImg.src = videoData.metadata.thumbnail || 'https://placehold.co/80x80/1f1f1f/e2e8f0?text=No+Thumb';
+                    
+                    // --- FIX: Use proxy for the video/download URL too ---
+                    const videoUrl = 'https://corsproxy.io/?' + encodeURIComponent(videoData.urls[0]);
+                    
+                    videoSource.src = videoUrl;
+                    videoPlayer.load(); 
+                    
+                    downloadLink.href = videoUrl;
+                    downloadLink.setAttribute('download', (videoData.metadata.title || 'tiktok_video') + '.mp4');
+
+                    resultsSection.classList.remove('hidden');
+                } else {
+                    throw new Error(data.message || "Invalid API response. No video found.");
+                }
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                showError(error.message);
+            } finally {
+                // --- Restore button to normal state ---
+                buttonText.textContent = 'Get Video';
+                loadingSpinner.classList.add('hidden');
+                submitButton.disabled = false;
+            }
+        });
+
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+        
+        // Initial icon load
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+        });
+
+    </script>
+
+</body>
+</html>
