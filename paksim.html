@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://fpyf8.com/88/tag.min.js" data-zone="181227" async data-cfasync="false"></script>
-    
+    <script>(function(s){s.dataset.zone='10133824',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     <title>HamzaEditz 2.0 - Number Search</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -176,16 +175,16 @@
                 return;
             }
 
-            // Normalize phone number
-            if (query.startsWith('+92')) {
-                query = '0' + query.substring(3);
-            } else if (query.startsWith('92')) {
-                query = '0' + query.substring(2);
-            } else if (query.startsWith('3') && query.length === 10) {
-                query = '0' + query;
+            // --- Number normalization (agar zaroorat ho) ---
+            if (query.startsWith('0')) {
+                query = '92' + query.substring(1); // Convert 03... to 923... if API needs it
+            } else if (query.startsWith('+92')) {
+                query = query.substring(1); // Convert +923... to 923...
             }
-
-            const apiUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://kami-database.vercel.app/api/search?phone=' + query);
+            // Agar API 03... format maangti hai toh is logic ko badalna hoga
+            
+            // --- FIX: Updated API URL ---
+            const apiUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://legendxdata.site/Api/simdata.php?phone=' + query);
 
             setLoading(true);
             resultsContainer.innerHTML = '';
@@ -198,15 +197,33 @@
                 }
                 const data = await response.json();
 
-                if (data.success && data.records && data.records.length > 0) {
-                    displayResults(data.records);
+                // --- NEW: Dynamic result finding ---
+                let results = null;
+                if (data && data.data && Array.isArray(data.data)) {
+                    results = data.data; // e.g., { "success": true, "data": [...] }
+                } else if (data && data.results && Array.isArray(data.results)) {
+                    results = data.results; // e.g., { "success": true, "results": [...] }
+                } else if (data && data.records && Array.isArray(data.records)) {
+                    results = data.records; // e.g., { "success": true, "records": [...] }
+                } else if (data && Array.isArray(data)) {
+                    results = data; // e.g., [...]
+                } else if (data && typeof data === 'object' && Object.keys(data).length > 0 && data.status !== 'error') {
+                    // Agar single object response hai
+                    results = [data]; 
+                } else if (data && data.status === 'error') {
+                    throw new Error(data.message || 'No records found.');
+                }
+                // --- END NEW LOGIC ---
+
+                if (results && results.length > 0 && Object.keys(results[0]).length > 0) {
+                    displayResults(results);
                 } else {
-                    showError('No records found for this number.');
+                    showError(data.message || 'No records found for this number.');
                 }
 
             } catch (error) {
                 console.error('Fetch Error:', error);
-                showError('An error occurred while fetching data. Please try again.');
+                showError(error.message || 'An error occurred while fetching data. Please try again.');
             } finally {
                 setLoading(false);
             }
@@ -230,20 +247,41 @@
             errorDisplay.classList.remove('hidden');
         }
 
+        /**
+         * --- NEW: Dynamic Display Function ---
+         * Ab yeh Name, CNIC, etc. dhoondne ke bajaye, jo bhi data milta hai usko dikha deta hai.
+         */
         function displayResults(records) {
             resultsContainer.innerHTML = ''; // Clear previous results
-            records.forEach(record => {
+            records.forEach((record, index) => {
                 const card = document.createElement('div');
                 card.className = 'result-card bg-bg-light p-5 rounded-xl border-t-4 border-primary-color shadow-lg';
+                
+                // Try to find a name, otherwise use "Result"
+                const name = record.Name || record.name || record.NAME || `Result ${index + 1}`;
+                
+                let detailsHtml = '<div class="mt-4 space-y-2 text-lg">';
+                
+                // Dynamically create key-value pairs
+                for (const key in record) {
+                    // Name/name ko title mein dikha diya hai, isliye skip karein
+                    if (key.toLowerCase() === 'name') continue; 
+                    
+                    // Khali values ko skip karein
+                    if (record[key] === null || record[key] === "") continue;
 
-                // Using innerHTML but with escaped values for security
+                    detailsHtml += `
+                        <p>
+                            <strong class="text-gray-400 font-medium capitalize">${escapeHTML(key.replace(/_/g, ' '))}:</strong> 
+                            <span class="font-mono">${escapeHTML(record[key])}</span>
+                        </p>
+                    `;
+                }
+                detailsHtml += '</div>';
+
                 card.innerHTML = `
-                    <h3 class="text-2xl font-bold text-primary-color pb-3 border-b border-border-color">${escapeHTML(record.Name)}</h3>
-                    <div class="mt-4 space-y-2 text-lg">
-                        <p><strong class="text-gray-400 font-medium">Mobile:</strong> <span class="font-mono">${escapeHTML(record.Mobile)}</span></p>
-                        <p><strong class="text-gray-400 font-medium">CNIC:</strong> <span class="font-mono">${escapeHTML(record.CNIC)}</span></p>
-                        <p><strong class="text-gray-400 font-medium">Address:</strong> <span class="text-gray-200">${escapeHTML(record.Address)}</span></p>
-                    </div>
+                    <h3 class="text-2xl font-bold text-primary-color pb-3 border-b border-border-color">${escapeHTML(name)}</h3>
+                    ${detailsHtml}
                 `;
                 
                 resultsContainer.appendChild(card);
@@ -252,13 +290,13 @@
         }
         
         /**
-         * Helper function to prevent XSS (Security best practice)
-         * ✅ FIX: Corrected typo 'ret urn' to 'return'
+         * Helper function to prevent XSS
          */
         function escapeHTML(str) {
-            if (!str) return 'N/A'; // Handle null or empty strings
+            if (str === null || str === undefined) return 'N/A';
+            str = String(str); // Convert to string just in case
             return str.replace(/[&<>"']/g, function(match) {
-                return { // <-- Fixed 'ret urn'
+                return {
                     '&': '&amp;',
                     '<': '&lt;',
                     '>': '&gt;',
