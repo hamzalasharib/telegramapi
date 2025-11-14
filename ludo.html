@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yalla Ludo Device Lock open</title>
+    <!-- Load Tailwind CSS -->
+  <script>(function(s){s.dataset.zone='10133824',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --primary-color: #8E2DE2;
+            --bg-dark: #0f0f12;
+            --bg-light: #1f1f1f;
+            --bg-lighter: #2a2a2a;
+            --border-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f0f0f0;
+        }
+
+        /* --- Gemini Text Effect --- */
+        .gemini-title {
+            font-weight: 800;
+            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gemini-shimmer 8s linear infinite;
+        }
+        @keyframes gemini-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+        /* --- End Gemini Effect --- */
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: var(--primary-gradient);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-gradient:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(142, 45, 226, 0.3);
+        }
+        
+        /* Video Embed Container */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-color': 'var(--primary-color)',
+                        'bg-dark': 'var(--bg-dark)',
+                        'bg-light': 'var(--bg-light)',
+                        'bg-lighter': 'var(--bg-lighter)',
+                        'border-color': 'var(--border-color)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-8 flex items-center justify-center">
+
+    <div class="max-w-2xl mx-auto space-y-8 w-full">
+        
+        <!-- Header -->
+        <header class="text-center py-4">
+            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">
+                Yalla Ludo Device Lock open
+            </h1>
+            <p class="text-gray-400 mt-2 text-lg">Download file and follow video instructions</p>
+        </header>
+
+        <!-- Main Card -->
+        <main class="bg-bg-light p-8 sm:p-10 rounded-xl shadow-2xl border-t-4 border-primary-color space-y-8">
+            
+            <!-- Button -->
+            <a 
+                href="https://drive.google.com/file/d/1y_gcvw630JngGfi3DxGvkB8sdu-J-JyP/view" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="btn-gradient text-white font-bold py-4 px-8 rounded-lg flex items-center justify-center text-xl w-full"
+            >
+                <i data-feather="download-cloud" class="w-6 h-6 mr-3"></i>
+                <span>Download File</span>
+                <i data-feather="external-link" class="w-5 h-5 ml-3"></i>
+            </a>
+            
+            <!-- Divider -->
+            <hr class="border-t border-border-color">
+
+            <!-- Instructions Section -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-100 mb-5 text-center">
+                    Instructions Video
+                </h2>
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/gLz7ZZ7UV0k?si=pqYxZze8lyvx18G0" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Initialize icons
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+        });
+    </script>
+</body>
+</html>
