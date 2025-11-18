@@ -32,8 +32,8 @@
       --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
       --primary-color: #8E2DE2;
       --bg-dark: #0f0f12;
-      --bg-light: #1f1f1f;
-      --bg-lighter: #2a2a2a;
+      --bg-light: #1f1f1f;       /* Container background */
+      --bg-lighter: #2a2a2a;    /* Card background */
       --border-color: #333;
       --ripple-color: rgba(142, 45, 226, 0.4); 
     }
@@ -41,7 +41,7 @@
     /* --- Main App Container --- */
     .container {
       width: 100%;
-      max-width: 450px;
+      max-width: 600px; 
       background: var(--bg-light);
       border-radius: 12px;
       padding: 30px 35px;
@@ -49,17 +49,11 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
     
-    /* * === ✅ CHANGE 1: MODIFIED THE H1 STYLING ===
-     * We replaced the static 'background: var(--primary-gradient)'
-     * with the new animated gradient properties.
-    */
     h1 { 
       font-size: 2.25rem; 
       margin: 0 0 10px 0;
       font-weight: 700;
       text-align: center;
-      
-      /* New Animated Gradient */
       background: linear-gradient(
           90deg, 
           #4f46e5, /* Indigo */
@@ -68,27 +62,16 @@
           #f59e0b, /* Orange */
           #4f46e5  /* Loop back */
       );
-      background-size: 400% 400%; /* Make gradient huge */
-      animation: gradient-flow 8s ease infinite; /* Apply animation */
-
-      /* These lines were already in your code and are correct! */
+      background-size: 400% 400%;
+      animation: gradient-flow 8s ease infinite;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     
-    /* * === ✅ CHANGE 2: ADDED THE KEYFRAMES ===
-     * This is the animation definition for 'gradient-flow'
-    */
     @keyframes gradient-flow {
-      0% {
-        background-position: 0% 50%; /* Start at the left */
-      }
-      50% {
-        background-position: 100% 50%; /* Move to the right */
-      }
-      100% {
-        background-position: 0% 50%; /* Loop back to the left */
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     
     .subtitle {
@@ -96,27 +79,31 @@
       font-size: 1rem;
       color: #aaa;
       margin-top: 0;
-      margin-bottom: 30px;
+      margin-bottom: 30px; /* Margin wapas set kar di hai */
     }
+
+    /* --- ✅ REMOVED: Toggle Switch Styles --- */
     
-    /* --- Links Container --- */
+    /* --- Links Container (Grid) --- */
     .links-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px; /* Buttons ke beech space */
+      display: grid;
+      grid-template-columns: 1fr 1fr; 
+      gap: 15px; /* Cards ke beech space */
     }
     
-    /* --- Styled Link Buttons --- */
+    /* --- Styled Link Buttons (Cards) --- */
     .link-button {
       display: flex; 
+      flex-direction: column; 
       align-items: center;
       justify-content: center;
-      gap: 10px; 
+      gap: 12px;
       
       background: var(--bg-lighter);
       border: 1px solid var(--border-color);
       color: white;
-      padding: 14px 20px;
+      padding: 20px 15px;
+      min-height: 130px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
@@ -138,26 +125,23 @@
     
     /* Icon style */
     .link-button i {
-      width: 20px;
-      height: 20px;
-      stroke-width: 2.5;
-      z-index: 2; /* Icon ko ripple ke upar rakhein */
+      width: 32px; 
+      height: 32px;
+      stroke-width: 2;
+      z-index: 2; 
     }
     .link-button span {
-      z-index: 2; /* Text ko ripple ke upar rakhein */
+      z-index: 2; 
     }
 
-    /* ===================================
-     * === ✅ LIQUID RIPPLE EFFECT CSS ===
-     * ===================================
-     */
+    /* --- Ripple Effect (No Change) --- */
     .ripple {
       position: absolute;
       border-radius: 50%;
       background-color: var(--ripple-color);
       transform: scale(0);
       animation: ripple-effect 0.6s linear;
-      z-index: 1; /* Ripple ko text ke neeche rakhein */
+      z-index: 1; 
     }
 
     @keyframes ripple-effect {
@@ -186,19 +170,21 @@
         <i data-feather="send"></i>
         <span>SMS Tool</span>
       </a>
-<a href="RdpMethod.html" class="link-button">
+
+      <a href="RdpMethod.html" class="link-button">
         <i data-feather="monitor"></i>
         <span>Free Window Rdp</span>
-</a>
+      </a>
       
       <a href="TvChannels.html" class="link-button">
         <i data-feather="tv"></i>
         <span>Jazz Tv</span>
       </a>
-        <a href="tiktok.html" class="link-button">
+
+      <a href="tiktok.html" class="link-button">
         <i data-feather="music"></i>
         <span>TikTok Downloader</span>
-        </a>
+      </a>
       
       <a href="India.html" class="link-button">
         <i data-feather="database"></i>
@@ -214,10 +200,12 @@
         <i data-feather="search"></i>
         <span>Vehicle Details</span>
       </a>
+      
       <a href="Adobe_Trial.html" class="link-button">
         <i data-feather="gift"></i>
         <span>Adobe Cloud Free</span>
       </a>
+
     </div>
   </div>
 
@@ -225,39 +213,30 @@
     // Pehle icons ko replace karein
     feather.replace();
 
-    /* ===================================
-     * === ✅ LIQUID RIPPLE EFFECT JS ===
-     * ===================================
-     */
+    /* --- Ripple Effect JS (No Change) --- */
     document.addEventListener('DOMContentLoaded', (event) => {
       const buttons = document.querySelectorAll('.link-button');
 
       buttons.forEach(button => {
         button.addEventListener('click', function (e) {
-          // Click position get karein
           const rect = button.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
 
-          // Ripple element banayein
           const ripple = document.createElement('span');
           ripple.classList.add('ripple');
           
-          // Button ke size ke hisab se ripple ka size set karein
           const size = Math.max(rect.width, rect.height);
           ripple.style.width = ripple.style.height = `${size}px`;
           
-          // Ripple ko click position par set karein
           ripple.style.left = `${x - size / 2}px`;
           ripple.style.top = `${y - size / 2}px`;
 
-          // Ripple ko button mein add karein
           this.appendChild(ripple);
 
-          // Animation khatam hone par ripple ko remove karein
           setTimeout(() => {
             ripple.remove();
-          }, 600); // Animation duration 0.6s hai
+          }, 600); 
         });
       });
     });
