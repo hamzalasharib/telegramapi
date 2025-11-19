@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Hamza App Store | HamzaEditz 2.0</title>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    /* --- HamzaEditz 2.0 Design System --- */
+    :root {
+        --bg-dark: #0f0f12;
+        --card-light: #1f1f1f;
+        --text-main: #ffffff;
+        --text-muted: #a0a0a0;
+        --accent-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+        --accent-glow: 0 4px 15px rgba(142, 45, 226, 0.4);
+        --border-radius: 12px;
+        --border-color: #333;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-main);
+    }
+
+    /* --- Gradient Title Effect (Gemini-style) --- */
+    .gradient-text {
+        font-weight: 800;
+        background: linear-gradient(to right, #8E2DE2, #4A00E0, #00d2ff, #8E2DE2);
+        background-size: 300% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 5s linear infinite;
+    }
+    @keyframes shine { to { background-position: 300% center; } }
+
+    header {
+        background: rgba(31, 31, 31, 0.8); /* Card-light with transparency */
+        backdrop-filter: blur(5px);
+        padding: 20px;
+        position: sticky;
+        top: 0;
+        border-bottom: 1px solid var(--border-color);
+        z-index: 10;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    input {
+        flex: 1;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: rgba(0,0,0,0.3);
+        color: var(--text-main);
+        transition: border-color 0.3s;
+    }
+    input:focus { border-color: #8E2DE2; outline: none; }
+
+    button {
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 0;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: box-shadow 0.3s, transform 0.2s;
+    }
+    button:active { transform: scale(0.98); }
+
+    button.primary {
+        background: var(--accent-gradient);
+        color: var(--text-main);
+        box-shadow: 0 4px 10px rgba(74, 0, 224, 0.4);
+    }
+    
+    main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    section {
+        margin-bottom: 40px;
+    }
+
+    section h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        padding-bottom: 6px;
+    }
+
+    .grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .card {
+        background: var(--card-light);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        border-top: 4px solid #4A00E0; /* Purple Top Border */
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+    .card img {
+        width: 70px;
+        height: 70px;
+        border-radius: 15px;
+        margin-bottom: 12px;
+        object-fit: cover;
+        box-shadow: 0 0 0 2px var(--card-light), 0 0 0 4px rgba(142, 45, 226, 0.5);
+    }
+
+    .card .title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        color: var(--text-main);
+    }
+
+    .card .meta {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+    }
+
+    .card a {
+        text-decoration: none;
+        background: var(--accent-gradient);
+        color: var(--text-main);
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-top: auto;
+        width: 80%;
+        transition: opacity 0.3s;
+    }
+    .card a:hover { opacity: 0.9; }
+
+    .status, .error, .empty {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 15px;
+        text-align: center;
+        background: rgba(74, 0, 224, 0.1);
+    }
+    .error { background: rgba(255, 0, 0, 0.15); color: #ff6666; }
+    #searchSection.hidden { display: none; }
+    
+    /* Spin animation for loader */
+    .spin { animation: rotate 2s linear infinite; }
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="gradient-text">Hamza App Store</h1>
+    <div class="search-row">
+      <input id="query" type="text" placeholder="Search apps, games, tools..."/>
+      <button class="primary" id="searchBtn"><i data-feather="search" stroke-width="3"></i>Search</button>
+    </div>
+    <div id="status" class="status"></div>
+  </header>
+
+  <main>
+    <section id="searchSection" class="hidden">
+      <h2 class="gradient-text">Search Results</h2>
+      <div class="grid" id="results"></div>
+      <div id="empty" class="empty"></div>
+      <div id="error" class="error"></div>
+    </section>
+
+    <section id="social">
+      <h2 class="gradient-text">Social Apps</h2>
+      <div class="grid" id="socialGrid"></div>
+    </section>
+
+    <section id="tools">
+      <h2 class="gradient-text">Tools & Utilities</h2>
+      <div class="grid" id="toolsGrid"></div>
+    </section>
+
+    <section id="games">
+      <h2 class="gradient-text">Games</h2>
+      <div class="grid" id="gamesGrid"></div>
+    </section>
+    
+    <section id="productivity">
+      <h2 class="gradient-text">Productivity Tools</h2>
+      <div class="grid" id="productivityGrid"></div>
+    </section>
+
+    <section id="entertainment">
+      <h2 class="gradient-text">Entertainment & Media</h2>
+      <div class="grid" id="entertainmentGrid"></div>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = "https://apk-downloader.bjcoderx.workers.dev/?query=";
+
+    const categories = {
+      // Expanded Social Apps
+      social: ["whatsapp", "instagram", "facebook", "telegram", "snapchat", "twitter", "tiktok", "viber", "signal", "imo"],
+      
+      // Expanded Tools & Utilities
+      tools: ["hide whatsapp", "file manager", "vpn", "cleaner", "notepad", "calculator", "google maps", "adobe acrobat", "shareit", "es file explorer"],
+      
+      // Expanded Games
+      games: ["pubg mobile", "free fire", "clash of clans", "subway surfers", "candy crush", "minecraft", "asphalt 9", "call of duty mobile", "fortnite", "roblox"],
+      
+      // New Category: Productivity
+      productivity: ["microsoft word", "google docs", "evernote", "slack", "trello", "zoom", "google calendar", "notion"],
+      
+      // New Category: Entertainment
+      entertainment: ["netflix", "youtube", "spotify", "amazon prime video", "disney plus", "mx player", "hotstar", "vlc media player"]
+    };
+
+    // Helper to format large numbers
+    function formatDownloads(n) {
+      if (n >= 1e9) return (n / 1e9).toFixed(1) + "B";
+      if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
+      if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+      return n;
+    }
+
+    // Function to create an app card
+    function createCard(app) {
+      const div = document.createElement("div");
+      div.className = "card";
+      
+      const downloadsFormatted = formatDownloads(app.downloads || 0);
+
+      div.innerHTML = `
+        <img src="${app.image}" alt="${app.name}" onerror="this.style.visibility='hidden'; this.style.width='0'; this.style.height='0'; this.style.margin='0';">
+        <div class="title" title="${app.name}">${app.name}</div>
+        <div class="meta">v${app.version || '1.0'} • ${app.filesize || 'N/A'}<br>⭐ ${app.rating || '5.0'} • ${downloadsFormatted} downloads</div>
+        <a href="${app.path}" target="_blank">Download</a>
+      `;
+      return div;
+    }
+
+    // Function to fetch category apps (runs concurrently)
+    async function fetchCategory(catId, queries) {
+      const grid = document.getElementById(catId + "Grid");
+      grid.innerHTML = "";
+      
+      const fetchPromises = queries.map(q => 
+        fetch(API_BASE + encodeURIComponent(q))
+          .then(res => res.json())
+          .catch(e => { console.error(`Error fetching ${q}:`, e); return []; })
+      );
+
+      const allResults = await Promise.all(fetchPromises);
+      
+      allResults.flat().forEach(data => {
+        if (Array.isArray(data) && data.length > 0) {
+            // Take the best/first result for category tiles
+            grid.appendChild(createCard(data[0])); 
+        } else if (data && data.name) {
+             grid.appendChild(createCard(data)); 
+        }
+      });
+      feather.replace(); // Replace icons after DOM manipulation
+    }
+
+    // Function to handle app search
+    async function searchApps(query) {
+      const searchSection = document.getElementById("searchSection");
+      const results = document.getElementById("results");
+      const empty = document.getElementById("empty");
+      const error = document.getElementById("error");
+      const status = document.getElementById("status");
+      
+      searchSection.classList.remove("hidden");
+      results.innerHTML = "";
+      empty.textContent = "";
+      error.textContent = "";
+      
+      if (!query.trim()) {
+        empty.textContent = "Please enter a search term.";
+        status.textContent = "";
+        return;
+      }
+      
+      status.innerHTML = `<i data-feather="loader" class="spin"></i> Searching for '<strong>${query}</strong>'...`;
+      feather.replace();
+      
+      try {
+        const res = await fetch(API_BASE + encodeURIComponent(query));
+        const data = await res.json();
+        
+        if (res.ok && Array.isArray(data) && data.length > 0) {
+          data.forEach(app => results.appendChild(createCard(app)));
+        } else {
+          empty.textContent = `No results found for "${query}". Please check the spelling.`;
+        }
+      } catch (e) {
+        error.textContent = "Server Error: Could not fetch results. Please try again later.";
+        console.error("Search Error:", e);
+      } finally {
+        status.textContent = "";
+        feather.replace(); // Replace icons after DOM manipulation
+      }
+    }
+
+    // --- Event Listeners ---
+    document.getElementById("searchBtn").addEventListener("click", () => searchApps(document.getElementById("query").value));
+    document.getElementById("query").addEventListener("keydown", (e) => { 
+        if (e.key === "Enter") searchApps(e.target.value); 
+    });
+
+    // Load categories on page load
+    window.onload = () => {
+        fetchCategory("social", categories.social);
+        fetchCategory("tools", categories.tools);
+        fetchCategory("games", categories.games);
+        fetchCategory("productivity", categories.productivity);
+        fetchCategory("entertainment", categories.entertainment);
+        
+        // Initial Feather icon replacement for static elements
+        feather.replace(); 
+    };
+  </script>
+</body>
+</html>
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gemini-shimmer 8s linear infinite;
+        }
+        @keyframes gemini-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+        /* --- End Gemini Effect --- */
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: var(--primary-gradient);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-gradient:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(142, 45, 226, 0.3);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-color': 'var(--primary-color)',
+                        'bg-dark': 'var(--bg-dark)',
+                        'bg-light': 'var(--bg-light)',
+                        'bg-lighter': 'var(--bg-lighter)',
+                        'border-color': 'var(--border-color)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-8 flex items-center justify-center">
+
+    <div class="max-w-2xl mx-auto space-y-8 w-full">
+        
+        <!-- Header -->
+        <header class="text-center py-4">
+            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">
+                Adobe Cloud 4 Month Trial
+            </h1>
+            <p class="text-gray-400 mt-2 text-lg">Click the button below to get your free trial</p>
+        </header>
+
+        <!-- Button & Instructions Card -->
+        <main class="bg-bg-light p-8 sm:p-10 rounded-xl shadow-2xl border-t-4 border-primary-color">
+            
+            <!-- Button -->
+            <a 
+                href="https://rb.gy/lxo5z1" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="btn-gradient text-white font-bold py-4 px-8 rounded-lg flex items-center justify-center text-xl w-full"
+            >
+                <i data-feather="gift" class="w-6 h-6 mr-3"></i>
+                <span>Get Free Trial Now</span>
+                <i data-feather="external-link" class="w-5 h-5 ml-3"></i>
+            </a>
+            
+            <p class="text-gray-500 text-sm mt-6 text-center">
+                You will be redirected to an external site.
+            </p>
+
+            <!-- Divider -->
+            <hr class="border-t border-border-color my-8">
+
+            <!-- Instructions Section -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-100 mb-5 text-center">
+                    How to Get
+                </h2>
+                <ol class="space-y-4 text-left">
+                    
+                    <!-- Step 1 -->
+                    <li class="flex items-start gap-3">
+                        <i data-feather="mouse-pointer" class="w-6 h-6 text-primary-color flex-shrink-0 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-lg text-gray-100">Click the Button</span>
+                            <p class="text-gray-400">Upar diye gaye "Get Free Trial Now" button par click karein.</p>
+                        </div>
+                    </li>
+
+                    <!-- Step 2 -->
+                    <li class="flex items-start gap-3">
+                        <i data-feather="check-square" class="w-6 h-6 text-primary-color flex-shrink-0 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-lg text-gray-100">Choose Plan</span>
+                            <p class="text-gray-400">Plan select karein: <strong class="text-gray-200">"Annual Billed Monthly"</strong> (US$69.99/mo).</p>
+                        </div>
+                    </li>
+
+                    <!-- Step 3 -->
+                    <li class="flex items-start gap-3">
+                        <i data-feather="credit-card" class="w-6 h-6 text-primary-color flex-shrink-0 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-lg text-gray-100">Add Card</span>
+                            <p class="text-gray-400">Apna card add karein. Aap koi bhi card istemal kar sakte hain, jaise <strong class="text-gray-200">Sadapay, Nayapay, etc.</strong></p>
+                        </div>
+                    </li>
+                    
+                    <!-- Step 4 -->
+                    <li class="flex items-start gap-3">
+                        <i data-feather="mail" class="w-6 h-6 text-primary-color flex-shrink-0 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-lg text-gray-100">Use New Gmail</span>
+                            <p class="text-gray-400">Hamesha ek naya Gmail account istemal karein.</p>
+                        </div>
+                    </li>
+                    
+                    <!-- Step 5 -->
+                    <li class="flex items-start gap-3">
+                        <i data-feather="shield" class="w-6 h-6 text-primary-color flex-shrink-0 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-lg text-gray-100">Use USA VPN</span>
+                            <p class="text-gray-400">VPN istemal karein aur <strong class="text-gray-200">USA ki location</strong> select karein.</p>
+                        </div>
+                    </li>
+
+                    <!-- Step 6 -->
+                    <li class="flex items-start gap-3">
+                        <i data-feather="zap" class="w-6 h-6 text-primary-color flex-shrink-0 mt-1"></i>
+                        <div>
+                            <span class="font-semibold text-lg text-gray-100">And Boom 💥</span>
+                            <p class="text-gray-400">Aapka trial successfully activate hojayega.</p>
+                        </div>
+                    </li>
+
+                </ol>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Initialize icons
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+        });
+    </script>
+</body>
+</html>
