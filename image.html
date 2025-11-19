@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator - HamzaEditz 2.0</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        /* --- HamzaEditz 2.0 Design System --- */
+        :root {
+            --bg-dark: #0f0f12;
+            --card-light: #1f1f1f;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --accent-color: #4A00E0;
+            --border-radius: 12px;
+            --border-color: #333;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .gradient-text {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #8E2DE2, #4A00E0, #00d2ff, #8E2DE2);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        @keyframes shine { to { background-position: 300% center; } }
+
+        .container { width: 100%; max-width: 800px; }
+
+        .card {
+            background: var(--card-light);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            border-top: 3px solid var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 8px;
+            outline: none;
+            box-sizing: border-box;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+        textarea:focus { border-color: #8E2DE2; }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .radio-btn input { display: none; }
+        .radio-btn label {
+            display: block;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            text-align: center;
+        }
+        .radio-btn input:checked + label {
+            background: rgba(142, 45, 226, 0.2);
+            border-color: #8E2DE2;
+            color: #8E2DE2;
+            font-weight: 600;
+        }
+        .radio-btn label:hover {
+            background: rgba(142, 45, 226, 0.1);
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        /* Specific Download Button Style */
+        .download-btn {
+            width: calc(100% - 20px);
+            padding: 8px 10px;
+            margin: 10px auto;
+            background: linear-gradient(90deg, #4A00E0, #8E2DE2); /* Reversed gradient for contrast */
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none; /* For the anchor tag used as a button */
+            font-size: 0.9rem;
+        }
+        .download-btn:hover { opacity: 0.9; }
+
+        #resultsArea {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .image-container {
+            width: 100%;
+            max-width: 250px;
+            background: var(--card-light);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .generated-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .generated-image:hover {
+            transform: scale(1.05);
+        }
+
+        #statusMsg, #errorMsg { 
+            text-align: center; 
+            margin-top: 15px; 
+            padding: 10px; 
+            border-radius: 8px; 
+            display: none; 
+        }
+        #statusMsg { color: #00d2ff; }
+        #errorMsg { color: #ff6666; background: rgba(255, 0, 0, 0.1); }
+        
+        /* Spin animation for loader */
+        .spin { animation: rotate 2s linear infinite; }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="gradient-text">AI Image Generator</div>
+
+        <div class="card">
+            <div class="card-header"><i data-feather="settings"></i> Generation Settings</div>
+            
+            <textarea id="promptInput" placeholder="Enter your prompt here (e.g., A cyberpunk cityscape at night with neon lights)"></textarea>
+
+            <div class="radio-group">
+                <div class="radio-btn">
+                    <input type="radio" id="portrait" name="aspectRatio" value="portrait" checked>
+                    <label for="portrait"><i data-feather="smartphone"></i> Portrait (9:16)</label>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" id="square" name="aspectRatio" value="square">
+                    <label for="square"><i data-feather="square"></i> Square (1:1)</label>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" id="landscape" name="aspectRatio" value="landscape">
+                    <label for="landscape"><i data-feather="image"></i> Landscape (16:9)</label>
+                </div>
+            </div>
+
+            <button onclick="generateImage()" id="generateBtn"><i data-feather="zap"></i> Generate Images</button>
+            <div id="statusMsg"></div>
+            <div id="errorMsg"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><i data-feather="grid"></i> Results</div>
+            <div id="resultsArea">
+                <p id="initialText" style="text-align: center; color: var(--text-muted);">Generated images will appear here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        feather.replace();
+
+        const BASE_API_URL = "https://famofc.site/api/generate.php";
+
+        // Helper function for displaying status/error messages
+        function displayMessage(id, message, isError = false) {
+            const statusEl = document.getElementById('statusMsg');
+            const errorEl = document.getElementById('errorMsg');
+            
+            // Clear both messages first
+            statusEl.style.display = 'none';
+            errorEl.style.display = 'none';
+
+            if (message) {
+                if (isError) {
+                    errorEl.innerText = message;
+                    errorEl.style.display = 'block';
+                } else {
+                    statusEl.innerText = message;
+                    statusEl.style.display = 'block';
+                }
+            }
+        }
+
+        function updateButton(isLoading) {
+            const btn = document.getElementById('generateBtn');
+            if (isLoading) {
+                btn.innerHTML = '<i data-feather="loader" class="spin"></i> Generating...';
+                btn.disabled = true;
+                displayMessage('statusMsg', "Request sent. Waiting for images...", false);
+            } else {
+                btn.innerHTML = '<i data-feather="zap"></i> Generate Images';
+                btn.disabled = false;
+                // Status message will be handled by displayMessage call in the main logic
+            }
+            feather.replace();
+        }
+
+        async function generateImage() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+            const resultsArea = document.getElementById('resultsArea');
+            const initialText = document.getElementById('initialText');
+
+            if (!prompt) {
+                displayMessage('errorMsg', "Please enter a descriptive prompt.", true);
+                return;
+            }
+            
+            // --- UI Loading State Start ---
+            updateButton(true);
+            initialText.style.display = 'none';
+            resultsArea.innerHTML = '';
+            
+            const encodedPrompt = encodeURIComponent(prompt);
+            const apiUrl = `${BASE_API_URL}?prompt=${encodedPrompt}&aspectRatio=${aspectRatio}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.success && data.images && data.images.length > 0) {
+                    
+                    data.images.forEach(image => {
+                        const container = document.createElement('div');
+                        container.className = 'image-container';
+                        
+                        // 1. Image Element
+                        const img = document.createElement('img');
+                        img.className = 'generated-image';
+                        img.src = image.image_url;
+                        img.alt = image.prompt;
+                        img.onclick = () => window.open(image.image_url, '_blank'); 
+                        
+                        // 2. Download Button Element
+                        const downloadBtn = document.createElement('a');
+                        downloadBtn.className = 'download-btn';
+                        downloadBtn.href = image.image_url;
+                        downloadBtn.download = `famofc_${image.id}.png`; // Suggest file name
+                        downloadBtn.innerHTML = `<i data-feather="download"></i> Download`;
+
+                        container.appendChild(img);
+                        container.appendChild(downloadBtn);
+                        resultsArea.appendChild(container);
+                    });
+                    
+                    displayMessage('statusMsg', `Successfully generated ${data.images.length} images.`, false);
+                    
+                } else {
+                    const errorMessage = data.error || "Image generation failed. Please try a different prompt.";
+                    displayMessage('errorMsg', errorMessage, true);
+                    initialText.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                displayMessage('errorMsg', "Network error or API server is unreachable.", true);
+                initialText.style.display = 'block';
+            } finally {
+                // --- UI Loading State End ---
+                updateButton(false);
+            }
+        }
+    </script>
+</body>
+</html>
