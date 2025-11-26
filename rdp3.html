@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDP Setup Guide | HamzaEditz 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        :root {
+            --bg-color: #0f0f12;
+            --card-bg: #1f1f1f;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-gradient: linear-gradient(135deg, #a855f7, #7c3aed);
+            --accent-color: #7c3aed;
+            --border-color: #333333;
+            --code-bg: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 60px;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Video Section */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .step-title i {
+            margin-right: 10px;
+            color: #a855f7;
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: none;
+            margin-bottom: 30px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Code Blocks */
+        .command-box {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .cred-box {
+            margin-bottom: 15px;
+        }
+
+        .code-text {
+            color: #e0e0e0;
+            word-break: break-all;
+            font-size: 0.95rem;
+        }
+        
+        .label-text {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .copy-btn {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            background-color: #333;
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .copy-btn.copied {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* MODALS & OVERLAYS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-btn {
+            background: var(--accent-gradient);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: opacity 0.2s;
+        }
+
+        .modal-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            background-color: #333;
+            border-radius: 10px;
+            height: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-gradient);
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px #7c3aed;
+        }
+
+        .progress-text {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal-overlay" id="adModal">
+    <div class="modal-box">
+        <i data-feather="alert-triangle" style="color: #f59e0b; width: 48px; height: 48px; margin-bottom: 15px;"></i>
+        <h2 style="color: white; margin-bottom: 10px;">Notice</h2>
+        <p style="color: var(--text-muted);">This page contains advertisements. Please proceed with understanding.</p>
+        <button class="modal-btn" onclick="closeAdModal()">I Understand</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="downloadModal">
+    <div class="modal-box">
+        <i data-feather="download-cloud" style="color: #a855f7; width: 40px; height: 40px; margin-bottom: 15px;"></i>
+        <h3 style="color: white;">Downloading File...</h3>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p class="progress-text" id="progressText">0%</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <header>
+        <h1>RDP Setup Guide</h1>
+        <p class="subtitle">HamzaEditz 2.0 Tutorial</p>
+    </header>
+
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/bBxejfjInzc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <button onclick="startDownloadProcess()" class="download-btn">
+        <i data-feather="download" style="margin-right: 10px;"></i> Download RDP File (rdp.sh)
+    </button>
+
+    <div class="card">
+        <div class="step-title">
+            <i data-feather="shield"></i> Step 1: Get Root Access
+        </div>
+        <p class="note">First, gain root privileges by running this command:</p>
+        <div class="command-box">
+            <span class="code-text">sudo su</span>
+            <button class="copy-btn" onclick="copyToClipboard(this, 'sudo su')">
+                <i data-feather="copy" style="width: 14px; height: 14px;"></i> <span>Copy</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="step-title">
+            <i data-feather="play-circle"></i> Step 2: Run RDP Script
+        </div>
+        <p class="note">Now, execute the downloaded script file:</p>
+        <div class="command-box">
+            <span class="code-text">bash rdp.sh</span>
+            <button class="copy-btn" onclick="copyToClipboard(this, 'bash rdp.sh')">
+                <i data-feather="copy" style="width: 14px; height: 14px;"></i> <span>Copy</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="step-title">
+            <i data-feather="download-cloud"></i> Step 3: Install Tailscale
+        </div>
+        <p class="note">Run this command to install Tailscale services:</p>
+        <div class="command-box">
+            <span class="code-text">curl -fsSL https://tailscale.com/install.sh | sh</span>
+            <button class="copy-btn" onclick="copyToClipboard(this, 'curl -fsSL https://tailscale.com/install.sh | sh')">
+                <i data-feather="copy" style="width: 14px; height: 14px;"></i> <span>Copy</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="step-title">
+            <i data-feather="server"></i> Step 4: Run Tailscale Service
+        </div>
+        <p class="note">Start the service in the background:</p>
+        <div class="command-box">
+            <span class="code-text">sudo tailscaled --state=/var/lib/tailscale/tailscaled.state &</span>
+            <button class="copy-btn" onclick="copyToClipboard(this, 'sudo tailscaled --state=/var/lib/tailscale/tailscaled.state &')">
+                <i data-feather="copy" style="width: 14px; height: 14px;"></i> <span>Copy</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="step-title">
+            <i data-feather="link"></i> Step 5: Get Login Link
+        </div>
+        <p class="note">Finally, run this to get your unique login link. Open it to connect your account.</p>
+        <div class="command-box">
+            <span class="code-text">sudo tailscale up</span>
+            <button class="copy-btn" onclick="copyToClipboard(this, 'sudo tailscale up')">
+                <i data-feather="copy" style="width: 14px; height: 14px;"></i> <span>Copy</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="step-title">
+            <i data-feather="key"></i> RDP Login Credentials
+        </div>
+        <p class="note">Use these details to log in if asked:</p>
+        
+        <div class="command-box cred-box">
+            <div>
+                <span class="label-text">Username:</span>
+                <span class="code-text">MASTER</span>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard(this, 'MASTER')">
+                <i data-feather="copy" style="width: 14px; height: 14px;"></i> <span>Copy</span>
+            </button>
+        </div>
+
+        <div class="command-box">
+            <div>
+                <span class="label-text">Password:</span>
+                <span class="code-text">admin@123</span>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard(this, 'admin@123')">
+                <i data-feather="copy" style="width: 14px; height: 14px;"></i> <span>Copy</span>
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 HamzaEditz 2.0 Design</p>
+    </footer>
+
+</div>
+
+<script>
+    // Initialize Icons
+    feather.replace();
+
+    // Ad Warning Modal Logic
+    window.onload = function() {
+        setTimeout(() => {
+            document.getElementById('adModal').classList.add('active');
+        }, 500);
+    }
+
+    function closeAdModal() {
+        document.getElementById('adModal').classList.remove('active');
+    }
+
+    // Download with Animation Logic
+    function startDownloadProcess() {
+        const modal = document.getElementById('downloadModal');
+        const bar = document.getElementById('progressBar');
+        const text = document.getElementById('progressText');
+        const fileUrl = 'https://raw.githubusercontent.com/namehamzajazz-cloud/HamzaShafiq/refs/heads/main/rdp.sh';
+
+        modal.classList.add('active');
+        
+        let width = 0;
+        const interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                text.innerText = "Download Starting...";
+                triggerFileDownload(fileUrl);
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    width = 0;
+                    bar.style.width = '0%';
+                }, 1000);
+            } else {
+                width += Math.floor(Math.random() * 5) + 1;
+                if(width > 100) width = 100;
+                bar.style.width = width + '%';
+                text.innerText = width + '%';
+            }
+        }, 50);
+    }
+
+    function triggerFileDownload(url) {
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'rdp.sh';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(() => {
+                alert('Download failed automatically. Opening link...');
+                window.open(url, '_blank');
+            });
+    }
+
+    // Robust Copy Function
+    function copyToClipboard(button, text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopiedFeedback(button);
+            }).catch(() => {
+                fallbackCopyTextToClipboard(button, text);
+            });
+        } else {
+            fallbackCopyTextToClipboard(button, text);
+        }
+    }
+
+    function fallbackCopyTextToClipboard(button, text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if(successful) showCopiedFeedback(button);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    function showCopiedFeedback(button) {
+        const span = button.querySelector('span');
+        
+        button.classList.add('copied');
+        span.innerText = 'Copied!';
+        const icon = button.querySelector('i');
+        if(icon) feather.replace();
+
+        setTimeout(() => {
+            button.classList.remove('copied');
+            span.innerText = 'Copy';
+        }, 2000);
+    }
+</script>
+
+<script>(function(s){s.dataset.zone='10133824',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+</body>
+</html>
