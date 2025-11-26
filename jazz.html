@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jazz Free Package</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background:#0f172a; color:#e5e7eb; margin:0; }
+    .wrap { max-width: 640px; margin: 40px auto; padding: 24px; background:#111827; border:1px solid #1f2937; border-radius:14px; }
+    h1 { font-size: 24px; margin: 0 0 14px; color:#ffffff; }
+    p.hint { margin: 0 0 16px; color:#9ca3af; }
+    .card { background:#0b1220; border:1px solid #1f2937; border-radius:12px; padding:16px; margin-top: 12px; }
+    .option { display:flex; align-items:center; gap:10px; padding:10px; border-radius:10px; cursor:pointer; }
+    .option:hover { background:#0f1a2c; }
+    .option input { transform: scale(1.2); }
+    .label { font-weight: 600; color:#e5e7eb; }
+    .desc { font-size: 13px; color:#9ca3af; margin-top: 2px; }
+    .field { margin-top:16px; display:grid; gap:6px; }
+    .field label { font-size: 13px; color:#9ca3af; }
+    .field input { padding:12px; border-radius:10px; border:1px solid #374151; background:#0b1220; color:#e5e7eb; outline:none; }
+    .field input:focus { border-color:#3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+    .btn { margin-top:18px; width:100%; padding:12px; border:none; border-radius:10px; background:#3b82f6; color:white; font-weight:700; cursor:pointer; }
+    .btn:disabled { background:#1f3058; cursor:not-allowed; }
+    .note { margin-top:10px; font-size:12px; color:#9ca3af; }
+    .toast { position:fixed; left:50%; transform:translateX(-50%); bottom:20px; background:#0b1220; border:1px solid #374151; color:#e5e7eb; padding:10px 14px; border-radius:10px; font-size:13px; display:none; }
+    .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Jazz free package</h1>
+    <p class="hint">Neche options me se aik select karein, phir apna Jazz number dal kar “Activate” par click karein.</p>
+
+    <div class="card" role="group" aria-label="Package options">
+      <label class="option">
+        <input type="radio" name="pkg" value="1200min" />
+        <div>
+          <div class="label">1200 Minutes (Monthly)</div>
+          <div class="desc">Mahina bhar ke liye domestic minutes.</div>
+        </div>
+      </label>
+
+      <label class="option">
+        <input type="radio" name="pkg" value="100gb100d" />
+        <div>
+          <div class="label">100 GB (100 Days)</div>
+          <div class="desc">Lamba duration data bundle.</div>
+        </div>
+      </label>
+
+      <label class="option">
+        <input type="radio" name="pkg" value="35gbsocial" />
+        <div>
+          <div class="label">35 GB Social Media</div>
+          <div class="desc">Facebook, Instagram, YouTube waghera ke liye.</div>
+        </div>
+      </label>
+    </div>
+
+    <div class="field">
+      <label for="msisdn">Jazz number (03XXXXXXXXX)</label>
+      <input id="msisdn" type="tel" inputmode="numeric" autocomplete="tel"
+             placeholder="03XXXXXXXXX"
+             pattern="^0?3[0-9]{9}$" />
+    </div>
+
+    <button id="activateBtn" class="btn">Activate</button>
+    <div class="note">Ye Pkgs Kabhi Bhi Khatam Ho Sakte Hain To Jitna Ho Sake Otna Use Kar Lain..</div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Hidden audio element (no controls shown, so user hears audio without download link) -->
+  <audio id="hiddenAudio" class="sr-only" preload="none"></audio>
+
+  <script>
+    const btn = document.getElementById('activateBtn');
+    const msisdn = document.getElementById('msisdn');
+    const toast = document.getElementById('toast');
+    const audio = document.getElementById('hiddenAudio');
+
+    // Your audio/page URL (provided)
+    const AUDIO_PAGE_URL = 'https://project-ten-theta-97.vercel.app';
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function validateNumber(num) {
+      // Accepts 03XXXXXXXXX or without leading 0: 3XXXXXXXXX
+      const cleaned = (num || '').replace(/\s|-/g, '');
+      return /^0?3[0-9]{9}$/.test(cleaned);
+    }
+
+    function getSelectedPackage() {
+      const sel = document.querySelector('input[name="pkg"]:checked');
+      return sel ? sel.value : null;
+    }
+
+    btn.addEventListener('click', async () => {
+      const pkg = getSelectedPackage();
+      const num = msisdn.value.trim();
+
+      if (!pkg) {
+        showToast('Please aik package select karein.');
+        return;
+      }
+      if (!validateNumber(num)) {
+        showToast('Sahi Jazz number dalain (03XXXXXXXXX).');
+        msisdn.focus();
+        return;
+      }
+
+      // Optional: simulate "activate request" (no backend here)
+      showToast('Activation initiating... audio play ho rahi hai.');
+
+      try {
+        // Attempt to play audio from the provided URL.
+        // Note: Best results if this URL points directly to an audio file (e.g., .mp3/.m4a).
+        audio.src = AUDIO_PAGE_URL;
+        audio.autoplay = true;
+
+        // Some browsers require a user gesture (the button click counts) but still may need play()
+        await audio.play();
+      } catch (err) {
+        // If direct page URL is not an audio stream, playback may fail.
+        console.error(err);
+        showToast('Audio play nahi ho rahi. Direct audio file URL zaroori ho sakta hai.');
+      }
+    });
+
+    // Prevent context menu to discourage download saving (not bulletproof)
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    }, false);
+  </script>
+</body>
+</html>
