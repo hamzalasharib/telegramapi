@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sora Downloader | HamzaEditz 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* HamzaEditz 2.0 Theme Variables */
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: #1a1a20;
+            --text-main: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-purple: #7c3aed;
+            --accent-hover: #6d28d9;
+            --border-color: #2d2d35;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #fff, var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Input Section */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            background: #000000;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-purple);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            background: #444;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Result Section */
+        #result-area {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            background: #000;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #121216;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .stat-item span {
+            color: #fff;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .prompt-box {
+            background: #121216;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .prompt-label {
+            font-size: 12px;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .prompt-text {
+            font-size: 13px;
+            color: #d1d1d1;
+            line-height: 1.6;
+            max-height: 100px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-copy {
+            background: #2d2d35;
+            color: #fff;
+        }
+
+        .btn-copy:hover {
+            background: #3d3d45;
+        }
+
+        .btn-download {
+            background: #fff;
+            color: #000;
+            position: relative;
+        }
+
+        .btn-download:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-download:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        /* Loader */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            display: none; /* Hidden by default */
+        }
+
+        /* Specific loader for download button */
+        #dl-spinner {
+            border-top-color: #000; 
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Sora Downloader</h1>
+        <p class="subtitle">HamzaEditz 2.0 • No Watermark</p>
+    </header>
+
+    <div class="input-group">
+        <input type="text" id="urlInput" placeholder="Paste Sora URL (e.g. https://sora.chatgpt.com/p/...)">
+        <button class="btn-primary" onclick="fetchVideoDetails()">
+            <span id="btnText">Fetch Video</span>
+            <div class="spinner" id="main-spinner"></div>
+        </button>
+    </div>
+
+    <div id="result-area">
+        
+        <div class="video-wrapper">
+            <video id="videoPlayer" controls loop playsinline>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-item">Views: <span id="viewCount">0</span></div>
+            <div class="stat-item">Likes: <span id="likeCount">0</span></div>
+        </div>
+
+        <div class="prompt-box">
+            <span class="prompt-label">Prompt / Description</span>
+            <div class="prompt-text" id="promptText">
+                Loading...
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn-action btn-copy" onclick="copyPrompt()">
+                    Copy Prompt
+                </button>
+                <button id="downloadBtn" class="btn-action btn-download" onclick="triggerDownload()">
+                    <span>Download MP4</span>
+                    <div class="spinner" id="dl-spinner"></div>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Global variable to store current ID
+    let currentPostId = null;
+
+    async function fetchVideoDetails() {
+        const inputUrl = document.getElementById('urlInput').value.trim();
+        const resultArea = document.getElementById('result-area');
+        const btnText = document.getElementById('btnText');
+        const spinner = document.getElementById('main-spinner');
+        const btn = document.querySelector('.btn-primary');
+        const player = document.getElementById('videoPlayer');
+
+        if (!inputUrl) {
+            alert("Please paste a Sora URL first.");
+            return;
+        }
+
+        // Reset UI
+        resultArea.style.display = 'none';
+        btnText.textContent = "Processing...";
+        spinner.style.display = 'block';
+        btn.disabled = true;
+        
+        // Pause any existing video
+        player.pause();
+        player.removeAttribute('src');
+
+        // CORS Proxy + API URL
+        // We use corsproxy.io to bypass the browser block
+        const targetApi = `https://api.soracdn.workers.dev/api-proxy/${inputUrl}`;
+        const corsProxy = `https://corsproxy.io/?url=${encodeURIComponent(targetApi)}`;
+
+        try {
+            const response = await fetch(corsProxy);
+            if (!response.ok) throw new Error("API Error");
+            const data = await response.json();
+
+            // 1. Extract Details
+            const previewUrl = data.links.mp4; 
+            const prompt = data.post_info.title;
+            const views = data.post_info.view_count;
+            const likes = data.post_info.like_count;
+            currentPostId = data.post_id; // Save ID for download step
+
+            // 2. Set Video Player
+            // Note: We might need proxy for the video file too if it doesn't play
+            player.src = previewUrl; 
+            player.load();
+
+            // 3. Update Text
+            document.getElementById('promptText').textContent = prompt;
+            document.getElementById('viewCount').textContent = views;
+            document.getElementById('likeCount').textContent = likes;
+
+            // Show Result
+            resultArea.style.display = 'block';
+
+        } catch (error) {
+            console.error(error);
+            alert("Failed to fetch details. Please check the URL or try again later.");
+        } finally {
+            // Restore Button
+            btnText.textContent = "Fetch Video";
+            spinner.style.display = 'none';
+            btn.disabled = false;
+        }
+    }
+
+    async function triggerDownload() {
+        if (!currentPostId) return;
+
+        const dlBtn = document.getElementById('downloadBtn');
+        const btnSpan = dlBtn.querySelector('span');
+        const spinner = document.getElementById('dl-spinner');
+
+        // UI Loading
+        dlBtn.disabled = true;
+        btnSpan.textContent = "Downloading...";
+        spinner.style.display = 'inline-block';
+
+        // 2nd API URL (Download Proxy)
+        const downloadApiUrl = `https://api.soracdn.workers.dev/download-proxy?id=${currentPostId}&filename=HamzaEditz.mp4`;
+        
+        // Use CORS proxy to fetch the video file data (BLOB) instead of just opening link
+        const corsDownloadUrl = `https://corsproxy.io/?url=${encodeURIComponent(downloadApiUrl)}`;
+
+        try {
+            // Fetch video as a blob (Binary Large Object)
+            const response = await fetch(corsDownloadUrl);
+            if (!response.ok) throw new Error("Download failed");
+            
+            const blob = await response.blob();
+            
+            // Create an invisible link to force download
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'HamzaEditz.mp4'; // Force filename here
+            
+            document.body.appendChild(a);
+            a.click(); // Click it programmatically
+            
+            // Cleanup
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+        } catch (error) {
+            console.error("Download Error:", error);
+            alert("Direct download failed. Opening in new tab instead.");
+            // Fallback: Just open the link if blob method fails
+            window.open(downloadApiUrl, '_blank');
+        } finally {
+            // Restore Button
+            dlBtn.disabled = false;
+            btnSpan.textContent = "Download MP4";
+            spinner.style.display = 'none';
+        }
+    }
+
+    function copyPrompt() {
+        const text = document.getElementById('promptText').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('.btn-copy');
+            const original = btn.textContent;
+            btn.textContent = "Copied!";
+            btn.style.background = "#2ea043";
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.background = "#2d2d35";
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
