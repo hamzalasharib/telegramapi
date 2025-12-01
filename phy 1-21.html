@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHY101 Notes - HamzaEditz 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        /* HamzaEditz 2.0 Variables */
+        :root {
+            --bg-color: #0f0f12;
+            --card-bg: #1f1f1f;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --border-color: #333;
+            --success-color: #00b894;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Animated Title (Gemini Style) */
+        .main-title {
+            font-size: 2.5rem;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #00d2ff, #8E2DE2);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-anim 5s ease infinite;
+        }
+
+        @keyframes gradient-anim {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            padding-left: 50px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #8E2DE2;
+            box-shadow: 0 0 15px rgba(142, 45, 226, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Lecture Cards */
+        .lecture-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lecture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-gradient);
+        }
+
+        .lecture-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .lecture-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Questions Section */
+        .section-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8E2DE2;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mcq-item, .short-q-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+
+        .mcq-item:hover, .short-q-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .answer-box {
+            background: rgba(0, 184, 148, 0.15);
+            color: var(--success-color);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .short-answer {
+            color: var(--text-muted);
+            margin-top: 5px;
+            padding-left: 10px;
+            border-left: 2px solid #8E2DE2;
+        }
+
+        /* Formula Card */
+        .formula-card {
+            background: linear-gradient(145deg, #1f1f1f, #252525);
+            border: 1px solid #8E2DE2;
+        }
+
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .formula-item {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .formula-item strong {
+            display: block;
+            color: #8E2DE2;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .main-title { font-size: 1.8rem; }
+            .lecture-title { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="main-title">PHY101 - MCQs & Questions</h1>
+    <p class="subtitle">Solved Lectures 1-21 | HamzaEditz 2.0 Style</p>
+
+    <div class="search-container">
+        <i data-feather="search" class="search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search for questions, formulas, or topics...">
+    </div>
+
+    <div id="contentArea">
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 1 - Introduction to Physics</span>
+            </div>
+            
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. What is the scientific method based on?</div>
+                <div class="answer-box">Answer: b) Reason, logic, and experimental evidence</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. What are the three fundamental dimensions in physics?</div>
+                <div class="answer-box">Answer: b) Mass, Length, Time</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">3. The dimensional formula for Force is:</div>
+                <div class="answer-box">Answer: b) MLT⁻²</div>
+            </div>
+
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+                <div class="question-text">Q: What is the difference between units and dimensions?</div>
+                <div class="short-answer">Dimensions are fundamental quantities (M, L, T) while units are the standards used to measure them.</div>
+            </div>
+            <div class="short-q-item">
+                <div class="question-text">Q: Why is dimensional analysis important?</div>
+                <div class="short-answer">It helps verify equations, convert units, and check the validity of physical relationships.</div>
+            </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 2 - Kinematics I</span>
+            </div>
+            
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Displacement is:</div>
+                <div class="answer-box">Answer: c) The position of a body at time t</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. For constant acceleration, final velocity equation is:</div>
+                <div class="answer-box">Answer: b) v = v₀ + at</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">3. The equation x = x₀ + v₀t + ½at² is valid for:</div>
+                <div class="answer-box">Answer: b) Constant acceleration</div>
+            </div>
+
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+                <div class="question-text">Q: What is the difference between speed and velocity?</div>
+                <div class="short-answer">Speed is scalar (rate of distance), velocity is vector (rate of displacement with direction).</div>
+            </div>
+            <div class="short-q-item">
+                <div class="question-text">Q: Can a body have zero velocity but non-zero acceleration?</div>
+                <div class="short-answer">Yes, e.g., at the highest point of a thrown ball, velocity is zero but gravity acts downward.</div>
+            </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 3 - Kinematics II</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. The derivative of x = t² with respect to time is:</div>
+                <div class="answer-box">Answer: b) 2t</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. If x = tⁿ, then dx/dt equals:</div>
+                <div class="answer-box">Answer: b) ntⁿ⁻¹</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">3. The acceleration due to gravity near Earth's surface is approx:</div>
+                <div class="answer-box">Answer: b) 9.8 m/s²</div>
+            </div>
+
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+                <div class="question-text">Q: Define derivative in physical terms.</div>
+                <div class="short-answer">A derivative shows how fast a function changes. Velocity is dx/dt, acceleration is dv/dt.</div>
+            </div>
+            <div class="short-q-item">
+                <div class="question-text">Q: What is the scalar product of two vectors?</div>
+                <div class="short-answer">A·B = AB cosθ. It equals the length of one vector times the projection of the other.</div>
+            </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 4 - Force and Newton's Laws</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Newton's First Law states that:</div>
+                <div class="answer-box">Answer: b) Remains at rest/uniform motion unless acted by external force</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. The SI unit of force is:</div>
+                <div class="answer-box">Answer: c) Newton</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">3. According to Newton's Third Law:</div>
+                <div class="answer-box">Answer: b) F_AB = -F_BA</div>
+            </div>
+
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+                <div class="question-text">Q: State Newton's Second Law.</div>
+                <div class="short-answer">F = ma. The net force on a body equals its mass times its acceleration.</div>
+            </div>
+            <div class="short-q-item">
+                <div class="question-text">Q: What is the difference between mass and weight?</div>
+                <div class="short-answer">Mass is constant matter. Weight is gravitational force (W=mg) and varies.</div>
+            </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 5 - Applications of Newton's Laws I</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. For a body in equilibrium:</div>
+                <div class="answer-box">Answer: c) F = 0</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. The coefficient of friction μ is:</div>
+                <div class="answer-box">Answer: a) Force/Normal force</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">3. For a massless rope, tension:</div>
+                <div class="answer-box">Answer: c) Is same everywhere</div>
+            </div>
+             <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+             <div class="short-q-item">
+                <div class="question-text">Q: What is static equilibrium?</div>
+                <div class="short-answer">Body at rest with sum of all forces zero (ΣF = 0).</div>
+            </div>
+            <div class="short-q-item">
+                <div class="question-text">Q: How does friction depend on normal force?</div>
+                <div class="short-answer">Friction is directly proportional to normal force (F = μN).</div>
+            </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 6 - Applications of Newton's Laws II</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Fluid resistance force typically:</div>
+                <div class="answer-box">Answer: c) Increases with speed</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. Terminal velocity is reached when:</div>
+                <div class="answer-box">Answer: b) Frictional force equals gravitational force</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">3. In a lift accelerating upward, you feel:</div>
+                <div class="answer-box">Answer: b) Heavier</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: What is terminal velocity?</div>
+               <div class="short-answer">Constant maximum velocity reached when drag force equals gravitational force.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 7 - Work and Energy</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Work is defined as:</div>
+                <div class="answer-box">Answer: b) Force × displacement (in direction of force)</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. The SI unit of work is:</div>
+                <div class="answer-box">Answer: c) Joule</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">3. Kinetic energy of a body is:</div>
+                <div class="answer-box">Answer: d) ½mv²</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: Define work in physics.</div>
+               <div class="short-answer">Work W = F·d = Fd cosθ. Energy transferred by a force.</div>
+           </div>
+           <div class="short-q-item">
+               <div class="question-text">Q: What is power?</div>
+               <div class="short-answer">Power is the rate of doing work (P = Work/Time). Unit is Watt.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 8 - Conservation of Energy</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Potential energy is:</div>
+                <div class="answer-box">Answer: b) Stored energy</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. Gravitational potential energy is:</div>
+                <div class="answer-box">Answer: a) mgh</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">3. Energy stored in a spring is:</div>
+                <div class="answer-box">Answer: d) ½kx²</div>
+            </div>
+             <div class="short-q-item">
+                <div class="question-text">Q: State the law of conservation of energy.</div>
+                <div class="short-answer">Energy cannot be created or destroyed. Total mechanical energy is constant without friction.</div>
+            </div>
+        </div>
+        
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 9 - Momentum</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Momentum is defined as:</div>
+                <div class="answer-box">Answer: a) Mass × velocity</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. The unit of momentum is:</div>
+                <div class="answer-box">Answer: b) kg·m/s</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">3. Impulse equals:</div>
+                <div class="answer-box">Answer: b) Change in momentum</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: What is impulse?</div>
+               <div class="short-answer">Impulse I = F·Δt = Δp, the change in momentum.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 10 - Collisions</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. In elastic collision:</div>
+                <div class="answer-box">Answer: c) Both momentum and KE are conserved</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. In perfectly inelastic collision:</div>
+                <div class="answer-box">Answer: a) Objects stick together</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: Difference between elastic and inelastic collisions?</div>
+               <div class="short-answer">Elastic: Momentum & KE conserved. Inelastic: Only Momentum conserved.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 11 - Rotational Kinematics</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. One complete revolution equals:</div>
+                <div class="answer-box">Answer: b) 2π radians</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. Relationship between linear and angular velocity:</div>
+                <div class="answer-box">Answer: a) v = rω</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: Define angular velocity.</div>
+               <div class="short-answer">Rate of change of angular displacement (ω = dθ/dt).</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 12 - Physics of Many Particles</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Centre of mass is defined as:</div>
+                <div class="answer-box">Answer: a) Σm_i r_i / M</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. For rotational motion, Moment of Inertia (I) is analogous to:</div>
+                <div class="answer-box">Answer: c) Mass</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: What is moment of inertia?</div>
+               <div class="short-answer">Rotational analog of mass (I = Σmr²), measuring resistance to rotation.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 13 - Angular Momentum</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Angular momentum L is defined as:</div>
+                <div class="answer-box">Answer: a) r × p</div>
+            </div>
+            <div class="mcq-item">
+                <div class="question-text">2. Angular momentum is conserved when:</div>
+                <div class="answer-box">Answer: b) Torque is zero</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: State law of conservation of angular momentum.</div>
+               <div class="short-answer">If net external torque is zero, total angular momentum remains constant.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 14 - Equilibrium of Rigid Bodies</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. For static equilibrium:</div>
+                <div class="answer-box">Answer: c) Both ΣF = 0 and Στ = 0</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. Centre of gravity is:</div>
+                <div class="answer-box">Answer: b) Point where weight acts</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: Conditions for static equilibrium?</div>
+               <div class="short-answer">Sum of forces = 0 and Sum of torques = 0.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 15 - Oscillations I</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. For SHM, the restoring force is:</div>
+                <div class="answer-box">Answer: b) F = -kx</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. Angular frequency ω for spring-mass:</div>
+                <div class="answer-box">Answer: b) √(k/m)</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: What is simple harmonic motion?</div>
+               <div class="short-answer">Motion where restoring force is proportional to displacement (F = -kx).</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 16 - Oscillations II</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. For a simple pendulum, ω equals:</div>
+                <div class="answer-box">Answer: b) √(g/L)</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. Resonance occurs when:</div>
+                <div class="answer-box">Answer: b) Driving frequency equals natural frequency</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: What causes damping?</div>
+               <div class="short-answer">Dissipative forces like friction or air resistance that remove energy.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 17 - Physics of Materials</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Elasticity is:</div>
+                <div class="answer-box">Answer: b) Tendency to regain original shape</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. Hooke's Law states:</div>
+                <div class="answer-box">Answer: b) Stress = Constant × Strain</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: Define stress and strain.</div>
+               <div class="short-answer">Stress = Force/Area. Strain = Fractional deformation.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 18 - Physics of Fluids</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Pascal's principle states:</div>
+                <div class="answer-box">Answer: b) Pressure in enclosed fluid is transmitted equally</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. Pressure at depth h is:</div>
+                <div class="answer-box">Answer: b) P₀ + ρgh</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: State Bernoulli's equation significance.</div>
+               <div class="short-answer">P + ½ρv² + ρgy = constant. Shows higher velocity regions have lower pressure.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 19 - Physics of Sound</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Sound waves are:</div>
+                <div class="answer-box">Answer: b) Longitudinal waves</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. Doppler effect occurs due to:</div>
+                <div class="answer-box">Answer: b) Relative motion between source and observer</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: Explain Doppler effect.</div>
+               <div class="short-answer">Source approaching = higher frequency/pitch. Source receding = lower frequency.</div>
+           </div>
+        </div>
+
+        <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 20 - Wave Motion</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. In longitudinal waves, particle motion is:</div>
+                <div class="answer-box">Answer: b) Parallel to wave direction</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. For constructive interference, phase difference is:</div>
+                <div class="answer-box">Answer: b) 2π or 0</div>
+            </div>
+            <div class="section-label"><i data-feather="help-circle"></i> Short Questions</div>
+            <div class="short-q-item">
+               <div class="question-text">Q: Difference between transverse and longitudinal waves?</div>
+               <div class="short-answer">Transverse: Oscillation perpendicular to propagation. Longitudinal: Oscillation parallel.</div>
+           </div>
+        </div>
+
+         <div class="lecture-card">
+            <div class="lecture-header">
+                <span class="lecture-title">Lecture 21 - Gravitation</span>
+            </div>
+            <div class="section-label"><i data-feather="list"></i> MCQs</div>
+            <div class="mcq-item">
+                <div class="question-text">1. Newton's law of gravitation states F ∝:</div>
+                <div class="answer-box">Answer: b) m₁m₂/r²</div>
+            </div>
+             <div class="mcq-item">
+                <div class="question-text">2. Escape velocity from Earth is:</div>
+                <div class="answer-box">Answer: b) 11.2 km/s</div>
+            </div>
+            <div class="short-q-item">
+                <div class="question-text">Q: State Kepler's second law.</div>
+                <div class="short-answer">A line joining a planet to the Sun sweeps out equal areas in equal time intervals.</div>
+            </div>
+        </div>
+
+        <div class="lecture-card formula-card">
+            <div class="lecture-header">
+                <span class="lecture-title" style="color:#8E2DE2"><i data-feather="activity"></i> Key Formulas</span>
+            </div>
+            <div class="formula-grid">
+                <div class="formula-item"><strong>Kinematics</strong>v = v₀ + at<br>x = x₀ + v₀t + ½at²</div>
+                <div class="formula-item"><strong>Dynamics</strong>F = ma<br>KE = ½mv²<br>PE = mgh</div>
+                <div class="formula-item"><strong>Rotation</strong>ω = dθ/dt<br>L = r × p<br>τ = dL/dt</div>
+                <div class="formula-item"><strong>Waves</strong>v = νλ<br>Doppler: ν' = ν(v±v₀)/(v∓v_s)</div>
+            </div>
+        </div>
+
+    </div> <footer>
+        <p>© 2025 HamzaEditz 2.0 | Physics Notes Tool</p>
+    </footer>
+</div>
+
+<script>
+    // Initialize Feather Icons
+    feather.replace();
+
+    // Search Functionality
+    const searchInput = document.getElementById('searchInput');
+    const contentArea = document.getElementById('contentArea');
+    const items = contentArea.querySelectorAll('.mcq-item, .short-q-item, .formula-item');
+
+    searchInput.addEventListener('keyup', function(e) {
+        const term = e.target.value.toLowerCase();
+        
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            if(text.includes(term)) {
+                item.style.display = "block";
+                // Ensure parent card is visible if it has matching children
+                if(item.closest('.lecture-card')) {
+                    item.closest('.lecture-card').style.display = "block";
+                }
+            } else {
+                item.style.display = "none";
+            }
+        });
+
+        // Hide empty cards
+        document.querySelectorAll('.lecture-card').forEach(card => {
+            const visibleChildren = Array.from(card.querySelectorAll('.mcq-item, .short-q-item, .formula-item')).filter(c => c.style.display !== 'none');
+            if(visibleChildren.length === 0 && term !== '') {
+                card.style.display = 'none';
+            } else {
+                card.style.display = 'block';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
