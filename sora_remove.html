@@ -84,7 +84,7 @@
             border: 1px solid var(--border-color);
             font-size: 14px;
             font-weight: 600;
-            display: none; /* Hidden initially */
+            display: none;
         }
 
         .stat-success { color: var(--success-color); }
@@ -159,7 +159,7 @@
             border-radius: 12px;
             overflow: hidden;
             display: flex;
-            flex-direction: row; /* Horizontal Layout for Thumbnail view */
+            flex-direction: row;
             animation: fadeIn 0.5s ease;
             min-height: 150px;
         }
@@ -170,6 +170,13 @@
             background: #000;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Placeholder Background */
+            background-image: url('https://placehold.co/600x400/000000/333333?text=Loading...');
+            background-size: cover;
+            background-position: center;
         }
 
         .thumb-wrapper img {
@@ -178,6 +185,13 @@
             object-fit: cover;
             display: block;
             transition: transform 0.3s;
+        }
+        
+        /* Fallback for broken images */
+        .thumb-wrapper img.error-img {
+            object-fit: contain;
+            padding: 20px;
+            opacity: 0.5;
         }
 
         .thumb-wrapper:hover img {
@@ -233,7 +247,6 @@
         .btn-download:hover { background: #e0e0e0; }
         .btn-download:disabled { opacity: 0.6; cursor: wait; }
 
-        /* Loader */
         .spinner {
             width: 18px;
             height: 18px;
@@ -243,20 +256,17 @@
             animation: spin 1s ease-in-out infinite;
             display: none; 
         }
-        
         .spinner-black { border-top-color: #000; }
 
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Mobile Responsive */
         @media (max-width: 600px) {
             .video-card { flex-direction: column; }
             .thumb-wrapper { width: 100%; max-width: none; height: 200px; }
             .card-content { width: 100%; }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f0f13; }
         ::-webkit-scrollbar-thumb { background: #2d2d35; border-radius: 3px; }
@@ -268,12 +278,12 @@
 <div class="container">
     <header>
         <h1>Sora Bulk Downloader</h1>
-        <p class="subtitle" style="color: #a0a0a0; font-size: 14px;">HamzaEditz 2.0 • Thumbnails Mode</p>
+        <p class="subtitle" style="color: #a0a0a0; font-size: 14px;">HamzaEditz 2.0 • Proxy Thumbnails</p>
         <div class="vpn-note">⚠️ Note: Use VPN if the site or download is not working.</div>
     </header>
 
     <div class="input-group">
-        <textarea id="urlInput" placeholder="Paste Sora URLs here...&#10;One link per line&#10;Example:&#10;https://sora.chatgpt.com/p/abc...&#10;https://sora.chatgpt.com/p/xyz..."></textarea>
+        <textarea id="urlInput" placeholder="Paste Sora URLs here...&#10;One link per line"></textarea>
         <button class="btn-primary" onclick="processBulkUrls()">
             <span id="btnText">Fetch All Videos</span>
             <div class="spinner" id="main-spinner"></div>
@@ -286,14 +296,13 @@
         <span class="stat-fail">Failed: <b id="fail-count">0</b> ❌</span>
     </div>
 
-    <div id="results-container">
-        </div>
+    <div id="results-container"></div>
 </div>
 
 <script>
-    // Global Counters
     let successCount = 0;
     let failCount = 0;
+    const PLACEHOLDER_IMG = "https://placehold.co/600x400/1a1a20/7c3aed?text=Sora+Video";
 
     async function processBulkUrls() {
         const inputArea = document.getElementById('urlInput');
@@ -303,12 +312,10 @@
         const btn = document.querySelector('.btn-primary');
         const statusBar = document.getElementById('status-bar');
         
-        // Reset counts
         successCount = 0;
         failCount = 0;
         updateStats();
 
-        // Split by new line and filter empty lines
         const rawUrls = inputArea.value.split('\n').map(u => u.trim()).filter(u => u.length > 0);
 
         if (rawUrls.length === 0) {
@@ -316,19 +323,17 @@
             return;
         }
 
-        // Reset UI
         resultsContainer.innerHTML = ''; 
-        statusBar.style.display = 'flex'; // Show stats
+        statusBar.style.display = 'flex';
         btn.disabled = true;
         btnText.textContent = `Processing ${rawUrls.length} links...`;
         spinner.style.display = 'block';
 
-        // Process each URL
+        // Use standard loop for orderly processing
         for (let i = 0; i < rawUrls.length; i++) {
             await fetchAndCreateCard(rawUrls[i], i);
         }
 
-        // Finish
         btnText.textContent = "Fetch All Videos";
         spinner.style.display = 'none';
         btn.disabled = false;
@@ -341,9 +346,9 @@
 
     async function fetchAndCreateCard(url, index) {
         const resultsContainer = document.getElementById('results-container');
-
-        // Create a placeholder card (Loading state)
         const cardId = `card-${index}`;
+        
+        // Add Loading Placeholder
         const placeholderHTML = `
             <div class="video-card" id="${cardId}" style="justify-content:center; align-items:center; min-height:100px;">
                 <div class="spinner" style="display:inline-block; border-top-color:var(--accent-purple);"></div>
@@ -352,7 +357,6 @@
         resultsContainer.insertAdjacentHTML('beforeend', placeholderHTML);
         const cardElement = document.getElementById(cardId);
 
-        // API Logic
         const targetApi = `https://api.soracdn.workers.dev/api-proxy/${url}`;
         const corsProxy = `https://corsproxy.io/?url=${encodeURIComponent(targetApi)}`;
 
@@ -361,22 +365,21 @@
             if (!response.ok) throw new Error("API Error");
             const data = await response.json();
 
-            // Data extraction
             const postId = data.post_id;
             const prompt = data.post_info.title || "No prompt available";
             
-            // Thumbnail Logic
-            let thumbUrl = "https://via.placeholder.com/300x200?text=No+Thumb";
-            if(data.links.thumbnail) thumbUrl = data.links.thumbnail;
-            else if (data.post_info.thumbnail_url) thumbUrl = data.post_info.thumbnail_url;
+            // --- NEW LOGIC FOR THUMBNAIL ---
+            // Using your specific proxy with the ID
+            const thumbUrl = `https://api.soracdn.workers.dev/thumbnail-proxy?id=${postId}`;
 
-            // Direct Download URL
             const directDownloadUrl = `https://api.soracdn.workers.dev/download-proxy?id=${postId}&filename=HamzaEditz.mp4`;
 
-            // Update Card HTML (Thumbnail Mode)
             cardElement.innerHTML = `
                 <div class="thumb-wrapper">
-                    <img src="${thumbUrl}" alt="Thumbnail">
+                    <img src="${thumbUrl}" 
+                         alt="Thumbnail" 
+                         onerror="this.onerror=null; this.src='${PLACEHOLDER_IMG}'; this.classList.add('error-img');" 
+                         referrerpolicy="no-referrer">
                 </div>
                 <div class="card-content">
                     <div class="prompt-text" id="prompt-${index}">${prompt}</div>
@@ -392,21 +395,18 @@
                 </div>
             `;
             
-            // Success Logic
             successCount++;
             updateStats();
 
         } catch (error) {
             console.error(error);
-            // Error Card
             cardElement.innerHTML = `
-                <div class="card-content" style="width:100%; text-align:center; color: #ff5555; justify-content:center;">
-                    <p>❌ Failed to fetch</p>
-                    <p style="font-size:11px; color:#666; word-break:break-all;">${url}</p>
+                <div class="card-content" style="width:100%; text-align:center; color: #ff5555; justify-content:center; flex-direction:column;">
+                    <p style="font-weight:600">❌ Failed to fetch</p>
+                    <p style="font-size:11px; color:#666; word-break:break-all; margin-top:5px;">${url}</p>
                 </div>
             `;
             
-            // Fail Logic
             failCount++;
             updateStats();
         }
@@ -417,11 +417,11 @@
         const spinner = btn.querySelector('.spinner');
         const span = btn.querySelector('span');
 
-        // Loading State
         btn.disabled = true;
         span.textContent = "Downloading...";
         spinner.style.display = 'inline-block';
 
+        // Use proxy for download blob
         const corsDownloadUrl = `https://corsproxy.io/?url=${encodeURIComponent(url)}`;
 
         try {
