@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamzaEditz Music Player</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        :root {
+            --bg-dark: #0f0f12;
+            --card-bg: #1f1f1f;
+            --text-main: #ffffff;
+            --text-sub: #b3b3b3;
+            --primary: #8E2DE2;
+            --secondary: #4A00E0;
+            --gradient: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background */
+        .ambient-glow {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: var(--primary);
+            filter: blur(180px);
+            opacity: 0.15;
+            z-index: -1;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 380px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 2px solid var(--secondary);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Title */
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #8E2DE2, #4A00E0, #00C6FF, #8E2DE2);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            animation: shine 3s linear infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes shine { to { background-position: 200% center; } }
+
+        /* Search Area */
+        .search-box {
+            display: flex;
+            background: #141414;
+            border-radius: 15px;
+            padding: 5px;
+            border: 1px solid #2a2a2a;
+            margin-bottom: 30px;
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        button.search-btn {
+            background: var(--gradient);
+            border: none;
+            border-radius: 12px;
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: white; transition: 0.3s;
+        }
+        button.search-btn:active { transform: scale(0.9); }
+
+        /* Loader */
+        .loader {
+            display: none;
+            width: 40px; height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 30px auto;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Player UI */
+        .player-ui {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .cover-art {
+            width: 220px; height: 220px;
+            border-radius: 20px; object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.05);
+            margin-bottom: 25px;
+        }
+
+        .song-info h2 { font-size: 1.3rem; margin-bottom: 5px; color: white; }
+        .song-info p { color: var(--text-sub); font-size: 0.9rem; margin-bottom: 25px; }
+
+        /* Custom Progress Bar */
+        .progress-area { width: 100%; margin-bottom: 25px; }
+        .progress-bar {
+            width: 100%; height: 6px;
+            background: #2a2a2a; border-radius: 5px; cursor: pointer;
+            appearance: none; outline: none;
+        }
+        .progress-bar::-webkit-slider-thumb {
+            appearance: none; width: 14px; height: 14px;
+            background: white; border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary); cursor: pointer; margin-top: -4px;
+        }
+        .progress-bar::-webkit-slider-runnable-track { height: 6px; border-radius: 5px; background: linear-gradient(90deg, var(--primary) 0%, #2a2a2a 0%); }
+
+        .time-stamps { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-top: 8px; font-weight: 500; }
+
+        /* Controls */
+        .controls { display: flex; align-items: center; justify-content: center; gap: 25px; margin-bottom: 25px; }
+        .control-btn { background: none; border: none; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
+        .control-btn:hover { color: white; }
+
+        .play-btn {
+            width: 60px; height: 60px;
+            border-radius: 50%; background: var(--gradient);
+            color: white; border: none;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 0 20px rgba(142, 45, 226, 0.4);
+            transition: transform 0.2s;
+        }
+        .play-btn:hover { transform: scale(1.05); }
+        .play-btn svg { fill: white; stroke: none; }
+
+        /* Download Button */
+        .download-btn {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            color: white; padding: 14px;
+            border-radius: 15px; text-decoration: none;
+            font-weight: 600; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            gap: 10px; border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .download-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
+        
+        /* Loading spinner for button */
+        .spin-icon { animation: spin 1s linear infinite; }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <div class="container">
+        <h1>HAMZA EDITZ 2.0</h1>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search song...">
+            <button class="search-btn" onclick="fetchSong()"><i data-feather="search" width="18"></i></button>
+        </div>
+
+        <div class="loader" id="loader"></div>
+
+        <div class="player-ui" id="playerUI">
+            <audio id="mainAudio"></audio>
+            <img src="" alt="Art" class="cover-art" id="coverImg">
+            
+            <div class="song-info">
+                <h2 id="songTitle">Song Name</h2>
+                <p id="artistName">Artist</p>
+            </div>
+
+            <div class="progress-area">
+                <input type="range" class="progress-bar" id="progressBar" value="0" min="0" max="100">
+                <div class="time-stamps">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" onclick="seek(-10)"><i data-feather="rotate-ccw"></i></button>
+                <button class="play-btn" onclick="togglePlay()">
+                    <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pauseIcon" style="display:none" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </button>
+                <button class="control-btn" onclick="seek(10)"><i data-feather="rotate-cw"></i></button>
+            </div>
+
+            <button class="download-btn" id="dlinkBtn" onclick="forceDownload()">
+                <i data-feather="download"></i> <span>Download MP3</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        feather.replace();
+
+        const audio = document.getElementById("mainAudio");
+        const playIcon = document.getElementById("playIcon");
+        const pauseIcon = document.getElementById("pauseIcon");
+        const progressBar = document.getElementById("progressBar");
+        const currTimeElem = document.getElementById("currentTime");
+        const durTimeElem = document.getElementById("duration");
+        
+        // Variables to store current song data
+        let currentDownloadUrl = "";
+        let currentFileName = "song";
+
+        async function fetchSong() {
+            const query = document.getElementById('searchInput').value;
+            if (!query) return;
+
+            document.getElementById('playerUI').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+
+            const apiUrl = `https://api.deline.web.id/downloader/spotifyplay?q=${encodeURIComponent(query)}`;
+
+            try {
+                const res = await fetch(apiUrl);
+                const data = await res.json();
+
+                if (data.status && data.result) {
+                    const meta = data.result.metadata;
+                    
+                    document.getElementById('coverImg').src = meta.cover;
+                    document.getElementById('songTitle').innerText = meta.title;
+                    document.getElementById('artistName').innerText = meta.artist;
+                    
+                    audio.src = data.result.dlink;
+                    
+                    // Store data for download function
+                    currentDownloadUrl = data.result.dlink;
+                    currentFileName = `${meta.title} - ${meta.artist}`;
+
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('playerUI').style.display = 'flex';
+                    
+                    resetPlayer();
+                    audio.play().then(() => updatePlayBtn(true)).catch(e => console.log("Autoplay blocked"));
+
+                } else {
+                    alert('Song not found!');
+                    document.getElementById('loader').style.display = 'none';
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Error fetching song');
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+
+        // New Force Download Function
+        async function forceDownload() {
+            if(!currentDownloadUrl) return;
+
+            const btn = document.getElementById('dlinkBtn');
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            
+            // UI Loading State
+            const originalIcon = icon.getAttribute('data-feather');
+            const originalText = text.innerText;
+            
+            text.innerText = "Downloading...";
+            icon.setAttribute('data-feather', 'loader');
+            icon.classList.add('spin-icon');
+            feather.replace();
+
+            try {
+                // Fetch the file as a Blob (Binary Data)
+                const response = await fetch(currentDownloadUrl);
+                if (!response.ok) throw new Error("Network Error");
+                
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                
+                // Create invisible link to force download
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `${currentFileName}.mp3`; // Force .mp3 extension
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } catch (error) {
+                console.error("Download failed, using fallback", error);
+                // Fallback: If CORS blocks fetch, open in new tab
+                window.open(currentDownloadUrl, '_blank');
+            } finally {
+                // Restore Button UI
+                text.innerText = "Download MP3";
+                icon.classList.remove('spin-icon');
+                icon.setAttribute('data-feather', 'download');
+                feather.replace();
+            }
+        }
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                updatePlayBtn(true);
+            } else {
+                audio.pause();
+                updatePlayBtn(false);
+            }
+        }
+
+        function updatePlayBtn(isPlaying) {
+            if (isPlaying) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            } else {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            }
+        }
+
+        function resetPlayer() {
+            audio.currentTime = 0;
+            progressBar.value = 0;
+            updatePlayBtn(false);
+            progressBar.style.background = `linear-gradient(90deg, #8E2DE2 0%, #2a2a2a 0%)`;
+        }
+        
+        // Seek 10 seconds
+        function seek(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        audio.addEventListener('timeupdate', (e) => {
+            const { duration, currentTime } = e.srcElement;
+            if (isNaN(duration)) return;
+            const progressPercent = (currentTime / duration) * 100;
+            progressBar.value = progressPercent;
+            progressBar.style.background = `linear-gradient(90deg, #8E2DE2 ${progressPercent}%, #2a2a2a ${progressPercent}%)`;
+            currTimeElem.innerText = formatTime(currentTime);
+            durTimeElem.innerText = formatTime(duration);
+        });
+
+        progressBar.addEventListener('input', () => {
+            const duration = audio.duration;
+            audio.currentTime = (progressBar.value * duration) / 100;
+        });
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' + sec : sec}`;
+        }
+
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") fetchSong();
+        });
+
+    </script>
+</body>
+</html>
