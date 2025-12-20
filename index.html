@@ -8,8 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="android-icon-96x96.png
-    ">
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
   
   <style>
@@ -81,11 +79,9 @@
       font-size: 1rem;
       color: #aaa;
       margin-top: 0;
-      margin-bottom: 30px; /* Margin wapas set kar di hai */
+      margin-bottom: 30px;
     }
 
-    /* --- ✅ REMOVED: Toggle Switch Styles --- */
-    
     /* --- Links Container (Grid) --- */
     .links-container {
       display: grid;
@@ -115,8 +111,8 @@
       text-align: center;
       transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
       
-      position: relative;
-      overflow: hidden; 
+      position: relative; /* Badge positioning ke liye zaroori hai */
+      overflow: visible;  /* Badge bahar cut na ho jaye */
     }
 
     .link-button:hover { 
@@ -136,7 +132,31 @@
       z-index: 2; 
     }
 
-    /* --- Ripple Effect (No Change) --- */
+    /* --- ✨ NEW BADGE STYLE ✨ --- */
+    .badge-new {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: linear-gradient(45deg, #ff0055, #ff5500);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(255, 0, 85, 0.5);
+      animation: pulse-badge 2s infinite;
+      z-index: 10;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes pulse-badge {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 6px rgba(255, 0, 85, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+    }
+
+    /* --- Ripple Effect --- */
     .ripple {
       position: absolute;
       border-radius: 50%;
@@ -150,6 +170,18 @@
       to {
         transform: scale(4);
         opacity: 0;
+      }
+    }
+
+    /* Mobile Responsive tweak */
+    @media (max-width: 480px) {
+      .links-container {
+        grid-template-columns: 1fr 1fr; /* Mobile par bhi 2 columns ache lagenge */
+        gap: 10px;
+      }
+      .link-button {
+        min-height: 110px;
+        font-size: 0.9rem;
       }
     }
     
@@ -184,6 +216,7 @@
       </a>
 
       <a href="tiktok.html" class="link-button">
+        <div class="badge-new">NEW</div>
         <i data-feather="music"></i>
         <span>TikTok Downloader</span>
       </a>
@@ -218,12 +251,13 @@
     // Pehle icons ko replace karein
     feather.replace();
 
-    /* --- Ripple Effect JS (No Change) --- */
+    /* --- Ripple Effect JS --- */
     document.addEventListener('DOMContentLoaded', (event) => {
       const buttons = document.querySelectorAll('.link-button');
 
       buttons.forEach(button => {
         button.addEventListener('click', function (e) {
+          // Badge par click ho to ripple button par hi rahe
           const rect = button.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
