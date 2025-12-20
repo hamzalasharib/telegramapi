@@ -21,8 +21,9 @@
       font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #0f0f12; /* Dark background */
       color: #f0f0f0;
-      display: grid;
-      place-items: center;
+      display: flex; /* Changed grid to flex for better layout with sidebar */
+      justify-content: center;
+      align-items: center;
       min-height: 100vh;
       padding: 20px;
     }
@@ -37,6 +38,115 @@
       --border-color: #333;
       --ripple-color: rgba(142, 45, 226, 0.4); 
     }
+
+    /* --- ☰ MENU BUTTON (Hamburger) --- */
+    .menu-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .menu-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    /* --- 📂 SIDEBAR STYLES --- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px; /* Hidden by default */
+      width: 280px;
+      height: 100%;
+      background: #1a1a1e;
+      border-right: 1px solid var(--border-color);
+      box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+      z-index: 1000;
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .sidebar.active {
+      left: 0; /* Slide in */
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover { color: white; transform: rotate(90deg); }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: #e0e0e0;
+      text-decoration: none;
+      padding: 15px;
+      border-radius: 8px;
+      transition: 0.3s;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(142, 45, 226, 0.1);
+      color: var(--primary-color);
+      transform: translateX(5px);
+    }
+
+    .sidebar-link i {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Overlay (Black tint when menu opens) */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 900;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+    .overlay.active { display: block; }
 
     /* --- Main App Container --- */
     .container {
@@ -176,7 +286,7 @@
     /* Mobile Responsive tweak */
     @media (max-width: 480px) {
       .links-container {
-        grid-template-columns: 1fr 1fr; /* Mobile par bhi 2 columns ache lagenge */
+        grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
       .link-button {
@@ -189,6 +299,37 @@
 </head>
 <body>
   
+  <button class="menu-btn" onclick="toggleSidebar()">
+    <i data-feather="menu"></i>
+  </button>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Social Menu</h2>
+      <button class="close-btn" onclick="toggleSidebar()"><i data-feather="x"></i></button>
+    </div>
+
+    <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" class="sidebar-link" target="_blank">
+      <i data-feather="message-circle"></i> Join WhatsApp
+    </a>
+
+    <a href="https://www.youtube.com/@hamzashafiq786" class="sidebar-link" target="_blank">
+      <i data-feather="youtube"></i> Subscribe YouTube
+    </a>
+
+    <a href="https://t.me/hamzaeditz2" class="sidebar-link" target="_blank">
+      <i data-feather="send"></i> Join Telegram
+    </a>
+
+    <div style="width: 100%; height: 1px; background: #333; margin: 15px 0;"></div>
+
+    <a href="https://hamzaeditz.pw/about.html" class="sidebar-link" target="_blank">
+      <i data-feather="user"></i> About Me
+    </a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
   <div class="container">
     <h1>HamzaEditz 2.0</h1>
     <p class="subtitle">Welcome to our site!</p>
@@ -248,16 +389,24 @@
   </div>
 
   <script>
-    // Pehle icons ko replace karein
+    // 1. Initialize Feather Icons
     feather.replace();
 
-    /* --- Ripple Effect JS --- */
+    // 2. Sidebar Toggle Logic
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    // 3. Ripple Effect Logic
     document.addEventListener('DOMContentLoaded', (event) => {
       const buttons = document.querySelectorAll('.link-button');
 
       buttons.forEach(button => {
         button.addEventListener('click', function (e) {
-          // Badge par click ho to ripple button par hi rahe
           const rect = button.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
