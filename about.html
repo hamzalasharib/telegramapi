@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Me | HamzaEditz 2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  
+  <style>
+    /* --- HamzaEditz 2.0 Theme Variables --- */
+    :root {
+      --primary-gradient: linear-gradient(135deg, #8E2DE2, #4A00E0);
+      --bg-dark: #0f0f12;
+      --bg-card: #1a1a1e;
+      --text-main: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --border-color: #2a2a30;
+      --accent-glow: rgba(142, 45, 226, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* --- Container --- */
+    .about-container {
+      width: 100%;
+      max-width: 700px;
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 40px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Top Decorative Gradient Line */
+    .about-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--primary-gradient);
+    }
+
+    /* --- Profile Section --- */
+    .profile-img-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      padding: 4px; /* Border thickness */
+      background: var(--primary-gradient);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid var(--bg-card); /* Space between gradient and image */
+      background-color: #333; /* Fallback color */
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .gradient-text {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tagline {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+
+    /* --- Content Box --- */
+    .bio-box {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      text-align: left;
+      border-left: 3px solid #8E2DE2;
+    }
+
+    .bio-box p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+      color: #ddd;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .skill-card {
+      background: #232328;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--border-color);
+      transition: 0.3s;
+    }
+
+    .skill-card:hover {
+      border-color: #8E2DE2;
+      transform: translateY(-3px);
+    }
+
+    /* --- Social Buttons --- */
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+      color: white;
+    }
+
+    .btn-youtube { background: #FF0000; }
+    .btn-whatsapp { background: #25D366; }
+    .btn-telegram { background: #0088cc; }
+    
+    .social-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    /* --- Back Button --- */
+    .back-home {
+      display: inline-block;
+      margin-top: 30px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      border-bottom: 1px solid transparent;
+    }
+
+    .back-home:hover {
+      color: white;
+      border-color: white;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="about-container">
+    
+    <div class="profile-img-wrapper">
+      <img src="https://i.postimg.cc/k4dFmf8p/New-Project-4-8D0AF60.png" alt="Hamza Profile" class="profile-img">
+    </div>
+
+    <h1>Hamza<span class="gradient-text">Editz 2.0</span></h1>
+    <p class="tagline">Tech Enthusiast | YouTuber | Developer</p>
+
+    <div class="bio-box">
+      <p>Hi, I'm <strong>Hamza Shafiq</strong>. Welcome to my digital toolkit.</p>
+      <p>I specialize in providing premium tech solutions for free. My main focus is on decrypting VPN files (HTTPS Custom), discovering RDP tricks, and creating useful web tools for the community.</p>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-card"><i data-feather="unlock"></i> VPN Configs</div>
+      <div class="skill-card"><i data-feather="monitor"></i> RDP Tricks</div>
+      <div class="skill-card"><i data-feather="code"></i> Web Dev</div>
+      <div class="skill-card"><i data-feather="zap"></i> Free Net</div>
+    </div>
+
+    <div class="social-links">
+      <a href="https://www.youtube.com/@hamzashafiq786" target="_blank" class="social-btn btn-youtube">
+        <i data-feather="youtube"></i> Subscribe on YouTube
+      </a>
+      
+      <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank" class="social-btn btn-whatsapp">
+        <i data-feather="message-circle"></i> Join WhatsApp Group
+      </a>
+
+      <a href="https://t.me/hamzaeditz2" target="_blank" class="social-btn btn-telegram">
+        <i data-feather="send"></i> Join Telegram Channel
+      </a>
+    </div>
+
+    <a href="index.html" class="back-home">← Back to Tools</a>
+
+  </div>
+
+  <script>
+    feather.replace();
+  </script>
+
+</body>
+</html>
