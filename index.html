@@ -1,433 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="google-site-verification" content="VgdJOwY2UPeKBV4EoJF4CvhFnRgukLdQtisKJTOQG5Q" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HamzaEditz 2.0 - All Tools</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  
-  <style>
-    /* --- Basic Setup --- */
-    * { 
-      box-sizing: border-box; 
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamzaEditz 2.0 - Dark Mode</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    body {
-      margin: 0;
-      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f0f12; /* Dark background */
-      color: #f0f0f0;
-      display: flex; /* Changed grid to flex for better layout with sidebar */
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    <style>
+        :root {
+            /* Dark Theme Colors */
+            --bg-color: #0f0f12;
+            --card-bg: #1e1e24;
+            --text-main: #ffffff;
+            --text-muted: #a0a0b0;
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+            --dot-color: rgba(255, 255, 255, 0.05); /* Subtle white dots */
+            --border-color: #2d2d35;
+        }
 
-    /* --- Professional Purple Gradient --- */
-    :root {
-      --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
-      --primary-color: #8E2DE2;
-      --bg-dark: #0f0f12;
-      --bg-light: #1f1f1f;       /* Container background */
-      --bg-lighter: #2a2a2a;    /* Card background */
-      --border-color: #333;
-      --ripple-color: rgba(142, 45, 226, 0.4); 
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
 
-    /* --- ☰ MENU BUTTON (Hamburger) --- */
-    .menu-btn {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: var(--bg-light);
-      border: 1px solid var(--border-color);
-      color: white;
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: 0.3s;
-    }
+        body {
+            background-color: var(--bg-color);
+            /* Dark Dot Pattern */
+            background-image: radial-gradient(var(--dot-color) 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .menu-btn:hover {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-    }
+        /* --- Navbar --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(15, 15, 18, 0.8); /* Dark glass effect */
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-    /* --- 📂 SIDEBAR STYLES --- */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -280px; /* Hidden by default */
-      width: 280px;
-      height: 100%;
-      background: #1a1a1e;
-      border-right: 1px solid var(--border-color);
-      box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-      z-index: 1000;
-      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-    }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
 
-    .sidebar.active {
-      left: 0; /* Slide in */
-    }
+        .menu-btn {
+            font-size: 20px;
+            color: var(--text-main);
+            cursor: pointer;
+        }
 
-    .sidebar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--border-color);
-    }
+        /* --- Hero Section --- */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    .sidebar-header h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        /* Badges */
+        .badges-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
 
-    .close-btn {
-      background: none;
-      border: none;
-      color: #aaa;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .close-btn:hover { color: white; transform: rotate(90deg); }
+        .badge {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      color: #e0e0e0;
-      text-decoration: none;
-      padding: 15px;
-      border-radius: 8px;
-      transition: 0.3s;
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
+        .badge i { color: #d946ef; }
 
-    .sidebar-link:hover {
-      background: rgba(142, 45, 226, 0.1);
-      color: var(--primary-color);
-      transform: translateX(5px);
-    }
+        /* Typography */
+        h1 {
+            font-size: 48px;
+            line-height: 1.1;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.3); /* Glow effect */
+        }
 
-    .sidebar-link i {
-      width: 20px;
-      height: 20px;
-    }
+        h1 span {
+            color: #8b5cf6;
+        }
 
-    /* Overlay (Black tint when menu opens) */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 900;
-      display: none;
-      backdrop-filter: blur(2px);
-    }
-    .overlay.active { display: block; }
+        p.subtitle {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
 
-    /* --- Main App Container --- */
-    .container {
-      width: 100%;
-      max-width: 600px; 
-      background: var(--bg-light);
-      border-radius: 12px;
-      padding: 30px 35px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-    
-    h1 { 
-      font-size: 2.25rem; 
-      margin: 0 0 10px 0;
-      font-weight: 700;
-      text-align: center;
-      background: linear-gradient(
-          90deg, 
-          #4f46e5, /* Indigo */
-          #a855f7, /* Purple */
-          #ec4899, /* Pink */
-          #f59e0b, /* Orange */
-          #4f46e5  /* Loop back */
-      );
-      background-size: 400% 400%;
-      animation: gradient-flow 8s ease infinite;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    @keyframes gradient-flow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    .subtitle {
-      text-align: center;
-      font-size: 1rem;
-      color: #aaa;
-      margin-top: 0;
-      margin-bottom: 30px;
-    }
+        /* CTA Button */
+        .cta-btn {
+            background: var(--text-main);
+            color: var(--bg-color); /* Inverted text color */
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            margin-bottom: 50px;
+        }
 
-    /* --- Links Container (Grid) --- */
-    .links-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr; 
-      gap: 15px; /* Cards ke beech space */
-    }
-    
-    /* --- Styled Link Buttons (Cards) --- */
-    .link-button {
-      display: flex; 
-      flex-direction: column; 
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      
-      background: var(--bg-lighter);
-      border: 1px solid var(--border-color);
-      color: white;
-      padding: 20px 15px;
-      min-height: 130px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1rem;
-      width: 100%;
-      text-decoration: none;
-      text-align: center;
-      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
-      
-      position: relative; /* Badge positioning ke liye zaroori hai */
-      overflow: visible;  /* Badge bahar cut na ho jaye */
-    }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+        }
 
-    .link-button:hover { 
-      transform: translateY(-3px);
-      border-color: var(--primary-color); 
-      box-shadow: 0 4px 15px rgba(142, 45, 226, 0.3); 
-    }
-    
-    /* Icon style */
-    .link-button i {
-      width: 32px; 
-      height: 32px;
-      stroke-width: 2;
-      z-index: 2; 
-    }
-    .link-button span {
-      z-index: 2; 
-    }
+        /* --- Tools List (Dark Chips) --- */
+        .tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+        }
 
-    /* --- ✨ NEW BADGE STYLE ✨ --- */
-    .badge-new {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: linear-gradient(45deg, #ff0055, #ff5500);
-      color: white;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 12px;
-      text-transform: uppercase;
-      box-shadow: 0 2px 8px rgba(255, 0, 85, 0.5);
-      animation: pulse-badge 2s infinite;
-      z-index: 10;
-      letter-spacing: 0.5px;
-    }
+        .tool-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
 
-    @keyframes pulse-badge {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
-      70% { transform: scale(1.05); box-shadow: 0 0 0 6px rgba(255, 0, 85, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
-    }
+        .tool-chip i { color: #8b5cf6; font-size: 14px; }
 
-    /* --- Ripple Effect --- */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background-color: var(--ripple-color);
-      transform: scale(0);
-      animation: ripple-effect 0.6s linear;
-      z-index: 1; 
-    }
+        .tool-chip:hover {
+            border-color: #8b5cf6;
+            color: white;
+            background: #25252b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.1);
+        }
 
-    @keyframes ripple-effect {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
+        /* --- Floating Icons (Dark Glass) --- */
+        .floater {
+            position: absolute;
+            background: rgba(30, 30, 36, 0.5);
+            border: 1px solid var(--border-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+            backdrop-filter: blur(5px);
+        }
 
-    /* Mobile Responsive tweak */
-    @media (max-width: 480px) {
-      .links-container {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-      .link-button {
-        min-height: 110px;
-        font-size: 0.9rem;
-      }
-    }
-    
-  </style>
+        .f1 { top: 15%; left: 5%; color: #ef4444; } 
+        .f2 { top: 20%; right: 8%; color: #f59e0b; animation-delay: 2s; } 
+        .f3 { bottom: 25%; left: 8%; color: #3b82f6; animation-delay: 1s; } 
+        .f4 { bottom: 30%; right: 10%; color: #10b981; animation-delay: 3s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            text-decoration: none; /* Removed underline */
+            transition: transform 0.2s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 36px; }
+            .tools-grid { padding: 0 10px; }
+            .floater { opacity: 0.3; transform: scale(0.8); }
+        }
+    </style>
 </head>
 <body>
-  
-  <button class="menu-btn" onclick="toggleSidebar()">
-    <i data-feather="menu"></i>
-  </button>
 
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h2>Social Menu</h2>
-      <button class="close-btn" onclick="toggleSidebar()"><i data-feather="x"></i></button>
-    </div>
+    <nav>
+        <div class="logo">HamzaEditz 2.0</div>
+        <div class="menu-btn"><i class="fas fa-bars"></i></div>
+    </nav>
 
-    <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" class="sidebar-link" target="_blank">
-      <i data-feather="message-circle"></i> Join WhatsApp
-    </a>
+    <div class="hero">
+        
+        <div class="floater f1"><i class="fas fa-video"></i></div>
+        <div class="floater f2"><i class="fas fa-bolt"></i></div>
+        <div class="floater f3"><i class="fas fa-music"></i></div>
+        <div class="floater f4"><i class="fas fa-code"></i></div>
 
-    <a href="https://www.youtube.com/@hamzashafiq786" class="sidebar-link" target="_blank">
-      <i data-feather="youtube"></i> Subscribe YouTube
-    </a>
+        <div class="badges-container">
+            <div class="badge"><i class="fas fa-robot"></i> AI-Powered</div>
+            <div class="badge"><i class="fas fa-wand-magic-sparkles"></i> Free Tools</div>
+        </div>
 
-    <a href="https://t.me/hamzaeditz2" class="sidebar-link" target="_blank">
-      <i data-feather="send"></i> Join Telegram
-    </a>
+        <h1>All-In-One Toolkit for <br> <span>Creators & Developers</span></h1>
+        
+        <p class="subtitle">
+            Access premium tools for free. From AI generation and Sim Data to TikTok downloading and Hadith collections—everything you need in one place.
+        </p>
 
-    <div style="width: 100%; height: 1px; background: #333; margin: 15px 0;"></div>
+        <a href="welcome.html" class="cta-btn">
+            <i class="fas fa-rocket"></i> Start Exploring
+        </a>
 
-    <a href="https://hamzaeditz.pw/about.html" class="sidebar-link" target="_blank">
-      <i data-feather="user"></i> About Me
-    </a>
-  </div>
-
-  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
-  <div class="container">
-    <h1>HamzaEditz 2.0</h1>
-    <p class="subtitle">Welcome to our site!</p>
-    
-    <div class="links-container">
-      
-      <a href="paksim.html" class="link-button">
-        <i data-feather="database"></i>
-        <span>Pak Sim Details</span>
-      </a>
-      
-      <a href="smsbomber.html" class="link-button">
-        <i data-feather="send"></i>
-        <span>SMS Tool</span>
-      </a>
-
-      <a href="RdpMethod.html" class="link-button">
-        <i data-feather="monitor"></i>
-        <span>Free Window Rdp</span>
-      </a>
-      
-      <a href="TvChannels.html" class="link-button">
-        <i data-feather="tv"></i>
-        <span>Jazz Tv</span>
-      </a>
-
-      <a href="tiktok.html" class="link-button">
-        <div class="badge-new">NEW</div>
-        <i data-feather="music"></i>
-        <span>TikTok Downloader</span>
-      </a>
-      
-      <a href="India.html" class="link-button">
-        <i data-feather="database"></i>
-        <span>Indian Sim Details</span>
-      </a>
-      
-      <a href="hadith.html" class="link-button">
-        <i data-feather="book-open"></i>
-        <span>Hadith</span>
-      </a>
-
-      <a href="vehicledetails.html" class="link-button">
-        <i data-feather="search"></i>
-        <span>Vehicle Details</span>
-      </a>
-      <a href="image.html" class="link-button">
-        <i data-feather="camera"></i>
-        <span>Ai Image Genrate</span>
-      </a>
-      <a href="apk.html" class="link-button">
-        <i data-feather="download"></i>
-        <span>Apk Download</span>
-      </a>
+        <div class="tools-grid">
+            <a href="#" class="tool-chip"><i class="fas fa-sim-card"></i> Pak Sim Data</a>
+            <a href="#" class="tool-chip"><i class="fas fa-image"></i> AI Photo Generate</a>
+            <a href="#" class="tool-chip"><i class="fab fa-tiktok"></i> TikTok Downloader</a>
+            <a href="#" class="tool-chip"><i class="fas fa-server"></i> Free RDP</a>
+            <a href="#" class="tool-chip"><i class="fab fa-spotify"></i> Spotify Downloader</a>
+            <a href="#" class="tool-chip"><i class="fas fa-book-quran"></i> Hadith Collection</a>
+        </div>
 
     </div>
-  </div>
 
-  <script>
-    // 1. Initialize Feather Icons
-    feather.replace();
+    <a href="https://wa.me/923091645255" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-    // 2. Sidebar Toggle Logic
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('overlay');
-      
-      sidebar.classList.toggle('active');
-      overlay.classList.toggle('active');
-    }
-
-    // 3. Ripple Effect Logic
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const buttons = document.querySelectorAll('.link-button');
-
-      buttons.forEach(button => {
-        button.addEventListener('click', function (e) {
-          const rect = button.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          const ripple = document.createElement('span');
-          ripple.classList.add('ripple');
-          
-          const size = Math.max(rect.width, rect.height);
-          ripple.style.width = ripple.style.height = `${size}px`;
-          
-          ripple.style.left = `${x - size / 2}px`;
-          ripple.style.top = `${y - size / 2}px`;
-
-          this.appendChild(ripple);
-
-          setTimeout(() => {
-            ripple.remove();
-          }, 600); 
-        });
-      });
-    });
-  </script>
 </body>
 </html>
