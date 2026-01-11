@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamzaEditz Tools</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f0f12;
+            --card-bg: #1f1f1f;
+            --text-color: #ffffff;
+            --accent-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --border-color: rgba(142, 45, 226, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Bubble Animation (Chemical Effect) --- */
+        .bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: radial-gradient(circle at 30% 30%, rgba(142, 45, 226, 0.4), rgba(74, 0, 224, 0.1));
+            border-radius: 50%;
+            animation: rise 10s infinite ease-in;
+            opacity: 0;
+            box-shadow: 0 0 10px rgba(142, 45, 226, 0.2);
+        }
+
+        .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 8s; }
+        .bubble:nth-child(2) { width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s; }
+        .bubble:nth-child(3) { width: 50px; height: 50px; left: 35%; animation-duration: 10s; animation-delay: 2s; }
+        .bubble:nth-child(4) { width: 80px; height: 80px; left: 50%; animation-duration: 11s; animation-delay: 0s; }
+        .bubble:nth-child(5) { width: 35px; height: 35px; left: 55%; animation-duration: 6s; animation-delay: 1s; }
+        .bubble:nth-child(6) { width: 45px; height: 45px; left: 65%; animation-duration: 8s; animation-delay: 3s; }
+        .bubble:nth-child(7) { width: 25px; height: 25px; left: 80%; animation-duration: 12s; animation-delay: 2s; }
+        .bubble:nth-child(8) { width: 60px; height: 60px; left: 90%; animation-duration: 9s; animation-delay: 1s; }
+
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                bottom: 110%;
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+        }
+
+        /* --- Main Layout --- */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Gemini Style Animated Title */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-anim 3s linear infinite;
+        }
+
+        @keyframes gradient-anim {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        /* Grid View */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 3px solid #8E2DE2; /* Purple Top Border */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(142, 45, 226, 0.2);
+        }
+
+        .icon-box {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #8E2DE2;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #eee;
+        }
+
+        /* Badge Styling */
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-gradient);
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(142, 45, 226, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(142, 45, 226, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(142, 45, 226, 0); }
+        }
+
+        /* --- Ripple Effect CSS --- */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-anim 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-anim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Mobile adjustment */
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="container">
+        <h1>HamzaEditz</h1>
+        
+        <div class="grid">
+            <div class="card" onclick="createRipple(event); setTimeout(() => { window.location.href = 'tiktok.html' }, 400)">
+                <div class="icon-box">
+                    <i data-feather="download-cloud"></i>
+                </div>
+                <h3>TikTok Downloader</h3>
+            </div>
+
+            <div class="card" onclick="createRipple(event); setTimeout(() => { window.location.href = 'v2.html' }, 400)">
+                <span class="badge">NEW</span>
+                <div class="icon-box">
+                    <i data-feather="zap"></i>
+                </div>
+                <h3>TikTok Downloader V2</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        feather.replace();
+
+        // Ripple Effect Function
+        function createRipple(event) {
+            const card = event.currentTarget;
+            
+            const circle = document.createElement("span");
+            const diameter = Math.max(card.clientWidth, card.clientHeight);
+            const radius = diameter / 2;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - card.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - card.getBoundingClientRect().top - radius}px`;
+            circle.classList.add("ripple");
+
+            const ripple = card.getElementsByClassName("ripple")[0];
+
+            if (ripple) {
+                ripple.remove();
+            }
+
+            card.appendChild(circle);
+        }
+    </script>
+</body>
+</html>
