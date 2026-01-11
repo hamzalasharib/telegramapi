@@ -232,7 +232,7 @@
     }
     
     /* Icon style */
-    .link-button i {
+    .link-button i, .link-button svg {
       width: 32px; 
       height: 32px;
       stroke-width: 2;
@@ -363,7 +363,13 @@
       </a>
       
       <a href="spotify.html" class="link-button">
-        <i data-feather="music"></i>
+        <div class="badge-new">NEW</div>
+        <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 14.5c2.5-1 6.5-1 9 0"></path>
+          <path d="M7 11.5c3-1.5 8-1.5 11 0"></path>
+          <path d="M6.5 8.5c3.5-2 9-2 12.5 0"></path>
+        </svg>
         <span>Spotify Downloader</span>
       </a>
       
@@ -430,5 +436,4 @@
     });
   </script>
 </body>
-      </html>
-      
+</html>
