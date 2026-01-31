@@ -13,10 +13,12 @@
             --primary-color: #8E2DE2;
             --bg-dark: #0f0f12;
             --bg-light: #1f1f1f;
-            --bg-lighter: #2a2a2a;
+            /* Pure Dark for Search Input */
+            --input-dark: #121212; 
             --border-color: #333;
         }
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: #f0f0f0; }
+        
         .gemini-title {
             font-weight: 800;
             background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
@@ -27,36 +29,64 @@
             animation: gemini-shimmer 8s linear infinite;
         }
         @keyframes gemini-shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
-        .btn-gradient { background: var(--primary-gradient); transition: opacity 0.2s; }
-        .btn-gradient:hover:not(:disabled) { opacity: 0.9; }
-        .btn-link { background-color: var(--bg-light); border: 1px solid var(--border-color); color: #d1d5db; transition: all 0.2s; }
-        .btn-link:hover { border-color: var(--primary-color); color: #fff; }
-        .copy-btn { background: rgba(142, 45, 226, 0.2); border: 1px solid var(--primary-color); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; transition: all 0.2s; cursor: pointer; }
+        
+        .btn-gradient { background: var(--primary-gradient); transition: transform 0.2s; }
+        .btn-gradient:active { transform: scale(0.95); }
+
+        /* Darker EditText (Input Box) */
+        .search-input {
+            background-color: var(--input-dark) !important;
+            border: 1px solid var(--border-color);
+            color: white;
+            transition: border-color 0.3s ease;
+        }
+        .search-input:focus {
+            border-color: var(--primary-color) !important;
+            outline: none;
+        }
+
+        .card-custom {
+            background-color: var(--bg-light);
+            border-top: 4px solid transparent;
+            border-image: var(--primary-gradient) 1;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .copy-btn {
+            background: rgba(142, 45, 226, 0.1);
+            border: 1px solid var(--primary-color);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
         .copy-btn:hover { background: var(--primary-color); }
     </style>
 </head>
-<body class="min-h-screen p-4 sm:p-8">
+<body class="min-h-screen p-4 sm:p-10">
 
-    <div class="max-w-4xl mx-auto space-y-8">
-        <header class="text-center py-4 border-b border-border-color">
-            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">HamzaEditz 2.0 - Number Search</h1>
+    <div class="max-w-4xl mx-auto space-y-10">
+        <header class="text-center">
+            <h1 class="text-4xl sm:text-6xl font-extrabold gemini-title">HamzaEditz 2.0</h1>
+            <p class="text-gray-400 mt-2">Professional Number & SIM Tracker</p>
         </header>
 
-        <div class="flex flex-col sm:flex-row gap-4">
-            <input type="tel" id="phoneInput" class="flex-1 bg-bg-lighter border border-border-color text-gray-200 text-lg rounded-lg focus:ring-primary-color focus:border-primary-color p-4" placeholder="Enter phone number (e.g., 0309...)">
-            <button id="searchButton" class="btn-gradient text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center text-lg disabled:opacity-50">
-                <i id="searchIcon" data-feather="search" class="w-6 h-6 mr-2"></i>
-                <span id="buttonText">Search</span>
+        <div class="card-custom p-6 rounded-xl flex flex-col sm:flex-row gap-4">
+            <input type="tel" id="phoneInput" class="search-input flex-1 text-lg rounded-lg p-4" placeholder="Enter number (e.g. 03091645255)">
+            <button id="searchButton" class="btn-gradient text-white font-bold py-4 px-8 rounded-lg flex items-center justify-center text-lg">
+                <i data-feather="search" class="w-6 h-6 mr-2"></i> Search
             </button>
         </div>
 
-        <div id="loading" class="text-center hidden py-8">
-            <i data-feather="loader" class="animate-spin h-10 w-10 inline-block text-primary-color"></i>
-            <p class="text-lg mt-4 text-gray-400">Searching records...</p>
+        <div id="loading" class="text-center hidden">
+            <i data-feather="loader" class="animate-spin h-12 w-12 inline-block text-primary-color"></i>
+            <p class="text-lg mt-4 text-purple-400">Fetching Secure Data...</p>
         </div>
         
-        <div id="errorDisplay" class="text-center hidden p-4 bg-red-900 bg-opacity-30 border border-red-700 rounded-lg">
-            <p id="errorMessage" class="text-red-300"></p>
+        <div id="errorDisplay" class="text-center hidden p-4 bg-red-900/20 border border-red-500 rounded-lg">
+            <p id="errorMessage" class="text-red-400 font-medium"></p>
         </div>
 
         <div id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
@@ -69,78 +99,88 @@
         const loading = document.getElementById('loading');
         const errorDisplay = document.getElementById('errorDisplay');
 
+        // CORS Proxy addition
+        const PROXY = "https://corsproxy.io/?";
+
         searchButton.addEventListener('click', searchPhone);
         phoneInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchPhone(); });
 
         async function searchPhone() {
-            let query = phoneInput.value.trim();
-            if (!query) return showError('Please enter a phone number.');
+            let num = phoneInput.value.trim();
+            if (!num) return showError('Please enter a phone number!');
 
-            // API URL as per your new endpoint
-            const apiUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://api.impossible-world.xyz/api/data?phone=' + query);
+            // URL with Proxy
+            const apiUrl = PROXY + encodeURIComponent('https://api.impossible-world.xyz/api/data?phone=' + num);
 
-            setLoading(true);
+            toggleLoading(true);
             resultsContainer.innerHTML = '';
             errorDisplay.classList.add('hidden');
 
             try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
+                const res = await fetch(apiUrl);
+                const data = await res.json();
 
                 if (data.success && data.records && data.records.length > 0) {
-                    displayResults(data.records);
+                    renderCards(data.records);
                 } else {
-                    showError('No records found for this number.');
+                    showError('Record not found in database.');
                 }
-            } catch (error) {
-                showError('Server error. Please try again later.');
+            } catch (err) {
+                showError('Proxy or API issue. Check connection.');
             } finally {
-                setLoading(false);
+                toggleLoading(false);
             }
         }
 
-        function displayResults(records) {
-            records.forEach((record) => {
+        function renderCards(records) {
+            records.forEach((rec) => {
                 const card = document.createElement('div');
-                card.className = 'bg-bg-light p-5 rounded-xl border-t-4 border-primary-color shadow-lg';
+                card.className = 'bg-[#1f1f1f] p-5 rounded-lg border-l-4 border-purple-600 shadow-xl';
                 
-                let detailsHtml = '<div class="mt-4 space-y-3">';
-                for (const key in record) {
-                    if (record[key] && record[key] !== "no") {
-                        detailsHtml += `
-                            <div class="flex justify-between items-start gap-2">
-                                <div class="flex-1">
-                                    <strong class="text-gray-400 text-sm block capitalize">${key}:</strong>
-                                    <span class="text-white break-all">${record[key]}</span>
+                let fields = '';
+                for (const key in rec) {
+                    if (rec[key] && rec[key] !== "no") {
+                        fields += `
+                            <div class="flex justify-between items-center border-b border-gray-800 py-2">
+                                <div class="overflow-hidden">
+                                    <span class="text-xs text-gray-500 uppercase block">${key}</span>
+                                    <span class="text-sm text-gray-200 font-medium">${rec[key]}</span>
                                 </div>
-                                <button class="copy-btn" onclick="copyText('${record[key]}', this)">Copy</button>
+                                <button class="copy-btn" onclick="copyValue('${rec[key]}', this)">Copy</button>
                             </div>`;
                     }
                 }
-                detailsHtml += '</div>';
 
                 card.innerHTML = `
-                    <h3 class="text-xl font-bold text-primary-color pb-2 border-b border-border-color flex items-center gap-2">
-                        <i data-feather="user" class="w-5 h-5"></i> ${record.Name || 'User Record'}
-                    </h3>
-                    ${detailsHtml}`;
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-purple-900/30 p-2 rounded-full">
+                            <i data-feather="user" class="text-purple-400 w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">${rec.Name || 'Subscriber'}</h3>
+                    </div>
+                    <div class="space-y-1">${fields}</div>
+                `;
                 resultsContainer.appendChild(card);
             });
             feather.replace();
         }
 
-        function copyText(text, btn) {
-            navigator.clipboard.writeText(text).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = "Copied!";
-                setTimeout(() => { btn.innerText = originalText; }, 2000);
+        function copyValue(val, btn) {
+            navigator.clipboard.writeText(val).then(() => {
+                const old = btn.innerText;
+                btn.innerText = "Done!";
+                btn.style.background = "#4A00E0";
+                setTimeout(() => { 
+                    btn.innerText = old; 
+                    btn.style.background = "";
+                }, 1500);
             });
         }
 
-        function setLoading(isLoading) {
-            searchButton.disabled = isLoading;
-            loading.classList.toggle('hidden', !isLoading);
-            document.getElementById('buttonText').textContent = isLoading ? "Searching..." : "Search";
+        function toggleLoading(status) {
+            searchButton.disabled = status;
+            loading.classList.toggle('hidden', !status);
+            resultsContainer.classList.toggle('opacity-50', status);
         }
 
         function showError(msg) {
