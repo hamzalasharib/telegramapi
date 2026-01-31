@@ -7,184 +7,230 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
     <style>
+        /* HamzaEditz 2.0 Color Palette */
         :root {
-            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0); /* */
-            --bg-dark: #0f0f12; /* */
-            --card-dark: #1f1f1f; /* */
-            --input-pure: #050505;
-            --accent-purple: #8E2DE2;
+            --bg-dark: #0f0f12;
+            --card-light: #1f1f1f;
+            --input-dark: #0a0a0c;
+            --accent-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
+            --purple-main: #8E2DE2;
         }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: #ffffff; }
 
-        /* Gemini Animated Title */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Gemini-style Animated Gradient Title */
         .gemini-title {
             font-weight: 800;
-            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
-            background-size: 400% 100%;
+            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ff0080, #7928ca, #8E2DE2);
+            background-size: 300% auto;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gemini-shimmer 8s linear infinite;
-        }
-        @keyframes gemini-shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
-
-        /* Custom Card with Purple Border */
-        .hamza-card {
-            background-color: var(--card-dark);
-            border-top: 4px solid transparent;
-            border-image: var(--primary-gradient) 1;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            animation: shine 5s linear infinite;
         }
 
-        .search-field {
-            background-color: var(--input-pure) !important;
+        @keyframes shine {
+            to { background-position: 300% center; }
+        }
+
+        /* Professional Dark Input */
+        .search-input {
+            background-color: var(--input-dark) !important;
             border: 1px solid #333;
-            color: #fff;
-            transition: 0.3s;
+            color: white;
+            transition: all 0.3s ease;
         }
-        .search-field:focus { border-color: var(--accent-purple); outline: none; }
+        .search-input:focus {
+            border-color: var(--purple-main);
+            box-shadow: 0 0 10px rgba(142, 45, 226, 0.3);
+            outline: none;
+        }
+
+        /* Modern Card with Purple Top Border */
+        .result-card {
+            background-color: var(--card-light);
+            border-top: 4px solid transparent;
+            border-image: var(--accent-gradient) 1;
+            border-radius: 4px 4px 12px 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
 
         .copy-btn {
-            background: rgba(142, 45, 226, 0.15);
-            border: 1px solid var(--accent-purple);
-            padding: 5px 12px;
+            background: rgba(142, 45, 226, 0.1);
+            border: 1px solid var(--purple-main);
+            color: white;
+            padding: 4px 10px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
         }
-        .copy-btn:hover { background: var(--accent-purple); }
+        .copy-btn:hover {
+            background: var(--purple-main);
+        }
+
+        .btn-gradient {
+            background: var(--accent-gradient);
+            transition: opacity 0.2s;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
-<body class="min-h-screen p-4 sm:p-10">
+<body class="min-h-screen py-10 px-4">
 
-    <div class="max-w-4xl mx-auto space-y-8">
+    <div class="max-w-4xl mx-auto space-y-10">
         <header class="text-center">
-            <h1 class="text-5xl sm:text-6xl font-extrabold gemini-title">HamzaEditz 2.0</h1>
-            <p class="text-gray-400 mt-2 tracking-widest uppercase text-xs">Sim Information System</p>
+            <h1 class="text-4xl sm:text-6xl gemini-title">HamzaEditz 2.0</h1>
+            <p class="text-gray-500 mt-2 flex items-center justify-center gap-2">
+                <i data-feather="cpu" class="w-4 h-4"></i> Professional SIM Tracker System
+            </p>
         </header>
 
-        <div class="hamza-card p-6 rounded-xl">
+        <div class="bg-[#16161a] p-6 rounded-2xl shadow-2xl border border-gray-800">
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="relative flex-1">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i data-feather="cpu" class="text-purple-500 w-5 h-5"></i> </div>
-                    <input type="tel" id="phoneInput" class="search-field w-full pl-12 p-4 rounded-lg text-lg" placeholder="Enter Mobile Number...">
+                        <i data-feather="smartphone" class="text-purple-500 w-5 h-5"></i>
+                    </div>
+                    <input type="tel" id="phoneInput" 
+                           class="search-input w-full pl-12 p-4 rounded-xl text-lg" 
+                           placeholder="Enter Number (e.g. 03091645255)">
                 </div>
-                <button id="searchBtn" class="bg-[var(--primary-gradient)] px-8 py-4 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 transition">
+                <button onclick="fetchData()" class="btn-gradient px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2">
                     <i data-feather="search"></i> Search
                 </button>
             </div>
         </div>
 
-        <div id="loading" class="text-center hidden py-10">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-            <p class="mt-4 text-purple-400 font-semibold">Accessing Database...</p>
+        <div id="loader" class="hidden text-center py-10">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mb-4"></div>
+            <p class="text-purple-400 font-medium">Connecting to Secure Database...</p>
         </div>
 
-        <div id="errorBox" class="hidden p-4 bg-red-900/20 border border-red-500 rounded-lg text-center text-red-400"></div>
+        <div id="errorBox" class="hidden bg-red-900/20 border border-red-600 p-4 rounded-lg text-red-400 text-center"></div>
 
         <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
     </div>
 
     <script>
-        const input = document.getElementById('phoneInput');
-        const btn = document.getElementById('searchBtn');
-        const grid = document.getElementById('resultsGrid');
-        const loading = document.getElementById('loading');
-        const error = document.getElementById('errorBox');
+        // API & Proxy Configuration
+        const PROXY = "https://corsproxy.io/?";
+        const API_BASE = "https://api.impossible-world.xyz/api/data?phone=";
 
-        // CORS Proxy configuration
-        const PROXY = "https://api.allorigins.win/raw?url=";
+        async function fetchData() {
+            const input = document.getElementById('phoneInput');
+            const grid = document.getElementById('resultsGrid');
+            const loader = document.getElementById('loader');
+            const errorBox = document.getElementById('errorBox');
+            
+            let phone = input.value.trim();
+            if(!phone) return;
 
-        btn.addEventListener('click', startSearch);
-        input.addEventListener('keypress', (e) => { if(e.key === 'Enter') startSearch(); });
-
-        async function startSearch() {
-            let num = input.value.trim();
-            if(!num) return showErr("Please enter a number first!");
-
-            // Format handling
-            if(num.startsWith('0')) num = num.substring(1);
-            if(num.startsWith('92')) num = num.substring(2);
-
-            const finalUrl = `${PROXY}${encodeURIComponent('https://api.impossible-world.xyz/api/data?phone=0' + num)}`;
-
-            loading.classList.remove('hidden');
+            // UI Reset
             grid.innerHTML = '';
-            error.classList.add('hidden');
+            errorBox.classList.add('hidden');
+            loader.classList.remove('hidden');
 
             try {
-                const res = await fetch(finalUrl);
-                const data = await res.json();
+                // Formatting: Ensure number starts with 0 for this specific API
+                if(!phone.startsWith('0')) phone = '0' + phone;
 
-                if(data.success && data.records && data.records.length > 0) {
-                    data.records.forEach(renderCard);
+                const finalUrl = PROXY + encodeURIComponent(API_BASE + phone);
+                const response = await fetch(finalUrl);
+                const data = await response.json();
+
+                if (data.success && data.records && data.records.length > 0) {
+                    data.records.forEach(record => {
+                        const card = document.createElement('div');
+                        card.className = 'result-card p-6';
+                        
+                        let fieldsHtml = '';
+                        const icons = {
+                            'Name': 'user',
+                            'Mobile': 'phone',
+                            'CNIC': 'credit-card',
+                            'Address': 'map-pin',
+                            'Country': 'globe'
+                        };
+
+                        for (const key in record) {
+                            if (record[key] && record[key] !== "no") {
+                                const icon = icons[key] || 'info';
+                                fieldsHtml += `
+                                    <div class="flex justify-between items-center py-3 border-b border-gray-800 last:border-0">
+                                        <div class="flex items-center gap-3 overflow-hidden">
+                                            <i data-feather="${icon}" class="w-4 h-4 text-purple-500 flex-shrink-0"></i>
+                                            <div class="overflow-hidden">
+                                                <span class="text-[10px] text-gray-500 uppercase block tracking-wider">${key}</span>
+                                                <span class="text-sm font-medium text-gray-200">${record[key]}</span>
+                                            </div>
+                                        </div>
+                                        <button class="copy-btn" onclick="copyText('${record[key]}', this)">Copy</button>
+                                    </div>`;
+                            }
+                        }
+
+                        card.innerHTML = `
+                            <div class="flex items-center gap-2 mb-4 text-purple-400">
+                                <i data-feather="cpu" class="w-5 h-5"></i>
+                                <span class="font-bold tracking-widest text-xs uppercase">SIM Data Record</span>
+                            </div>
+                            ${fieldsHtml}
+                        `;
+                        grid.appendChild(card);
+                    });
                 } else {
-                    showErr("No records found for this number.");
+                    showError("No records found in database.");
                 }
             } catch (err) {
-                showErr("Connection failed. Please check your internet or proxy.");
+                showError("API Connection Error. Please try again later.");
             } finally {
-                loading.classList.add('hidden');
-                feather.replace();
+                loader.classList.add('hidden');
+                feather.replace(); // Refresh icons
             }
         }
 
-        function renderCard(record) {
-            const card = document.createElement('div');
-            card.className = 'bg-[#1a1a1e] p-5 rounded-lg border-l-4 border-purple-600';
-            
-            let content = '';
-            const iconMap = {
-                'Name': 'user',
-                'Mobile': 'phone',
-                'CNIC': 'credit-card',
-                'Address': 'map-pin',
-                'Country': 'globe'
-            };
-
-            for(const key in record) {
-                if(record[key] && record[key] !== "no") {
-                    const icon = iconMap[key] || 'info';
-                    content += `
-                        <div class="flex justify-between items-center border-b border-gray-800/50 py-3">
-                            <div class="flex items-center gap-3 overflow-hidden">
-                                <i data-feather="${icon}" class="w-4 h-4 text-purple-500 flex-shrink-0"></i>
-                                <div>
-                                    <span class="text-[10px] text-gray-500 uppercase block">${key}</span>
-                                    <span class="text-sm font-medium text-gray-200">${record[key]}</span>
-                                </div>
-                            </div>
-                            <button class="copy-btn" onclick="copyValue('${record[key]}', this)">Copy</button>
-                        </div>`;
-                }
-            }
-
-            card.innerHTML = `
-                <div class="flex items-center gap-3 mb-4 text-purple-400">
-                    <i data-feather="cpu" class="w-6 h-6"></i> <span class="font-bold">SIM Information</span>
-                </div>
-                ${content}`;
-            grid.appendChild(card);
-        }
-
-        function copyValue(text, btn) {
+        function copyText(text, btn) {
             navigator.clipboard.writeText(text).then(() => {
                 const original = btn.innerText;
-                btn.innerText = "Saved!";
-                setTimeout(() => btn.innerText = original, 1500);
+                btn.innerText = "Copied!";
+                btn.style.background = "#8E2DE2";
+                setTimeout(() => {
+                    btn.innerText = original;
+                    btn.style.background = "";
+                }, 1500);
             });
         }
 
-        function showErr(msg) {
-            error.innerText = msg;
-            error.classList.remove('hidden');
-            loading.classList.add('hidden');
+        function showError(msg) {
+            const errorBox = document.getElementById('errorBox');
+            errorBox.innerText = msg;
+            errorBox.classList.remove('hidden');
         }
 
-        document.addEventListener('DOMContentLoaded', () => feather.replace());
+        // Initialize Feather Icons
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+        });
+
+        // Enter key support
+        document.getElementById('phoneInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') fetchData();
+        });
     </script>
 </body>
 </html>
