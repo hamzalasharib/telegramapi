@@ -3,200 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HamzaEditz 2.0 - SIM Tracker</title>
+    <title>Quran Flow | Search & Play</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #0f0f12;
-            --card-light: #1f1f1f;
-            --input-dark: #070708; /* Extra Dark for Search */
-            --accent-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
-            --purple-main: #8E2DE2;
-        }
-
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: #ffffff; }
-
-        .gemini-title {
-            font-weight: 800;
-            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ff0080, #7928ca, #8E2DE2);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 5s linear infinite;
-        }
-        @keyframes shine { to { background-position: 300% center; } }
-
-        .search-input {
-            background-color: var(--input-dark) !important;
-            border: 1px solid #222;
-            color: white;
+        body { background: #020617; font-family: 'Poppins', sans-serif; color: white; overflow-x: hidden; }
+        .arabic-font { font-family: 'Amiri', serif; direction: rtl; }
+        
+        .surah-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(16, 185, 129, 0.1);
             transition: all 0.3s ease;
-        }
-        .search-input:focus { border-color: var(--purple-main); box-shadow: 0 0 15px rgba(142, 45, 226, 0.4); outline: none; }
-
-        .result-card {
-            background-color: var(--card-light);
-            border-top: 4px solid transparent;
-            border-image: var(--accent-gradient) 1;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-        }
-
-        .copy-btn {
-            background: rgba(142, 45, 226, 0.1);
-            border: 1px solid var(--purple-main);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 11px;
             cursor: pointer;
-            transition: 0.3s;
         }
-        .copy-btn:hover { background: var(--purple-main); box-shadow: 0 0 8px var(--purple-main); }
+        .surah-card:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.08); }
+
+        #swipe-view {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            display: none;
+            background: #020617;
+        }
+
+        .ayah-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .ayah-page.active { 
+            background: radial-gradient(circle at center, #064e3b 0%, #020617 100%); 
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        .ayah-page:not(.active) { opacity: 0.2; transform: scale(0.9); }
+
+        .ayah-arabic { font-size: 2.2rem; line-height: 2; margin-bottom: 1.5rem; }
+        
+        .play-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: none;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            z-index: 100;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen py-10 px-4">
+<body>
 
-    <div class="max-w-4xl mx-auto space-y-10">
-        <header class="text-center">
-            <h1 class="text-5xl sm:text-7xl gemini-title">HamzaEditz 2.0</h1>
-            <p class="text-gray-500 mt-2 flex items-center justify-center gap-2 tracking-widest uppercase text-xs">
-                <i data-feather="cpu" class="w-4 h-4"></i> Secure SIM Info Retrieval
-            </p>
+    <div id="home-view" class="max-w-4xl mx-auto p-6">
+        <header class="text-center py-10">
+            <h1 class="arabic-font text-5xl text-emerald-400 mb-6">القرآن الكريم</h1>
+            
+            <div class="relative max-w-md mx-auto mb-8">
+                <input type="text" id="searchBox" oninput="filterSurahs()" placeholder="Search Surah (e.g. Al-Fatiha)..." 
+                    class="w-full bg-slate-900/50 border border-emerald-500/20 rounded-2xl py-4 px-6 focus:outline-none focus:border-emerald-500 transition-all text-emerald-50 placeholder:text-slate-600">
+                <div class="absolute right-5 top-4 text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
         </header>
 
-        <div class="bg-[#16161a] p-6 rounded-2xl shadow-2xl border border-gray-800">
-            <div class="flex flex-col sm:flex-row gap-4">
-                <div class="relative flex-1">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i data-feather="smartphone" class="text-purple-500 w-5 h-5"></i>
-                    </div>
-                    <input type="tel" id="phoneInput" class="search-input w-full pl-12 p-4 rounded-xl text-lg" placeholder="03XXXXXXXXX">
-                </div>
-                <button onclick="fetchData()" id="searchBtn" class="bg-[linear-gradient(90deg,#8E2DE2,#4A00E0)] px-10 py-4 rounded-xl font-bold text-lg hover:scale-105 transition active:scale-95 flex items-center justify-center gap-2">
-                    <i data-feather="search"></i> Search
-                </button>
-            </div>
+        <div id="surah-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
+            <div class="col-span-full text-center animate-pulse text-slate-500">Loading Surahs...</div>
         </div>
-
-        <div id="loader" class="hidden text-center py-10">
-            <div class="inline-block animate-spin rounded-full h-14 w-14 border-t-4 border-purple-500 mb-4"></div>
-            <p class="text-purple-400 font-bold animate-pulse">Please wait....</p>
-        </div>
-
-        <div id="errorBox" class="hidden bg-red-900/30 border border-red-600 p-5 rounded-xl text-red-300 text-center font-medium"></div>
-
-        <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
     </div>
 
+    <div id="swipe-view">
+        <button onclick="goBack()" class="fixed top-6 left-6 z-50 bg-black/60 backdrop-blur-md text-white px-5 py-2 rounded-full border border-white/10 hover:bg-emerald-600 transition">
+            ← Back
+        </button>
+        <div id="playing-tag" class="play-indicator">RECiting...</div>
+        <div id="ayah-feed"></div>
+    </div>
+
+    <audio id="player"></audio>
+
     <script>
-        const API_BASE = "https://api.impossible-world.xyz/api/data?phone=";
+        const player = document.getElementById('player');
+        let currentAyahIndex = 0;
+        let totalAyahs = 0;
+        let ayahAudios = [];
+        let allSurahs = []; // Global store for search
 
-        async function fetchData() {
-            const input = document.getElementById('phoneInput');
-            const grid = document.getElementById('resultsGrid');
-            const loader = document.getElementById('loader');
-            const errorBox = document.getElementById('errorBox');
-            
-            let phone = input.value.trim();
-            if(!phone) return;
-
-            // Normalize Number
-            if(phone.startsWith('0')) phone = phone.substring(1); // API often expects without lead 0 or uses its own format
-
-            grid.innerHTML = '';
-            errorBox.classList.add('hidden');
-            loader.classList.remove('hidden');
-
-            // Trying multiple Proxies for stability
-            const proxies = [
-                "https://api.allorigins.win/raw?url=",
-                "https://corsproxy.io/?",
-                "https://thingproxy.freeboard.io/fetch/"
-            ];
-
-            let success = false;
-            for (let proxy of proxies) {
-                try {
-                    console.log(`Trying Proxy: ${proxy}`);
-                    const finalUrl = proxy + encodeURIComponent(API_BASE + '0' + phone);
-                    const response = await fetch(finalUrl);
-                    if(!response.ok) continue;
-                    
-                    const data = await response.json();
-                    
-                    // Stronger validation to handle different API structures
-                    const records = data.records || (Array.isArray(data.data) ? data.data : null) || (Array.isArray(data) ? data : null);
-
-                    if (records && records.length > 0) {
-                        renderRecords(records);
-                        success = true;
-                        break; // Stop if success
-                    }
-                } catch (err) {
-                    console.error("Proxy failed, trying next...");
-                }
+        async function init() {
+            try {
+                const res = await fetch('https://api.alquran.cloud/v1/surah');
+                const data = await res.json();
+                allSurahs = data.data;
+                renderSurahs(allSurahs);
+            } catch (e) {
+                document.getElementById('surah-grid').innerHTML = "Error loading Quran data.";
             }
-
-            loader.classList.add('hidden');
-            if (!success) showError("Record not found or API is currently blocked. Try a different number.");
-            feather.replace();
         }
 
-        function renderRecords(records) {
-            const grid = document.getElementById('resultsGrid');
-            records.forEach(record => {
-                const card = document.createElement('div');
-                card.className = 'result-card p-6 rounded-xl relative overflow-hidden';
-                
-                let fields = '';
-                const icons = { 'Name': 'user', 'Mobile': 'phone', 'CNIC': 'credit-card', 'Address': 'map-pin' };
-
-                for (const key in record) {
-                    if (record[key] && record[key] !== "no") {
-                        const icon = icons[key] || 'info';
-                        fields += `
-                            <div class="flex justify-between items-center py-3 border-b border-gray-800/60 last:border-0">
-                                <div class="flex items-center gap-3 overflow-hidden">
-                                    <i data-feather="${icon}" class="w-4 h-4 text-purple-500"></i>
-                                    <div class="overflow-hidden">
-                                        <span class="text-[10px] text-gray-500 uppercase tracking-tighter font-bold">${key}</span>
-                                        <span class="text-sm font-semibold text-gray-100 block truncate">${record[key]}</span>
-                                    </div>
-                                </div>
-                                <button class="copy-btn" onclick="copyText('${record[key]}', this)">Copy</button>
-                            </div>`;
-                    }
-                }
-
-                card.innerHTML = `
-                    <div class="flex items-center gap-2 mb-5 text-purple-400 font-bold text-xs uppercase tracking-widest border-b border-purple-900/30 pb-2">
-                        <i data-feather="cpu" class="w-4 h-4"></i> SIM DATA SLOT
+        function renderSurahs(list) {
+            const grid = document.getElementById('surah-grid');
+            if (list.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-10">No Surah found with that name.</div>`;
+                return;
+            }
+            grid.innerHTML = list.map(s => `
+                <div onclick="startReading(${s.number}, '${s.englishName}')" class="surah-card p-6 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <h3 class="font-semibold text-emerald-50">${s.englishName}</h3>
+                        <p class="text-xs text-slate-500 uppercase tracking-tighter">${s.revelationType} • ${s.numberOfAyahs} Ayahs</p>
                     </div>
-                    ${fields}
-                `;
-                grid.appendChild(card);
-            });
+                    <div class="arabic-font text-xl text-emerald-400">${s.name}</div>
+                </div>
+            `).join('');
         }
 
-        function copyText(text, btn) {
-            navigator.clipboard.writeText(text).then(() => {
-                const oldText = btn.innerText;
-                btn.innerText = "Done!";
-                btn.classList.add('bg-purple-600');
-                setTimeout(() => { btn.innerText = oldText; btn.classList.remove('bg-purple-600'); }, 1500);
-            });
+        // Search Filter Function
+        function filterSurahs() {
+            const term = document.getElementById('searchBox').value.toLowerCase();
+            const filtered = allSurahs.filter(s => 
+                s.englishName.toLowerCase().includes(term) || 
+                s.name.includes(term) ||
+                s.englishNameTranslation.toLowerCase().includes(term)
+            );
+            renderSurahs(filtered);
         }
 
-        function showError(msg) {
-            const errorBox = document.getElementById('errorBox');
-            errorBox.innerText = msg;
-            errorBox.classList.remove('hidden');
+        async function startReading(id, name) {
+            document.getElementById('home-view').style.display = 'none';
+            const swipeView = document.getElementById('swipe-view');
+            swipeView.style.display = 'block';
+            document.getElementById('playing-tag').style.display = 'block';
+            
+            document.getElementById('ayah-feed').innerHTML = `<div class="h-screen flex items-center justify-center text-emerald-500">Opening ${name}...</div>`;
+
+            try {
+                const [ar, en, aud] = await Promise.all([
+                    fetch(`https://api.alquran.cloud/v1/surah/${id}`),
+                    fetch(`https://api.alquran.cloud/v1/surah/${id}/en.asad`),
+                    fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.alafasy`)
+                ]);
+
+                const arData = await ar.json();
+                const enData = await en.json();
+                const audData = await aud.json();
+
+                totalAyahs = arData.data.ayahs.length;
+                ayahAudios = audData.data.ayahs.map(a => a.audio);
+                
+                document.getElementById('ayah-feed').innerHTML = arData.data.ayahs.map((ayah, i) => `
+                    <div id="ayah-block-${i}" class="ayah-page" onclick="playAyah(${i})">
+                        <div class="max-w-2xl text-center">
+                            <p class="text-emerald-500/40 text-xs mb-6 tracking-widest">AYAH ${ayah.numberInSurah}</p>
+                            <h2 class="arabic-font ayah-arabic text-white">${ayah.text}</h2>
+                            <p class="text-slate-400 text-lg font-light italic leading-relaxed">${enData.data.ayahs[i].text}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                playAyah(0);
+            } catch (err) {
+                alert("Error loading Ayahs.");
+                goBack();
+            }
         }
 
-        document.addEventListener('DOMContentLoaded', () => feather.replace());
+        function playAyah(index) {
+            if (index >= totalAyahs || index < 0) return;
+            currentAyahIndex = index;
+            player.src = ayahAudios[index];
+            player.play();
+            updateActiveUI(index);
+        }
+
+        function updateActiveUI(index) {
+            document.querySelectorAll('.ayah-page').forEach(el => el.classList.remove('active'));
+            const activeBlock = document.getElementById(`ayah-block-${index}`);
+            if (activeBlock) {
+                activeBlock.classList.add('active');
+                activeBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        player.onended = () => {
+            if (currentAyahIndex + 1 < totalAyahs) {
+                playAyah(currentAyahIndex + 1);
+            }
+        };
+
+        function goBack() {
+            document.getElementById('swipe-view').style.display = 'none';
+            document.getElementById('home-view').style.display = 'block';
+            document.getElementById('playing-tag').style.display = 'none';
+            player.pause();
+        }
+
+        init();
     </script>
 </body>
 </html>
