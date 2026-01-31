@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HamzaEditz 2.0 - Number Search</title>
+    <title>HamzaEditz 2.0 - SIM Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <style>
         :root {
-            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
-            --primary-color: #8E2DE2;
-            --bg-dark: #0f0f12;
-            --bg-light: #1f1f1f;
-            /* Pure Dark for Search Input */
-            --input-dark: #121212; 
-            --border-color: #333;
+            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0); /* */
+            --bg-dark: #0f0f12; /* */
+            --card-dark: #1f1f1f; /* */
+            --input-pure: #050505;
+            --accent-purple: #8E2DE2;
         }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: #f0f0f0; }
-        
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: #ffffff; }
+
+        /* Gemini Animated Title */
         .gemini-title {
             font-weight: 800;
             background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
@@ -29,163 +28,160 @@
             animation: gemini-shimmer 8s linear infinite;
         }
         @keyframes gemini-shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
-        
-        .btn-gradient { background: var(--primary-gradient); transition: transform 0.2s; }
-        .btn-gradient:active { transform: scale(0.95); }
 
-        /* Darker EditText (Input Box) */
-        .search-input {
-            background-color: var(--input-dark) !important;
-            border: 1px solid var(--border-color);
-            color: white;
-            transition: border-color 0.3s ease;
-        }
-        .search-input:focus {
-            border-color: var(--primary-color) !important;
-            outline: none;
-        }
-
-        .card-custom {
-            background-color: var(--bg-light);
+        /* Custom Card with Purple Border */
+        .hamza-card {
+            background-color: var(--card-dark);
             border-top: 4px solid transparent;
             border-image: var(--primary-gradient) 1;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
 
-        .copy-btn {
-            background: rgba(142, 45, 226, 0.1);
-            border: 1px solid var(--primary-color);
+        .search-field {
+            background-color: var(--input-pure) !important;
+            border: 1px solid #333;
             color: #fff;
-            padding: 4px 10px;
+            transition: 0.3s;
+        }
+        .search-field:focus { border-color: var(--accent-purple); outline: none; }
+
+        .copy-btn {
+            background: rgba(142, 45, 226, 0.15);
+            border: 1px solid var(--accent-purple);
+            padding: 5px 12px;
             border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: 0.2s;
         }
-        .copy-btn:hover { background: var(--primary-color); }
+        .copy-btn:hover { background: var(--accent-purple); }
     </style>
 </head>
 <body class="min-h-screen p-4 sm:p-10">
 
-    <div class="max-w-4xl mx-auto space-y-10">
+    <div class="max-w-4xl mx-auto space-y-8">
         <header class="text-center">
-            <h1 class="text-4xl sm:text-6xl font-extrabold gemini-title">HamzaEditz 2.0</h1>
-            <p class="text-gray-400 mt-2">Professional Number & SIM Tracker</p>
+            <h1 class="text-5xl sm:text-6xl font-extrabold gemini-title">HamzaEditz 2.0</h1>
+            <p class="text-gray-400 mt-2 tracking-widest uppercase text-xs">Sim Information System</p>
         </header>
 
-        <div class="card-custom p-6 rounded-xl flex flex-col sm:flex-row gap-4">
-            <input type="tel" id="phoneInput" class="search-input flex-1 text-lg rounded-lg p-4" placeholder="Enter number (e.g. 03091645255)">
-            <button id="searchButton" class="btn-gradient text-white font-bold py-4 px-8 rounded-lg flex items-center justify-center text-lg">
-                <i data-feather="search" class="w-6 h-6 mr-2"></i> Search
-            </button>
+        <div class="hamza-card p-6 rounded-xl">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i data-feather="cpu" class="text-purple-500 w-5 h-5"></i> </div>
+                    <input type="tel" id="phoneInput" class="search-field w-full pl-12 p-4 rounded-lg text-lg" placeholder="Enter Mobile Number...">
+                </div>
+                <button id="searchBtn" class="bg-[var(--primary-gradient)] px-8 py-4 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 transition">
+                    <i data-feather="search"></i> Search
+                </button>
+            </div>
         </div>
 
-        <div id="loading" class="text-center hidden">
-            <i data-feather="loader" class="animate-spin h-12 w-12 inline-block text-primary-color"></i>
-            <p class="text-lg mt-4 text-purple-400">Fetching Secure Data...</p>
-        </div>
-        
-        <div id="errorDisplay" class="text-center hidden p-4 bg-red-900/20 border border-red-500 rounded-lg">
-            <p id="errorMessage" class="text-red-400 font-medium"></p>
+        <div id="loading" class="text-center hidden py-10">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+            <p class="mt-4 text-purple-400 font-semibold">Accessing Database...</p>
         </div>
 
-        <div id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        <div id="errorBox" class="hidden p-4 bg-red-900/20 border border-red-500 rounded-lg text-center text-red-400"></div>
+
+        <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
     </div>
 
     <script>
-        const phoneInput = document.getElementById('phoneInput');
-        const searchButton = document.getElementById('searchButton');
-        const resultsContainer = document.getElementById('resultsContainer');
+        const input = document.getElementById('phoneInput');
+        const btn = document.getElementById('searchBtn');
+        const grid = document.getElementById('resultsGrid');
         const loading = document.getElementById('loading');
-        const errorDisplay = document.getElementById('errorDisplay');
+        const error = document.getElementById('errorBox');
 
-        // CORS Proxy addition
-        const PROXY = "https://corsproxy.io/?";
+        // CORS Proxy configuration
+        const PROXY = "https://api.allorigins.win/raw?url=";
 
-        searchButton.addEventListener('click', searchPhone);
-        phoneInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchPhone(); });
+        btn.addEventListener('click', startSearch);
+        input.addEventListener('keypress', (e) => { if(e.key === 'Enter') startSearch(); });
 
-        async function searchPhone() {
-            let num = phoneInput.value.trim();
-            if (!num) return showError('Please enter a phone number!');
+        async function startSearch() {
+            let num = input.value.trim();
+            if(!num) return showErr("Please enter a number first!");
 
-            // URL with Proxy
-            const apiUrl = PROXY + encodeURIComponent('https://api.impossible-world.xyz/api/data?phone=' + num);
+            // Format handling
+            if(num.startsWith('0')) num = num.substring(1);
+            if(num.startsWith('92')) num = num.substring(2);
 
-            toggleLoading(true);
-            resultsContainer.innerHTML = '';
-            errorDisplay.classList.add('hidden');
+            const finalUrl = `${PROXY}${encodeURIComponent('https://api.impossible-world.xyz/api/data?phone=0' + num)}`;
+
+            loading.classList.remove('hidden');
+            grid.innerHTML = '';
+            error.classList.add('hidden');
 
             try {
-                const res = await fetch(apiUrl);
+                const res = await fetch(finalUrl);
                 const data = await res.json();
 
-                if (data.success && data.records && data.records.length > 0) {
-                    renderCards(data.records);
+                if(data.success && data.records && data.records.length > 0) {
+                    data.records.forEach(renderCard);
                 } else {
-                    showError('Record not found in database.');
+                    showErr("No records found for this number.");
                 }
             } catch (err) {
-                showError('Proxy or API issue. Check connection.');
+                showErr("Connection failed. Please check your internet or proxy.");
             } finally {
-                toggleLoading(false);
+                loading.classList.add('hidden');
+                feather.replace();
             }
         }
 
-        function renderCards(records) {
-            records.forEach((rec) => {
-                const card = document.createElement('div');
-                card.className = 'bg-[#1f1f1f] p-5 rounded-lg border-l-4 border-purple-600 shadow-xl';
-                
-                let fields = '';
-                for (const key in rec) {
-                    if (rec[key] && rec[key] !== "no") {
-                        fields += `
-                            <div class="flex justify-between items-center border-b border-gray-800 py-2">
-                                <div class="overflow-hidden">
-                                    <span class="text-xs text-gray-500 uppercase block">${key}</span>
-                                    <span class="text-sm text-gray-200 font-medium">${rec[key]}</span>
+        function renderCard(record) {
+            const card = document.createElement('div');
+            card.className = 'bg-[#1a1a1e] p-5 rounded-lg border-l-4 border-purple-600';
+            
+            let content = '';
+            const iconMap = {
+                'Name': 'user',
+                'Mobile': 'phone',
+                'CNIC': 'credit-card',
+                'Address': 'map-pin',
+                'Country': 'globe'
+            };
+
+            for(const key in record) {
+                if(record[key] && record[key] !== "no") {
+                    const icon = iconMap[key] || 'info';
+                    content += `
+                        <div class="flex justify-between items-center border-b border-gray-800/50 py-3">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <i data-feather="${icon}" class="w-4 h-4 text-purple-500 flex-shrink-0"></i>
+                                <div>
+                                    <span class="text-[10px] text-gray-500 uppercase block">${key}</span>
+                                    <span class="text-sm font-medium text-gray-200">${record[key]}</span>
                                 </div>
-                                <button class="copy-btn" onclick="copyValue('${rec[key]}', this)">Copy</button>
-                            </div>`;
-                    }
+                            </div>
+                            <button class="copy-btn" onclick="copyValue('${record[key]}', this)">Copy</button>
+                        </div>`;
                 }
+            }
 
-                card.innerHTML = `
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-purple-900/30 p-2 rounded-full">
-                            <i data-feather="user" class="text-purple-400 w-5 h-5"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-white">${rec.Name || 'Subscriber'}</h3>
-                    </div>
-                    <div class="space-y-1">${fields}</div>
-                `;
-                resultsContainer.appendChild(card);
-            });
-            feather.replace();
+            card.innerHTML = `
+                <div class="flex items-center gap-3 mb-4 text-purple-400">
+                    <i data-feather="cpu" class="w-6 h-6"></i> <span class="font-bold">SIM Information</span>
+                </div>
+                ${content}`;
+            grid.appendChild(card);
         }
 
-        function copyValue(val, btn) {
-            navigator.clipboard.writeText(val).then(() => {
-                const old = btn.innerText;
-                btn.innerText = "Done!";
-                btn.style.background = "#4A00E0";
-                setTimeout(() => { 
-                    btn.innerText = old; 
-                    btn.style.background = "";
-                }, 1500);
+        function copyValue(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerText;
+                btn.innerText = "Saved!";
+                setTimeout(() => btn.innerText = original, 1500);
             });
         }
 
-        function toggleLoading(status) {
-            searchButton.disabled = status;
-            loading.classList.toggle('hidden', !status);
-            resultsContainer.classList.toggle('opacity-50', status);
-        }
-
-        function showError(msg) {
-            document.getElementById('errorMessage').textContent = msg;
-            errorDisplay.classList.remove('hidden');
+        function showErr(msg) {
+            error.innerText = msg;
+            error.classList.remove('hidden');
+            loading.classList.add('hidden');
         }
 
         document.addEventListener('DOMContentLoaded', () => feather.replace());
