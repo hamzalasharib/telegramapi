@@ -3,428 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Downloader | HamzaEditz 2.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>TikTok Ultra Pro Downloader</title>
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* HAMZAEDITZ 2.0 DESIGN SYSTEM */
-        :root {
-            --bg-dark: #0f0f12;
-            --card-bg: #1a1a1e;
-            --card-border: #2a2a30;
-            --accent-primary: #8b5cf6; /* Purple */
-            --accent-secondary: #d946ef; /* Magenta */
-            --text-main: #ffffff;
-            --text-muted: #a1a1aa;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
+        :root {
+            --primary: #a100ff;
+            --secondary: #00d4ff;
+            --bg-dark: #08080a;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
         }
 
         body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* UTILITIES */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(161, 0, 255, 0.15) 0%, transparent 35%),
+                radial-gradient(circle at 100% 100%, rgba(0, 212, 255, 0.1) 0%, transparent 35%);
+            color: #ffffff;
+            margin: 0;
             padding: 20px;
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-
-        /* HEADER */
-        header {
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            color: var(--text-muted);
-        }
-
-        /* DOWNLOADER CARD */
-        .downloader-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            margin-bottom: 40px;
-        }
-
-        .input-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-        }
-
-        input[type="text"] {
-            background: #0f0f12;
-            border: 1px solid #333;
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
-        }
-
-        .btn-download {
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            min-height: 100vh;
         }
 
-        .btn-download:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
+        /* Search Section */
+        .header-section { text-align: center; margin-bottom: 40px; width: 100%; max-width: 600px; }
+        .header-section h1 { font-size: 2.8rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
+        .gradient-text { background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .btn-download:disabled {
-            background: #333;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* RESULTS AREA */
-        #result-area {
-            margin-top: 30px;
-            display: none; /* Hidden by default */
-        }
-
-        .result-grid {
-            display: grid;
-            gap: 15px;
-        }
-
-        .download-item {
-            background: #232329;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid var(--card-border);
+        .search-wrapper {
+            position: relative;
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            padding: 8px;
+            border-radius: 100px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: white;
-            transition: 0.3s;
+            backdrop-filter: blur(10px);
+            margin-top: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .download-item:hover {
-            background: #2a2a32;
-            border-color: var(--accent-primary);
+        .search-wrapper input {
+            flex: 1; background: transparent; border: none; outline: none;
+            color: #fff; padding-left: 25px; font-size: 1rem;
         }
 
-        .download-item span {
-            font-weight: 500;
+        .btn-fetch {
+            background: var(--primary); color: white; border: none;
+            padding: 14px 35px; border-radius: 100px; font-weight: 700;
+            cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(161, 0, 255, 0.4);
         }
 
-        .icon-box {
-            background: rgba(139, 92, 246, 0.1);
-            color: var(--accent-primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .btn-fetch:hover { transform: scale(1.05) translateY(-2px); filter: brightness(1.2); }
 
-        .preview-img {
-            width: 100%;
-            max-width: 200px;
-            border-radius: 10px;
-            margin: 0 auto 20px auto;
-            display: block;
-            border: 2px solid var(--card-border);
-        }
-
-        /* INFO SECTIONS (Guide & FAQ) */
-        .info-section {
-            margin-top: 50px;
-            padding: 20px;
-        }
-
-        .info-section h2 {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            color: var(--accent-secondary);
-        }
-
-        .info-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--accent-primary);
-        }
-
-        .info-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .info-card p, .info-card li {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            list-style-position: inside;
-        }
-
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--accent-primary);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+        /* Main Content Card */
+        .main-card {
+            width: 100%; max-width: 480px;
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(25px);
+            border-radius: 35px;
+            padding: 30px;
             display: none;
+            animation: fadeIn 0.6s ease-out;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Profile & Meta */
+        .user-info-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .avatar-frame { position: relative; width: 65px; height: 65px; border-radius: 22px; overflow: hidden; border: 2px solid var(--primary); }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .user-text h3 { margin: 0; font-size: 1.1rem; font-weight: 700; }
+        .meta-tags { display: flex; gap: 8px; margin-top: 6px; }
+        .tag { font-size: 0.65rem; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); color: var(--secondary); font-weight: 600; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* Video Container */
+        .video-player-box { border-radius: 25px; overflow: hidden; margin-bottom: 25px; border: 1px solid var(--border-glass); background: #000; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+        /* Stats Bar */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px; }
+        .stat-item { background: rgba(255,255,255,0.02); padding: 12px 5px; border-radius: 18px; text-align: center; border: 1px solid var(--border-glass); }
+        .stat-item i { display: block; color: var(--primary); font-size: 0.9rem; margin-bottom: 6px; }
+        .stat-item b { font-size: 0.8rem; color: #eee; }
+
+        /* Description */
+        .desc-text { font-size: 0.85rem; color: #a1a1a1; line-height: 1.6; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 15px; margin-bottom: 25px; border-left: 3px solid var(--primary); }
+
+        /* Actions */
+        .action-stack { display: flex; flex-direction: column; gap: 12px; }
+        .dl-btn {
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            padding: 16px; border-radius: 20px; font-weight: 700; text-decoration: none;
+            transition: 0.3s; font-size: 0.95rem; border: none; cursor: pointer;
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            header h1 { font-size: 1.8rem; }
-            .downloader-card { padding: 20px; }
-        }
+        .btn-vid { background: #fff; color: #000; }
+        .btn-aud { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-glass); }
+        .btn-profile { background: rgba(161, 0, 255, 0.1); color: var(--primary); border: 1px solid rgba(161, 0, 255, 0.3); }
+
+        .dl-btn:hover { transform: translateY(-3px); opacity: 0.9; }
+
+        #status { display: none; margin-top: 20px; color: var(--secondary); font-weight: 600; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>HamzaEditz <span class="gradient-text">2.0</span></h1>
-        <p>Premium TikTok Downloader (No Watermark)</p>
-    </header>
-
-    <div class="downloader-card">
-        <div class="input-group">
-            <input type="text" id="tiktokUrl" placeholder="Paste TikTok Link Here (e.g. https://vm.tiktok.com/...)">
-            <button class="btn-download" id="fetchBtn" onclick="fetchVideo()">
-                <span id="btnText">Download Video</span>
-                <div class="loader" id="loader"></div>
-            </button>
+    <div class="header-section">
+        <h1>TikTok <span class="gradient-text">Pro+</span></h1>
+        <p style="color: #666; margin-top: 10px;">Download TikTok content without watermark in seconds.</p>
+        
+        <div class="search-wrapper">
+            <input type="text" id="urlInput" placeholder="Paste link here...">
+            <button class="btn-fetch" onclick="handleFetch()">Fetch</button>
         </div>
+        <div id="status"><i class="fas fa-sync fa-spin"></i> ANALYZING URL...</div>
+    </div>
 
-        <div id="result-area">
+    <div class="main-card" id="resultCard">
+        <div class="user-info-bar">
+            <div class="avatar-frame">
+                <img id="avatar" src="" alt="user">
             </div>
-    </div>
-
-    <div class="info-section">
-        <h2>How to Download</h2>
-        <div class="info-card">
-            <ol>
-                <li>Open the TikTok / TikTok Lite app on your phone.</li>
-                <li>Find the video you want to download.</li>
-                <li>Click the <strong>Share</strong> button and select <strong>Copy Link</strong>.</li>
-                <li>Paste the link into the box above.</li>
-                <li>Click the <strong>Download Video</strong> button.</li>
-            </ol>
-            <br>
-            <p><strong>Supported Formats:</strong> MP4 (Video), MP3 (Audio), Slide Shows.</p>
-        </div>
-    </div>
-
-    <div class="info-section">
-        <h2>Frequency Asked Questions</h2>
-        
-        <div class="info-card">
-            <h3>Can all videos be downloaded without watermark?</h3>
-            <p>Yes. You can download all tiktok videos without logo / username watermark, except private videos.</p>
-        </div>
-
-        <div class="info-card">
-            <h3>Why is the quality so high?</h3>
-            <p>We extract the direct URL provided by TikTok servers, so you get the original uncompressed quality (HD/1080p).</p>
-        </div>
-
-        <div class="info-card">
-            <h3>Does this save files on your server?</h3>
-            <p>NO. You download directly from the URL provided by TikTok. We don't save anything.</p>
-        </div>
-
-        <div class="info-card">
-            <h3>Supported Devices</h3>
-            <p>Smartphone (Android & iPhone), Laptop, Tablet, iPad, PC (Windows/Linux/Mac).</p>
-        </div>
-    </div>
-
-    <footer style="text-align: center; color: #555; padding: 20px; font-size: 0.8rem;">
-        &copy; 2025 HamzaEditz 2.0. All rights reserved.
-    </footer>
-</div>
-
-<script>
-    async function fetchVideo() {
-        const urlInput = document.getElementById('tiktokUrl').value;
-        const resultArea = document.getElementById('result-area');
-        const fetchBtn = document.getElementById('fetchBtn');
-        const btnText = document.getElementById('btnText');
-        const loader = document.getElementById('loader');
-
-        // Validation
-        if (!urlInput) {
-            alert("Please paste a TikTok link first!");
-            return;
-        }
-
-        // UI Loading State
-        fetchBtn.disabled = true;
-        btnText.innerText = "Processing...";
-        loader.style.display = "block";
-        resultArea.style.display = "none";
-        resultArea.innerHTML = ""; // Clear previous results
-
-        // 1. Prepare CORS Proxy + API Endpoint
-        // We use corsproxy.io to forward the POST request to ttsave.app
-        const targetUrl = 'https://ttsave.app/download';
-        const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
-
-        try {
-            // 2. Send POST Request
-            const response = await fetch(proxyUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Mimic a browser to avoid simple blocking
-                    'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
-                },
-                body: JSON.stringify({
-                    query: urlInput,
-                    language_id: "1"
-                })
-            });
-
-            if (!response.ok) throw new Error('Network response was not ok');
-
-            // 3. Get Raw HTML Text
-            const htmlText = await response.text();
-
-            // 4. Parse the HTML Response
-            // The API returns an HTML fragment. We need to extract links and text.
-            parseAndDisplay(htmlText);
-
-        } catch (error) {
-            console.error('Error:', error);
-            resultArea.innerHTML = `<div style="text-align:center; color:#ff4d4d; padding:10px;">Error: Could not fetch video. Make sure the link is correct.</div>`;
-            resultArea.style.display = "block";
-        } finally {
-            // Reset UI
-            fetchBtn.disabled = false;
-            btnText.innerText = "Download Video";
-            loader.style.display = "none";
-        }
-    }
-
-    function parseAndDisplay(htmlFragment) {
-        const resultArea = document.getElementById('result-area');
-        
-        // Create a temporary DOM parser
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlFragment, 'text/html');
-
-        // 1. Extract Cover Image (if exists)
-        const coverImg = doc.querySelector('img');
-        let coverHtml = '';
-        if (coverImg) {
-            coverHtml = `<img src="${coverImg.src}" class="preview-img" alt="Video Thumbnail">`;
-        }
-
-        // 2. Extract Download Links (a tags)
-        const links = doc.querySelectorAll('a');
-        let buttonsHtml = '';
-
-        links.forEach(link => {
-            const href = link.getAttribute('href');
-            const type = link.getAttribute('type'); // custom attribute from ttsave
-            let label = link.innerText.trim();
-
-            // Refine Labels for HamzaEditz Theme
-            let icon = '⬇️';
-            
-            if (label.includes("WITHOUT WATERMARK")) {
-                label = "Download No Watermark";
-                icon = '✨';
-            } else if (label.includes("WITH WATERMARK")) {
-                label = "Download With Watermark";
-                icon = '💧';
-            } else if (label.includes("AUDIO")) {
-                label = "Download Audio (MP3)";
-                icon = '🎵';
-            } else if (label.includes("PROFILE")) {
-                label = "Download Profile Pic";
-                icon = '👤';
-            } else if (label.includes("COVER")) {
-                label = "Download Thumbnail";
-                icon = '🖼️';
-            } else if (label.includes("SLIDE")) {
-                icon = '📸';
-            }
-
-            // Create HamzaEditz Styled Button
-            // We use target="_blank" to ensure the download opens in a new tab
-            buttonsHtml += `
-                <a href="${href}" target="_blank" class="download-item">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div class="icon-box">${icon}</div>
-                        <span>${label}</span>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-            `;
-        });
-
-        if (buttonsHtml === '') {
-            resultArea.innerHTML = `<div style="text-align:center; color:#ff4d4d;">No media found. Check the link.</div>`;
-        } else {
-            resultArea.innerHTML = `
-                ${coverHtml}
-                <div class="result-grid">
-                    ${buttonsHtml}
+            <div class="user-text">
+                <h3 id="nickname">@user</h3>
+                <div class="meta-tags">
+                    <span class="tag" id="region">US</span>
+                    <span class="tag" id="datetime">Time</span>
                 </div>
-            `;
+            </div>
+        </div>
+
+        <div class="video-player-box">
+            <video id="vjs-player" class="video-js vjs-fluid vjs-big-play-centered"></video>
+        </div>
+
+        <div class="desc-text" id="caption">Video description here...</div>
+
+        <div class="stats-grid">
+            <div class="stat-item"><i class="fas fa-play"></i><b id="s-play">0</b></div>
+            <div class="stat-item"><i class="fas fa-heart"></i><b id="s-like">0</b></div>
+            <div class="stat-item"><i class="fas fa-share"></i><b id="s-share">0</b></div>
+            <div class="stat-item"><i class="fas fa-clock"></i><b id="s-dur">0s</b></div>
+        </div>
+
+        <div class="action-stack">
+            <a href="#" id="dl-video" class="dl-btn btn-vid" target="_blank"><i class="fas fa-film"></i> Video (No Watermark)</a>
+            <a href="#" id="dl-audio" class="dl-btn btn-aud" target="_blank"><i class="fas fa-music"></i> Audio (MP3)</a>
+            <button onclick="downloadProfileImg()" class="dl-btn btn-profile"><i class="fas fa-image"></i> Download Profile Picture</button>
+        </div>
+    </div>
+
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+    <script>
+        // Global variable for player
+        let player = videojs('vjs-player');
+
+        function handleFetch() {
+            const link = document.getElementById('urlInput').value;
+            if(!link) return alert("Please paste a link first!");
+
+            document.getElementById('status').style.display = 'block';
+            document.getElementById('resultCard').style.display = 'none';
+
+            // Simulating API Fetch with your provided JSON data
+            setTimeout(() => {
+                const responseData = {
+                    "code": 0,
+                    "data": {
+                        "region": "United States",
+                        "title": "❤️ #viral #fypシ #sad #memories #korean #kdrama #kpopfypシ #foryou",
+                        "play": "https://v16m.tiktokcdn-us.com/92a3d073817ddec620e52dcd0a9d6958/69e76ac2/video/tos/useast5/tos-useast5-pve-0068-tx/ow0Te4glPA3AwjbfAgLszUkGTeYbLRiIHICucQ/?a=1233&bti=OTg7QGo5QHM6OjZALTAzYCMvcCMxNDNg&&bt=403&ft=BIcq8VY1wyqRft9EOr_hFJ4_A0piZVYr4jKJHmNMs.0P3-I&mime_type=video_mp4",
+                        "music": "https://v16-ies-music.tiktokcdn-us.com/0f1c29df27801985886ada87813fd11f/69f050f1/video/tos/useast5/tos-useast5-v-27dcd7-tx/ocznHeiIAlT7AENEACLTEFDGAekVAHlEeizoD2/?a=583965",
+                        "play_count": 68, "digg_count": 5, "share_count": 1, "duration": 15,
+                        "create_time": 1776751682,
+                        "author": {
+                            "nickname": "introvertuser78",
+                            "avatar": "https://p16-common-sign.tiktokcdn-us.com/tos-useast5-avt-0068-tx/12d3da4baf0e41172f2fd98df9f47a8b~tplv-tiktokx-cropcenter-q:300:300:q70.jpeg?dr=8834&idc=useast5&ps=87d6e48a&refresh_token=418fd9c9&s=AWEME_DETAIL&sc=avatar&shcp=1d1a97fc&shp=d05b14bd&t=223449c4&x-expires=1776837600&x-signature=gxzI%2BcmoOvwh1aPOW40RWx137yA%3D"
+                        }
+                    }
+                };
+
+                updateUI(responseData.data);
+            }, 1500);
         }
 
-        resultArea.style.display = "block";
-    }
-</script>
+        function updateUI(data) {
+            // Text Info
+            document.getElementById('nickname').innerText = "@" + data.author.nickname;
+            document.getElementById('region').innerText = data.region;
+            document.getElementById('caption').innerText = data.title;
+            document.getElementById('s-play').innerText = data.play_count;
+            document.getElementById('s-like').innerText = data.digg_count;
+            document.getElementById('s-share').innerText = data.share_count;
+            document.getElementById('s-dur').innerText = data.duration + "s";
 
+            // Date & Time conversion
+            const unixTime = data.create_time;
+            const dateObj = new Date(unixTime * 1000);
+            const dateStr = dateObj.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+            const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('datetime').innerText = `${dateStr} | ${timeStr}`;
+
+            // Image & Video
+            document.getElementById('avatar').src = data.author.avatar;
+            player.src({ type: 'video/mp4', src: data.play });
+            
+            // Download Links
+            document.getElementById('dl-video').href = data.play;
+            document.getElementById('dl-audio').href = data.music;
+
+            // Show Card
+            document.getElementById('status').style.display = 'none';
+            document.getElementById('resultCard').style.display = 'block';
+        }
+
+        async function downloadProfileImg() {
+            const avatarUrl = document.getElementById('avatar').src;
+            
+            // Note: Direct fetch might fail due to CORS. 
+            // Most TikTok Downloader APIs offer a proxy URL for images.
+            // If it fails, we open in new tab as fallback.
+            try {
+                const response = await fetch(avatarUrl);
+                const blob = await response.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = "tiktok_profile.jpg";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (e) {
+                window.open(avatarUrl, '_blank');
+            }
+        }
+    </script>
 </body>
 </html>
