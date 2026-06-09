@@ -75,7 +75,7 @@
                     </div>
                     <input type="tel" id="phoneInput" class="search-input w-full pl-12 p-4 rounded-xl text-lg" placeholder="03XXXXXXXXX">
                 </div>
-                <button onclick="fetchData()" id="searchBtn" class="bg-[linear-gradient(90deg,#8E2DE2,#4A00E0)] px-10 py-4 rounded-xl font-bold text-lg hover:scale-105 transition active:scale-95 flex items-center justify-center gap-2">
+                <button onclick="fetchData()" id="searchBtn" class="bg-[linear-gradient(90deg,#8E2DE2,#4A00E0)] px-10 py-4 rounded-xl font-bold text-lg hover:scale-105 transition active:scale-95">
                     <i data-feather="search"></i> Search
                 </button>
             </div>
@@ -92,7 +92,7 @@
     </div>
 
     <script>
-        const API_BASE = "https://api.impossible-world.xyz/api/data?phone=";
+        const API_BASE = "https://simowner.net.pk/ajax-handler.php?number=";
 
         async function fetchData() {
             const input = document.getElementById('phoneInput');
