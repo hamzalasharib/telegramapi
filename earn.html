@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bestvideo.shop – Auto Task</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ===== Reset & Base ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0e17;
+            color: #e5edf5;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: #111820;
+            border-radius: 2.5rem;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 0 1px #2a3340;
+            transition: all 0.3s;
+        }
+
+        /* ===== Header ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #2a3340;
+            padding-bottom: 1.2rem;
+        }
+        .header i {
+            font-size: 2.4rem;
+            color: #ff5e6b;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .header h1 span {
+            color: #6fcf97;
+        }
+        .badge {
+            margin-left: auto;
+            background: #1f2a36;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            border: 1px solid #3f4c5c;
+            color: #9aafc4;
+        }
+        .badge i {
+            color: #6fcf97;
+            font-size: 0.7rem;
+        }
+
+        /* ===== Credentials ===== */
+        .creds {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1.8rem;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #0d111b;
+            border-radius: 14px;
+            padding: 4px 16px;
+            border: 1px solid #25303d;
+            transition: 0.2s;
+        }
+        .input-group:focus-within {
+            border-color: #6fcf97;
+        }
+        .input-group i {
+            color: #7b8fa5;
+            font-size: 1rem;
+            width: 24px;
+        }
+        .input-group input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 0.95rem;
+            padding: 12px 8px;
+            width: 100%;
+            font-family: inherit;
+        }
+        .input-group input::placeholder {
+            color: #4b5a6b;
+        }
+
+        /* ===== Actions ===== */
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 1.8rem;
+        }
+        .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff87, #60efff);
+            color: #0a0e17;
+            box-shadow: 0 8px 20px rgba(0,255,135,0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0,255,135,0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-danger {
+            background: #ff5e6b;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #ff3b4a;
+        }
+
+        /* ===== Log Console ===== */
+        .log-box {
+            background: #0a0e17;
+            border-radius: 16px;
+            border: 1px solid #25303d;
+            padding: 16px 18px;
+            min-height: 200px;
+            max-height: 320px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            color: #b7c9d9;
+        }
+        .log-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .log-box::-webkit-scrollbar-track {
+            background: #0a0e17;
+        }
+        .log-box::-webkit-scrollbar-thumb {
+            background: #3f4c5c;
+            border-radius: 10px;
+        }
+        .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid #141d26;
+        }
+        .log-entry .time {
+            color: #5b6f84;
+            margin-right: 10px;
+        }
+        .log-entry .ok {
+            color: #6fcf97;
+        }
+        .log-entry .err {
+            color: #ff5e6b;
+        }
+        .log-entry .info {
+            color: #60efff;
+        }
+
+        /* ===== Stats ===== */
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: #7b8fa5;
+        }
+        .stats span i {
+            margin-right: 6px;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 500px) {
+            .container {
+                padding: 1.8rem 1.2rem;
+            }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="app">
+    <!-- Header -->
+    <div class="header">
+        <i class="fas fa-robot"></i>
+        <h1>Auto <span>Task</span></h1>
+        <div class="badge"><i class="fas fa-circle"></i> LIVE</div>
+    </div>
+
+    <!-- Credentials -->
+    <div class="creds">
+        <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="text" id="mobile" placeholder="Mobile Number" value="3091645255">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password" value="aass1122">
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="actions">
+        <button class="btn btn-primary" id="runBtn"><i class="fas fa-play"></i> Run Now</button>
+        <button class="btn btn-danger" id="clearBtn"><i class="fas fa-trash"></i> Clear Log</button>
+    </div>
+
+    <!-- Log Console -->
+    <div class="log-box" id="logBox"></div>
+
+    <!-- Stats -->
+    <div class="stats">
+        <span><i class="fas fa-clock"></i> Last run: <span id="lastRun">Never</span></span>
+        <span><i class="fas fa-check-circle"></i> Status: <span id="statusBadge">Idle</span></span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ===== CONFIG =====
+        const BASE = 'https://bestvideo.shop';
+        const CSRF_TOKEN = 'iQwIg9vxlAqBXd2XHQeMyMdxhgulZiZaHACpwHlm';
+
+        // ===== DOM refs =====
+        const mobileInput = document.getElementById('mobile');
+        const passwordInput = document.getElementById('password');
+        const runBtn = document.getElementById('runBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const logBox = document.getElementById('logBox');
+        const lastRunEl = document.getElementById('lastRun');
+        const statusBadge = document.getElementById('statusBadge');
+
+        // ===== Logger =====
+        function log(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="time">[${time}]</span><span class="${type}">${msg}</span>`;
+            logBox.appendChild(entry);
+            logBox.scrollTop = logBox.scrollHeight;
+            statusBadge.textContent = type === 'ok' ? '✅ Success' : type === 'err' ? '❌ Failed' : '⏳ Running...';
+        }
+
+        function clearLog() {
+            logBox.innerHTML = '';
+            statusBadge.textContent = 'Idle';
+        }
+
+        // ===== Main Automation =====
+        async function runAutomation() {
+            const mobile = mobileInput.value.trim();
+            const password = passwordInput.value.trim();
+            if (!mobile || !password) {
+                log('❌ Please enter mobile and password.', 'err');
+                return;
+            }
+
+            runBtn.disabled = true;
+            runBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
+            log('🚀 Starting automation...', 'info');
+
+            try {
+                // 1. Login
+                log('📱 Logging in...', 'info');
+                const loginUrl = `${BASE}/login/index`;
+                const loginBody = `mobile=${mobile}&password=${password}&_token=${CSRF_TOKEN}`;
+                const loginRes = await fetch(loginUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Origin': BASE,
+                        'Referer': `${BASE}/login/index`,
+                    },
+                    credentials: 'include',
+                    body: loginBody,
+                });
+                if (!loginRes.ok) throw new Error(`Login HTTP ${loginRes.status}`);
+                const loginData = await loginRes.json();
+                if (loginData.code !== 200) {
+                    throw new Error(`Login failed: ${loginData.msg || 'unknown'}`);
+                }
+                log('✅ Login successful.', 'ok');
+
+                // 2. Get Task
+                log('📋 Fetching task...', 'info');
+                const taskUrl = `${BASE}/task/dayreceive`;
+                const taskBody = 'level_id=1';
+                const taskRes = await fetch(taskUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Origin': BASE,
+                        'Referer': `${BASE}/task/mytask`,
+                    },
+                    credentials: 'include',
+                    body: taskBody,
+                });
+                if (!taskRes.ok) throw new Error(`Task HTTP ${taskRes.status}`);
+                const taskData = await taskRes.json();
+                if (taskData.code !== 200) {
+                    throw new Error(`Task request failed: ${taskData.msg || 'unknown'}`);
+                }
+                const taskId = taskData.data?.task_id;
+                if (!taskId) throw new Error('No task ID returned.');
+                log(`📌 Task ID: ${taskId} – ${taskData.data?.trailer?.title || ''}`, 'info');
+
+                // 3. Finish Task
+                log('✅ Completing task...', 'info');
+                const finishUrl = `${BASE}/task/finish`;
+                const finishBody = `id=${taskId}`;
+                const finishRes = await fetch(finishUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Origin': BASE,
+                        'Referer': `${BASE}/task/mytask`,
+                    },
+                    credentials: 'include',
+                    body: finishBody,
+                });
+                if (!finishRes.ok) throw new Error(`Finish HTTP ${finishRes.status}`);
+                const finishData = await finishRes.json();
+                if (finishData.code !== 200) {
+                    throw new Error(`Finish failed: ${finishData.msg || 'unknown'}`);
+                }
+                log(`🎉 Task ${taskId} completed successfully!`, 'ok');
+                lastRunEl.textContent = new Date().toLocaleString();
+
+            } catch (err) {
+                log(`❌ Error: ${err.message}`, 'err');
+            } finally {
+                runBtn.disabled = false;
+                runBtn.innerHTML = '<i class="fas fa-play"></i> Run Now';
+                statusBadge.textContent = 'Idle';
+            }
+        }
+
+        // ===== Event Listeners =====
+        runBtn.addEventListener('click', runAutomation);
+        clearBtn.addEventListener('click', clearLog);
+
+        // Optional: Press Enter to run
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !runBtn.disabled) {
+                runBtn.click();
+            }
+        });
+
+        // Initial log
+        log('💡 Click "Run Now" to start automation.', 'info');
+        log('🔒 Credentials are pre-filled (you can change them).', 'info');
+    })();
+</script>
+
+</body>
+</html>
