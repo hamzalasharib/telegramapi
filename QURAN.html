@@ -1,218 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quran Flow | Search & Play</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body { background: #020617; font-family: 'Poppins', sans-serif; color: white; overflow-x: hidden; }
-        .arabic-font { font-family: 'Amiri', serif; direction: rtl; }
-        
-        .surah-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(16, 185, 129, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .surah-card:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.08); }
-
-        #swipe-view {
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-behavior: smooth;
-            display: none;
-            background: #020617;
-        }
-
-        .ayah-page {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 4rem 2rem;
-            cursor: pointer;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .ayah-page.active { 
-            background: radial-gradient(circle at center, #064e3b 0%, #020617 100%); 
-            opacity: 1;
-            transform: scale(1.05);
-        }
-        .ayah-page:not(.active) { opacity: 0.2; transform: scale(0.9); }
-
-        .ayah-arabic { font-size: 2.2rem; line-height: 2; margin-bottom: 1.5rem; }
-        
-        .play-indicator {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #10b981;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: none;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-            z-index: 100;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quran Flow | Search & Play</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body { background: #f2f6f2; font-family: 'Poppins', sans-serif; color: #10241a; overflow-x: hidden; }
+.arabic-font { font-family: 'Amiri', serif; direction: rtl; }
+.surah-card {
+  background: #ffffff;
+  border: 1px solid rgba(31, 122, 77, 0.12);
+  box-shadow: 0 6px 16px rgba(16,36,26,.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.surah-card:hover { border-color: #4fc06a; background: rgba(79, 192, 106, 0.06); transform: translateY(-2px); }
+#swipe-view {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  display: none;
+  background: #0b1f16;
+}
+.ayah-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.ayah-page.active {
+  background: radial-gradient(circle at center, #1f7a4d 0%, #0b1f16 100%);
+  opacity: 1;
+  transform: scale(1.05);
+}
+.ayah-page:not(.active) { opacity: 0.2; transform: scale(0.9); }
+.ayah-arabic { font-size: 2.2rem; line-height: 2; margin-bottom: 1.5rem; color: #fff; }
+.play-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4fc06a;
+  color: #0b1f16;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  display: none;
+  box-shadow: 0 0 20px rgba(79, 192, 106, 0.4);
+  z-index: 100;
+}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: #4fc06a; border-radius: 10px; }
+</style>
 </head>
 <body>
+<div id="home-view" class="max-w-4xl mx-auto p-6">
+  <header class="text-center py-10">
+    <h1 class="arabic-font text-5xl mb-6" style="color:#1f7a4d;">القرآن الكريم</h1>
+    <div class="relative max-w-md mx-auto mb-8">
+      <input type="text" id="searchBox" oninput="filterSurahs()" placeholder="Search Surah (e.g. Al-Fatiha)..."
+        class="w-full bg-white border rounded-2xl py-4 px-6 focus:outline-none transition-all placeholder:text-slate-400"
+        style="border-color: rgba(31,122,77,0.2); color:#10241a;">
+      <div class="absolute right-5 top-4 text-slate-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+    </div>
+  </header>
+  <div id="surah-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
+    <div class="col-span-full text-center animate-pulse text-slate-400">Loading Surahs...</div>
+  </div>
+</div>
 
-    <div id="home-view" class="max-w-4xl mx-auto p-6">
-        <header class="text-center py-10">
-            <h1 class="arabic-font text-5xl text-emerald-400 mb-6">القرآن الكريم</h1>
-            
-            <div class="relative max-w-md mx-auto mb-8">
-                <input type="text" id="searchBox" oninput="filterSurahs()" placeholder="Search Surah (e.g. Al-Fatiha)..." 
-                    class="w-full bg-slate-900/50 border border-emerald-500/20 rounded-2xl py-4 px-6 focus:outline-none focus:border-emerald-500 transition-all text-emerald-50 placeholder:text-slate-600">
-                <div class="absolute right-5 top-4 text-slate-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div>
-        </header>
+<div id="swipe-view">
+  <button onclick="goBack()" class="fixed top-6 left-6 z-50 text-white px-5 py-2 rounded-full border transition"
+    style="background: rgba(0,0,0,.45); border-color: rgba(255,255,255,.15);"
+    onmouseover="this.style.background='#1f7a4d'" onmouseout="this.style.background='rgba(0,0,0,.45)'">
+    ← Back
+  </button>
+  <div id="playing-tag" class="play-indicator">Reciting...</div>
+  <div id="ayah-feed"></div>
+</div>
 
-        <div id="surah-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
-            <div class="col-span-full text-center animate-pulse text-slate-500">Loading Surahs...</div>
+<audio id="player"></audio>
+<script>
+const player = document.getElementById('player');
+let currentAyahIndex = 0;
+let totalAyahs = 0;
+let ayahAudios = [];
+let allSurahs = [];
+
+async function init() {
+  try {
+    const res = await fetch('https://api.alquran.cloud/v1/surah');
+    const data = await res.json();
+    allSurahs = data.data;
+    renderSurahs(allSurahs);
+  } catch (e) {
+    document.getElementById('surah-grid').innerHTML = "Error loading Quran data.";
+  }
+}
+
+function renderSurahs(list) {
+  const grid = document.getElementById('surah-grid');
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10">No Surah found with that name.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(s => `
+    <div onclick="startReading(${s.number}, '${s.englishName}')" class="surah-card p-6 rounded-2xl flex justify-between items-center">
+      <div>
+        <h3 class="font-semibold" style="color:#10241a;">${s.englishName}</h3>
+        <p class="text-xs text-slate-400 uppercase tracking-tighter">${s.revelationType} • ${s.numberOfAyahs} Ayahs</p>
+      </div>
+      <div class="arabic-font text-xl" style="color:#1f7a4d;">${s.name}</div>
+    </div>
+  `).join('');
+}
+
+function filterSurahs() {
+  const term = document.getElementById('searchBox').value.toLowerCase();
+  const filtered = allSurahs.filter(s =>
+    s.englishName.toLowerCase().includes(term) ||
+    s.name.includes(term) ||
+    s.englishNameTranslation.toLowerCase().includes(term)
+  );
+  renderSurahs(filtered);
+}
+
+async function startReading(id, name) {
+  document.getElementById('home-view').style.display = 'none';
+  const swipeView = document.getElementById('swipe-view');
+  swipeView.style.display = 'block';
+  document.getElementById('playing-tag').style.display = 'block';
+  document.getElementById('ayah-feed').innerHTML = `<div class="h-screen flex items-center justify-center" style="color:#4fc06a;">Opening ${name}...</div>`;
+  try {
+    const [ar, en, aud] = await Promise.all([
+      fetch(`https://api.alquran.cloud/v1/surah/${id}`),
+      fetch(`https://api.alquran.cloud/v1/surah/${id}/en.asad`),
+      fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.alafasy`)
+    ]);
+    const arData = await ar.json();
+    const enData = await en.json();
+    const audData = await aud.json();
+    totalAyahs = arData.data.ayahs.length;
+    ayahAudios = audData.data.ayahs.map(a => a.audio);
+    document.getElementById('ayah-feed').innerHTML = arData.data.ayahs.map((ayah, i) => `
+      <div id="ayah-block-${i}" class="ayah-page" onclick="playAyah(${i})">
+        <div class="max-w-2xl text-center">
+          <p class="text-xs mb-6 tracking-widest" style="color: rgba(79,192,106,.5);">AYAH ${ayah.numberInSurah}</p>
+          <h2 class="arabic-font ayah-arabic">${ayah.text}</h2>
+          <p class="text-slate-300 text-lg font-light italic leading-relaxed">${enData.data.ayahs[i].text}</p>
         </div>
-    </div>
+      </div>
+    `).join('');
+    playAyah(0);
+  } catch (err) {
+    alert("Error loading Ayahs.");
+    goBack();
+  }
+}
 
-    <div id="swipe-view">
-        <button onclick="goBack()" class="fixed top-6 left-6 z-50 bg-black/60 backdrop-blur-md text-white px-5 py-2 rounded-full border border-white/10 hover:bg-emerald-600 transition">
-            ← Back
-        </button>
-        <div id="playing-tag" class="play-indicator">RECiting...</div>
-        <div id="ayah-feed"></div>
-    </div>
+function playAyah(index) {
+  if (index >= totalAyahs || index < 0) return;
+  currentAyahIndex = index;
+  player.src = ayahAudios[index];
+  player.play();
+  updateActiveUI(index);
+}
 
-    <audio id="player"></audio>
+function updateActiveUI(index) {
+  document.querySelectorAll('.ayah-page').forEach(el => el.classList.remove('active'));
+  const activeBlock = document.getElementById(`ayah-block-${index}`);
+  if (activeBlock) {
+    activeBlock.classList.add('active');
+    activeBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
 
-    <script>
-        const player = document.getElementById('player');
-        let currentAyahIndex = 0;
-        let totalAyahs = 0;
-        let ayahAudios = [];
-        let allSurahs = []; // Global store for search
+player.onended = () => {
+  if (currentAyahIndex + 1 < totalAyahs) {
+    playAyah(currentAyahIndex + 1);
+  }
+};
 
-        async function init() {
-            try {
-                const res = await fetch('https://api.alquran.cloud/v1/surah');
-                const data = await res.json();
-                allSurahs = data.data;
-                renderSurahs(allSurahs);
-            } catch (e) {
-                document.getElementById('surah-grid').innerHTML = "Error loading Quran data.";
-            }
-        }
+function goBack() {
+  document.getElementById('swipe-view').style.display = 'none';
+  document.getElementById('home-view').style.display = 'block';
+  document.getElementById('playing-tag').style.display = 'none';
+  player.pause();
+}
 
-        function renderSurahs(list) {
-            const grid = document.getElementById('surah-grid');
-            if (list.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-10">No Surah found with that name.</div>`;
-                return;
-            }
-            grid.innerHTML = list.map(s => `
-                <div onclick="startReading(${s.number}, '${s.englishName}')" class="surah-card p-6 rounded-2xl flex justify-between items-center">
-                    <div>
-                        <h3 class="font-semibold text-emerald-50">${s.englishName}</h3>
-                        <p class="text-xs text-slate-500 uppercase tracking-tighter">${s.revelationType} • ${s.numberOfAyahs} Ayahs</p>
-                    </div>
-                    <div class="arabic-font text-xl text-emerald-400">${s.name}</div>
-                </div>
-            `).join('');
-        }
-
-        // Search Filter Function
-        function filterSurahs() {
-            const term = document.getElementById('searchBox').value.toLowerCase();
-            const filtered = allSurahs.filter(s => 
-                s.englishName.toLowerCase().includes(term) || 
-                s.name.includes(term) ||
-                s.englishNameTranslation.toLowerCase().includes(term)
-            );
-            renderSurahs(filtered);
-        }
-
-        async function startReading(id, name) {
-            document.getElementById('home-view').style.display = 'none';
-            const swipeView = document.getElementById('swipe-view');
-            swipeView.style.display = 'block';
-            document.getElementById('playing-tag').style.display = 'block';
-            
-            document.getElementById('ayah-feed').innerHTML = `<div class="h-screen flex items-center justify-center text-emerald-500">Opening ${name}...</div>`;
-
-            try {
-                const [ar, en, aud] = await Promise.all([
-                    fetch(`https://api.alquran.cloud/v1/surah/${id}`),
-                    fetch(`https://api.alquran.cloud/v1/surah/${id}/en.asad`),
-                    fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.alafasy`)
-                ]);
-
-                const arData = await ar.json();
-                const enData = await en.json();
-                const audData = await aud.json();
-
-                totalAyahs = arData.data.ayahs.length;
-                ayahAudios = audData.data.ayahs.map(a => a.audio);
-                
-                document.getElementById('ayah-feed').innerHTML = arData.data.ayahs.map((ayah, i) => `
-                    <div id="ayah-block-${i}" class="ayah-page" onclick="playAyah(${i})">
-                        <div class="max-w-2xl text-center">
-                            <p class="text-emerald-500/40 text-xs mb-6 tracking-widest">AYAH ${ayah.numberInSurah}</p>
-                            <h2 class="arabic-font ayah-arabic text-white">${ayah.text}</h2>
-                            <p class="text-slate-400 text-lg font-light italic leading-relaxed">${enData.data.ayahs[i].text}</p>
-                        </div>
-                    </div>
-                `).join('');
-
-                playAyah(0);
-            } catch (err) {
-                alert("Error loading Ayahs.");
-                goBack();
-            }
-        }
-
-        function playAyah(index) {
-            if (index >= totalAyahs || index < 0) return;
-            currentAyahIndex = index;
-            player.src = ayahAudios[index];
-            player.play();
-            updateActiveUI(index);
-        }
-
-        function updateActiveUI(index) {
-            document.querySelectorAll('.ayah-page').forEach(el => el.classList.remove('active'));
-            const activeBlock = document.getElementById(`ayah-block-${index}`);
-            if (activeBlock) {
-                activeBlock.classList.add('active');
-                activeBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        player.onended = () => {
-            if (currentAyahIndex + 1 < totalAyahs) {
-                playAyah(currentAyahIndex + 1);
-            }
-        };
-
-        function goBack() {
-            document.getElementById('swipe-view').style.display = 'none';
-            document.getElementById('home-view').style.display = 'block';
-            document.getElementById('playing-tag').style.display = 'none';
-            player.pause();
-        }
-
-        init();
-    </script>
+init();
+</script>
 </body>
 </html>
