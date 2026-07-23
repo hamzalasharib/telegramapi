@@ -1,169 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Pro Max Downloader</title>
-    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-
-        :root {
-            --primary: #a100ff;
-            --secondary: #00d4ff;
-            --bg-dark: #08080a;
-            --card-glass: rgba(255, 255, 255, 0.03);
-            --border-glass: rgba(255, 255, 255, 0.08);
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 0% 0%, rgba(161, 0, 255, 0.15) 0%, transparent 35%), radial-gradient(circle at 100% 100%, rgba(0, 212, 255, 0.1) 0%, transparent 35%);
-            color: #ffffff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-        }
-
-        .header-section { text-align: center; margin-bottom: 40px; width: 100%; max-width: 600px; }
-        .gradient-text { background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 2.8rem; }
-
-        .search-wrapper {
-            position: relative; background: var(--card-glass); border: 1px solid var(--border-glass);
-            padding: 8px; border-radius: 100px; display: flex; backdrop-filter: blur(10px); margin-top: 25px;
-        }
-
-        .search-wrapper input { flex: 1; background: transparent; border: none; outline: none; color: #fff; padding-left: 25px; font-size: 1rem; }
-
-        .btn-fetch {
-            background: var(--primary); color: white; border: none; padding: 14px 35px; border-radius: 100px;
-            font-weight: 700; cursor: pointer; transition: 0.3s;
-        }
-
-        .main-card {
-            width: 100%; max-width: 480px; background: var(--card-glass); border: 1px solid var(--border-glass);
-            backdrop-filter: blur(25px); border-radius: 35px; padding: 30px; display: none; margin-top: 20px;
-        }
-
-        .user-info-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .avatar-frame { width: 65px; height: 65px; border-radius: 20px; overflow: hidden; border: 2px solid var(--primary); }
-        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .tag { font-size: 0.65rem; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); color: var(--secondary); font-weight: 600; margin-right: 5px; border: 1px solid rgba(255,255,255,0.1); }
-
-        .video-player-box { border-radius: 25px; overflow: hidden; margin-bottom: 25px; background: #000; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px; }
-        .stat-item { background: rgba(255,255,255,0.02); padding: 12px 5px; border-radius: 18px; text-align: center; border: 1px solid var(--border-glass); }
-        .stat-item i { display: block; color: var(--primary); font-size: 0.9rem; margin-bottom: 6px; }
-
-        .action-stack { display: flex; flex-direction: column; gap: 12px; }
-        .dl-btn {
-            display: flex; align-items: center; justify-content: center; gap: 12px; padding: 16px;
-            border-radius: 20px; font-weight: 700; text-decoration: none; transition: 0.3s; font-size: 0.95rem; cursor: pointer;
-        }
-        .btn-vid { background: #fff; color: #000; }
-        .btn-aud { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-glass); }
-        .btn-profile { background: rgba(161, 0, 255, 0.1); color: var(--primary); border: 1px solid var(--primary); }
-
-        #loading { display: none; margin-top: 20px; color: var(--secondary); font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TikTok Pro Max Downloader</title>
+<link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+:root {
+  --primary: #1f7a4d;
+  --secondary: #4fc06a;
+  --bg-light: #f2f6f2;
+  --card-glass: rgba(255, 255, 255, 0.75);
+  --border-glass: rgba(31, 122, 77, 0.15);
+  --ink: #10241a;
+}
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-light);
+  background-image: radial-gradient(circle at 0% 0%, rgba(31, 122, 77, 0.10) 0%, transparent 35%), radial-gradient(circle at 100% 100%, rgba(79, 192, 106, 0.12) 0%, transparent 35%);
+  color: var(--ink); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+}
+.header-section { text-align: center; margin-bottom: 40px; width: 100%; max-width: 600px; }
+.gradient-text { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 2.8rem; }
+.search-wrapper {
+  position: relative; background: var(--card-glass); border: 1px solid var(--border-glass);
+  padding: 8px; border-radius: 100px; display: flex; backdrop-filter: blur(10px); margin-top: 25px;
+  box-shadow: 0 8px 20px rgba(16,36,26,.06);
+}
+.search-wrapper input { flex: 1; background: transparent; border: none; outline: none; color: var(--ink); padding-left: 25px; font-size: 1rem; }
+.btn-fetch {
+  background: linear-gradient(90deg, var(--primary), var(--secondary)); color: white; border: none; padding: 14px 35px; border-radius: 100px;
+  font-weight: 700; cursor: pointer; transition: 0.3s;
+}
+.btn-fetch:hover { opacity: .9; }
+.main-card {
+  width: 100%; max-width: 480px; background: var(--card-glass); border: 1px solid var(--border-glass);
+  backdrop-filter: blur(25px); border-radius: 35px; padding: 30px; display: none; margin-top: 20px;
+  box-shadow: 0 15px 35px rgba(16,36,26,.08);
+}
+.user-info-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+.avatar-frame { width: 65px; height: 65px; border-radius: 20px; overflow: hidden; border: 2px solid var(--primary); }
+.avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+.tag { font-size: 0.65rem; padding: 4px 10px; border-radius: 6px; background: rgba(31,122,77,0.08); color: var(--primary); font-weight: 600; margin-right: 5px; border: 1px solid var(--border-glass); }
+.video-player-box { border-radius: 25px; overflow: hidden; margin-bottom: 25px; background: #000; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px; }
+.stat-item { background: rgba(31,122,77,0.04); padding: 12px 5px; border-radius: 18px; text-align: center; border: 1px solid var(--border-glass); }
+.stat-item i { display: block; color: var(--primary); font-size: 0.9rem; margin-bottom: 6px; }
+.action-stack { display: flex; flex-direction: column; gap: 12px; }
+.dl-btn {
+  display: flex; align-items: center; justify-content: center; gap: 12px; padding: 16px;
+  border-radius: 20px; font-weight: 700; text-decoration: none; transition: 0.3s; font-size: 0.95rem; cursor: pointer;
+}
+.btn-vid { background: var(--ink); color: #fff; }
+.btn-aud { background: rgba(31,122,77,0.06); color: var(--ink); border: 1px solid var(--border-glass); }
+.btn-profile { background: rgba(31, 122, 77, 0.08); color: var(--primary); border: 1px solid var(--primary); }
+#loading { display: none; margin-top: 20px; color: var(--primary); font-weight: bold; }
+</style>
 </head>
 <body>
-
-    <div class="header-section">
-        <div class="gradient-text">TikTok Pro</div>
-        <div class="search-wrapper">
-            <input type="text" id="urlInput" placeholder="Paste TikTok Video Link...">
-            <button class="btn-fetch" onclick="fetchTikTokData()">Fetch Data</button>
-        </div>
-        <div id="loading"><i class="fas fa-spinner fa-spin"></i> FETCHING REAL DATA...</div>
+<div class="header-section">
+  <div class="gradient-text">TikTok Pro</div>
+  <div class="search-wrapper">
+    <input type="text" id="urlInput" placeholder="Paste TikTok Video Link...">
+    <button class="btn-fetch" onclick="fetchTikTokData()">Fetch Data</button>
+  </div>
+  <div id="loading"><i class="fas fa-spinner fa-spin"></i> FETCHING REAL DATA...</div>
+</div>
+<div class="main-card" id="resultCard">
+  <div class="user-info-bar">
+    <div class="avatar-frame"><img id="avatar" src=""></div>
+    <div>
+      <h3 id="nickname" style="margin:0"></h3>
+      <div style="margin-top:5px;">
+        <span class="tag" id="region"></span>
+        <span class="tag" id="datetime"></span>
+      </div>
     </div>
-
-    <div class="main-card" id="resultCard">
-        <div class="user-info-bar">
-            <div class="avatar-frame"><img id="avatar" src=""></div>
-            <div>
-                <h3 id="nickname" style="margin:0"></h3>
-                <div style="margin-top:5px;">
-                    <span class="tag" id="region"></span>
-                    <span class="tag" id="datetime"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video-player-box">
-            <video id="vjs-player" class="video-js vjs-fluid vjs-big-play-centered"></video>
-        </div>
-
-        <div id="caption" style="font-size:0.85rem; color:#ccc; margin-bottom:20px; padding:10px; background:rgba(0,0,0,0.2); border-radius:10px;"></div>
-
-        <div class="stats-grid">
-            <div class="stat-item"><i class="fas fa-play"></i><b id="s-play"></b></div>
-            <div class="stat-item"><i class="fas fa-heart"></i><b id="s-like"></b></div>
-            <div class="stat-item"><i class="fas fa-share"></i><b id="s-share"></b></div>
-            <div class="stat-item"><i class="fas fa-clock"></i><b id="s-dur"></b></div>
-        </div>
-
-        <div class="action-stack">
-            <a href="#" id="dl-video" class="dl-btn btn-vid" download><i class="fas fa-download"></i> Download Video</a>
-            <a href="#" id="dl-audio" class="dl-btn btn-aud" download><i class="fas fa-music"></i> Download MP3</a>
-            <button onclick="downloadProfile()" class="dl-btn btn-profile"><i class="fas fa-user"></i> Save Profile Picture</button>
-        </div>
-    </div>
-
-    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-    <script>
-        let player = videojs('vjs-player');
-
-        async function fetchTikTokData() {
-            const inputUrl = document.getElementById('urlInput').value;
-            if (!inputUrl) return alert("Link toh daal de bhai!");
-
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('resultCard').style.display = 'none';
-
-            try {
-                // REAL API CALL
-                const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(inputUrl)}`);
-                const res = await response.json();
-
-                if (res.code === 0) {
-                    const data = res.data;
-                    
-                    // Update UI with Real Data
-                    document.getElementById('nickname').innerText = "@" + data.author.unique_id;
-                    document.getElementById('region').innerText = "Region: " + data.region;
-                    document.getElementById('caption').innerText = data.title || "No Title";
-                    document.getElementById('avatar').src = data.author.avatar;
-                    document.getElementById('s-play').innerText = data.play_count;
-                    document.getElementById('s-like').innerText = data.digg_count;
-                    document.getElementById('s-share').innerText = data.share_count;
-                    document.getElementById('s-dur').innerText = data.duration + "s";
-
-                    // Date & Time
-                    const dt = new Date(data.create_time * 1000);
-                    document.getElementById('datetime').innerText = dt.toLocaleDateString() + " | " + dt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-                    // Player & Links
-                    player.src({ type: 'video/mp4', src: data.play });
-                    document.getElementById('dl-video').href = data.play;
-                    document.getElementById('dl-audio').href = data.music;
-
-                    document.getElementById('resultCard').style.display = 'block';
-                } else {
-                    alert("Video nahi mili! Link sahi check kar.");
-                }
-            } catch (err) {
-                alert("API Error! Connection check kar.");
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-        }
-
-        function downloadProfile() {
-            const img = document.getElementById('avatar').src;
-            window.open(img, '_blank');
-        }
-    </script>
+  </div>
+  <div class="video-player-box">
+    <video id="vjs-player" class="video-js vjs-fluid vjs-big-play-centered"></video>
+  </div>
+  <div id="caption" style="font-size:0.85rem; color:#6b7d73; margin-bottom:20px; padding:10px; background:rgba(31,122,77,0.05); border-radius:10px;"></div>
+  <div class="stats-grid">
+    <div class="stat-item"><i class="fas fa-play"></i><b id="s-play"></b></div>
+    <div class="stat-item"><i class="fas fa-heart"></i><b id="s-like"></b></div>
+    <div class="stat-item"><i class="fas fa-share"></i><b id="s-share"></b></div>
+    <div class="stat-item"><i class="fas fa-clock"></i><b id="s-dur"></b></div>
+  </div>
+  <div class="action-stack">
+    <a href="#" id="dl-video" class="dl-btn btn-vid" download><i class="fas fa-download"></i> Download Video</a>
+    <a href="#" id="dl-audio" class="dl-btn btn-aud" download><i class="fas fa-music"></i> Download MP3</a>
+    <button onclick="downloadProfile()" class="dl-btn btn-profile"><i class="fas fa-user"></i> Save Profile Picture</button>
+  </div>
+</div>
+<script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+<script>
+let player = videojs('vjs-player');
+async function fetchTikTokData() {
+  const inputUrl = document.getElementById('urlInput').value;
+  if (!inputUrl) return alert("Link toh daal de bhai!");
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('resultCard').style.display = 'none';
+  try {
+    const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(inputUrl)}`);
+    const res = await response.json();
+    if (res.code === 0) {
+      const data = res.data;
+      document.getElementById('nickname').innerText = "@" + data.author.unique_id;
+      document.getElementById('region').innerText = "Region: " + data.region;
+      document.getElementById('caption').innerText = data.title || "No Title";
+      document.getElementById('avatar').src = data.author.avatar;
+      document.getElementById('s-play').innerText = data.play_count;
+      document.getElementById('s-like').innerText = data.digg_count;
+      document.getElementById('s-share').innerText = data.share_count;
+      document.getElementById('s-dur').innerText = data.duration + "s";
+      const dt = new Date(data.create_time * 1000);
+      document.getElementById('datetime').innerText = dt.toLocaleDateString() + " | " + dt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      player.src({ type: 'video/mp4', src: data.play });
+      document.getElementById('dl-video').href = data.play;
+      document.getElementById('dl-audio').href = data.music;
+      document.getElementById('resultCard').style.display = 'block';
+    } else {
+      alert("Video nahi mili! Link sahi check kar.");
+    }
+  } catch (err) {
+    alert("API Error! Connection check kar.");
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+  }
+}
+function downloadProfile() {
+  const img = document.getElementById('avatar').src;
+  window.open(img, '_blank');
+}
+</script>
 </body>
 </html>
