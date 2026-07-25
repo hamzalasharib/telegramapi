@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -5,171 +6,206 @@
 <title>HamzaEditz 2.0 - All Tools</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --deep: #0b1f16;
-    --leaf-1: #1f7a4d;
-    --leaf-2: #4fc06a;
-    --lime: #a4e83c;
-    --panel: #ffffff;
-    --bg: #f2f6f2;
-    --ink: #10241a;
-    --muted: #6b7d73;
-    --coral: #ff6b4a;
-  }
-  body {
-    font-family: "Poppins", sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-  }
-  .phone {
-    width: 100%;
-    max-width: 430px;
-    background: var(--bg);
-    min-height: 100vh;
-    position: relative;
-    padding-bottom: 84px;
-  }
+:root {
+  --bg:#060b08; --panel:rgba(255,255,255,.045); --panel-hi:rgba(255,255,255,.09);
+  --border:rgba(255,255,255,.09); --ink:#eafbf1; --muted:#9fb8a8;
+  --leaf-1:#1f7a4d; --leaf-2:#4fc06a; --lime:#baf24a; --glow:#6dffb0; --coral:#ff6b4a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--bg); color: var(--ink);
+  display: flex; justify-content: center; min-height: 100vh;
+  overflow-x: hidden; position: relative;
+}
+h1,h2,h3,.font-display{ font-family:'Sora',sans-serif; }
 
-  /* Top bar */
-  .topbar {
-    background: var(--deep);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 18px;
-  }
-  .topbar .title { font-size: 1.05rem; font-weight: 600; }
-  .topbar .sub { font-size: .72rem; color: #9fb3a6; margin-top: 2px; }
-  .icon-btn {
-    background: none; border: none; color: #fff; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px;
-  }
+/* ---------- Animated background ---------- */
+.bg-fixed{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.mesh div{ position:absolute; border-radius:50%; filter:blur(75px); opacity:.5; animation:drift 22s ease-in-out infinite; }
+.m1{ width:50vw; height:50vw; left:-16%; top:-16%; background:radial-gradient(circle,var(--leaf-1),transparent 70%); }
+.m2{ width:42vw; height:42vw; right:-14%; bottom:-10%; background:radial-gradient(circle,var(--lime),transparent 70%); animation-delay:3s; animation-duration:28s; }
+.m3{ width:34vw; height:34vw; left:30%; top:40%; background:radial-gradient(circle,var(--leaf-2),transparent 70%); animation-delay:6s; animation-duration:24s; }
+@keyframes drift{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(4%,-4%) scale(1.08);} }
+canvas#particles{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.noise{ position:fixed; inset:0; z-index:1; opacity:.035; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-  /* Hero balance-style panel repurposed as brand hero */
-  .hero {
-    margin: 16px;
-    border-radius: 22px;
-    padding: 26px 22px 22px;
-    background: linear-gradient(160deg, var(--leaf-2) 0%, var(--leaf-1) 55%, var(--deep) 130%);
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::after {
-    content: "";
-    position: absolute; right: -40px; top: -40px;
-    width: 160px; height: 160px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(164,232,60,.35), transparent 70%);
-  }
-  .hero-top { display: flex; align-items: center; gap: 14px; position: relative; z-index: 2; }
-  .logo-circle {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: rgba(255,255,255,.12);
-    border: 2px solid rgba(255,255,255,.5);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 1.1rem; letter-spacing: .5px;
-  }
-  .hero-name { font-size: 1.15rem; font-weight: 700; }
-  .hero-tag { font-size: .78rem; color: rgba(255,255,255,.8); }
-  .eyebrow {
-    margin-top: 22px; font-size: .68rem; letter-spacing: 1.5px;
-    color: rgba(255,255,255,.75); text-transform: uppercase;
-  }
-  .headline { font-size: 1.9rem; font-weight: 800; margin-top: 6px; }
-  .hero-note { font-size: .8rem; color: rgba(255,255,255,.8); margin-top: 6px; }
+.wrap {
+  width: 100%; max-width: 480px; min-height: 100vh; position: relative; z-index: 2;
+  padding-bottom: 90px; transition: max-width .3s ease;
+}
 
-  /* Banner strip (was "claim income" card) */
-  .banner {
-    margin: 0 16px 18px;
-    border-radius: 18px;
-    background: linear-gradient(100deg, var(--lime), var(--leaf-2));
-    padding: 18px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-    color: var(--deep);
-  }
-  .banner h3 { font-size: .95rem; font-weight: 700; }
-  .banner p { font-size: .72rem; color: #244a30; margin-top: 4px; max-width: 190px; }
-  .banner .emoji { font-size: 2.1rem; }
+/* ---------- Top bar ---------- */
+.topbar {
+  background: rgba(6,11,8,.65); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+  color: #fff; display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; position: sticky; top: 0; z-index: 50;
+}
+.topbar .title { font-size: 1.05rem; font-weight: 700; }
+.topbar .sub { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+.icon-btn {
+  background: var(--panel); border: 1px solid var(--border); color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; border-radius: 10px;
+  width: 38px; height: 38px; transition: background .25s ease, transform .2s ease;
+}
+.icon-btn:hover { background: var(--panel-hi); }
+.icon-btn i { width: 18px; height: 18px; }
 
-  /* Service menu */
-  .section-label {
-    padding: 0 16px; margin-bottom: 10px;
-    font-size: .78rem; font-weight: 700; letter-spacing: 1px;
-    color: var(--muted); text-transform: uppercase;
-  }
-  .grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px; padding: 0 16px;
-  }
-  .card {
-    background: var(--panel);
-    border-radius: 16px;
-    padding: 16px 8px;
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    text-decoration: none; color: var(--ink);
-    box-shadow: 0 6px 16px rgba(16,36,26,.06);
-    position: relative;
-    transition: transform .15s ease, box-shadow .15s ease;
-  }
-  .card:active { transform: scale(.96); }
-  .card .icon-wrap {
-    width: 46px; height: 46px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff;
-  }
-  .card span.label { font-size: .74rem; font-weight: 600; text-align: center; line-height: 1.2; }
-  .badge-new {
-    position: absolute; top: -6px; right: 4px;
-    background: var(--coral); color: #fff;
-    font-size: .55rem; font-weight: 700;
-    padding: 2px 6px; border-radius: 999px;
-  }
+/* ---------- Hero ---------- */
+.hero {
+  margin: 18px; border-radius: 24px; padding: 28px 24px 24px;
+  background: linear-gradient(160deg, var(--leaf-2) 0%, var(--leaf-1) 55%, var(--bg) 130%);
+  color: #fff; position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(24px); animation: rise .8s ease forwards .1s;
+  box-shadow: 0 24px 50px -18px rgba(0,0,0,.55);
+}
+.hero::after {
+  content: ""; position: absolute; right: -40px; top: -40px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(186,242,74,.4), transparent 70%);
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+@keyframes pulseGlow { 0%,100%{ opacity:.6; transform:scale(1);} 50%{ opacity:1; transform:scale(1.15);} }
+@keyframes rise { to { opacity:1; transform:translateY(0); } }
+.hero-top { display: flex; align-items: center; gap: 14px; position: relative; z-index: 2; }
+.logo-circle {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: rgba(255,255,255,.14); border: 2px solid rgba(255,255,255,.55);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.1rem; letter-spacing: .5px;
+  animation: avatar-float 5s ease-in-out infinite;
+}
+@keyframes avatar-float { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
+.hero-name { font-size: 1.18rem; font-weight: 700; }
+.hero-tag { font-size: .78rem; color: rgba(255,255,255,.85); }
+.eyebrow {
+  margin-top: 24px; font-size: .68rem; letter-spacing: 1.5px;
+  color: rgba(255,255,255,.8); text-transform: uppercase; position: relative; z-index: 2;
+}
+.headline { font-size: 1.95rem; font-weight: 800; margin-top: 6px; position: relative; z-index: 2; }
+.hero-note { font-size: .8rem; color: rgba(255,255,255,.85); margin-top: 6px; position: relative; z-index: 2; }
 
-  /* Bottom nav */
-  .bottomnav {
-    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 430px;
-    background: #fff; border-top: 1px solid #e7ece8;
-    display: flex; justify-content: space-around; padding: 10px 0 14px;
-  }
-  .navitem {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: var(--muted); font-size: .68rem; text-decoration: none; background:none; border:none;
-  }
-  .navitem.active { color: var(--leaf-1); font-weight: 600; }
+/* ---------- Banner ---------- */
+.banner {
+  margin: 0 18px 20px; border-radius: 20px;
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 20px 22px; display: flex; align-items: center; justify-content: space-between;
+  opacity: 0; transform: translateY(20px); animation: rise .8s ease forwards .2s;
+}
+.banner h3 { font-size: .95rem; font-weight: 700; color: var(--ink); }
+.banner p { font-size: .75rem; color: var(--muted); margin-top: 4px; max-width: 190px; }
+.banner .emoji { font-size: 2.1rem; filter: drop-shadow(0 0 12px rgba(186,242,74,.4)); animation: float3 3s ease-in-out infinite; }
+@keyframes float3 { 0%,100%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-8px) rotate(6deg);} }
 
-  /* Sidebar (social links) */
-  .overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.5);
-    display: none; z-index: 900;
-  }
-  .overlay.active { display: block; }
-  .sidebar {
-    position: fixed; top: 0; right: -300px; width: 280px; height: 100%;
-    background: #fff; z-index: 1000; padding: 20px;
-    transition: right .35s ease;
-    box-shadow: -4px 0 20px rgba(0,0,0,.15);
-  }
-  .sidebar.active { right: 0; }
-  .sidebar h2 { font-size: 1.1rem; margin-bottom: 18px; color: var(--leaf-1); }
-  .sidebar-link {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 8px; color: var(--ink); text-decoration: none;
-    border-radius: 10px; font-size: .88rem; font-weight: 500;
-  }
-  .sidebar-link:active { background: #eef7ef; }
+/* ---------- Service menu ---------- */
+.section-label {
+  padding: 0 18px; margin-bottom: 14px;
+  font-size: .78rem; font-weight: 700; letter-spacing: 1.4px;
+  color: var(--muted); text-transform: uppercase;
+  opacity: 0; animation: rise .6s ease forwards .3s;
+}
+.grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px; padding: 0 18px;
+}
+.card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
+  padding: 18px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--ink); position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(22px); animation: rise .6s ease forwards;
+  transition: border-color .3s ease, background .3s ease;
+}
+.card:nth-child(1){ animation-delay:.35s; } .card:nth-child(2){ animation-delay:.40s; }
+.card:nth-child(3){ animation-delay:.45s; } .card:nth-child(4){ animation-delay:.50s; }
+.card:nth-child(5){ animation-delay:.55s; } .card:nth-child(6){ animation-delay:.60s; }
+.card:nth-child(7){ animation-delay:.65s; } .card:nth-child(8){ animation-delay:.70s; }
+.card:nth-child(9){ animation-delay:.75s; } .card:nth-child(10){ animation-delay:.80s; }
+.card:hover { border-color: rgba(186,242,74,.4); background: var(--panel-hi); transform: translateY(-4px) !important; }
+.card .icon-wrap {
+  width: 46px; height: 46px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center; color: #06110a;
+  box-shadow: 0 10px 20px -6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.card .icon-wrap i { width: 21px; height: 21px; }
+.card span.label { font-size: .74rem; font-weight: 600; text-align: center; line-height: 1.25; }
+.badge-new {
+  position: absolute; top: 8px; right: 8px;
+  background: linear-gradient(120deg,var(--coral),#ff9d6f); color: #fff;
+  font-size: .55rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(255,107,74,.4);
+}
+.ripple-el { position:absolute; border-radius:50%; background:rgba(186,242,74,.35); transform:scale(0); animation:rip .6s ease-out; pointer-events:none; }
+@keyframes rip{ to{ transform:scale(4); opacity:0; } }
+
+/* ---------- Bottom nav ---------- */
+.bottomnav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: rgba(6,11,8,.75); backdrop-filter: blur(16px); border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around; padding: 10px 0 14px; z-index: 60;
+}
+.navitem {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--muted); font-size: .68rem; text-decoration: none; background:none; border:none;
+  transition: color .25s ease;
+}
+.navitem i { width: 19px; height: 19px; }
+.navitem.active { color: var(--lime); font-weight: 600; }
+.navitem:hover { color: var(--ink); }
+
+/* ---------- Sidebar ---------- */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(2px);
+  display: none; z-index: 900; opacity: 0; transition: opacity .3s ease;
+}
+.overlay.active { display: block; opacity: 1; }
+.sidebar {
+  position: fixed; top: 0; right: -300px; width: 280px; height: 100%;
+  background: #0a140e; border-left: 1px solid var(--border); z-index: 1000; padding: 22px;
+  transition: right .35s cubic-bezier(.4,0,.2,1);
+  box-shadow: -10px 0 40px rgba(0,0,0,.5);
+}
+.sidebar.active { right: 0; }
+.sidebar h2 { font-size: 1.1rem; margin-bottom: 20px; color: var(--lime); }
+.sidebar-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 10px; color: var(--ink); text-decoration: none;
+  border-radius: 12px; font-size: .88rem; font-weight: 500; transition: background .2s ease;
+}
+.sidebar-link i { width: 18px; height: 18px; color: var(--lime); }
+.sidebar-link:hover { background: var(--panel); }
+.sidebar-divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+/* ---------- Responsive: tablet & desktop widen the layout ---------- */
+@media (min-width: 700px) {
+  .wrap { max-width: 720px; }
+  .grid { grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .bottomnav { max-width: 720px; }
+}
+@media (min-width: 1000px) {
+  .wrap { max-width: 900px; }
+  .grid { grid-template-columns: repeat(5,1fr); }
+  .hero { padding: 36px 34px 30px; }
+  .headline { font-size: 2.3rem; }
+}
+@media (max-width: 380px) {
+  .grid { gap: 10px; }
+  .card { padding: 14px 6px; }
+  .card .icon-wrap { width: 40px; height: 40px; }
+}
 </style>
 </head>
 <body>
-<div class="phone">
+
+<div class="bg-fixed"><div class="mesh"><div class="m1"></div><div class="m2"></div><div class="m3"></div></div></div>
+<canvas id="particles"></canvas>
+<div class="noise"></div>
+
+<div class="wrap">
 
   <div class="topbar">
     <div>
@@ -177,7 +213,7 @@
       <div class="sub">All Tools · One Place</div>
     </div>
     <button class="icon-btn" onclick="toggleSidebar()" aria-label="Menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <i data-lucide="menu"></i>
     </button>
   </div>
 
@@ -191,13 +227,13 @@
     </div>
     <div class="eyebrow">Welcome back</div>
     <div class="headline">10+ Free Tools</div>
-    <div class="hero-note">Sim data, RDPs, TV, downloaders & more — sab aik jagah.</div>
+    <div class="hero-note">Sim data, RDPs, TV, downloaders &amp; more — sab aik jagah.</div>
   </div>
 
   <div class="banner">
     <div>
       <h3>New tools weekly</h3>
-      <p>TikTok & Spotify downloaders just added</p>
+      <p>TikTok &amp; Spotify downloaders just added</p>
     </div>
     <div class="emoji">🛠️</div>
   </div>
@@ -205,96 +241,72 @@
   <div class="section-label">Service Menu</div>
   <div class="grid">
 
-    <a class="card" href="paksim.html">
-      <div class="icon-wrap" style="background:#3d8bfd">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-      </div>
+    <a class="card ripple" href="paksim.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#5fa0ff,#3d8bfd)"><i data-lucide="credit-card"></i></div>
       <span class="label">Pak Sim Details</span>
     </a>
 
-    <a class="card" href="smsbomber.html">
-      <div class="icon-wrap" style="background:#ff8a3d">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </div>
+    <a class="card ripple" href="smsbomber.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#ffab5f,#ff8a3d)"><i data-lucide="send"></i></div>
       <span class="label">SMS Tool</span>
     </a>
 
-    <a class="card" href="RdpMethod.html">
-      <div class="icon-wrap" style="background:#7a5cff">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      </div>
+    <a class="card ripple" href="RdpMethod.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#9a85ff,#7a5cff)"><i data-lucide="monitor"></i></div>
       <span class="label">Free Window Rdp</span>
     </a>
 
-    <a class="card" href="TvChannels.html">
-      <div class="icon-wrap" style="background:#22a26b">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
-      </div>
+    <a class="card ripple" href="TvChannels.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#4fdb96,#22a26b)"><i data-lucide="tv"></i></div>
       <span class="label">Jazz Tv</span>
     </a>
 
-    <a class="card" href="tiktokmenu.html">
+    <a class="card ripple" href="tiktokmenu.html">
       <div class="badge-new">NEW</div>
-      <div class="icon-wrap" style="background:#ff4d67">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-      </div>
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#ff7a90,#ff4d67)"><i data-lucide="video"></i></div>
       <span class="label">TikTok Downloader</span>
     </a>
 
-    <a class="card" href="spotify.html">
+    <a class="card ripple" href="spotify.html">
       <div class="badge-new">NEW</div>
-      <div class="icon-wrap" style="background:#1db954">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14.5c2.5-1 6.5-1 9 0"/><path d="M7 11.5c3-1.5 8-1.5 11 0"/><path d="M6.5 8.5c3.5-2 9-2 12.5 0"/></svg>
-      </div>
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#3ddb7a,#1db954)"><i data-lucide="music-2"></i></div>
       <span class="label">Spotify Downloader</span>
     </a>
 
-    <a class="card" href="hadith.html">
-      <div class="icon-wrap" style="background:#c99a3d">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      </div>
+    <a class="card ripple" href="hadith.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#e0b65f,#c99a3d)"><i data-lucide="book-open"></i></div>
       <span class="label">Hadith</span>
     </a>
 
-    <a class="card" href="vehicledetails.html">
-      <div class="icon-wrap" style="background:#3d6bfd">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </div>
+    <a class="card ripple" href="vehicledetails.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#6f95ff,#3d6bfd)"><i data-lucide="search"></i></div>
       <span class="label">Vehicle Details</span>
     </a>
 
-    <a class="card" href="image.html">
-      <div class="icon-wrap" style="background:#ff6b4a">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      </div>
+    <a class="card ripple" href="image.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#ff9270,#ff6b4a)"><i data-lucide="image"></i></div>
       <span class="label">Ai Image Generate</span>
     </a>
 
-    <a class="card" href="apk.html">
-      <div class="icon-wrap" style="background:#4fc06a">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      </div>
+    <a class="card ripple" href="apk.html">
+      <div class="icon-wrap" style="background:linear-gradient(135deg,#79db94,#4fc06a)"><i data-lucide="download"></i></div>
       <span class="label">Apk Download</span>
     </a>
 
   </div>
 
   <div class="bottomnav">
-    <a class="navitem active" href="#">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Home
+    <a class="navitem active" href="index.html">
+      <i data-lucide="home"></i> Home
     </a>
     <a class="navitem" href="#" onclick="document.querySelector('.grid').scrollIntoView({behavior:'smooth'});return false;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Tools
+      <i data-lucide="layout-grid"></i> Tools
     </a>
     <a class="navitem" href="https://t.me/hamzaeditz2" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      Telegram
+      <i data-lucide="send"></i> Telegram
     </a>
-    <a class="navitem" href="https://hamzaeditz.pw/about.html">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      About
+    <a class="navitem" href="about.html">
+      <i data-lucide="user"></i> About
     </a>
   </div>
 
@@ -302,30 +314,127 @@
   <div class="sidebar" id="sidebar">
     <h2>Social Menu</h2>
     <a class="sidebar-link" href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      Join WhatsApp
+      <i data-lucide="message-circle"></i> Join WhatsApp
     </a>
     <a class="sidebar-link" href="https://www.youtube.com/@hamzashafiq786" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
-      Subscribe YouTube
+      <i data-lucide="youtube"></i> Subscribe YouTube
     </a>
     <a class="sidebar-link" href="https://t.me/hamzaeditz2" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      Join Telegram
+      <i data-lucide="send"></i> Join Telegram
     </a>
-    <div style="height:1px;background:#eee;margin:12px 0;"></div>
-    <a class="sidebar-link" href="https://hamzaeditz.pw/about.html" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      About Me
+    <div class="sidebar-divider"></div>
+    <a class="sidebar-link" href="about.html">
+      <i data-lucide="user"></i> About Me
     </a>
   </div>
 
 </div>
+
 <script>
-  function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
-    document.getElementById('overlay').classList.toggle('active');
+lucide.createIcons();
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('overlay').classList.toggle('active');
+}
+
+/* Ripple on cards */
+document.querySelectorAll('.ripple').forEach(function(card){
+  card.addEventListener('click', function(e){
+    var r = this.getBoundingClientRect();
+    var span = document.createElement('span');
+    var d = Math.max(r.width, r.height);
+    span.className = 'ripple-el';
+    span.style.width = span.style.height = d+'px';
+    span.style.left = (e.clientX - r.left - d/2) + 'px';
+    span.style.top = (e.clientY - r.top - d/2) + 'px';
+    this.appendChild(span);
+    setTimeout(function(){ span.remove(); }, 600);
+  });
+});
+
+/* Particle network background */
+(function(){
+  var canvas = document.getElementById('particles');
+  var ctx = canvas.getContext('2d');
+  var w,h,particles;
+  function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  function init(){
+    resize();
+    var count = window.innerWidth < 700 ? 30 : 55;
+    particles = Array.from({length:count}, function(){
+      return { x: Math.random()*w, y: Math.random()*h,
+        vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*1.5+0.6 };
+    });
   }
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(function(p){
+      p.x += p.vx; p.y += p.vy;
+      if (p.x<0) p.x=w; if (p.x>w) p.x=0;
+      if (p.y<0) p.y=h; if (p.y>h) p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(186,242,74,0.4)'; ctx.fill();
+    });
+    for (var i=0;i<particles.length;i++){
+      for (var j=i+1;j<particles.length;j++){
+        var a=particles[i], b=particles[j];
+        var dx=a.x-b.x, dy=a.y-b.y, dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist < 100){
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle = 'rgba(79,192,106,' + (0.12*(1-dist/100)) + ')';
+          ctx.lineWidth = 0.6; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', resize);
+  init(); tick();
+})();
+</script>
+
+<style>
+.sprouty-stage { position: fixed; bottom: 14px; left: 14px; width: 70px; height: 84px; z-index: 999; perspective: 500px; cursor: pointer; }
+.sprouty-shadow { position:absolute; bottom:-4px; left:50%; width:40px; height:8px; background:rgba(0,0,0,0.4); border-radius:50%; transform:translateX(-50%); animation: sprouty-shadow-pulse 3s ease-in-out infinite; }
+.sprouty-char { width:100%; height:100%; transform-style: preserve-3d; animation: sprouty-float 3s ease-in-out infinite; }
+@keyframes sprouty-float { 0%,100%{ transform: translateY(0) rotateY(-6deg);} 50%{ transform: translateY(-12px) rotateY(6deg);} }
+@keyframes sprouty-shadow-pulse { 0%,100%{ transform: translateX(-50%) scale(1); opacity:.5;} 50%{ transform: translateX(-50%) scale(.7); opacity:.25;} }
+.sprouty-eye-l, .sprouty-eye-r { animation: sprouty-blink 4.2s infinite; transform-origin: center; }
+.sprouty-eye-r { animation-delay: .05s; }
+@keyframes sprouty-blink { 0%,94%,100%{ transform: scaleY(1);} 97%{ transform: scaleY(.1);} }
+.sprouty-arm-l { animation: sprouty-wave-l 2.6s ease-in-out infinite; transform-origin: 30px 55px; }
+.sprouty-arm-r { animation: sprouty-wave-r 2.6s ease-in-out infinite .3s; transform-origin: 70px 55px; }
+@keyframes sprouty-wave-l { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(-16deg);} }
+@keyframes sprouty-wave-r { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(16deg);} }
+.sprouty-jump { animation: sprouty-jump-kf .6s ease !important; }
+@keyframes sprouty-jump-kf { 0%{transform:translateY(0) rotateY(0);} 30%{transform:translateY(-34px) rotateY(-14deg);} 60%{transform:translateY(0) rotateY(14deg);} 100%{transform:translateY(0) rotateY(0);} }
+@media (max-width:480px){ .sprouty-stage{ width:54px; height:64px; bottom:10px; left:10px; } }
+</style>
+<div class="sprouty-stage" onclick="sproutyJump()" title="Sprouty says hi!">
+  <div class="sprouty-shadow"></div>
+  <svg class="sprouty-char" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+    <path class="sprouty-arm-l" d="M32 60 Q18 55 14 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path class="sprouty-arm-r" d="M68 60 Q82 55 86 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="60" rx="30" ry="34" fill="#4fc06a"/>
+    <path d="M50 26 C40 4 20 2 12 10 C22 14 30 22 36 34 Z" fill="#a4e83c"/>
+    <path d="M50 26 C60 4 80 2 88 10 C78 14 70 22 64 34 Z" fill="#a4e83c"/>
+    <circle cx="38" cy="58" r="7" fill="#fff"/>
+    <circle cx="62" cy="58" r="7" fill="#fff"/>
+    <circle class="sprouty-eye-l" cx="38" cy="58" r="3.4" fill="#10241a"/>
+    <circle class="sprouty-eye-r" cx="62" cy="58" r="3.4" fill="#10241a"/>
+    <path d="M40 72 Q50 80 60 72" stroke="#10241a" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="30" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
+    <circle cx="70" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
+  </svg>
+</div>
+<script>
+function sproutyJump(){
+  var el = document.querySelector('.sprouty-char');
+  if(!el) return;
+  el.classList.add('sprouty-jump');
+  setTimeout(function(){ el.classList.remove('sprouty-jump'); }, 600);
+}
 </script>
 </body>
 </html>
