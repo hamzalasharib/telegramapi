@@ -1,238 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Me | HamzaEditz 2.0</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  
-  <style>
-    /* --- HamzaEditz 2.0 Theme Variables --- */
-    :root {
-      --primary-gradient: linear-gradient(135deg, #8E2DE2, #4A00E0);
-      --bg-dark: #0f0f12;
-      --bg-card: #1a1a1e;
-      --text-main: #f0f0f0;
-      --text-muted: #a0a0a0;
-      --border-color: #2a2a30;
-      --accent-glow: rgba(142, 45, 226, 0.5);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About Me | HamzaEditz 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+:root{
+  --bg:#060b08; --panel:rgba(255,255,255,.045); --panel-hi:rgba(255,255,255,.08);
+  --border:rgba(255,255,255,.09); --ink:#eafbf1; --muted:#9fb8a8;
+  --leaf-1:#1f7a4d; --leaf-2:#4fc06a; --lime:#baf24a; --glow:#6dffb0;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{
+  font-family:'Poppins',sans-serif; background:var(--bg); color:var(--ink);
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:24px; overflow-x:hidden; position:relative;
+}
+h1,.font-display{ font-family:'Sora',sans-serif; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ---------- Animated background ---------- */
+.bg-fixed{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.mesh div{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.5; animation:drift 20s ease-in-out infinite; }
+.m1{ width:44vw; height:44vw; left:-12%; top:-14%; background:radial-gradient(circle,var(--leaf-1),transparent 70%); }
+.m2{ width:38vw; height:38vw; right:-10%; bottom:-12%; background:radial-gradient(circle,var(--lime),transparent 70%); animation-delay:3s; animation-duration:26s; }
+@keyframes drift{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(4%,-4%) scale(1.08);} }
+canvas#particles{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.noise{ position:fixed; inset:0; z-index:1; opacity:.035; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-    body {
-      font-family: "Poppins", sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+/* ---------- Card ---------- */
+.about-container{
+  width:100%; max-width:640px; position:relative; z-index:2;
+  background:var(--panel); border:1px solid var(--border); backdrop-filter:blur(20px);
+  border-radius:26px; padding:46px 40px; text-align:center;
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.6);
+  opacity:0; transform:translateY(30px); animation:card-in .8s ease forwards .1s;
+}
+@keyframes card-in{ to{ opacity:1; transform:translateY(0);} }
+.about-container::before{
+  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--lime),transparent);
+}
 
-    /* --- Container --- */
-    .about-container {
-      width: 100%;
-      max-width: 700px;
-      background: var(--bg-card);
-      border-radius: 20px;
-      padding: 40px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
+.profile-img-wrapper{
+  position:relative; width:128px; height:128px; margin:0 auto 22px; border-radius:50%; padding:4px;
+  background:linear-gradient(135deg,var(--leaf-2),var(--lime));
+  box-shadow:0 0 0 1px rgba(186,242,74,.2), 0 0 40px rgba(109,255,176,.35);
+  animation:avatar-float 5s ease-in-out infinite;
+}
+@keyframes avatar-float{ 0%,100%{ transform:translateY(0) rotateZ(0deg);} 50%{ transform:translateY(-8px) rotateZ(2deg);} }
+.profile-img{ width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid var(--bg); background:#0f2418; }
 
-    /* Top Decorative Gradient Line */
-    .about-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: var(--primary-gradient);
-    }
+h1{ font-size:2rem; font-weight:800; margin-bottom:6px; opacity:0; animation:rise .7s ease forwards .3s; }
+.gradient-text{
+  background:linear-gradient(110deg,var(--leaf-2),var(--lime),var(--leaf-2)); background-size:200% auto;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:sheen 4s linear infinite;
+}
+@keyframes sheen{ to{ background-position:200% center; } }
+@keyframes rise{ from{ opacity:0; transform:translateY(12px);} to{ opacity:1; transform:translateY(0);} }
 
-    /* --- Profile Section --- */
-    .profile-img-wrapper {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 20px;
-      border-radius: 50%;
-      padding: 4px; /* Border thickness */
-      background: var(--primary-gradient);
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
+.tagline{ color:var(--muted); font-size:.92rem; margin-bottom:30px; font-weight:300; opacity:0; animation:rise .7s ease forwards .4s; }
 
-    .profile-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 4px solid var(--bg-card); /* Space between gradient and image */
-      background-color: #333; /* Fallback color */
-    }
+.bio-box{
+  background:rgba(186,242,74,.05); border:1px solid var(--border); border-left:3px solid var(--lime);
+  padding:20px; border-radius:14px; margin-bottom:30px; text-align:left;
+  opacity:0; animation:rise .7s ease forwards .5s;
+}
+.bio-box p{ margin-bottom:10px; line-height:1.65; color:#d7e7dd; font-size:.9rem; }
+.bio-box p:last-child{ margin-bottom:0; }
+.bio-box strong{ color:var(--ink); }
 
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
+.skills-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:14px; margin-bottom:32px;
+}
+.skill-card{
+  background:var(--panel); border:1px solid var(--border); padding:16px; border-radius:14px;
+  font-size:.85rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:all .3s ease; opacity:0; transform:translateY(16px); animation:rise .6s ease forwards;
+}
+.skill-card:nth-child(1){ animation-delay:.55s; }
+.skill-card:nth-child(2){ animation-delay:.62s; }
+.skill-card:nth-child(3){ animation-delay:.69s; }
+.skill-card:nth-child(4){ animation-delay:.76s; }
+.skill-card i{ width:16px; height:16px; color:var(--lime); }
+.skill-card:hover{ border-color:var(--lime); background:var(--panel-hi); transform:translateY(-4px); box-shadow:0 10px 24px rgba(109,255,176,.15); }
 
-    .gradient-text {
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+.social-links{ display:flex; flex-direction:column; gap:13px; opacity:0; animation:rise .7s ease forwards .85s; }
+.social-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px; padding:15px;
+  border-radius:14px; text-decoration:none; font-weight:600; font-size:.9rem; color:#fff;
+  position:relative; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease; isolation:isolate;
+}
+.social-btn i{ width:18px; height:18px; }
+.btn-youtube{ background:linear-gradient(120deg,#ff3b3b,#c81e1e); }
+.btn-whatsapp{ background:linear-gradient(120deg,#2fe07a,#1aa855); }
+.btn-telegram{ background:linear-gradient(120deg,#3db4ff,#0088cc); }
+.social-btn:hover{ transform:translateY(-3px) scale(1.015); box-shadow:0 14px 30px rgba(0,0,0,.35); }
+.ripple-el{ position:absolute; border-radius:50%; background:rgba(255,255,255,.45); transform:scale(0); animation:rip .7s ease-out; pointer-events:none; }
+@keyframes rip{ to{ transform:scale(3.4); opacity:0; } }
 
-    .tagline {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 30px;
-      font-weight: 300;
-    }
+.back-home{
+  display:inline-flex; align-items:center; gap:6px; margin-top:28px; color:var(--muted); text-decoration:none;
+  font-size:.85rem; transition:color .25s ease; opacity:0; animation:rise .7s ease forwards 1s;
+}
+.back-home i{ width:14px; height:14px; transition:transform .25s ease; }
+.back-home:hover{ color:var(--lime); }
+.back-home:hover i{ transform:translateX(-4px); }
 
-    /* --- Content Box --- */
-    .bio-box {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      text-align: left;
-      border-left: 3px solid #8E2DE2;
-    }
-
-    .bio-box p {
-      margin-bottom: 10px;
-      line-height: 1.6;
-      color: #ddd;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-
-    .skill-card {
-      background: #232328;
-      padding: 15px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 1px solid var(--border-color);
-      transition: 0.3s;
-    }
-
-    .skill-card:hover {
-      border-color: #8E2DE2;
-      transform: translateY(-3px);
-    }
-
-    /* --- Social Buttons --- */
-    .social-links {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 14px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.3s;
-      color: white;
-    }
-
-    .btn-youtube { background: #FF0000; }
-    .btn-whatsapp { background: #25D366; }
-    .btn-telegram { background: #0088cc; }
-    
-    .social-btn:hover {
-      opacity: 0.9;
-      transform: scale(1.02);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    /* --- Back Button --- */
-    .back-home {
-      display: inline-block;
-      margin-top: 30px;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: 0.3s;
-      border-bottom: 1px solid transparent;
-    }
-
-    .back-home:hover {
-      color: white;
-      border-color: white;
-    }
-
-  </style>
+@media (max-width:560px){
+  .about-container{ padding:32px 22px; border-radius:22px; }
+  h1{ font-size:1.5rem; }
+  .profile-img-wrapper{ width:100px; height:100px; }
+  .skills-grid{ grid-template-columns:repeat(2,1fr); gap:10px; }
+  .skill-card{ padding:13px; font-size:.78rem; }
+  .social-btn{ padding:13px; font-size:.85rem; }
+  .bio-box{ padding:16px; }
+}
+</style>
 </head>
 <body>
 
-  <div class="about-container">
-    
-    <div class="profile-img-wrapper">
-      <img src="https://i.postimg.cc/k4dFmf8p/New-Project-4-8D0AF60.png" alt="Hamza Profile" class="profile-img">
-    </div>
+<div class="bg-fixed"><div class="mesh"><div class="m1"></div><div class="m2"></div></div></div>
+<canvas id="particles"></canvas>
+<div class="noise"></div>
 
-    <h1>Hamza<span class="gradient-text">Editz 2.0</span></h1>
-    <p class="tagline">Tech Enthusiast | YouTuber | Developer</p>
+<div class="about-container">
+  <div class="profile-img-wrapper">
+    <img src="https://i.postimg.cc/k4dFmf8p/New-Project-4-8D0AF60.png" alt="Hamza Profile" class="profile-img">
+  </div>
+  <h1>Hamza<span class="gradient-text">Editz 2.0</span></h1>
+  <p class="tagline">Tech Enthusiast · YouTuber · Developer</p>
 
-    <div class="bio-box">
-      <p>Hi, I'm <strong>Hamza Shafiq</strong>. Welcome to my digital toolkit.</p>
-      <p>I specialize in providing premium tech solutions for free. My main focus is on decrypting VPN files (HTTPS Custom), discovering RDP tricks, and creating useful web tools for the community.</p>
-    </div>
-
-    <div class="skills-grid">
-      <div class="skill-card"><i data-feather="unlock"></i> VPN Configs</div>
-      <div class="skill-card"><i data-feather="monitor"></i> RDP Tricks</div>
-      <div class="skill-card"><i data-feather="code"></i> Web Dev</div>
-      <div class="skill-card"><i data-feather="zap"></i> Free Net</div>
-    </div>
-
-    <div class="social-links">
-      <a href="https://www.youtube.com/@hamzashafiq786" target="_blank" class="social-btn btn-youtube">
-        <i data-feather="youtube"></i> Subscribe on YouTube
-      </a>
-      
-      <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank" class="social-btn btn-whatsapp">
-        <i data-feather="message-circle"></i> Join WhatsApp Group
-      </a>
-
-      <a href="https://t.me/hamzaeditz2" target="_blank" class="social-btn btn-telegram">
-        <i data-feather="send"></i> Join Telegram Channel
-      </a>
-    </div>
-
-    <a href="index.html" class="back-home">← Back to Tools</a>
-
+  <div class="bio-box">
+    <p>Hi, I'm <strong>Hamza Shafiq</strong>. Welcome to my digital toolkit.</p>
+    <p>I specialize in providing premium tech solutions for free. My main focus is on decrypting VPN files (HTTPS Custom), discovering RDP tricks, and creating useful web tools for the community.</p>
   </div>
 
-  <script>
-    feather.replace();
-  </script>
+  <div class="skills-grid">
+    <div class="skill-card"><i data-lucide="unlock"></i> VPN Configs</div>
+    <div class="skill-card"><i data-lucide="monitor"></i> RDP Tricks</div>
+    <div class="skill-card"><i data-lucide="code"></i> Web Dev</div>
+    <div class="skill-card"><i data-lucide="zap"></i> Free Net</div>
+  </div>
 
+  <div class="social-links">
+    <a href="https://www.youtube.com/@hamzashafiq786" target="_blank" class="social-btn btn-youtube ripple">
+      <i data-lucide="youtube"></i> Subscribe on YouTube
+    </a>
+    <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank" class="social-btn btn-whatsapp ripple">
+      <i data-lucide="message-circle"></i> Join WhatsApp Group
+    </a>
+    <a href="https://t.me/hamzaeditz2" target="_blank" class="social-btn btn-telegram ripple">
+      <i data-lucide="send"></i> Join Telegram Channel
+    </a>
+  </div>
+
+  <a href="index.html" class="back-home"><i data-lucide="arrow-left"></i> Back to Tools</a>
+</div>
+
+<script>
+lucide.createIcons();
+
+/* Ripple on social buttons */
+document.querySelectorAll('.ripple').forEach(btn => {
+  btn.addEventListener('click', function(e){
+    const r = this.getBoundingClientRect();
+    const span = document.createElement('span');
+    const d = Math.max(r.width, r.height);
+    span.className = 'ripple-el';
+    span.style.width = span.style.height = d+'px';
+    span.style.left = (e.clientX - r.left - d/2) + 'px';
+    span.style.top = (e.clientY - r.top - d/2) + 'px';
+    this.appendChild(span);
+    setTimeout(()=>span.remove(), 700);
+  });
+});
+
+/* Particle network background (lightweight, matches index.html) */
+(function(){
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w,h,particles;
+  function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  function init(){
+    resize();
+    const count = window.innerWidth < 700 ? 26 : 50;
+    particles = Array.from({length:count}, () => ({
+      x: Math.random()*w, y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*1.5+0.6
+    }));
+  }
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x<0) p.x=w; if (p.x>w) p.x=0;
+      if (p.y<0) p.y=h; if (p.y>h) p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(186,242,74,0.45)'; ctx.fill();
+    });
+    for (let i=0;i<particles.length;i++){
+      for (let j=i+1;j<particles.length;j++){
+        const a=particles[i], b=particles[j];
+        const dx=a.x-b.x, dy=a.y-b.y, dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist < 110){
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle = 'rgba(79,192,106,' + (0.12*(1-dist/110)) + ')';
+          ctx.lineWidth = 0.6; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', resize);
+  init(); tick();
+})();
+</script>
+
+<style>
+.sprouty-stage { position: fixed; bottom: 14px; left: 14px; width: 70px; height: 84px; z-index: 999; perspective: 500px; cursor: pointer; }
+.sprouty-shadow { position:absolute; bottom:-4px; left:50%; width:40px; height:8px; background:rgba(0,0,0,0.4); border-radius:50%; transform:translateX(-50%); animation: sprouty-shadow-pulse 3s ease-in-out infinite; }
+.sprouty-char { width:100%; height:100%; transform-style: preserve-3d; animation: sprouty-float 3s ease-in-out infinite; }
+@keyframes sprouty-float { 0%,100%{ transform: translateY(0) rotateY(-6deg);} 50%{ transform: translateY(-12px) rotateY(6deg);} }
+@keyframes sprouty-shadow-pulse { 0%,100%{ transform: translateX(-50%) scale(1); opacity:.5;} 50%{ transform: translateX(-50%) scale(.7); opacity:.25;} }
+.sprouty-eye-l, .sprouty-eye-r { animation: sprouty-blink 4.2s infinite; transform-origin: center; }
+.sprouty-eye-r { animation-delay: .05s; }
+@keyframes sprouty-blink { 0%,94%,100%{ transform: scaleY(1);} 97%{ transform: scaleY(.1);} }
+.sprouty-arm-l { animation: sprouty-wave-l 2.6s ease-in-out infinite; transform-origin: 30px 55px; }
+.sprouty-arm-r { animation: sprouty-wave-r 2.6s ease-in-out infinite .3s; transform-origin: 70px 55px; }
+@keyframes sprouty-wave-l { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(-16deg);} }
+@keyframes sprouty-wave-r { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(16deg);} }
+.sprouty-jump { animation: sprouty-jump-kf .6s ease !important; }
+@keyframes sprouty-jump-kf { 0%{transform:translateY(0) rotateY(0);} 30%{transform:translateY(-34px) rotateY(-14deg);} 60%{transform:translateY(0) rotateY(14deg);} 100%{transform:translateY(0) rotateY(0);} }
+@media (max-width:480px){ .sprouty-stage{ width:54px; height:64px; bottom:10px; left:10px; } }
+</style>
+<div class="sprouty-stage" onclick="sproutyJump()" title="Sprouty says hi!">
+  <div class="sprouty-shadow"></div>
+  <svg class="sprouty-char" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+    <path class="sprouty-arm-l" d="M32 60 Q18 55 14 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path class="sprouty-arm-r" d="M68 60 Q82 55 86 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="60" rx="30" ry="34" fill="#4fc06a"/>
+    <path d="M50 26 C40 4 20 2 12 10 C22 14 30 22 36 34 Z" fill="#a4e83c"/>
+    <path d="M50 26 C60 4 80 2 88 10 C78 14 70 22 64 34 Z" fill="#a4e83c"/>
+    <circle cx="38" cy="58" r="7" fill="#fff"/>
+    <circle cx="62" cy="58" r="7" fill="#fff"/>
+    <circle class="sprouty-eye-l" cx="38" cy="58" r="3.4" fill="#10241a"/>
+    <circle class="sprouty-eye-r" cx="62" cy="58" r="3.4" fill="#10241a"/>
+    <path d="M40 72 Q50 80 60 72" stroke="#10241a" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="30" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
+    <circle cx="70" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
+  </svg>
+</div>
+<script>
+function sproutyJump(){
+  var el = document.querySelector('.sprouty-char');
+  if(!el) return;
+  el.classList.add('sprouty-jump');
+  setTimeout(function(){ el.classList.remove('sprouty-jump'); }, 600);
+}
+</script>
 </body>
 </html>
