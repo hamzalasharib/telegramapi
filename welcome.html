@@ -1,440 +1,659 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>HamzaEditz 2.0 - All Tools</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<style>
-:root {
-  --bg:#060b08; --panel:rgba(255,255,255,.045); --panel-hi:rgba(255,255,255,.09);
-  --border:rgba(255,255,255,.09); --ink:#eafbf1; --muted:#9fb8a8;
-  --leaf-1:#1f7a4d; --leaf-2:#4fc06a; --lime:#baf24a; --glow:#6dffb0; --coral:#ff6b4a;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: "Poppins", sans-serif;
-  background: var(--bg); color: var(--ink);
-  display: flex; justify-content: center; min-height: 100vh;
-  overflow-x: hidden; position: relative;
-}
-h1,h2,h3,.font-display{ font-family:'Sora',sans-serif; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Welcome - HamzaEditz 2.0</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
-/* ---------- Animated background ---------- */
-.bg-fixed{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
-.mesh div{ position:absolute; border-radius:50%; filter:blur(75px); opacity:.5; animation:drift 22s ease-in-out infinite; }
-.m1{ width:50vw; height:50vw; left:-16%; top:-16%; background:radial-gradient(circle,var(--leaf-1),transparent 70%); }
-.m2{ width:42vw; height:42vw; right:-14%; bottom:-10%; background:radial-gradient(circle,var(--lime),transparent 70%); animation-delay:3s; animation-duration:28s; }
-.m3{ width:34vw; height:34vw; left:30%; top:40%; background:radial-gradient(circle,var(--leaf-2),transparent 70%); animation-delay:6s; animation-duration:24s; }
-@keyframes drift{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(4%,-4%) scale(1.08);} }
-canvas#particles{ position:fixed; inset:0; z-index:0; pointer-events:none; }
-.noise{ position:fixed; inset:0; z-index:1; opacity:.035; pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg: #060b08;
+            --panel: rgba(255, 255, 255, 0.045);
+            --panel-hi: rgba(255, 255, 255, 0.09);
+            --border: rgba(255, 255, 255, 0.09);
+            --border-hi: rgba(186, 242, 74, 0.4);
+            --ink: #eafbf1;
+            --muted: #9fb8a8;
+            --leaf-1: #1f7a4d;
+            --leaf-2: #4fc06a;
+            --lime: #baf24a;
+            --glow: #6dffb0;
+            --coral: #ff6b4a;
+        }
 
-.wrap {
-  width: 100%; max-width: 480px; min-height: 100vh; position: relative; z-index: 2;
-  padding-bottom: 90px; transition: max-width .3s ease;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-/* ---------- Top bar ---------- */
-.topbar {
-  background: rgba(6,11,8,.65); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
-  color: #fff; display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; position: sticky; top: 0; z-index: 50;
-}
-.topbar .title { font-size: 1.05rem; font-weight: 700; }
-.topbar .sub { font-size: .72rem; color: var(--muted); margin-top: 2px; }
-.icon-btn {
-  background: var(--panel); border: 1px solid var(--border); color: #fff; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; border-radius: 10px;
-  width: 38px; height: 38px; transition: background .25s ease, transform .2s ease;
-}
-.icon-btn:hover { background: var(--panel-hi); }
-.icon-btn i { width: 18px; height: 18px; }
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-/* ---------- Hero ---------- */
-.hero {
-  margin: 18px; border-radius: 24px; padding: 28px 24px 24px;
-  background: linear-gradient(160deg, var(--leaf-2) 0%, var(--leaf-1) 55%, var(--bg) 130%);
-  color: #fff; position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(24px); animation: rise .8s ease forwards .1s;
-  box-shadow: 0 24px 50px -18px rgba(0,0,0,.55);
-}
-.hero::after {
-  content: ""; position: absolute; right: -40px; top: -40px;
-  width: 180px; height: 180px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(186,242,74,.4), transparent 70%);
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-@keyframes pulseGlow { 0%,100%{ opacity:.6; transform:scale(1);} 50%{ opacity:1; transform:scale(1.15);} }
-@keyframes rise { to { opacity:1; transform:translateY(0); } }
-.hero-top { display: flex; align-items: center; gap: 14px; position: relative; z-index: 2; }
-.logo-circle {
-  width: 58px; height: 58px; border-radius: 50%;
-  background: rgba(255,255,255,.14); border: 2px solid rgba(255,255,255,.55);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 1.1rem; letter-spacing: .5px;
-  animation: avatar-float 5s ease-in-out infinite;
-}
-@keyframes avatar-float { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
-.hero-name { font-size: 1.18rem; font-weight: 700; }
-.hero-tag { font-size: .78rem; color: rgba(255,255,255,.85); }
-.eyebrow {
-  margin-top: 24px; font-size: .68rem; letter-spacing: 1.5px;
-  color: rgba(255,255,255,.8); text-transform: uppercase; position: relative; z-index: 2;
-}
-.headline { font-size: 1.95rem; font-weight: 800; margin-top: 6px; position: relative; z-index: 2; }
-.hero-note { font-size: .8rem; color: rgba(255,255,255,.85); margin-top: 6px; position: relative; z-index: 2; }
+        h1, h2, h3, .sora-font {
+            font-family: 'Sora', sans-serif;
+        }
 
-/* ---------- Banner ---------- */
-.banner {
-  margin: 0 18px 20px; border-radius: 20px;
-  background: var(--panel); border: 1px solid var(--border);
-  padding: 20px 22px; display: flex; align-items: center; justify-content: space-between;
-  opacity: 0; transform: translateY(20px); animation: rise .8s ease forwards .2s;
-}
-.banner h3 { font-size: .95rem; font-weight: 700; color: var(--ink); }
-.banner p { font-size: .75rem; color: var(--muted); margin-top: 4px; max-width: 190px; }
-.banner .emoji { font-size: 2.1rem; filter: drop-shadow(0 0 12px rgba(186,242,74,.4)); animation: float3 3s ease-in-out infinite; }
-@keyframes float3 { 0%,100%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-8px) rotate(6deg);} }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
 
-/* ---------- Service menu ---------- */
-.section-label {
-  padding: 0 18px; margin-bottom: 14px;
-  font-size: .78rem; font-weight: 700; letter-spacing: 1.4px;
-  color: var(--muted); text-transform: uppercase;
-  opacity: 0; animation: rise .6s ease forwards .3s;
-}
-.grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  gap: 14px; padding: 0 18px;
-}
-.card {
-  background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
-  padding: 18px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px;
-  text-decoration: none; color: var(--ink); position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(22px); animation: rise .6s ease forwards;
-  transition: border-color .3s ease, background .3s ease;
-}
-.card:nth-child(1){ animation-delay:.35s; } .card:nth-child(2){ animation-delay:.40s; }
-.card:nth-child(3){ animation-delay:.45s; } .card:nth-child(4){ animation-delay:.50s; }
-.card:nth-child(5){ animation-delay:.55s; } .card:nth-child(6){ animation-delay:.60s; }
-.card:nth-child(7){ animation-delay:.65s; } .card:nth-child(8){ animation-delay:.70s; }
-.card:nth-child(9){ animation-delay:.75s; } .card:nth-child(10){ animation-delay:.80s; }
-.card:hover { border-color: rgba(186,242,74,.4); background: var(--panel-hi); transform: translateY(-4px) !important; }
-.card .icon-wrap {
-  width: 46px; height: 46px; border-radius: 13px;
-  display: flex; align-items: center; justify-content: center; color: #06110a;
-  box-shadow: 0 10px 20px -6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.35);
-}
-.card .icon-wrap i { width: 21px; height: 21px; }
-.card span.label { font-size: .74rem; font-weight: 600; text-align: center; line-height: 1.25; }
-.badge-new {
-  position: absolute; top: 8px; right: 8px;
-  background: linear-gradient(120deg,var(--coral),#ff9d6f); color: #fff;
-  font-size: .55rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;
-  box-shadow: 0 4px 10px rgba(255,107,74,.4);
-}
-.ripple-el { position:absolute; border-radius:50%; background:rgba(186,242,74,.35); transform:scale(0); animation:rip .6s ease-out; pointer-events:none; }
-@keyframes rip{ to{ transform:scale(4); opacity:0; } }
+        /* --- Background Layers --- */
+        #bg-noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; opacity: 0.035;
+        }
+        #bg-canvas, #seasonal-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+        #seasonal-canvas { z-index: 2; }
 
-/* ---------- Bottom nav ---------- */
-.bottomnav {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 480px;
-  background: rgba(6,11,8,.75); backdrop-filter: blur(16px); border-top: 1px solid var(--border);
-  display: flex; justify-content: space-around; padding: 10px 0 14px; z-index: 60;
-}
-.navitem {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  color: var(--muted); font-size: .68rem; text-decoration: none; background:none; border:none;
-  transition: color .25s ease;
-}
-.navitem i { width: 19px; height: 19px; }
-.navitem.active { color: var(--lime); font-weight: 600; }
-.navitem:hover { color: var(--ink); }
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: drift 24s infinite alternate ease-in-out;
+        }
+        .blob-1 { width: 400px; height: 400px; background: var(--leaf-2); top: -10%; left: -10%; }
+        .blob-2 { width: 300px; height: 300px; background: var(--lime); bottom: 10%; right: -5%; animation-duration: 28s; animation-delay: -5s; }
+        .blob-3 { width: 350px; height: 350px; background: var(--leaf-1); top: 40%; left: 50%; animation-duration: 22s; animation-delay: -10s; }
 
-/* ---------- Sidebar ---------- */
-.overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(2px);
-  display: none; z-index: 900; opacity: 0; transition: opacity .3s ease;
-}
-.overlay.active { display: block; opacity: 1; }
-.sidebar {
-  position: fixed; top: 0; right: -300px; width: 280px; height: 100%;
-  background: #0a140e; border-left: 1px solid var(--border); z-index: 1000; padding: 22px;
-  transition: right .35s cubic-bezier(.4,0,.2,1);
-  box-shadow: -10px 0 40px rgba(0,0,0,.5);
-}
-.sidebar.active { right: 0; }
-.sidebar h2 { font-size: 1.1rem; margin-bottom: 20px; color: var(--lime); }
-.sidebar-link {
-  display: flex; align-items: center; gap: 12px;
-  padding: 13px 10px; color: var(--ink); text-decoration: none;
-  border-radius: 12px; font-size: .88rem; font-weight: 500; transition: background .2s ease;
-}
-.sidebar-link i { width: 18px; height: 18px; color: var(--lime); }
-.sidebar-link:hover { background: var(--panel); }
-.sidebar-divider { height: 1px; background: var(--border); margin: 14px 0; }
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, -60px) scale(1.15); }
+        }
 
-/* ---------- Responsive: tablet & desktop widen the layout ---------- */
-@media (min-width: 700px) {
-  .wrap { max-width: 720px; }
-  .grid { grid-template-columns: repeat(4,1fr); gap: 16px; }
-  .bottomnav { max-width: 720px; }
-}
-@media (min-width: 1000px) {
-  .wrap { max-width: 900px; }
-  .grid { grid-template-columns: repeat(5,1fr); }
-  .hero { padding: 36px 34px 30px; }
-  .headline { font-size: 2.3rem; }
-}
-@media (max-width: 380px) {
-  .grid { gap: 10px; }
-  .card { padding: 14px 6px; }
-  .card .icon-wrap { width: 40px; height: 40px; }
-}
-</style>
+        /* --- Layout & Container --- */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px 100px 16px; /* Bottom padding for nav */
+        }
+
+        .glass {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        /* --- Top Bar --- */
+        .top-bar {
+            position: sticky; top: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 0;
+            z-index: 50;
+        }
+        .brand-titles .title { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px;}
+        .brand-titles .subtitle { font-size: 0.75rem; color: var(--muted); }
+        
+        .menu-btn {
+            width: 44px; height: 44px;
+            border-radius: 14px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .menu-btn:hover { background: var(--panel-hi); border-color: var(--border-hi); color: var(--lime); }
+
+        /* --- Hero Card --- */
+        .hero {
+            position: relative;
+            border-radius: 24px;
+            padding: 28px 24px;
+            margin-top: 8px;
+            background: linear-gradient(160deg, var(--leaf-2), var(--leaf-1), var(--bg));
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-glow {
+            position: absolute; bottom: -30px; right: -30px;
+            width: 160px; height: 160px;
+            background: var(--glow);
+            filter: blur(60px); opacity: 0.35;
+            border-radius: 50%;
+            animation: pulseGlow 4s infinite alternate;
+        }
+        .hero-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .hero-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--bg); display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid var(--border);
+        }
+        .hero-meta .name { font-weight: 700; font-size: 1rem; }
+        .hero-meta .tag { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+        .hero-eyebrow { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--lime); margin-bottom: 4px; display: block; }
+        .hero-headline { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 12px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .hero-note { font-size: 0.9rem; color: rgba(255,255,255,0.85); max-width: 90%; }
+
+        /* --- Banner Strip --- */
+        .banner-strip {
+            border-radius: 16px; padding: 16px 20px; margin-top: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .banner-text .b-title { font-weight: 600; font-size: 0.95rem; color: var(--lime); }
+        .banner-text .b-note { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+        .banner-icon { font-size: 1.5rem; animation: float 3s infinite ease-in-out; }
+
+        /* --- Tools Grid --- */
+        .tools-section { margin-top: 32px; }
+        .section-label { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+        
+        .tools-grid {
+            display: grid; gap: 16px;
+            /* Mobile default */
+            grid-template-columns: repeat(3, 1fr);
+        }
+        @media (min-width: 700px) { .tools-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+        @media (min-width: 1000px) { .tools-grid { grid-template-columns: repeat(5, 1fr); gap: 24px; } .hero-headline { font-size: 3rem; } .hero { padding: 40px; } }
+
+        .tool-card {
+            border-radius: 18px; padding: 20px 12px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            position: relative; overflow: hidden; cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, background 0.3s;
+            opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .tool-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-hi);
+            background: var(--panel-hi);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .tool-icon-wrap {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            color: #fff;
+        }
+        .tool-label { font-size: 0.8rem; font-weight: 500; color: var(--ink); line-height: 1.3; }
+        
+        .badge-new {
+            position: absolute; top: 8px; right: 8px;
+            background: var(--coral); color: #fff;
+            font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(255, 107, 74, 0.4);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute; border-radius: 50%; background: rgba(255,255,255,0.15);
+            transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none;
+        }
+        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 32px); max-width: 400px;
+            border-radius: 24px; padding: 12px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: var(--muted); transition: color 0.3s;
+        }
+        .nav-item.active { color: var(--lime); }
+        .nav-item.active svg { filter: drop-shadow(0 0 8px rgba(186, 242, 74, 0.4)); }
+        .nav-label { font-size: 0.7rem; font-weight: 500; }
+
+        /* --- Sidebar --- */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .sidebar {
+            position: fixed; top: 0; right: -100%; width: 280px; height: 100%;
+            background: var(--bg); border-left: 1px solid var(--border);
+            z-index: 201; padding: 24px; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar-close { align-self: flex-end; cursor: pointer; color: var(--muted); margin-bottom: 32px; }
+        .sidebar-link {
+            display: flex; align-items: center; gap: 12px; padding: 16px 0;
+            color: var(--ink); font-weight: 500; border-bottom: 1px solid var(--border);
+            transition: color 0.2s;
+        }
+        .sidebar-link:hover { color: var(--lime); }
+        .sidebar-link:last-child { border-bottom: none; }
+        .sidebar-divider { height: 1px; background: var(--border); margin: 16px 0; border: none; }
+
+        /* --- Mascot (Sprouty) --- */
+        #mascot-container {
+            position: fixed; bottom: 14px; left: 14px; z-index: 90;
+            width: 70px; height: 84px; cursor: pointer;
+            animation: mascotFloat 3s infinite ease-in-out;
+            perspective: 200px;
+        }
+        @media (max-width: 700px) { #mascot-container { width: 54px; height: 64px; bottom: 90px; } }
+        
+        .mascot-shadow {
+            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 8px; background: rgba(0,0,0,0.5); border-radius: 50%;
+            filter: blur(4px); animation: mascotShadow 3s infinite ease-in-out;
+        }
+        .mascot-svg { width: 100%; height: 100%; overflow: visible; }
+        
+        /* Mascot Animations */
+        @keyframes mascotFloat { 0%, 100% { transform: translateY(0) rotateY(0deg); } 50% { transform: translateY(-8px) rotateY(15deg); } }
+        @keyframes mascotShadow { 0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; } 50% { transform: translateX(-50%) scale(0.8); opacity: 0.2; } }
+        @keyframes blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.1); } }
+        @keyframes waveLeft { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-30deg); } }
+        @keyframes waveRight { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(30deg); } }
+        .mascot-jump { animation: jumpAnim 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
+        @keyframes jumpAnim { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(-34px) scale(0.9, 1.1) rotate(10deg); } 100% { transform: translateY(0) scale(1); } }
+        
+        .m-eye { transform-origin: center; animation: blink 4.2s infinite; }
+        .m-arm-l { transform-origin: top right; animation: waveLeft 2s infinite ease-in-out; }
+        .m-arm-r { transform-origin: top left; animation: waveRight 2.2s infinite ease-in-out; animation-delay: 0.3s; }
+        
+        /* Utility Animations */
+        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseGlow { 0% { opacity: 0.2; transform: scale(0.9); } 100% { opacity: 0.5; transform: scale(1.1); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+        
+        /* Seasonal Badge */
+        .seasonal-badge {
+            position: absolute; top: 16px; right: 24px;
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10; display: none;
+        }
+    </style>
 </head>
 <body>
 
-<div class="bg-fixed"><div class="mesh"><div class="m1"></div><div class="m2"></div><div class="m3"></div></div></div>
-<canvas id="particles"></canvas>
-<div class="noise"></div>
+    <!-- Backgrounds -->
+    <svg id="bg-noise">
+        <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter>
+        <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+    </svg>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <canvas id="bg-canvas"></canvas>
+    <canvas id="seasonal-canvas"></canvas>
 
-<div class="wrap">
+    <!-- Main Content -->
+    <div class="app-container">
+        
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="brand-titles">
+                <div class="title sora-font" id="dom-site-name">Loading...</div>
+                <div class="subtitle" id="dom-site-sub">All Tools · One Place</div>
+            </div>
+            <div class="menu-btn glass" onclick="toggleSidebar()">
+                <i data-lucide="menu"></i>
+            </div>
+        </header>
 
-  <div class="topbar">
-    <div>
-      <div class="title">HamzaEditz 2.0</div>
-      <div class="sub">All Tools · One Place</div>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="seasonal-badge" id="seasonal-badge"></div>
+            <div class="hero-glow"></div>
+            <div class="hero-top">
+                <div class="hero-avatar" id="dom-hero-avatar"></div>
+                <div class="hero-meta">
+                    <div class="name" id="dom-hero-name"></div>
+                    <div class="tag" id="dom-hero-tag"></div>
+                </div>
+            </div>
+            <span class="hero-eyebrow">Welcome back</span>
+            <h1 class="hero-headline" id="dom-hero-headline"></h1>
+            <p class="hero-note" id="dom-hero-note"></p>
+        </section>
+
+        <!-- Banner -->
+        <div class="banner-strip glass">
+            <div class="banner-text">
+                <div class="b-title" id="dom-banner-title"></div>
+                <div class="b-note" id="dom-banner-note"></div>
+            </div>
+            <div class="banner-icon">🚀</div>
+        </div>
+
+        <!-- Tools Grid -->
+        <section class="tools-section">
+            <h2 class="section-label">Service Menu</h2>
+            <div class="tools-grid" id="tools-grid">
+                <!-- Cards injected via JS -->
+            </div>
+        </section>
     </div>
-    <button class="icon-btn" onclick="toggleSidebar()" aria-label="Menu">
-      <i data-lucide="menu"></i>
-    </button>
-  </div>
 
-  <div class="hero">
-    <div class="hero-top">
-      <div class="logo-circle">HE</div>
-      <div>
-        <div class="hero-name">Hamza Editz</div>
-        <div class="hero-tag">hamzaeditz.pw</div>
-      </div>
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav glass">
+        <a href="index.html" class="nav-item">
+            <i data-lucide="home"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="#" class="nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <i data-lucide="grid"></i>
+            <span class="nav-label">Tools</span>
+        </a>
+        <a href="https://t.me/hamzaeditz" target="_blank" class="nav-item">
+            <i data-lucide="send"></i>
+            <span class="nav-label">Telegram</span>
+        </a>
+        <a href="about.html" class="nav-item">
+            <i data-lucide="user"></i>
+            <span class="nav-label">About</span>
+        </a>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <i data-lucide="x" class="sidebar-close" onclick="toggleSidebar()"></i>
+        <a href="#" class="sidebar-link"><i data-lucide="message-circle"></i> WhatsApp Group</a>
+        <a href="#" class="sidebar-link"><i data-lucide="youtube"></i> YouTube Channel</a>
+        <a href="https://t.me/hamzaeditz" target="_blank" class="sidebar-link"><i data-lucide="send"></i> Telegram Channel</a>
+        <hr class="sidebar-divider">
+        <a href="about.html" class="sidebar-link"><i data-lucide="user"></i> About Me</a>
+    </aside>
+
+    <!-- Brand Mascot (Sprouty) -->
+    <div id="mascot-container" onclick="triggerMascotJump()">
+        <div class="mascot-shadow"></div>
+        <svg class="mascot-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- Body -->
+            <path d="M 50,110 C 20,110 10,70 20,40 C 30,10 50,10 50,10 C 50,10 70,10 80,40 C 90,70 80,110 50,110 Z" fill="var(--leaf-2)" stroke="var(--leaf-1)" stroke-width="3"/>
+            <path d="M 50,110 C 20,110 10,70 20,40 C 30,10 50,10 50,10" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="4" stroke-linecap="round"/>
+            <!-- Eyes -->
+            <circle cx="38" cy="55" r="5" fill="#060b08" class="m-eye" />
+            <circle cx="62" cy="55" r="5" fill="#060b08" class="m-eye" />
+            <!-- Cheeks -->
+            <circle cx="28" cy="62" r="4" fill="var(--coral)" opacity="0.6"/>
+            <circle cx="72" cy="62" r="4" fill="var(--coral)" opacity="0.6"/>
+            <!-- Smile -->
+            <path d="M 45,65 Q 50,70 55,65" fill="none" stroke="#060b08" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Left Arm -->
+            <path class="m-arm-l" d="M 22,60 Q 5,65 10,80" fill="none" stroke="var(--leaf-1)" stroke-width="4" stroke-linecap="round"/>
+            <!-- Right Arm -->
+            <path class="m-arm-r" d="M 78,60 Q 95,50 90,35" fill="none" stroke="var(--leaf-1)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
     </div>
-    <div class="eyebrow">Welcome back</div>
-    <div class="headline">10+ Free Tools</div>
-    <div class="hero-note">Sim data, RDPs, TV, downloaders &amp; more — sab aik jagah.</div>
-  </div>
 
-  <div class="banner">
-    <div>
-      <h3>New tools weekly</h3>
-      <p>TikTok &amp; Spotify downloaders just added</p>
-    </div>
-    <div class="emoji">🛠️</div>
-  </div>
+    <script>
+        /* SITE_CONFIG_START */
+        const SITE_CONFIG = {
+          name: "HamzaEditz 2.0",
+          avatarInitials: "HE",
+          heroName: "Hamza Editz",
+          heroTag: "hamzaeditz.pw",
+          headline: "10+ Free Tools",
+          heroNote: "Sim data, RDPs, TV, downloaders & more — sab aik jagah.",
+          bannerTitle: "New tools weekly",
+          bannerNote: "TikTok & Spotify downloaders just added"
+        };
+        /* SITE_CONFIG_END */
 
-  <div class="section-label">Service Menu</div>
-  <div class="grid">
+        /* OCCASION_CONFIG_START */
+        const OCCASION_CONFIG = {
+          active: "auto", // 'auto' | 'eid' | 'holi' | 'christmas' | 'newyear' | 'none'
+          eidRange: ["2026-03-20", "2026-03-22"],
+          holiRange: ["2026-03-03", "2026-03-04"]
+        };
+        /* OCCASION_CONFIG_END */
 
-    <a class="card ripple" href="paksim.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#5fa0ff,#3d8bfd)"><i data-lucide="credit-card"></i></div>
-      <span class="label">Pak Sim Details</span>
-    </a>
+        /* TOOLS_ARRAY_START */
+        const TOOLS = [
+          { icon: "credit-card", label: "Pak Sim Details", href: "paksim.html", c1: "#5fa0ff", c2: "#3d8bfd" },
+          { icon: "send", label: "SMS Tool", href: "smsbomber.html", c1: "#ffab5f", c2: "#ff8a3d" },
+          { icon: "monitor", label: "Free Window Rdp", href: "RdpMethod.html", c1: "#9a85ff", c2: "#7a5cff" },
+          { icon: "tv", label: "Jazz Tv", href: "TvChannels.html", c1: "#4fdb96", c2: "#22a26b" },
+          { icon: "video", label: "TikTok Downloader", href: "tiktokmenu.html", c1: "#ff7a90", c2: "#ff4d67", badge: "NEW" },
+          { icon: "music-2", label: "Spotify Downloader", href: "spotify.html", c1: "#3ddb7a", c2: "#1db954", badge: "NEW" },
+          { icon: "book-open", label: "Hadith", href: "hadith.html", c1: "#e0b65f", c2: "#c99a3d" },
+          { icon: "search", label: "Vehicle Details", href: "vehicledetails.html", c1: "#6f95ff", c2: "#3d6bfd" },
+          { icon: "image", label: "Ai Image Generate", href: "image.html", c1: "#ff9270", c2: "#ff6b4a" },
+          { icon: "download", label: "Apk Download", href: "apk.html", c1: "#79db94", c2: "#4fc06a" }
+        ];
+        /* TOOLS_ARRAY_END */
 
-    <a class="card ripple" href="smsbomber.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#ffab5f,#ff8a3d)"><i data-lucide="send"></i></div>
-      <span class="label">SMS Tool</span>
-    </a>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Populate DOM from Config
+            document.getElementById('dom-site-name').innerHTML = `${SITE_CONFIG.name} <i data-lucide="sparkles" style="width:16px; height:16px; color:var(--lime);"></i>`;
+            document.getElementById('dom-hero-avatar').textContent = SITE_CONFIG.avatarInitials;
+            document.getElementById('dom-hero-name').textContent = SITE_CONFIG.heroName;
+            document.getElementById('dom-hero-tag').textContent = SITE_CONFIG.heroTag;
+            document.getElementById('dom-hero-headline').textContent = SITE_CONFIG.headline;
+            document.getElementById('dom-hero-note').textContent = SITE_CONFIG.heroNote;
+            document.getElementById('dom-banner-title').textContent = SITE_CONFIG.bannerTitle;
+            document.getElementById('dom-banner-note').textContent = SITE_CONFIG.bannerNote;
 
-    <a class="card ripple" href="RdpMethod.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#9a85ff,#7a5cff)"><i data-lucide="monitor"></i></div>
-      <span class="label">Free Window Rdp</span>
-    </a>
+            // 2. Render Tools Grid
+            const grid = document.getElementById('tools-grid');
+            TOOLS.forEach((tool, index) => {
+                const a = document.createElement('a');
+                a.href = tool.href;
+                a.className = 'tool-card glass';
+                a.style.animationDelay = `${index * 0.05}s`;
 
-    <a class="card ripple" href="TvChannels.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#4fdb96,#22a26b)"><i data-lucide="tv"></i></div>
-      <span class="label">Jazz Tv</span>
-    </a>
+                let badgeHTML = tool.badge ? `<div class="badge-new">${tool.badge}</div>` : '';
+                
+                a.innerHTML = `
+                    ${badgeHTML}
+                    <div class="tool-icon-wrap" style="background: linear-gradient(135deg, ${tool.c1}, ${tool.c2})">
+                        <i data-lucide="${tool.icon}"></i>
+                    </div>
+                    <span class="tool-label">${tool.label}</span>
+                `;
 
-    <a class="card ripple" href="tiktokmenu.html">
-      <div class="badge-new">NEW</div>
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#ff7a90,#ff4d67)"><i data-lucide="video"></i></div>
-      <span class="label">TikTok Downloader</span>
-    </a>
+                // Add Ripple Effect
+                a.addEventListener('click', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
 
-    <a class="card ripple" href="spotify.html">
-      <div class="badge-new">NEW</div>
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#3ddb7a,#1db954)"><i data-lucide="music-2"></i></div>
-      <span class="label">Spotify Downloader</span>
-    </a>
+                grid.appendChild(a);
+            });
 
-    <a class="card ripple" href="hadith.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#e0b65f,#c99a3d)"><i data-lucide="book-open"></i></div>
-      <span class="label">Hadith</span>
-    </a>
+            // Init Icons
+            lucide.createIcons();
 
-    <a class="card ripple" href="vehicledetails.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#6f95ff,#3d6bfd)"><i data-lucide="search"></i></div>
-      <span class="label">Vehicle Details</span>
-    </a>
+            // Init Canvas Systems
+            initNetworkCanvas();
+            initSeasonalCanvas();
+        });
 
-    <a class="card ripple" href="image.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#ff9270,#ff6b4a)"><i data-lucide="image"></i></div>
-      <span class="label">Ai Image Generate</span>
-    </a>
-
-    <a class="card ripple" href="apk.html">
-      <div class="icon-wrap" style="background:linear-gradient(135deg,#79db94,#4fc06a)"><i data-lucide="download"></i></div>
-      <span class="label">Apk Download</span>
-    </a>
-
-  </div>
-
-  <div class="bottomnav">
-    <a class="navitem active" href="index.html">
-      <i data-lucide="home"></i> Home
-    </a>
-    <a class="navitem" href="#" onclick="document.querySelector('.grid').scrollIntoView({behavior:'smooth'});return false;">
-      <i data-lucide="layout-grid"></i> Tools
-    </a>
-    <a class="navitem" href="https://t.me/hamzaeditz2" target="_blank">
-      <i data-lucide="send"></i> Telegram
-    </a>
-    <a class="navitem" href="about.html">
-      <i data-lucide="user"></i> About
-    </a>
-  </div>
-
-  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-  <div class="sidebar" id="sidebar">
-    <h2>Social Menu</h2>
-    <a class="sidebar-link" href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank">
-      <i data-lucide="message-circle"></i> Join WhatsApp
-    </a>
-    <a class="sidebar-link" href="https://www.youtube.com/@hamzashafiq786" target="_blank">
-      <i data-lucide="youtube"></i> Subscribe YouTube
-    </a>
-    <a class="sidebar-link" href="https://t.me/hamzaeditz2" target="_blank">
-      <i data-lucide="send"></i> Join Telegram
-    </a>
-    <div class="sidebar-divider"></div>
-    <a class="sidebar-link" href="about.html">
-      <i data-lucide="user"></i> About Me
-    </a>
-  </div>
-
-</div>
-
-<script>
-lucide.createIcons();
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('active');
-  document.getElementById('overlay').classList.toggle('active');
-}
-
-/* Ripple on cards */
-document.querySelectorAll('.ripple').forEach(function(card){
-  card.addEventListener('click', function(e){
-    var r = this.getBoundingClientRect();
-    var span = document.createElement('span');
-    var d = Math.max(r.width, r.height);
-    span.className = 'ripple-el';
-    span.style.width = span.style.height = d+'px';
-    span.style.left = (e.clientX - r.left - d/2) + 'px';
-    span.style.top = (e.clientY - r.top - d/2) + 'px';
-    this.appendChild(span);
-    setTimeout(function(){ span.remove(); }, 600);
-  });
-});
-
-/* Particle network background */
-(function(){
-  var canvas = document.getElementById('particles');
-  var ctx = canvas.getContext('2d');
-  var w,h,particles;
-  function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-  function init(){
-    resize();
-    var count = window.innerWidth < 700 ? 30 : 55;
-    particles = Array.from({length:count}, function(){
-      return { x: Math.random()*w, y: Math.random()*h,
-        vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*1.5+0.6 };
-    });
-  }
-  function tick(){
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(function(p){
-      p.x += p.vx; p.y += p.vy;
-      if (p.x<0) p.x=w; if (p.x>w) p.x=0;
-      if (p.y<0) p.y=h; if (p.y>h) p.y=0;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(186,242,74,0.4)'; ctx.fill();
-    });
-    for (var i=0;i<particles.length;i++){
-      for (var j=i+1;j<particles.length;j++){
-        var a=particles[i], b=particles[j];
-        var dx=a.x-b.x, dy=a.y-b.y, dist=Math.sqrt(dx*dx+dy*dy);
-        if (dist < 100){
-          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-          ctx.strokeStyle = 'rgba(79,192,106,' + (0.12*(1-dist/100)) + ')';
-          ctx.lineWidth = 0.6; ctx.stroke();
+        // --- Sidebar Logic ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
         }
-      }
-    }
-    requestAnimationFrame(tick);
-  }
-  window.addEventListener('resize', resize);
-  init(); tick();
-})();
-</script>
 
-<style>
-.sprouty-stage { position: fixed; bottom: 14px; left: 14px; width: 70px; height: 84px; z-index: 999; perspective: 500px; cursor: pointer; }
-.sprouty-shadow { position:absolute; bottom:-4px; left:50%; width:40px; height:8px; background:rgba(0,0,0,0.4); border-radius:50%; transform:translateX(-50%); animation: sprouty-shadow-pulse 3s ease-in-out infinite; }
-.sprouty-char { width:100%; height:100%; transform-style: preserve-3d; animation: sprouty-float 3s ease-in-out infinite; }
-@keyframes sprouty-float { 0%,100%{ transform: translateY(0) rotateY(-6deg);} 50%{ transform: translateY(-12px) rotateY(6deg);} }
-@keyframes sprouty-shadow-pulse { 0%,100%{ transform: translateX(-50%) scale(1); opacity:.5;} 50%{ transform: translateX(-50%) scale(.7); opacity:.25;} }
-.sprouty-eye-l, .sprouty-eye-r { animation: sprouty-blink 4.2s infinite; transform-origin: center; }
-.sprouty-eye-r { animation-delay: .05s; }
-@keyframes sprouty-blink { 0%,94%,100%{ transform: scaleY(1);} 97%{ transform: scaleY(.1);} }
-.sprouty-arm-l { animation: sprouty-wave-l 2.6s ease-in-out infinite; transform-origin: 30px 55px; }
-.sprouty-arm-r { animation: sprouty-wave-r 2.6s ease-in-out infinite .3s; transform-origin: 70px 55px; }
-@keyframes sprouty-wave-l { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(-16deg);} }
-@keyframes sprouty-wave-r { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(16deg);} }
-.sprouty-jump { animation: sprouty-jump-kf .6s ease !important; }
-@keyframes sprouty-jump-kf { 0%{transform:translateY(0) rotateY(0);} 30%{transform:translateY(-34px) rotateY(-14deg);} 60%{transform:translateY(0) rotateY(14deg);} 100%{transform:translateY(0) rotateY(0);} }
-@media (max-width:480px){ .sprouty-stage{ width:54px; height:64px; bottom:10px; left:10px; } }
-</style>
-<div class="sprouty-stage" onclick="sproutyJump()" title="Sprouty says hi!">
-  <div class="sprouty-shadow"></div>
-  <svg class="sprouty-char" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
-    <path class="sprouty-arm-l" d="M32 60 Q18 55 14 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <path class="sprouty-arm-r" d="M68 60 Q82 55 86 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <ellipse cx="50" cy="60" rx="30" ry="34" fill="#4fc06a"/>
-    <path d="M50 26 C40 4 20 2 12 10 C22 14 30 22 36 34 Z" fill="#a4e83c"/>
-    <path d="M50 26 C60 4 80 2 88 10 C78 14 70 22 64 34 Z" fill="#a4e83c"/>
-    <circle cx="38" cy="58" r="7" fill="#fff"/>
-    <circle cx="62" cy="58" r="7" fill="#fff"/>
-    <circle class="sprouty-eye-l" cx="38" cy="58" r="3.4" fill="#10241a"/>
-    <circle class="sprouty-eye-r" cx="62" cy="58" r="3.4" fill="#10241a"/>
-    <path d="M40 72 Q50 80 60 72" stroke="#10241a" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <circle cx="30" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
-    <circle cx="70" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
-  </svg>
-</div>
-<script>
-function sproutyJump(){
-  var el = document.querySelector('.sprouty-char');
-  if(!el) return;
-  el.classList.add('sprouty-jump');
-  setTimeout(function(){ el.classList.remove('sprouty-jump'); }, 600);
-}
-</script>
+        // --- Mascot Logic ---
+        function triggerMascotJump() {
+            const mascot = document.getElementById('mascot-container');
+            mascot.classList.remove('mascot-jump');
+            void mascot.offsetWidth; // trigger reflow
+            mascot.classList.add('mascot-jump');
+        }
+
+        // --- Network Canvas Logic ---
+        function initNetworkCanvas() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height, particles = [];
+            
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                initParticles();
+            }
+            
+            function initParticles() {
+                particles = [];
+                const density = width < 700 ? 30 : 55;
+                for(let i=0; i<density; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 1.5 + 0.5
+                    });
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(186, 242, 74, 0.6)';
+                ctx.strokeStyle = 'rgba(186, 242, 74, 0.05)';
+
+                for(let i=0; i<particles.length; i++) {
+                    let p = particles[i];
+                    p.x += p.vx; p.y += p.vy;
+                    if(p.x < 0 || p.x > width) p.vx *= -1;
+                    if(p.y < 0 || p.y > height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for(let j=i+1; j<particles.length; j++) {
+                        let p2 = particles[j];
+                        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                        if(dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resize);
+            resize(); draw();
+        }
+
+        // --- Seasonal Occasion Canvas Logic ---
+        function initSeasonalCanvas() {
+            const canvas = document.getElementById('seasonal-canvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+            let particles = [];
+
+            let mode = OCCASION_CONFIG.active;
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${y}-${m}-${d}`;
+            const mdStr = `${m}-${d}`;
+
+            if(mode === 'auto') {
+                if(mdStr >= '12-20' && mdStr <= '12-26') mode = 'christmas';
+                else if(mdStr >= '12-27' || mdStr <= '01-02') mode = 'newyear';
+                else if(todayStr >= OCCASION_CONFIG.eidRange[0] && todayStr <= OCCASION_CONFIG.eidRange[1]) mode = 'eid';
+                else if(todayStr >= OCCASION_CONFIG.holiRange[0] && todayStr <= OCCASION_CONFIG.holiRange[1]) mode = 'holi';
+                else mode = 'none';
+            }
+
+            const badge = document.getElementById('seasonal-badge');
+            if(mode !== 'none') badge.style.display = 'block';
+
+            if(mode === 'christmas') {
+                badge.innerHTML = "🎄 Merry Christmas";
+                for(let i=0; i<40; i++) particles.push({ x: Math.random()*width, y: Math.random()*height, r: Math.random()*3+1, vy: Math.random()*1+0.5, sway: Math.random()*Math.PI });
+            } else if (mode === 'eid') {
+                badge.innerHTML = "🌙 Eid Mubarak";
+                for(let i=0; i<30; i++) particles.push({ x: Math.random()*width, y: Math.random()*height, r: Math.random()*2+1, vy: Math.random()*1.5+0.5, c: Math.random()>0.5?'#e0b65f':'#fff' });
+            } else if (mode === 'newyear' || mode === 'holi') {
+                badge.innerHTML = mode === 'newyear' ? "🎆 Happy New Year" : "🎨 Happy Holi";
+                // burst logic happens in animation frame
+            } else {
+                return; // none
+            }
+
+            function drawSeasonal() {
+                ctx.clearRect(0, 0, width, height);
+                
+                if(mode === 'christmas' || mode === 'eid') {
+                    for(let i=0; i<particles.length; i++) {
+                        let p = particles[i];
+                        p.y += p.vy;
+                        if(mode === 'christmas') p.x += Math.sin(p.sway += 0.02) * 0.5;
+                        if(p.y > height) { p.y = -10; p.x = Math.random() * width; }
+                        
+                        ctx.fillStyle = p.c || '#fff';
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                        ctx.fill();
+                    }
+                } 
+                else if(mode === 'newyear' || mode === 'holi') {
+                    // Simple intermittent bursts
+                    if(Math.random() < 0.03) {
+                        let bx = Math.random() * width;
+                        let by = Math.random() * height * 0.5;
+                        const colors = mode === 'newyear' ? ['#ff4d67', '#baf24a', '#3d8bfd', '#fff'] : ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+                        let col = colors[Math.floor(Math.random()*colors.length)];
+                        for(let i=0; i<20; i++) {
+                            let angle = Math.random() * Math.PI * 2;
+                            let speed = Math.random() * 3 + 1;
+                            particles.push({ x: bx, y: by, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed, r: Math.random()*2+1, c: col, life: 1 });
+                        }
+                    }
+                    for(let i=particles.length-1; i>=0; i--) {
+                        let p = particles[i];
+                        p.x += p.vx; p.y += p.vy; p.vy += 0.05; // gravity
+                        p.life -= 0.015;
+                        if(p.life <= 0) { particles.splice(i, 1); continue; }
+                        ctx.fillStyle = p.c;
+                        ctx.globalAlpha = p.life;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+                requestAnimationFrame(drawSeasonal);
+            }
+            
+            window.addEventListener('resize', () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
+            drawSeasonal();
+        }
+    </script>
 </body>
 </html>
