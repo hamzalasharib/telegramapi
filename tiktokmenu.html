@@ -1,130 +1,376 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HamzaEditz Tools</title>
-<script src="https://unpkg.com/feather-icons"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-color: #f2f6f2;
-  --card-bg: #ffffff;
-  --text-color: #10241a;
-  --muted: #6b7d73;
-  --accent-gradient: linear-gradient(90deg, #1f7a4d, #4fc06a);
-  --accent: #1f7a4d;
-  --border-color: rgba(31, 122, 77, 0.15);
-}
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-  -webkit-tap-highlight-color: transparent;
-}
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  overflow-x: hidden; position: relative;
-}
-/* Bubble Animation */
-.bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
-.bubble {
-  position: absolute; bottom: -100px;
-  background: radial-gradient(circle at 30% 30%, rgba(79, 192, 106, 0.35), rgba(31, 122, 77, 0.08));
-  border-radius: 50%;
-  animation: rise 10s infinite ease-in;
-  opacity: 0;
-  box-shadow: 0 0 10px rgba(79, 192, 106, 0.15);
-}
-.bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 8s; }
-.bubble:nth-child(2) { width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s; }
-.bubble:nth-child(3) { width: 50px; height: 50px; left: 35%; animation-duration: 10s; animation-delay: 2s; }
-.bubble:nth-child(4) { width: 80px; height: 80px; left: 50%; animation-duration: 11s; animation-delay: 0s; }
-.bubble:nth-child(5) { width: 35px; height: 35px; left: 55%; animation-duration: 6s; animation-delay: 1s; }
-.bubble:nth-child(6) { width: 45px; height: 45px; left: 65%; animation-duration: 8s; animation-delay: 3s; }
-.bubble:nth-child(7) { width: 25px; height: 25px; left: 80%; animation-duration: 12s; animation-delay: 2s; }
-.bubble:nth-child(8) { width: 60px; height: 60px; left: 90%; animation-duration: 9s; animation-delay: 1s; }
-@keyframes rise {
-  0% { bottom: -100px; transform: translateX(0); opacity: 0; }
-  50% { opacity: 0.5; }
-  100% { bottom: 110%; transform: translateX(-20px); opacity: 0; }
-}
-.container { width: 100%; max-width: 600px; padding: 20px; text-align: center; }
-h1 {
-  font-size: 2.3rem; margin-bottom: 36px; font-weight: 800;
-  color: var(--accent);
-}
-.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-.card {
-  background-color: var(--card-bg);
-  border-radius: 18px;
-  padding: 30px 20px;
-  text-align: center;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  border-top: 3px solid var(--accent);
-  box-shadow: 0 10px 25px rgba(16,36,26,.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(31,122,77,0.15); }
-.icon-box { font-size: 2rem; margin-bottom: 15px; color: var(--accent); display: inline-block; }
-.card h3 { font-size: 1rem; font-weight: 600; color: var(--text-color); }
-.badge {
-  position: absolute; top: 10px; right: 10px;
-  background: var(--accent-gradient);
-  font-size: 0.7rem; font-weight: bold;
-  padding: 2px 8px; border-radius: 4px; color: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(31, 122, 77, 0.5); }
-  70% { box-shadow: 0 0 0 6px rgba(31, 122, 77, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(31, 122, 77, 0); }
-}
-.ripple { position: absolute; border-radius: 50%; background: rgba(31, 122, 77, 0.2); transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none; }
-@keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
-@media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HamzaEditz 2.0 - TikTok Tools</title>
+
+  <!-- Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --bg: #090a0f;
+      --surface: #11131b;
+      --surface-hover: #161924;
+      --fg: #f8fafc;
+      --muted: #94a3b8;
+      --line: #1e2230;
+      --line-subtle: #141724;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --coral: #ff5e62;
+      --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 16px 36px -10px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 440px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Subtle Floating Particles */
+    .bubbles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bubble {
+      position: absolute;
+      bottom: -80px;
+      background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.25), rgba(16, 185, 129, 0.03));
+      border-radius: 50%;
+      animation: rise 12s infinite ease-in;
+      opacity: 0;
+    }
+    .bubble:nth-child(1) { width: 36px; height: 36px; left: 12%; animation-duration: 9s; }
+    .bubble:nth-child(2) { width: 18px; height: 18px; left: 24%; animation-duration: 6s; animation-delay: 1s; }
+    .bubble:nth-child(3) { width: 44px; height: 44px; left: 38%; animation-duration: 11s; animation-delay: 2s; }
+    .bubble:nth-child(4) { width: 68px; height: 68px; left: 52%; animation-duration: 13s; }
+    .bubble:nth-child(5) { width: 28px; height: 28px; left: 68%; animation-duration: 7s; animation-delay: 1.5s; }
+    .bubble:nth-child(6) { width: 50px; height: 50px; left: 84%; animation-duration: 10s; animation-delay: 2.5s; }
+    @keyframes rise {
+      0% { bottom: -80px; transform: translateX(0); opacity: 0; }
+      40% { opacity: 0.45; }
+      100% { bottom: 108%; transform: translateX(-24px); opacity: 0; }
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* Header Bar */
+    .hdr {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .hdr-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      color: var(--fg);
+      background: var(--surface-hover);
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 580px;
+      padding: 90px 20px 40px;
+      text-align: center;
+    }
+
+    .badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 4px 14px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 5vw, 2.75rem);
+      margin-bottom: 8px;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+    }
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+      background: var(--surface-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .icon-box {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: var(--surface-hover);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover .icon-box {
+      transform: scale(1.08);
+      border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+    .icon-box svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .card h3 {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .card p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .badge-pill {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--coral);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(255, 94, 98, 0.35);
+    }
+
+    /* Ripple Animation */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.25);
+      transform: scale(0);
+      animation: ripple-anim 0.5s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; gap: 14px; }
+      .card { padding: 26px 18px; }
+    }
+  </style>
 </head>
 <body>
-<div class="bubbles">
-  <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-  <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
-</div>
-<div class="container">
-  <h1>HamzaEditz</h1>
-  <div class="grid">
-    <div class="card" onclick="createRipple(event); setTimeout(() => { window.location.href = 'tiktok.html' }, 400)">
-      <div class="icon-box"><i data-feather="download-cloud"></i></div>
-      <h3>TikTok Downloader</h3>
+
+  <!-- Background Bubbles -->
+  <div class="bubbles">
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="hdr-wrap">
+      <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
+      <a href="welcome.html" class="back-btn">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> All Tools
+      </a>
     </div>
-    <div class="card" onclick="createRipple(event); setTimeout(() => { window.location.href = 'v2.html' }, 400)">
-      <span class="badge">NEW</span>
-      <div class="icon-box"><i data-feather="zap"></i></div>
-      <h3>TikTok Downloader V2</h3>
+  </header>
+
+  <!-- Content -->
+  <div class="container">
+    <div class="badge-top">
+      <span class="badge-dot"></span> Watermark-Free Utilities
+    </div>
+    <h1>TikTok Suite</h1>
+    <p class="subtitle">Select your preferred server engine to start fetching videos.</p>
+
+    <div class="grid">
+      <!-- V1 Card -->
+      <div class="card" onclick="handleNavigation(event, 'tiktok.html')">
+        <div class="icon-box">
+          <i data-lucide="cloud-download"></i>
+        </div>
+        <h3>Server Engine 1</h3>
+        <p>Standard stable downloader for HD videos &amp; MP3 audio.</p>
+      </div>
+
+      <!-- V2 Card -->
+      <div class="card" onclick="handleNavigation(event, 'v2.html')">
+        <span class="badge-pill">NEW</span>
+        <div class="icon-box">
+          <i data-lucide="zap"></i>
+        </div>
+        <h3>Server Engine 2</h3>
+        <p>High-speed alternate route with direct instant links.</p>
+      </div>
     </div>
   </div>
-</div>
-<script>
-feather.replace();
-function createRipple(event) {
-  const card = event.currentTarget;
-  const circle = document.createElement("span");
-  const diameter = Math.max(card.clientWidth, card.clientHeight);
-  const radius = diameter / 2;
-  circle.style.width = circle.style.height = `${diameter}px`;
-  circle.style.left = `${event.clientX - card.getBoundingClientRect().left - radius}px`;
-  circle.style.top = `${event.clientY - card.getBoundingClientRect().top - radius}px`;
-  circle.classList.add("ripple");
-  const ripple = card.getElementsByClassName("ripple")[0];
-  if (ripple) { ripple.remove(); }
-  card.appendChild(circle);
-}
-</script>
+
+  <script>
+    function handleNavigation(event, targetUrl) {
+      createRipple(event);
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 250);
+    }
+
+    function createRipple(event) {
+      const card = event.currentTarget;
+      const circle = document.createElement("span");
+      const diameter = Math.max(card.clientWidth, card.clientHeight);
+      const radius = diameter / 2;
+      const rect = card.getBoundingClientRect();
+
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${event.clientX - rect.left - radius}px`;
+      circle.style.top = `${event.clientY - rect.top - radius}px`;
+      circle.classList.add("ripple");
+
+      const existing = card.querySelector(".ripple");
+      if (existing) existing.remove();
+
+      card.appendChild(circle);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
