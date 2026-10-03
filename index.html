@@ -33,23 +33,23 @@
   <style>
     :root {
       --bg: #f8fafc;
-      --surface: rgba(255, 255, 255, 0.72);
+      --surface: rgba(255, 255, 255, 0.82);
       --fg: #0f172a;
       --muted: #64748b;
       --line: rgba(226, 232, 240, 0.85);
       --line-subtle: rgba(241, 245, 249, 0.75);
       --accent: #10b981;
       --accent-glow: rgba(16, 185, 129, 0.15);
-      --card-hover: rgba(255, 255, 255, 0.92);
+      --card-hover: rgba(255, 255, 255, 0.95);
       --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
       --shadow-md: 0 16px 36px -10px rgba(15, 23, 42, 0.1);
 
-      /* Gemini Fluid Colors (Light Theme) */
-      --gemini-c1: #4285F4; /* Google Blue */
-      --gemini-c2: #9b51e0; /* Vivid Purple */
-      --gemini-c3: #00d2ff; /* Electric Cyan */
-      --gemini-c4: #ff5277; /* Rose Glow */
+      /* Gemini Fluid & Stroke Colors */
+      --gemini-c1: #4285F4;
+      --gemini-c2: #9b51e0;
+      --gemini-c3: #00d2ff;
+      --gemini-c4: #ff5277;
       --gemini-opacity: 0.35;
       --gemini-blur: 70px;
     }
@@ -57,18 +57,18 @@
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #06070b;
-        --surface: rgba(15, 17, 26, 0.68);
+        --surface: rgba(15, 17, 26, 0.78);
         --fg: #f8fafc;
         --muted: #94a3b8;
         --line: rgba(255, 255, 255, 0.08);
         --line-subtle: rgba(255, 255, 255, 0.04);
         --accent: #10b981;
         --accent-glow: rgba(16, 185, 129, 0.18);
-        --card-hover: rgba(22, 26, 38, 0.88);
+        --card-hover: rgba(20, 23, 34, 0.92);
         --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.5);
         --shadow-md: 0 18px 40px -8px rgba(0, 0, 0, 0.7);
 
-        /* Gemini Fluid Colors (Dark Theme) */
+        /* Gemini Fluid & Stroke Colors */
         --gemini-c1: #3b82f6; 
         --gemini-c2: #8b5cf6; 
         --gemini-c3: #06b6d4; 
@@ -121,11 +121,9 @@
     .fluid-blob {
       position: absolute;
       border-radius: 50%;
-      mix-blend-mode: normal;
       will-change: transform, border-radius;
     }
 
-    /* Blob 1: Blue Core Fluid */
     .blob-gemini-blue {
       top: 20%;
       left: 20%;
@@ -135,7 +133,6 @@
       animation: morphGemini1 18s ease-in-out infinite alternate;
     }
 
-    /* Blob 2: Purple Fluid */
     .blob-gemini-purple {
       top: 15%;
       right: 15%;
@@ -145,7 +142,6 @@
       animation: morphGemini2 23s ease-in-out infinite alternate;
     }
 
-    /* Blob 3: Cyan Fluid */
     .blob-gemini-cyan {
       bottom: 10%;
       left: 25%;
@@ -155,7 +151,6 @@
       animation: morphGemini3 20s ease-in-out infinite alternate;
     }
 
-    /* Blob 4: Pink/Rose Accent */
     .blob-gemini-pink {
       bottom: 20%;
       right: 20%;
@@ -165,80 +160,34 @@
       animation: morphGemini4 26s ease-in-out infinite alternate;
     }
 
-    /* Morphing & Floating Animations identical to Gemini Liquid Wave */
     @keyframes morphGemini1 {
-      0% {
-        border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-        transform: translate(0, 0) rotate(0deg) scale(1);
-      }
-      50% {
-        border-radius: 58% 42% 40% 60% / 35% 65% 35% 65%;
-        transform: translate(6vw, 8vh) rotate(110deg) scale(1.1);
-      }
-      100% {
-        border-radius: 35% 65% 60% 40% / 55% 35% 65% 45%;
-        transform: translate(-5vw, 12vh) rotate(220deg) scale(0.95);
-      }
+      0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { border-radius: 58% 42% 40% 60% / 35% 65% 35% 65%; transform: translate(6vw, 8vh) rotate(110deg) scale(1.1); }
+      100% { border-radius: 35% 65% 60% 40% / 55% 35% 65% 45%; transform: translate(-5vw, 12vh) rotate(220deg) scale(0.95); }
     }
 
     @keyframes morphGemini2 {
-      0% {
-        border-radius: 50% 50% 35% 65% / 60% 40% 60% 40%;
-        transform: translate(0, 0) rotate(0deg) scale(1.05);
-      }
-      50% {
-        border-radius: 38% 62% 55% 45% / 48% 52% 48% 52%;
-        transform: translate(-8vw, 10vh) rotate(-120deg) scale(0.9);
-      }
-      100% {
-        border-radius: 65% 35% 42% 58% / 38% 62% 38% 62%;
-        transform: translate(4vw, -6vh) rotate(-240deg) scale(1.15);
-      }
+      0% { border-radius: 50% 50% 35% 65% / 60% 40% 60% 40%; transform: translate(0, 0) rotate(0deg) scale(1.05); }
+      50% { border-radius: 38% 62% 55% 45% / 48% 52% 48% 52%; transform: translate(-8vw, 10vh) rotate(-120deg) scale(0.9); }
+      100% { border-radius: 65% 35% 42% 58% / 38% 62% 38% 62%; transform: translate(4vw, -6vh) rotate(-240deg) scale(1.15); }
     }
 
     @keyframes morphGemini3 {
-      0% {
-        border-radius: 60% 40% 55% 45% / 40% 50% 50% 60%;
-        transform: translate(0, 0) rotate(0deg) scale(0.95);
-      }
-      50% {
-        border-radius: 40% 60% 38% 62% / 62% 38% 62% 38%;
-        transform: translate(8vw, -8vh) rotate(90deg) scale(1.15);
-      }
-      100% {
-        border-radius: 52% 48% 65% 35% / 45% 55% 45% 55%;
-        transform: translate(-6vw, 4vh) rotate(180deg) scale(1);
-      }
+      0% { border-radius: 60% 40% 55% 45% / 40% 50% 50% 60%; transform: translate(0, 0) rotate(0deg) scale(0.95); }
+      50% { border-radius: 40% 60% 38% 62% / 62% 38% 62% 38%; transform: translate(8vw, -8vh) rotate(90deg) scale(1.15); }
+      100% { border-radius: 52% 48% 65% 35% / 45% 55% 45% 55%; transform: translate(-6vw, 4vh) rotate(180deg) scale(1); }
     }
 
     @keyframes morphGemini4 {
-      0% {
-        border-radius: 45% 55% 40% 60% / 50% 40% 60% 50%;
-        transform: translate(0, 0) scale(1);
-      }
-      50% {
-        border-radius: 60% 40% 65% 35% / 40% 60% 40% 60%;
-        transform: translate(-7vw, -9vh) scale(1.18);
-      }
-      100% {
-        border-radius: 38% 62% 50% 50% / 55% 45% 55% 45%;
-        transform: translate(5vw, 6vh) scale(0.92);
-      }
+      0% { border-radius: 45% 55% 40% 60% / 50% 40% 60% 50%; transform: translate(0, 0) scale(1); }
+      50% { border-radius: 60% 40% 65% 35% / 40% 60% 40% 60%; transform: translate(-7vw, -9vh) scale(1.18); }
+      100% { border-radius: 38% 62% 50% 50% / 55% 45% 55% 45%; transform: translate(5vw, 6vh) scale(0.92); }
     }
 
-    /* Mobile Performance Tweaks */
     @media (max-width: 768px) {
-      :root {
-        --gemini-blur: 50px;
-        --gemini-opacity: 0.42;
-      }
-      .gemini-mesh {
-        width: 150vw;
-        height: 140vh;
-      }
-      .blob-gemini-pink {
-        display: none; /* Mobile par lightweight rakhne ke liye 3 orbs */
-      }
+      :root { --gemini-blur: 50px; --gemini-opacity: 0.42; }
+      .gemini-mesh { width: 150vw; height: 140vh; }
+      .blob-gemini-pink { display: none; }
     }
 
     a { color: inherit; text-decoration: none; }
@@ -327,28 +276,89 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px;
     }
+
+    /* =========================================================
+       GEMINI STROKE EFFECT ON CARD (HOVER & SELECT)
+       ========================================================= */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--line);
+      position: relative;
       border-radius: 16px;
-      padding: 22px;
+      padding: 2px; /* Gradient stroke border thickness */
+      background: var(--line);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+      overflow: hidden;
+    }
+
+    /* Animated gradient ring inside card border */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        var(--gemini-c1),
+        var(--gemini-c2),
+        var(--gemini-c4),
+        var(--gemini-c3),
+        var(--gemini-c1)
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      animation: rotateStroke 4s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes rotateStroke {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Card Inner Body (Solid surface over stroke) */
+    .card-inner {
+      position: relative;
+      z-index: 2;
+      background: var(--surface);
+      border-radius: 14.5px;
+      padding: 20px;
       display: flex;
       gap: 16px;
       align-items: flex-start;
-      box-shadow: var(--shadow-sm);
+      height: 100%;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-                  border-color 0.2s ease, 
-                  box-shadow 0.25s ease, 
-                  background-color 0.2s;
+      transition: background-color 0.2s ease;
     }
-    .card:hover {
+
+    /* Active / Selected / Hover States */
+    .card:hover, .card.selected {
       transform: translateY(-3px);
-      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 12px 30px -8px rgba(66, 133, 244, 0.25), var(--shadow-md);
+    }
+
+    .card:hover::before, .card.selected::before {
+      opacity: 1;
+    }
+
+    .card.selected .card-inner {
       background: var(--card-hover);
     }
+
+    /* Subtle glow flare when selected */
+    .card.selected::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      box-shadow: 0 0 20px 2px rgba(66, 133, 244, 0.35);
+      z-index: 0;
+      pointer-events: none;
+    }
+
     .tick {
       width: 28px;
       height: 28px;
@@ -391,7 +401,7 @@
     footer a:hover { color: var(--fg); }
 
     @media (prefers-reduced-motion: reduce) {
-      .fluid-blob { animation: none !important; }
+      .fluid-blob, .card::before { animation: none !important; }
       * { transition: none !important; }
     }
   </style>
@@ -434,32 +444,40 @@
         <p>Pick a tool, perform the task, and get on with your day.</p>
       </div>
       <div class="grid">
-        <div class="card">
-          <span class="tick" aria-hidden="true"></span>
-          <div>
-            <h3>TikTok Downloader</h3>
-            <p>Paste any TikTok link and download clean video directly to your storage.</p>
+        <div class="card" role="button" tabindex="0">
+          <div class="card-inner">
+            <span class="tick" aria-hidden="true"></span>
+            <div>
+              <h3>TikTok Downloader</h3>
+              <p>Paste any TikTok link and download clean video directly to your storage.</p>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <span class="tick" aria-hidden="true"></span>
-          <div>
-            <h3>AI Photo Generator</h3>
-            <p>Turn text prompts into high-resolution visuals in just a few seconds.</p>
+        <div class="card" role="button" tabindex="0">
+          <div class="card-inner">
+            <span class="tick" aria-hidden="true"></span>
+            <div>
+              <h3>AI Photo Generator</h3>
+              <p>Turn text prompts into high-resolution visuals in just a few seconds.</p>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <span class="tick" aria-hidden="true"></span>
-          <div>
-            <h3>Spotify Downloader</h3>
-            <p>Download clean, high-bitrate audio directly from public Spotify tracks.</p>
+        <div class="card" role="button" tabindex="0">
+          <div class="card-inner">
+            <span class="tick" aria-hidden="true"></span>
+            <div>
+              <h3>Spotify Downloader</h3>
+              <p>Download clean, high-bitrate audio directly from public Spotify tracks.</p>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <span class="tick" aria-hidden="true"></span>
-          <div>
-            <h3>Hadith Collection</h3>
-            <p>Instant keyword search and seamless chapter browsing all in one view.</p>
+        <div class="card" role="button" tabindex="0">
+          <div class="card-inner">
+            <span class="tick" aria-hidden="true"></span>
+            <div>
+              <h3>Hadith Collection</h3>
+              <p>Instant keyword search and seamless chapter browsing all in one view.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -472,25 +490,31 @@
         <p>Built with speed and minimalism as top priorities.</p>
       </div>
       <div class="grid">
-        <div class="card">
-          <span class="tick" aria-hidden="true"></span>
-          <div>
-            <h3>Zero Subscriptions</h3>
-            <p>No paywalls, hidden tiers, or credits. Every tool is unrestricted.</p>
+        <div class="card" role="button" tabindex="0">
+          <div class="card-inner">
+            <span class="tick" aria-hidden="true"></span>
+            <div>
+              <h3>Zero Subscriptions</h3>
+              <p>No paywalls, hidden tiers, or credits. Every tool is unrestricted.</p>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <span class="tick" aria-hidden="true"></span>
-          <div>
-            <h3>Focused Workspaces</h3>
-            <p>Dedicated minimal interfaces designed around input and output.</p>
+        <div class="card" role="button" tabindex="0">
+          <div class="card-inner">
+            <span class="tick" aria-hidden="true"></span>
+            <div>
+              <h3>Focused Workspaces</h3>
+              <p>Dedicated minimal interfaces designed around input and output.</p>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <span class="tick" aria-hidden="true"></span>
-          <div>
-            <h3>Performance First</h3>
-            <p>Ultra-lightweight code footprint with zero bloated asset overhead.</p>
+        <div class="card" role="button" tabindex="0">
+          <div class="card-inner">
+            <span class="tick" aria-hidden="true"></span>
+            <div>
+              <h3>Performance First</h3>
+              <p>Ultra-lightweight code footprint with zero bloated asset overhead.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -605,6 +629,39 @@
 
     ticks.forEach(el => io.observe(el));
   })();
+
+  /* =========================================================
+     CARD SELECTION INTERACTION (Click & Keyboard Enter/Space)
+     ========================================================= */
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+      const toggleSelect = (e) => {
+        // Agar click card par ho toh toggle karein
+        const isSelected = card.classList.contains('selected');
+        cards.forEach(c => c.classList.remove('selected'));
+        if (!isSelected) {
+          card.classList.add('selected');
+        }
+      };
+
+      card.addEventListener('click', toggleSelect);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleSelect(e);
+        }
+      });
+    });
+
+    // Bahar click karne par selection remove ho jaye
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.card')) {
+        cards.forEach(c => c.classList.remove('selected'));
+      }
+    });
+  });
   </script>
 </body>
 </html>
