@@ -1,136 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RDP Methods</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Poppins Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Feather Icons -->
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
-            --primary-color: #8E2DE2;
-            --bg-dark: #0f0f12;
-            --bg-light: #1f1f1f;
-            --bg-lighter: #2a2a2a;
-            --border-color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HamzaEditz 2.0 - Free Windows RDP Methods</title>
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-dark);
-            color: #f0f0f0;
-        }
+  <!-- Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        /* --- Gemini Text Effect --- */
-        .gemini-title {
-            font-weight: 800;
-            background: linear-gradient(90deg, #8E2DE2, #4A00E0, #ec4899, #f59e0b, #8E2DE2);
-            background-size: 400% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gemini-shimmer 8s linear infinite;
-        }
-        @keyframes gemini-shimmer {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 400% 50%; }
-        }
-        
-        /* Clickable Card Style */
-        .method-card {
-            background: var(--bg-light);
-            border: 1px solid var(--border-color);
-            border-top: 4px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            text-decoration: none;
-            color: #d1d5db; /* gray-300 */
-            transition: all 0.3s ease;
-            display: block;
-        }
-        .method-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-            box-shadow: 0 10px 25px rgba(142, 45, 226, 0.2);
-        }
-        .method-card h2 {
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .method-card p {
-            font-size: 1rem;
-        }
-    </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        'primary-color': 'var(--primary-color)',
-                        'bg-dark': 'var(--bg-dark)',
-                        'bg-light': 'var(--bg-light)',
-                        'bg-lighter': 'var(--bg-lighter)',
-                        'border-color': 'var(--border-color)',
-                    }
-                }
-            }
-        }
-    </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --bg: #090a0f;
+      --surface: #11131b;
+      --surface-hover: #161924;
+      --fg: #f8fafc;
+      --muted: #94a3b8;
+      --line: #1e2230;
+      --line-subtle: #141724;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --purple: #8b5cf6;
+      --purple-glow: rgba(139, 92, 246, 0.15);
+      --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 16px 36px -10px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 760px;
+      height: 480px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* Header Bar */
+    .hdr {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .hdr-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      color: var(--fg);
+      background: var(--surface-hover);
+    }
+
+    /* Main Wrap */
+    .main-wrap {
+      position: relative;
+      z-index: 10;
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 36px;
+      width: 100%;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    /* Grid Cards */
+    .methods-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .method-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+    }
+    .method-card:hover {
+      transform: translateY(-4px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+      background: var(--surface-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-hover);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      margin-bottom: 18px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease;
+    }
+    .method-card:hover .icon-wrap {
+      transform: scale(1.06);
+      border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--fg);
+      letter-spacing: -0.015em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .card-action {
+      margin-top: auto;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+    .method-card:hover .card-action {
+      gap: 9px;
+    }
+
+    .badge-pill {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+
+    @media (max-width: 600px) {
+      .methods-grid { grid-template-columns: 1fr; gap: 14px; }
+      .method-card { padding: 22px 20px; }
+    }
+  </style>
 </head>
-<body class="min-h-screen p-4 sm:p-8 flex items-center justify-center">
+<body>
 
-    <div class="max-w-4xl mx-auto space-y-8 w-full">
-        
-        <!-- Header -->
-        <header class="text-center py-4 border-b border-border-color">
-            <h1 class="text-4xl sm:text-5xl font-extrabold gemini-title">
-                RDP Methods
-            </h1>
-            <p class="text-gray-400 mt-2 text-lg">Choose a setup method to continue</p>
-        </header>
+  <!-- Top Bar -->
+  <header class="hdr">
+    <div class="hdr-wrap">
+      <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">RDP Hub</span></a>
+      <a href="welcome.html" class="back-btn">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> All Tools
+      </a>
+    </div>
+  </header>
 
-        <!-- Method Cards -->
-        <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <!-- Card 1: Easy Method -->
-            <a href="rdp.html" class="method-card">
-                <div class="flex items-center mb-3">
-                    <i data-feather="play-circle" class="w-8 h-8 text-primary-color mr-3"></i>
-                    <h2>Rdp Method Easy</h2>
-                </div>
-                <p>Click here to view the setup guide with video tutorial.</p>
-            </a>
-            
-            <!-- Card 2: Latest Method -->
-            <a href="rdp_latest.html" class="method-card">
-                <div class="flex items-center mb-3">
-                    <i data-feather="zap" class="w-8 h-8 text-primary-color mr-3"></i>
-                    <h2>Rdp Method Latest</h2>
-                </div>
-                <p>Click here to view the latest and setup method.</p>
-            </a>
-
-        </main>
+  <main class="main-wrap">
+    <div class="header-section">
+      <div class="badge">
+        <span class="badge-dot"></span> Cloud &amp; VPS Workflows
+      </div>
+      <h1>Free Windows RDP Methods</h1>
+      <p class="subtitle">Select your preferred setup method with step-by-step guidance.</p>
     </div>
 
-    <script>
-        // Initialize icons
-        document.addEventListener('DOMContentLoaded', () => {
-            feather.replace();
-        });
-    </script>
+    <div class="methods-grid">
+      <!-- Easy Method -->
+      <a href="rdp.html" class="method-card">
+        <div class="icon-wrap">
+          <i data-lucide="play-circle" style="width: 22px; height: 22px;"></i>
+        </div>
+        <div class="card-title">
+          <span>RDP Method Easy</span>
+          <span class="badge-pill">GUIDED</span>
+        </div>
+        <p class="card-desc">Beginner-friendly walkthrough with an embedded video demonstration and quick scripts.</p>
+        <span class="card-action">
+          View Easy Guide <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+        </span>
+      </a>
+
+      <!-- Latest Method -->
+      <a href="rdp_latest.html" class="method-card">
+        <div class="icon-wrap">
+          <i data-lucide="zap" style="width: 22px; height: 22px;"></i>
+        </div>
+        <div class="card-title">
+          <span>RDP Method Latest</span>
+          <span class="badge-pill">ACTIVE</span>
+        </div>
+        <p class="card-desc">The newest working method for deploying remote desktop servers with updated cloud providers.</p>
+        <span class="card-action">
+          View Latest Setup <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+        </span>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
