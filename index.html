@@ -1,203 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>HamzaEditz 2.0 | Free tools for creators and developers</title>
-<meta name="description" content="HamzaEditz 2.0 is a free online toolkit for creators and developers.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>HamzaEditz 2.0 | Free Tools for Creators &amp; Developers</title>
+  <meta name="description" content="A curated suite of fast, lightweight, and completely free web utilities for digital creators and builders.">
 
-<!-- On start: open the welcome page once per session.
-     Add ?nowelcome to the address to skip it (for example, link back from welcome.html to /?nowelcome). -->
-<script>
-(function () {
-  var WELCOME = 'https://hamzaeditz.pw/welcome.html';
-  try {
-    if (/[?&#]nowelcome\b/.test(location.search + location.hash)) return;
-    if (location.hostname === 'hamzaeditz.pw' && location.pathname === '/welcome.html') return;
-    if (document.referrer && document.referrer.indexOf('hamzaeditz.pw/welcome') > -1) return;
-    var seen = false;
+  <!-- Welcome Redirect Script -->
+  <script>
+  (function () {
+    var WELCOME = 'https://hamzaeditz.pw/welcome.html';
     try {
-      seen = sessionStorage.getItem('welcomeSeen') === '1';
-      sessionStorage.setItem('welcomeSeen', '1');
+      if (/[?&#]nowelcome\b/.test(location.search + location.hash)) return;
+      if (location.hostname === 'hamzaeditz.pw' && location.pathname === '/welcome.html') return;
+      if (document.referrer && document.referrer.indexOf('hamzaeditz.pw/welcome') > -1) return;
+      var seen = false;
+      try {
+        seen = sessionStorage.getItem('welcomeSeen') === '1';
+        sessionStorage.setItem('welcomeSeen', '1');
+      } catch (e) {}
+      if (!seen) location.replace(WELCOME);
     } catch (e) {}
-    if (!seen) location.replace(WELCOME);
-  } catch (e) {}
-})();
-</script>
+  })();
+  </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#ffffff; --fg:#111114; --muted:#6a6a74; --line:#e4e4e8;
-  --sans:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-@media (prefers-color-scheme:dark){
-  :root{ --bg:#0b0b0d; --fg:#f4f4f6; --muted:#9a9aa4; --line:#26262b; }
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid var(--fg);outline-offset:3px;border-radius:6px}
-.wrap{max-width:720px;margin:0 auto;padding:0 24px}
-h1,h2,h3{font-weight:500;letter-spacing:-.03em}
+  <!-- Typography: Inter for clean professional look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-.hdr{border-bottom:1px solid var(--line)}
-.hdr .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{font-weight:600;letter-spacing:-.02em}
-.logo span{color:var(--muted);font-weight:400}
-.hdr a.link{font-size:14px;color:var(--muted)}
-.hdr a.link:hover{color:var(--fg)}
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --line-subtle: #f1f5f9;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.12);
+      --card-hover: #ffffff;
+      --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.06);
+    }
 
-.hero{padding:72px 24px 56px;text-align:center}
-.orbit{width:160px;height:160px;margin:0 auto 12px}
-.orbit svg,.tick svg{display:block;width:100%;height:100%}
-h1{font-size:clamp(2.1rem,6vw,3.25rem);line-height:1.08;text-wrap:balance}
-.sub{margin:16px auto 0;max-width:30rem;font-size:1.1rem;color:var(--muted);text-wrap:pretty}
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #090a0f;
+        --surface: #11131b;
+        --fg: #f8fafc;
+        --muted: #94a3b8;
+        --line: #1e2230;
+        --line-subtle: #141724;
+        --accent: #10b981;
+        --accent-glow: rgba(16, 185, 129, 0.15);
+        --card-hover: #161924;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+      }
+    }
 
-section.block{padding:40px 0;border-top:1px solid var(--line)}
-h2{font-size:1.5rem;margin-bottom:24px}
-.feat{list-style:none;display:grid;gap:28px}
-.feat li{display:flex;gap:16px;align-items:flex-start}
-.tick{width:32px;height:32px;flex:none;margin-top:1px}
-.tick:empty::before{content:"";display:block;width:8px;height:8px;margin:12px;border-radius:50%;background:#2bb673}
-.feat h3{font-size:1.1rem;margin-bottom:2px}
-.feat p{color:var(--muted)}
-.note{padding:0 0 56px;color:var(--muted);font-size:14px}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-footer{border-top:1px solid var(--line);padding:28px 0 48px;font-size:13px;color:var(--muted)}
-footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-footer a:hover{color:var(--fg)}
-@media (prefers-reduced-motion:reduce){*{transition:none !important}}
-</style>
+    /* Ambient background gradient glow */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+    .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    .hdr {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      border-bottom: 1px solid var(--line);
+      z-index: 50;
+      transition: border-color 0.2s;
+    }
+    .hdr .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .nav-btn {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 6px 14px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover { color: var(--fg); background: var(--line-subtle); }
+
+    /* Hero */
+    .hero { padding: 76px 24px 60px; text-align: center; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+    .orbit-box { width: 140px; height: 140px; margin: 0 auto 20px; }
+    .orbit-box svg, .tick svg { display: block; width: 100%; height: 100%; }
+
+    h1 {
+      font-size: clamp(2.3rem, 5.5vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+      margin-bottom: 16px;
+    }
+    .sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* Sections & Cards */
+    section.block { padding: 48px 0; border-top: 1px solid var(--line); }
+    .section-head { margin-bottom: 28px; }
+    .section-head h2 { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.02em; }
+    .section-head p { font-size: 0.95rem; color: var(--muted); margin-top: 4px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+      box-shadow: var(--shadow-md);
+      background: var(--card-hover);
+    }
+    .tick {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .tick:empty::before {
+      content: "";
+      display: block;
+      width: 8px;
+      height: 8px;
+      margin: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.01em; }
+    .card p { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+
+    /* Footer & Disclaimer */
+    .note-box {
+      margin: 40px auto 60px;
+      padding: 16px 20px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px dashed var(--line);
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 0 44px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    footer a:hover { color: var(--fg); }
+
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
 </head>
 <body>
 
-<header class="hdr">
-  <div class="wrap">
-    <a href="#" class="logo" aria-label="HamzaEditz 2.0">HamzaEditz <span>2.0</span></a>
-    <a class="link" href="https://hamzaeditz.pw/welcome.html">Welcome page</a>
-  </div>
-</header>
+  <!-- Navigation Bar -->
+  <header class="hdr">
+    <div class="wrap">
+      <a href="#" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
+      <a class="nav-btn" href="https://hamzaeditz.pw/welcome.html">Welcome Guide &rarr;</a>
+    </div>
+  </header>
 
-<main>
-  <section class="hero">
-    <div class="orbit" id="orbit" aria-hidden="true"></div>
-    <h1>Free tools for creators and developers.</h1>
-    <p class="sub">HamzaEditz 2.0 is a free online toolkit. Here is what you can do with it.</p>
-  </section>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero wrap">
+      <div class="badge">
+        <span class="badge-dot"></span> 100% Free &amp; Open Utilities
+      </div>
+      <div class="orbit-box" id="orbit" aria-hidden="true"></div>
+      <h1>Everyday tools for creators &amp; builders.</h1>
+      <p class="sub">Fast, simple, distraction-free utilities tailored to save you time. Zero paywalls, zero clutter.</p>
+    </section>
 
-  <section class="block wrap" id="features">
-    <h2>Features</h2>
-    <ul class="feat">
-      <li><span class="tick" aria-hidden="true"></span><div><h3>TikTok downloader</h3><p>Paste a TikTok link and download the video to your device.</p></div></li>
-      <li><span class="tick" aria-hidden="true"></span><div><h3>AI photo generator</h3><p>Describe the picture you want and get images back in seconds.</p></div></li>
-      <li><span class="tick" aria-hidden="true"></span><div><h3>Spotify downloader</h3><p>Paste a Spotify track link and download the audio file.</p></div></li>
-      <li><span class="tick" aria-hidden="true"></span><div><h3>Hadith Collection</h3><p>Browse by book or search by keyword and read the results on one page.</p></div></li>
-    </ul>
-  </section>
+    <!-- Features -->
+    <section class="block wrap" id="features">
+      <div class="section-head">
+        <h2>Curated Utilities</h2>
+        <p>Pick a tool, perform the task, and get on with your day.</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <span class="tick" aria-hidden="true"></span>
+          <div>
+            <h3>TikTok Downloader</h3>
+            <p>Paste any TikTok link and download clean video directly to your storage.</p>
+          </div>
+        </div>
+        <div class="card">
+          <span class="tick" aria-hidden="true"></span>
+          <div>
+            <h3>AI Photo Generator</h3>
+            <p>Turn text prompts into high-resolution visuals in just a few seconds.</p>
+          </div>
+        </div>
+        <div class="card">
+          <span class="tick" aria-hidden="true"></span>
+          <div>
+            <h3>Spotify Downloader</h3>
+            <p>Download clean, high-bitrate audio directly from public Spotify tracks.</p>
+          </div>
+        </div>
+        <div class="card">
+          <span class="tick" aria-hidden="true"></span>
+          <div>
+            <h3>Hadith Collection</h3>
+            <p>Instant keyword search and seamless chapter browsing all in one view.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <section class="block wrap">
-    <h2>Why HamzaEditz</h2>
-    <ul class="feat">
-      <li><span class="tick" aria-hidden="true"></span><div><h3>Free to use</h3><p>Every tool on the site costs nothing.</p></div></li>
-      <li><span class="tick" aria-hidden="true"></span><div><h3>One job per tool</h3><p>Each tool has its own page, so you see the input and the result, nothing else.</p></div></li>
-      <li><span class="tick" aria-hidden="true"></span><div><h3>Made for creators and developers</h3><p>Tools for the content you make and the things you build.</p></div></li>
-    </ul>
-  </section>
+    <!-- Value Propositions -->
+    <section class="block wrap">
+      <div class="section-head">
+        <h2>Why HamzaEditz</h2>
+        <p>Built with speed and minimalism as top priorities.</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <span class="tick" aria-hidden="true"></span>
+          <div>
+            <h3>Zero Subscriptions</h3>
+            <p>No paywalls, hidden tiers, or credits. Every tool is unrestricted.</p>
+          </div>
+        </div>
+        <div class="card">
+          <span class="tick" aria-hidden="true"></span>
+          <div>
+            <h3>Focused Workspaces</h3>
+            <p>Dedicated minimal interfaces designed around input and output.</p>
+          </div>
+        </div>
+        <div class="card">
+          <span class="tick" aria-hidden="true"></span>
+          <div>
+            <h3>Performance First</h3>
+            <p>Ultra-lightweight code footprint with zero bloated asset overhead.</p>
+          </div>
+        </div>
+      </div>
 
-  <p class="wrap note">Only download content that you own or have permission to use.</p>
-</main>
+      <div class="note-box">
+        Notice: Please ensure you only download content you own or have explicit rights to archive.
+      </div>
+    </section>
+  </main>
 
-<footer>
-  <div class="wrap">
-    <span>&copy; 2026 HamzaEditz</span>
-    <a href="https://hamzaeditz.pw/welcome.html">Welcome page</a>
-  </div>
-</footer>
+  <footer>
+    <div class="wrap">
+      <span>&copy; 2026 HamzaEditz. Built for creators.</span>
+      <a href="https://hamzaeditz.pw/welcome.html">Welcome Page</a>
+    </div>
+  </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
-<script id="lottie-builders">
-/* Lottie animations are generated in code, so no extra JSON files are needed */
-const LB = (() => {
-  const prop = k => ({ a: 0, k });
-  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).concat(1);
-  const anim = (frames, mode = 'ease') => ({ a: 1, k: frames.map(([t, v], idx) => {
-    const kf = { t, s: Array.isArray(v) ? v : [v] };
-    if (idx < frames.length - 1) {
-      if (mode === 'lin') { kf.i = { x: [1], y: [1] }; kf.o = { x: [0], y: [0] }; }
-      else { kf.i = { x: [.4], y: [1] }; kf.o = { x: [.6], y: [0] }; }
+  <!-- Lottie Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  
+  <script id="lottie-builders">
+  /* Dynamic Lottie vector generator */
+  const LB = (() => {
+    const prop = k => ({ a: 0, k });
+    const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).concat(1);
+    const anim = (frames, mode = 'ease') => ({
+      a: 1,
+      k: frames.map(([t, v], idx) => {
+        const kf = { t, s: Array.isArray(v) ? v : [v] };
+        if (idx < frames.length - 1) {
+          if (mode === 'lin') { kf.i = { x: [1], y: [1] }; kf.o = { x: [0], y: [0] }; }
+          else { kf.i = { x: [.4], y: [1] }; kf.o = { x: [.6], y: [0] }; }
+        }
+        return kf;
+      })
+    });
+    const tr = (x = {}) => Object.assign({ ty: 'tr', p: prop([0, 0]), a: prop([0, 0]), s: prop([100, 100]), r: prop(0), o: prop(100), sk: prop(0), sa: prop(0), nm: 'tr' }, x);
+    const group = (items, x) => ({ ty: 'gr', it: [...items, tr(x)], nm: 'group' });
+    const ellipse = d => ({ ty: 'el', d: 1, s: prop([d, d]), p: prop([0, 0]), nm: 'ellipse' });
+    const path = v => ({ ty: 'sh', ks: prop({ i: v.map(() => [0, 0]), o: v.map(() => [0, 0]), v, c: false }), nm: 'path' });
+    const stroke = (c, w) => ({ ty: 'st', c: prop(hex(c)), o: prop(100), w: prop(w), lc: 2, lj: 2, nm: 'stroke' });
+    const fill = c => ({ ty: 'fl', c: prop(hex(c)), o: prop(100), r: 1, nm: 'fill' });
+    const trim = (s, e) => ({ ty: 'tm', s: prop(s), e, o: prop(0), m: 1, nm: 'trim' });
+    const layer = (ind, shapes, ks, op) => ({
+      ddd: 0, ind, ty: 4, nm: 'layer' + ind, sr: 1,
+      ks: Object.assign({ o: prop(100), r: prop(0), p: prop([0, 0, 0]), a: prop([0, 0, 0]), s: prop([100, 100, 100]) }, ks),
+      ao: 0, shapes, ip: 0, op, st: 0, bm: 0
+    });
+    const comp = (size, op, layers) => ({ v: '5.7.0', fr: 30, ip: 0, op, w: size, h: size, nm: 'anim', ddd: 0, assets: [], layers });
+
+    const check = () => {
+      const g = '#10b981';
+      return comp(100, 45, [
+        layer(1, [group([path([[-14, 0], [-4, 10], [15, -9]]), stroke(g, 6), trim(0, anim([[0, 0], [18, 100]]))])], { p: prop([50, 50, 0]) }, 45),
+        layer(2, [group([ellipse(40), fill(g)], { o: prop(12), s: anim([[0, [0, 0]], [14, [100, 100]]]) })], { p: prop([50, 50, 0]) }, 45)
+      ]);
+    };
+
+    const orbit = () => {
+      const T = 150;
+      const dot = (ind, radius, size, color, turns, start) =>
+        layer(ind, [group([ellipse(size), fill(color)], { p: prop([radius, 0]) })],
+          { p: prop([60, 60, 0]), r: anim([[0, start], [T, start + 360 * turns]], 'lin') }, T);
+      const ring = (ind, d) => layer(ind, [group([ellipse(d), stroke('#94a3b8', 1)], { o: prop(25) })], { p: prop([60, 60, 0]) }, T);
+      const core = layer(5, [group([ellipse(18), fill('#10b981')])],
+        { p: prop([60, 60, 0]), s: anim([[0, [95, 95, 100]], [75, [110, 110, 100]], [T, [95, 95, 100]]]) }, T);
+      return comp(120, T, [
+        dot(1, 46, 9, '#38bdf8', 1, 0),
+        dot(2, 34, 8, '#818cf8', -2, 90),
+        dot(3, 22, 6, '#10b981', 3, 200),
+        dot(4, 46, 8, '#fbbf24', 1, 180),
+        core,
+        ring(6, 92), ring(7, 68), ring(8, 44)
+      ]);
+    };
+
+    return { check, orbit };
+  })();
+  </script>
+
+  <script>
+  (function () {
+    if (!window.lottie) return;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const load = (el, data, loop) => lottie.loadAnimation({
+      container: el,
+      renderer: 'svg',
+      loop: !!loop,
+      autoplay: false,
+      animationData: data
+    });
+
+    const orbitEl = document.getElementById('orbit');
+    if (orbitEl) {
+      const orbit = load(orbitEl, LB.orbit(), true);
+      still ? orbit.goToAndStop(0, true) : orbit.play();
     }
-    return kf;
-  }) });
-  const tr = (x = {}) => Object.assign({ ty: 'tr', p: prop([0, 0]), a: prop([0, 0]), s: prop([100, 100]), r: prop(0), o: prop(100), sk: prop(0), sa: prop(0), nm: 'tr' }, x);
-  const group = (items, x) => ({ ty: 'gr', it: [...items, tr(x)], nm: 'group' });
-  const ellipse = d => ({ ty: 'el', d: 1, s: prop([d, d]), p: prop([0, 0]), nm: 'ellipse' });
-  const path = v => ({ ty: 'sh', ks: prop({ i: v.map(() => [0, 0]), o: v.map(() => [0, 0]), v, c: false }), nm: 'path' });
-  const stroke = (c, w) => ({ ty: 'st', c: prop(hex(c)), o: prop(100), w: prop(w), lc: 2, lj: 2, nm: 'stroke' });
-  const fill = c => ({ ty: 'fl', c: prop(hex(c)), o: prop(100), r: 1, nm: 'fill' });
-  const trim = (s, e) => ({ ty: 'tm', s: prop(s), e, o: prop(0), m: 1, nm: 'trim' });
-  const layer = (ind, shapes, ks, op) => ({ ddd: 0, ind, ty: 4, nm: 'layer' + ind, sr: 1,
-    ks: Object.assign({ o: prop(100), r: prop(0), p: prop([0, 0, 0]), a: prop([0, 0, 0]), s: prop([100, 100, 100]) }, ks),
-    ao: 0, shapes, ip: 0, op, st: 0, bm: 0 });
-  const comp = (size, op, layers) => ({ v: '5.7.0', fr: 30, ip: 0, op, w: size, h: size, nm: 'anim', ddd: 0, assets: [], layers });
 
-  /* Tick: a soft circle grows, then the check draws itself */
-  const check = () => {
-    const g = '#2bb673';
-    return comp(100, 50, [
-      layer(1, [group([path([[-15, 1], [-5, 11], [16, -11]]), stroke(g, 7), trim(0, anim([[0, 0], [16, 100]]))])], { p: prop([50, 50, 0]) }, 50),
-      layer(2, [group([ellipse(44), fill(g)], { o: prop(16), s: anim([[0, [0, 0]], [14, [100, 100]]]) })], { p: prop([50, 50, 0]) }, 50)
-    ]);
-  };
+    const ticks = [...document.querySelectorAll('.tick')];
+    const anims = new Map(ticks.map(el => [el, load(el, LB.check(), false)]));
+    
+    if (still || !('IntersectionObserver' in window)) {
+      anims.forEach(a => a.goToAndStop(44, true));
+      return;
+    }
 
-  /* Orbit: four tool-colored dots circle a soft core */
-  const orbit = () => {
-    const T = 120;
-    const dot = (ind, radius, size, color, turns, start) =>
-      layer(ind, [group([ellipse(size), fill(color)], { p: prop([radius, 0]) })],
-        { p: prop([60, 60, 0]), r: anim([[0, start], [T, start + 360 * turns]], 'lin') }, T);
-    const ring = (ind, d) => layer(ind, [group([ellipse(d), stroke('#8b8b98', 1)], { o: prop(40) })], { p: prop([60, 60, 0]) }, T);
-    const core = layer(5, [group([ellipse(16), fill('#8b8b98')])],
-      { p: prop([60, 60, 0]), s: anim([[0, [90, 90, 100]], [60, [115, 115, 100]], [T, [90, 90, 100]]]) }, T);
-    return comp(120, T, [
-      dot(1, 48, 13, '#38d6ff', 1, 0),
-      dot(2, 36, 11, '#8b6dff', -2, 90),
-      dot(3, 24, 9, '#3ecf7a', 3, 200),
-      dot(4, 48, 11, '#ffb547', 1, 180),
-      core,
-      ring(6, 96), ring(7, 72), ring(8, 48)
-    ]);
-  };
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      anims.get(e.target).goToAndPlay(0, true);
+      io.unobserve(e.target);
+    }), { threshold: 0.6 });
 
-  return { check, orbit };
-})();
-</script>
-<script>
-/* Players. If the Lottie library fails to load, the page stays static. */
-(function () {
-  if (!window.lottie) return;
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const load = (el, data, loop) => lottie.loadAnimation({ container: el, renderer: 'svg', loop: !!loop, autoplay: false, animationData: data });
-
-  const orbit = load(document.getElementById('orbit'), LB.orbit(), true);
-  still ? orbit.goToAndStop(0, true) : orbit.play();
-
-  const ticks = [...document.querySelectorAll('.tick')];
-  const anims = new Map(ticks.map(el => [el, load(el, LB.check(), false)]));
-  if (still || !('IntersectionObserver' in window)) {
-    anims.forEach(a => a.goToAndStop(49, true));
-    return;
-  }
-  const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    anims.get(e.target).goToAndPlay(0, true);
-    io.unobserve(e.target);
-  }), { threshold: .8 });
-  ticks.forEach(el => io.observe(el));
-})();
-</script>
+    ticks.forEach(el => io.observe(el));
+  })();
+  </script>
 </body>
 </html>
