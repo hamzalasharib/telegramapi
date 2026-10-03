@@ -23,13 +23,13 @@
       --muted: #64748b;
       --line: rgba(226, 232, 240, 0.85);
       --line-subtle: rgba(241, 245, 249, 0.75);
-      --accent: #22c55e; /* Spotify green accent */
+      --accent: #22c55e;
       --accent-glow: rgba(34, 197, 94, 0.15);
       --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
       --shadow-md: 0 16px 36px -10px rgba(15, 23, 42, 0.1);
 
-      /* Gemini Fluid & Stroke Colors */
+      /* Gemini Fluid & Stroke Palette */
       --gemini-c1: #4285F4;
       --gemini-c2: #9b51e0;
       --gemini-c3: #00d2ff;
@@ -149,13 +149,6 @@
       padding: 0 20px 80px;
     }
 
-    .glass {
-      background: color-mix(in srgb, var(--surface) 80%, transparent);
-      border: 1px solid var(--line);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
     /* Header */
     .hdr {
       position: sticky;
@@ -225,7 +218,7 @@
       margin-top: 8px;
     }
 
-    /* Gemini Stroke Input Card */
+    /* Gemini Stroke Container */
     .gemini-stroke-card {
       position: relative;
       border-radius: 20px;
@@ -573,8 +566,6 @@
   <script>
     lucide.createIcons();
 
-    const API_ENDPOINT = "https://musicfab.io/api/spotify";
-
     async function handleFetch(e) {
       e.preventDefault();
       const input = document.getElementById('spotify-url');
@@ -586,7 +577,6 @@
       const trackUrl = input.value.trim();
       if (!trackUrl) return;
 
-      // Reset states
       statusMsg.className = "status-msg info";
       statusMsg.textContent = "Fetching track details...";
       statusMsg.style.display = "block";
@@ -594,26 +584,42 @@
       btn.disabled = true;
       btnText.textContent = "Loading...";
 
-      try {
-        // Direct call with corsproxy fallback if direct fetch fails
-        let res;
+      const targetUrl = "https://musicfab.io/api/spotify";
+      const payload = JSON.stringify({ url: trackUrl });
+
+      // Multiple proxy relays to ensure CORS bypass on browser
+      const proxyEndpoints = [
+        "https://corsproxy.io/?" + encodeURIComponent(targetUrl),
+        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetUrl),
+        targetUrl
+      ];
+
+      let data = null;
+
+      for (const endpoint of proxyEndpoints) {
         try {
-          res = await fetch(API_ENDPOINT, {
+          const res = await fetch(endpoint, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: trackUrl })
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: payload
           });
-        } catch (corsErr) {
-          // Fallback through proxy in case browser triggers CORS restrictions
-          res = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(API_ENDPOINT), {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: trackUrl })
-          });
+
+          if (!res.ok) continue;
+          
+          const json = await res.json();
+          data = typeof json === "string" ? JSON.parse(json) : json;
+          if (data && data.data && data.data.metadata) {
+            break;
+          }
+        } catch (err) {
+          // Continue to next proxy fallback
         }
+      }
 
-        const data = await res.json();
-
+      try {
         if (data && data.data && data.data.metadata) {
           const meta = data.data.metadata;
 
@@ -640,7 +646,7 @@
         }
       } catch (err) {
         statusMsg.className = "status-msg error";
-        statusMsg.textContent = err.message || "Failed to fetch Spotify track. Verify the link and try again.";
+        statusMsg.textContent = err.message || "Request failed. Please verify the URL.";
       } finally {
         btn.disabled = false;
         btnText.textContent = "Get Track";
