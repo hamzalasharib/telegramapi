@@ -33,32 +33,44 @@
   <style>
     :root {
       --bg: #fafafa;
-      --surface: #ffffff;
+      --surface: rgba(255, 255, 255, 0.78);
       --fg: #0f172a;
       --muted: #64748b;
-      --line: #e2e8f0;
-      --line-subtle: #f1f5f9;
+      --line: rgba(226, 232, 240, 0.85);
+      --line-subtle: rgba(241, 245, 249, 0.8);
       --accent: #10b981;
       --accent-glow: rgba(16, 185, 129, 0.12);
-      --card-hover: #ffffff;
+      --card-hover: rgba(255, 255, 255, 0.95);
       --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.06);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 14px 34px -10px rgba(15, 23, 42, 0.08);
+
+      /* Gemini Aurora Gradient Colors */
+      --aurora-1: rgba(59, 130, 246, 0.28);  /* Gemini Blue */
+      --aurora-2: rgba(147, 51, 234, 0.22);  /* Gemini Purple */
+      --aurora-3: rgba(6, 182, 212, 0.25);   /* Cyan */
+      --aurora-4: rgba(236, 72, 153, 0.16);  /* Magenta */
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #090a0f;
-        --surface: #11131b;
+        --bg: #07080d;
+        --surface: rgba(17, 19, 27, 0.72);
         --fg: #f8fafc;
         --muted: #94a3b8;
-        --line: #1e2230;
-        --line-subtle: #141724;
+        --line: rgba(30, 34, 48, 0.85);
+        --line-subtle: rgba(20, 23, 36, 0.7);
         --accent: #10b981;
         --accent-glow: rgba(16, 185, 129, 0.15);
-        --card-hover: #161924;
-        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+        --card-hover: rgba(24, 28, 40, 0.9);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 16px 36px -8px rgba(0, 0, 0, 0.55);
+
+        /* Gemini Dark Aurora Colors */
+        --aurora-1: rgba(59, 130, 246, 0.35);
+        --aurora-2: rgba(147, 51, 234, 0.30);
+        --aurora-3: rgba(6, 182, 212, 0.26);
+        --aurora-4: rgba(244, 63, 94, 0.20);
       }
     }
 
@@ -72,34 +84,102 @@
       -webkit-font-smoothing: antialiased;
       position: relative;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* Ambient background gradient glow */
-    body::before {
-      content: "";
-      position: absolute;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 500px;
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-      z-index: -1;
+    /* =========================================================
+       GEMINI AURORA MESH BACKGROUND ANIMATION
+       ========================================================= */
+    .gemini-bg {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
       pointer-events: none;
+      z-index: -1;
+      filter: blur(80px);
+      transform: translateZ(0);
+      opacity: 0.95;
+    }
+
+    .aurora-blob {
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: normal;
+      will-change: transform;
+    }
+
+    .blob-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
+      top: -150px;
+      left: 15%;
+      animation: floatOrb1 20s infinite alternate ease-in-out;
+    }
+
+    .blob-2 {
+      width: 700px;
+      height: 650px;
+      background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
+      top: 5%;
+      right: 10%;
+      animation: floatOrb2 25s infinite alternate ease-in-out;
+    }
+
+    .blob-3 {
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
+      bottom: 10%;
+      left: 20%;
+      animation: floatOrb3 18s infinite alternate ease-in-out;
+    }
+
+    .blob-4 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--aurora-4) 0%, transparent 70%);
+      top: 40%;
+      right: 25%;
+      animation: floatOrb4 22s infinite alternate ease-in-out;
+    }
+
+    @keyframes floatOrb1 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(80px, 60px) scale(1.15); }
+      100% { transform: translate(-60px, 90px) scale(0.9); }
+    }
+
+    @keyframes floatOrb2 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(-100px, 80px) scale(1.1); }
+      100% { transform: translate(50px, -40px) scale(0.95); }
+    }
+
+    @keyframes floatOrb3 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(90px, -70px) scale(1.18); }
+      100% { transform: translate(-70px, 40px) scale(0.88); }
+    }
+
+    @keyframes floatOrb4 {
+      0%   { transform: translate(0, 0) scale(0.95); }
+      50%  { transform: translate(-60px, -90px) scale(1.12); }
+      100% { transform: translate(70px, 40px) scale(1); }
     }
 
     a { color: inherit; text-decoration: none; }
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
-    .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; position: relative; }
 
     /* Header */
     .hdr {
       position: sticky;
       top: 0;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: color-mix(in srgb, var(--bg) 75%, transparent);
       border-bottom: 1px solid var(--line);
       z-index: 50;
       transition: border-color 0.2s;
@@ -140,6 +220,8 @@
       border-radius: 100px;
       margin-bottom: 24px;
       box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
     .orbit-box { width: 140px; height: 140px; margin: 0 auto 20px; }
@@ -181,11 +263,16 @@
       gap: 16px;
       align-items: flex-start;
       box-shadow: var(--shadow-sm);
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.2s ease, 
+                  box-shadow 0.25s ease, 
+                  background-color 0.2s;
     }
     .card:hover {
-      transform: translateY(-2px);
-      border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
       box-shadow: var(--shadow-md);
       background: var(--card-hover);
     }
@@ -217,20 +304,34 @@
       font-size: 13px;
       color: var(--muted);
       text-align: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     footer {
       border-top: 1px solid var(--line);
       padding: 32px 0 44px;
       font-size: 13px;
       color: var(--muted);
+      background: color-mix(in srgb, var(--bg) 60%, transparent);
     }
     footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
     footer a:hover { color: var(--fg); }
 
-    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora-blob { animation: none !important; }
+      * { transition: none !important; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Gemini Aurora Ambient Background -->
+  <div class="gemini-bg" aria-hidden="true">
+    <div class="aurora-blob blob-1"></div>
+    <div class="aurora-blob blob-2"></div>
+    <div class="aurora-blob blob-3"></div>
+    <div class="aurora-blob blob-4"></div>
+  </div>
 
   <!-- Navigation Bar -->
   <header class="hdr">
