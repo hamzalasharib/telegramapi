@@ -574,8 +574,14 @@
       const statusMsg = document.getElementById('status-msg');
       const resultBox = document.getElementById('result-box');
 
-      const trackUrl = input.value.trim();
+      let trackUrl = input.value.trim();
       if (!trackUrl) return;
+
+      // Extract Spotify track ID or clean URL
+      const trackIdMatch = trackUrl.match(/track[\/:]([a-zA-Z0-9]+)/);
+      if (trackIdMatch) {
+        trackUrl = `https://open.spotify.com/track/${trackIdMatch[1]}`;
+      }
 
       statusMsg.className = "status-msg info";
       statusMsg.textContent = "Fetching track details...";
@@ -587,42 +593,70 @@
       const targetUrl = "https://musicfab.io/api/spotify";
       const payload = JSON.stringify({ url: trackUrl });
 
-      // Multiple proxy relays to ensure CORS bypass on browser
-      const proxyEndpoints = [
-        "https://corsproxy.io/?" + encodeURIComponent(targetUrl),
-        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetUrl),
-        targetUrl
-      ];
+      let meta = null;
 
-      let data = null;
-
-      for (const endpoint of proxyEndpoints) {
-        try {
-          const res = await fetch(endpoint, {
+      // Waterfall Proxy Strategy for POST Requests
+      const gateways = [
+        // 1. Dedicated Backend/Local endpoint (agar site kisi server/Flask par ho)
+        async () => {
+          const res = await fetch("/api/spotify", {
             method: "POST",
-            headers: {
+            headers: { "Content-Type": "application/json" },
+            body: payload
+          });
+          return await res.json();
+        },
+        // 2. Direct Target Attempt
+        async () => {
+          const res = await fetch(targetUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload
+          });
+          return await res.json();
+        },
+        // 3. CORS Anywhere Mirror
+        async () => {
+          const res = await fetch("https://corsproxy.io/?" + encodeURIComponent(targetUrl), {
+            method: "POST",
+            headers: { 
               "Content-Type": "application/json",
               "Accept": "application/json"
             },
             body: payload
           });
+          return await res.json();
+        },
+        // 4. Codetabs POST Bridge
+        async () => {
+          const res = await fetch("https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetUrl), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload
+          });
+          return await res.json();
+        }
+      ];
 
-          if (!res.ok) continue;
-          
-          const json = await res.json();
-          data = typeof json === "string" ? JSON.parse(json) : json;
-          if (data && data.data && data.data.metadata) {
+      for (const gateway of gateways) {
+        try {
+          const raw = await gateway();
+          const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+
+          if (parsed?.data?.metadata) {
+            meta = parsed.data.metadata;
+            break;
+          } else if (parsed?.metadata) {
+            meta = parsed.metadata;
             break;
           }
         } catch (err) {
-          // Continue to next proxy fallback
+          // Continue to next gateway
         }
       }
 
       try {
-        if (data && data.data && data.data.metadata) {
-          const meta = data.data.metadata;
-
+        if (meta && (meta.name || meta.download)) {
           document.getElementById('track-name').textContent = meta.name || "Untitled Track";
           document.getElementById('track-artist').textContent = meta.artist || "Unknown Artist";
           document.getElementById('track-duration').textContent = meta.duration || "--:--";
@@ -642,7 +676,7 @@
           resultBox.style.display = "block";
           lucide.createIcons();
         } else {
-          throw new Error("Track details could not be retrieved. Please check the URL.");
+          throw new Error("Track details could not be retrieved. Please check the URL or try again in a few moments.");
         }
       } catch (err) {
         statusMsg.className = "status-msg error";
