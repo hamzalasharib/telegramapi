@@ -482,7 +482,7 @@
   <header class="hdr">
     <div class="hdr-wrap">
       <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
-      <span style="font-size: 13px; font-weight: 600; color: var(--muted);">Utilities</span>
+      <span style="font-size: 13px; font-weight: 600; color: var(--muted);">Spotify Engine</span>
     </div>
   </header>
 
@@ -490,16 +490,16 @@
     <!-- Intro -->
     <div class="hero">
       <div class="spotify-badge">
-        <i data-lucide="music-2" style="width: 14px; height: 14px;"></i> Spotify Media Extractor
+        <i data-lucide="music-2" style="width: 14px; height: 14px;"></i> Spotsaver Engine
       </div>
       <h1>Download Spotify MP3</h1>
-      <p class="sub">Paste track link to download audio, cover artwork, and full metadata.</p>
+      <p class="sub">Direct 3-step high-speed downloader. Clean 320kbps audio & artwork.</p>
     </div>
 
     <!-- URL Input Card with Gemini Animated Stroke -->
     <div class="gemini-stroke-card">
       <div class="card-body">
-        <form id="spotify-form" onsubmit="handleFetch(event)">
+        <form id="spotify-form" onsubmit="handleSpotsaverPipeline(event)">
           <div class="input-box">
             <i data-lucide="link" style="width: 18px; height: 18px; color: var(--muted);"></i>
             <input 
@@ -537,7 +537,7 @@
                 </span>
                 <span class="pill">
                   <i data-lucide="disc" style="width: 13px; height: 13px;"></i>
-                  <span>320 kbps MP3</span>
+                  <span id="track-quality">320 kbps MP3</span>
                 </span>
                 <span class="pill" id="pill-album" style="display: none;">
                   <i data-lucide="folder" style="width: 13px; height: 13px;"></i>
@@ -566,7 +566,50 @@
   <script>
     lucide.createIcons();
 
-    async function handleFetch(e) {
+    // Helper: Format seconds into MM:SS
+    function formatTime(seconds) {
+      if (!seconds) return "--:--";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    // CORS Safe Request Relay (Direct + Proxy Gateways)
+    async function makeRequest(url, method = 'GET', body = null) {
+      const proxies = [
+        (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+        (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+        (u) => u // Direct attempt
+      ];
+
+      for (const proxy of proxies) {
+        try {
+          const target = proxy(url);
+          const opts = {
+            method: method,
+            headers: {
+              'Accept': '*/*',
+              'Content-Type': 'application/json'
+            }
+          };
+          if (body && method === 'POST') {
+            opts.body = typeof body === 'string' ? body : JSON.stringify(body);
+          }
+
+          const res = await fetch(target, opts);
+          if (!res.ok) continue;
+
+          const data = await res.json();
+          const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+          if (parsed) return parsed;
+        } catch (e) {
+          // Continue to next gateway
+        }
+      }
+      throw new Error("Connection failed across gateways.");
+    }
+
+    async function handleSpotsaverPipeline(e) {
       e.preventDefault();
       const input = document.getElementById('spotify-url');
       const btn = document.getElementById('submit-btn');
@@ -574,113 +617,96 @@
       const statusMsg = document.getElementById('status-msg');
       const resultBox = document.getElementById('result-box');
 
-      let trackUrl = input.value.trim();
-      if (!trackUrl) return;
+      const rawUrl = input.value.trim();
+      if (!rawUrl) return;
 
-      // Extract Spotify track ID or clean URL
-      const trackIdMatch = trackUrl.match(/track[\/:]([a-zA-Z0-9]+)/);
-      if (trackIdMatch) {
-        trackUrl = `https://open.spotify.com/track/${trackIdMatch[1]}`;
-      }
-
+      // Status indicator
       statusMsg.className = "status-msg info";
-      statusMsg.textContent = "Fetching track details...";
+      statusMsg.textContent = "Step 1/3: Reading Spotify metadata...";
       statusMsg.style.display = "block";
       resultBox.style.display = "none";
       btn.disabled = true;
-      btnText.textContent = "Loading...";
-
-      const targetUrl = "https://musicfab.io/api/spotify";
-      const payload = JSON.stringify({ url: trackUrl });
-
-      let meta = null;
-
-      // Waterfall Proxy Strategy for POST Requests
-      const gateways = [
-        // 1. Dedicated Backend/Local endpoint (agar site kisi server/Flask par ho)
-        async () => {
-          const res = await fetch("/api/spotify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: payload
-          });
-          return await res.json();
-        },
-        // 2. Direct Target Attempt
-        async () => {
-          const res = await fetch(targetUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: payload
-          });
-          return await res.json();
-        },
-        // 3. CORS Anywhere Mirror
-        async () => {
-          const res = await fetch("https://corsproxy.io/?" + encodeURIComponent(targetUrl), {
-            method: "POST",
-            headers: { 
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-            },
-            body: payload
-          });
-          return await res.json();
-        },
-        // 4. Codetabs POST Bridge
-        async () => {
-          const res = await fetch("https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetUrl), {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: payload
-          });
-          return await res.json();
-        }
-      ];
-
-      for (const gateway of gateways) {
-        try {
-          const raw = await gateway();
-          const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
-
-          if (parsed?.data?.metadata) {
-            meta = parsed.data.metadata;
-            break;
-          } else if (parsed?.metadata) {
-            meta = parsed.metadata;
-            break;
-          }
-        } catch (err) {
-          // Continue to next gateway
-        }
-      }
+      btnText.textContent = "Processing...";
 
       try {
-        if (meta && (meta.name || meta.download)) {
-          document.getElementById('track-name').textContent = meta.name || "Untitled Track";
-          document.getElementById('track-artist').textContent = meta.artist || "Unknown Artist";
-          document.getElementById('track-duration').textContent = meta.duration || "--:--";
-          document.getElementById('track-img').src = meta.image || "";
-          
-          if (meta.album) {
-            document.getElementById('track-album').textContent = meta.album;
-            document.getElementById('pill-album').style.display = "inline-flex";
-          } else {
-            document.getElementById('pill-album').style.display = "none";
-          }
+        /* ========================================================
+           STEP 1: Fetch Track Metadata from spotsaver
+           ======================================================== */
+        const step1Url = `https://spotsaver.net/api/spotify/?url=${encodeURIComponent(rawUrl)}`;
+        const step1Data = await makeRequest(step1Url, 'GET');
 
-          document.getElementById('dl-audio-btn').href = meta.download || "#";
-          document.getElementById('dl-cover-btn').href = meta.image || "#";
-
-          statusMsg.style.display = "none";
-          resultBox.style.display = "block";
-          lucide.createIcons();
-        } else {
-          throw new Error("Track details could not be retrieved. Please check the URL or try again in a few moments.");
+        if (!step1Data || !step1Data.items || !step1Data.items.length) {
+          throw new Error("Unable to parse track info. Please check the Spotify link.");
         }
+
+        const item = step1Data.items[0];
+        const title = item.title;
+        const artist = item.artist;
+        const thumbnail = item.thumbnail || "";
+        const duration = formatTime(item.duration);
+
+        // Pre-fill result card UI
+        document.getElementById('track-name').textContent = title;
+        document.getElementById('track-artist').textContent = artist;
+        document.getElementById('track-duration').textContent = duration;
+        document.getElementById('track-img').src = thumbnail;
+        document.getElementById('dl-cover-btn').href = thumbnail;
+
+        if (item.album) {
+          document.getElementById('track-album').textContent = item.album;
+          document.getElementById('pill-album').style.display = "inline-flex";
+        } else {
+          document.getElementById('pill-album').style.display = "none";
+        }
+
+        /* ========================================================
+           STEP 2: Get Video ID from spotsaver get-id API
+           ======================================================== */
+        statusMsg.textContent = "Step 2/3: Locating audio stream ID...";
+        const step2Url = "https://spotsaver.net/api/get-id/";
+        const step2Data = await makeRequest(step2Url, 'POST', {
+          title: title,
+          artist: artist
+        });
+
+        if (!step2Data || !step2Data.videoId) {
+          throw new Error("Audio stream matching failed for this track.");
+        }
+
+        const videoId = step2Data.videoId;
+
+        /* ========================================================
+           STEP 3: Generate Final MP3 Download Link
+           ======================================================== */
+        statusMsg.textContent = "Step 3/3: Generating 320kbps MP3 link...";
+        const step3Url = "https://spotsaver.net/api/download/";
+        const step3Data = await makeRequest(step3Url, 'POST', {
+          videoId: videoId,
+          candidateIds: [],
+          format: "mp3",
+          title: `${title} - ${artist}`,
+          licenseKey: null
+        });
+
+        const finalDlUrl = step3Data?.downloadUrl || step3Data?.mediaUrl || step3Data?.url || step3Data?.dlink || step3Data?.download_url;
+
+        if (!finalDlUrl) {
+          throw new Error("Failed to generate direct MP3 URL. Please try again.");
+        }
+
+        // Set Download button
+        const dlBtn = document.getElementById('dl-audio-btn');
+        dlBtn.href = finalDlUrl;
+        dlBtn.setAttribute('download', `${title} - ${artist}.mp3`);
+
+        // Reveal card
+        statusMsg.style.display = "none";
+        resultBox.style.display = "block";
+        lucide.createIcons();
+
       } catch (err) {
         statusMsg.className = "status-msg error";
-        statusMsg.textContent = err.message || "Request failed. Please verify the URL.";
+        statusMsg.textContent = err.message || "Failed to download track. Verify URL and try again.";
       } finally {
         btn.disabled = false;
         btnText.textContent = "Get Track";
