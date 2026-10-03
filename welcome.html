@@ -4,28 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Welcome - HamzaEditz 2.0</title>
-    <!-- Google Fonts -->
+
+    <!-- Typography: Plus Jakarta Sans for clean SaaS look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
     <style>
-        /* CSS Variables */
         :root {
-            --bg: #060b08;
-            --panel: rgba(255, 255, 255, 0.045);
-            --panel-hi: rgba(255, 255, 255, 0.09);
-            --border: rgba(255, 255, 255, 0.09);
-            --border-hi: rgba(186, 242, 74, 0.4);
-            --ink: #eafbf1;
-            --muted: #9fb8a8;
-            --leaf-1: #1f7a4d;
-            --leaf-2: #4fc06a;
-            --lime: #baf24a;
-            --glow: #6dffb0;
-            --coral: #ff6b4a;
+            --bg: #090a0f;
+            --surface: #11131b;
+            --surface-hover: #161924;
+            --fg: #f8fafc;
+            --muted: #94a3b8;
+            --line: #1e2230;
+            --line-subtle: #141724;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --coral: #ff5e62;
+            --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.45);
         }
 
         * {
@@ -37,539 +39,573 @@
 
         body {
             background-color: var(--bg);
-            color: var(--ink);
-            font-family: 'Poppins', sans-serif;
+            color: var(--fg);
+            font-family: var(--font);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        h1, h2, h3, .sora-font {
-            font-family: 'Sora', sans-serif;
+        /* Ambient background glow */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #seasonal-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
-        /* --- Background Layers --- */
-        #bg-noise {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0; opacity: 0.035;
-        }
-        #bg-canvas, #seasonal-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1;
-        }
-        #seasonal-canvas { z-index: 2; }
-
-        .blob {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-            pointer-events: none;
-            z-index: 0;
-            animation: drift 24s infinite alternate ease-in-out;
-        }
-        .blob-1 { width: 400px; height: 400px; background: var(--leaf-2); top: -10%; left: -10%; }
-        .blob-2 { width: 300px; height: 300px; background: var(--lime); bottom: 10%; right: -5%; animation-duration: 28s; animation-delay: -5s; }
-        .blob-3 { width: 350px; height: 350px; background: var(--leaf-1); top: 40%; left: 50%; animation-duration: 22s; animation-delay: -10s; }
-
-        @keyframes drift {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(80px, -60px) scale(1.15); }
-        }
-
-        /* --- Layout & Container --- */
-        .app-container {
+        .wrap {
             position: relative;
             z-index: 10;
-            max-width: 1200px;
+            max-width: 920px;
             margin: 0 auto;
-            padding: 0 16px 100px 16px; /* Bottom padding for nav */
+            padding: 0 20px 100px;
         }
 
         .glass {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            background: color-mix(in srgb, var(--surface) 85%, transparent);
+            border: 1px solid var(--line);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
         }
 
-        /* --- Top Bar --- */
-        .top-bar {
-            position: sticky; top: 0;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 0;
+        /* Top Bar */
+        .hdr {
+            position: sticky;
+            top: 0;
             z-index: 50;
+            background: color-mix(in srgb, var(--bg) 85%, transparent);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
         }
-        .brand-titles .title { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px;}
-        .brand-titles .subtitle { font-size: 0.75rem; color: var(--muted); }
-        
+        .hdr-wrap {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
+        }
+        .brand-tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: var(--accent-glow);
+            color: var(--accent);
+            border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+        }
         .menu-btn {
-            width: 44px; height: 44px;
-            border-radius: 14px;
-            display: flex; justify-content: center; align-items: center;
-            cursor: pointer; transition: all 0.3s ease;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.2s;
         }
-        .menu-btn:hover { background: var(--panel-hi); border-color: var(--border-hi); color: var(--lime); }
+        .menu-btn:hover {
+            color: var(--fg);
+            background: var(--surface-hover);
+        }
 
-        /* --- Hero Card --- */
+        /* Hero */
         .hero {
             position: relative;
-            border-radius: 24px;
-            padding: 28px 24px;
-            margin-top: 8px;
-            background: linear-gradient(160deg, var(--leaf-2), var(--leaf-1), var(--bg));
+            border-radius: 20px;
+            padding: 32px 28px;
+            margin-top: 24px;
+            background: linear-gradient(135deg, rgba(22, 27, 39, 0.95), rgba(12, 14, 20, 0.95));
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-md);
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
-        .hero-glow {
-            position: absolute; bottom: -30px; right: -30px;
-            width: 160px; height: 160px;
-            background: var(--glow);
-            filter: blur(60px); opacity: 0.35;
-            border-radius: 50%;
-            animation: pulseGlow 4s infinite alternate;
+        .hero-orbit-bg {
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            width: 220px;
+            height: 220px;
+            opacity: 0.18;
+            pointer-events: none;
         }
-        .hero-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .hero-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
         .hero-avatar {
-            width: 48px; height: 48px; border-radius: 50%;
-            background: var(--bg); display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-family: 'Sora', sans-serif;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.95rem;
         }
-        .hero-meta .name { font-weight: 700; font-size: 1rem; }
-        .hero-meta .tag { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
-        .hero-eyebrow { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--lime); margin-bottom: 4px; display: block; }
-        .hero-headline { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 12px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .hero-note { font-size: 0.9rem; color: rgba(255,255,255,0.85); max-width: 90%; }
-
-        /* --- Banner Strip --- */
-        .banner-strip {
-            border-radius: 16px; padding: 16px 20px; margin-top: 16px;
-            display: flex; justify-content: space-between; align-items: center;
-            animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .banner-text .b-title { font-weight: 600; font-size: 0.95rem; color: var(--lime); }
-        .banner-text .b-note { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
-        .banner-icon { font-size: 1.5rem; animation: float 3s infinite ease-in-out; }
-
-        /* --- Tools Grid --- */
-        .tools-section { margin-top: 32px; }
-        .section-label { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+        .hero-meta .name { font-weight: 600; font-size: 0.95rem; }
+        .hero-meta .tag { font-size: 0.75rem; color: var(--muted); }
         
-        .tools-grid {
-            display: grid; gap: 16px;
-            /* Mobile default */
-            grid-template-columns: repeat(3, 1fr);
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
-        @media (min-width: 700px) { .tools-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
-        @media (min-width: 1000px) { .tools-grid { grid-template-columns: repeat(5, 1fr); gap: 24px; } .hero-headline { font-size: 3rem; } .hero { padding: 40px; } }
+        .hero-headline {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+        .hero-note {
+            font-size: 0.92rem;
+            color: var(--muted);
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        /* Seasonal Badge */
+        .seasonal-badge {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border: 1px solid var(--line);
+            color: var(--fg);
+            display: none;
+        }
+
+        /* Banner Strip */
+        .banner-strip {
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--line);
+        }
+        .banner-text .b-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .banner-text .b-note {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* Tools Grid */
+        .tools-section { margin-top: 36px; }
+        .section-label {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .section-label span { font-size: 0.8rem; font-weight: 400; color: var(--muted); }
+
+        .tools-grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media (min-width: 600px) { .tools-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 840px) { .tools-grid { grid-template-columns: repeat(4, 1fr); } }
 
         .tool-card {
-            border-radius: 18px; padding: 20px 12px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            position: relative; overflow: hidden; cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, background 0.3s;
-            opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            border-radius: 16px;
+            padding: 20px 16px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
         }
         .tool-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--border-hi);
-            background: var(--panel-hi);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transform: translateY(-3px);
+            border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+            background: var(--surface-hover);
+            box-shadow: var(--shadow-md);
         }
         .tool-icon-wrap {
-            width: 48px; height: 48px; border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
             color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
-        .tool-label { font-size: 0.8rem; font-weight: 500; color: var(--ink); line-height: 1.3; }
+        .tool-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--fg);
+            line-height: 1.3;
+        }
+        .tool-desc {
+            font-size: 0.76rem;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
         
         .badge-new {
-            position: absolute; top: 8px; right: 8px;
-            background: var(--coral); color: #fff;
-            font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(255, 107, 74, 0.4);
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--coral);
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
         }
 
-        /* Ripple Effect */
-        .ripple {
-            position: absolute; border-radius: 50%; background: rgba(255,255,255,0.15);
-            transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none;
-        }
-        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
-
-        /* --- Bottom Nav --- */
+        /* Bottom Nav */
         .bottom-nav {
-            position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-            width: calc(100% - 32px); max-width: 400px;
-            border-radius: 24px; padding: 12px 24px;
-            display: flex; justify-content: space-between; align-items: center;
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 380px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border: 1px solid var(--line);
         }
         .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: var(--muted); transition: color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--muted);
+            transition: color 0.2s;
+            font-size: 0.72rem;
+            font-weight: 500;
         }
-        .nav-item.active { color: var(--lime); }
-        .nav-item.active svg { filter: drop-shadow(0 0 8px rgba(186, 242, 74, 0.4)); }
-        .nav-label { font-size: 0.7rem; font-weight: 500; }
+        .nav-item svg { width: 18px; height: 18px; }
+        .nav-item:hover { color: var(--fg); }
+        .nav-item.active { color: var(--accent); }
 
-        /* --- Sidebar --- */
+        /* Sidebar */
         .sidebar-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-            z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
         .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
         
         .sidebar {
-            position: fixed; top: 0; right: -100%; width: 280px; height: 100%;
-            background: var(--bg); border-left: 1px solid var(--border);
-            z-index: 201; padding: 24px; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex; flex-direction: column;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 290px;
+            height: 100%;
+            background: var(--surface);
+            border-left: 1px solid var(--line);
+            z-index: 201;
+            padding: 24px;
+            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
         }
         .sidebar.active { right: 0; }
-        .sidebar-close { align-self: flex-end; cursor: pointer; color: var(--muted); margin-bottom: 32px; }
+        .sidebar-close {
+            align-self: flex-end;
+            cursor: pointer;
+            color: var(--muted);
+            margin-bottom: 24px;
+            width: 22px;
+            height: 22px;
+        }
+        .sidebar-close:hover { color: var(--fg); }
         .sidebar-link {
-            display: flex; align-items: center; gap: 12px; padding: 16px 0;
-            color: var(--ink); font-weight: 500; border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            color: var(--fg);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--line-subtle);
             transition: color 0.2s;
         }
-        .sidebar-link:hover { color: var(--lime); }
+        .sidebar-link svg { width: 18px; height: 18px; color: var(--muted); }
+        .sidebar-link:hover { color: var(--accent); }
+        .sidebar-link:hover svg { color: var(--accent); }
         .sidebar-link:last-child { border-bottom: none; }
-        .sidebar-divider { height: 1px; background: var(--border); margin: 16px 0; border: none; }
+        .sidebar-divider { height: 1px; background: var(--line); margin: 16px 0; border: none; }
 
-        /* --- Mascot (Sprouty) --- */
+        /* Mascot Container */
         #mascot-container {
-            position: fixed; bottom: 14px; left: 14px; z-index: 90;
-            width: 70px; height: 84px; cursor: pointer;
+            position: fixed;
+            bottom: 24px;
+            left: 20px;
+            z-index: 90;
+            width: 58px;
+            height: 70px;
+            cursor: pointer;
             animation: mascotFloat 3s infinite ease-in-out;
-            perspective: 200px;
         }
-        @media (max-width: 700px) { #mascot-container { width: 54px; height: 64px; bottom: 90px; } }
-        
-        .mascot-shadow {
-            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
-            width: 40px; height: 8px; background: rgba(0,0,0,0.5); border-radius: 50%;
-            filter: blur(4px); animation: mascotShadow 3s infinite ease-in-out;
+        @media (max-width: 600px) {
+            #mascot-container { width: 48px; height: 58px; bottom: 84px; left: 16px; }
         }
-        .mascot-svg { width: 100%; height: 100%; overflow: visible; }
-        
-        /* Mascot Animations */
-        @keyframes mascotFloat { 0%, 100% { transform: translateY(0) rotateY(0deg); } 50% { transform: translateY(-8px) rotateY(15deg); } }
-        @keyframes mascotShadow { 0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; } 50% { transform: translateX(-50%) scale(0.8); opacity: 0.2; } }
-        @keyframes blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.1); } }
-        @keyframes waveLeft { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-30deg); } }
-        @keyframes waveRight { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(30deg); } }
-        .mascot-jump { animation: jumpAnim 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
-        @keyframes jumpAnim { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(-34px) scale(0.9, 1.1) rotate(10deg); } 100% { transform: translateY(0) scale(1); } }
-        
-        .m-eye { transform-origin: center; animation: blink 4.2s infinite; }
-        .m-arm-l { transform-origin: top right; animation: waveLeft 2s infinite ease-in-out; }
-        .m-arm-r { transform-origin: top left; animation: waveRight 2.2s infinite ease-in-out; animation-delay: 0.3s; }
-        
-        /* Utility Animations */
-        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes pulseGlow { 0% { opacity: 0.2; transform: scale(0.9); } 100% { opacity: 0.5; transform: scale(1.1); } }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
-        
-        /* Seasonal Badge */
-        .seasonal-badge {
-            position: absolute; top: 16px; right: 24px;
-            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
-            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 10; display: none;
-        }
+        @keyframes mascotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .mascot-jump { animation: jumpAnim 0.5s ease !important; }
+        @keyframes jumpAnim { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(0.9, 1.1); } 100% { transform: translateY(0) scale(1); } }
     </style>
 </head>
 <body>
 
-    <!-- Backgrounds -->
-    <svg id="bg-noise">
-        <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter>
-        <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-    </svg>
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <canvas id="bg-canvas"></canvas>
     <canvas id="seasonal-canvas"></canvas>
 
-    <!-- Main Content -->
-    <div class="app-container">
-        
-        <!-- Top Bar -->
-        <header class="top-bar">
-            <div class="brand-titles">
-                <div class="title sora-font" id="dom-site-name">Loading...</div>
-                <div class="subtitle" id="dom-site-sub">All Tools · One Place</div>
-            </div>
+    <!-- Top Bar -->
+    <header class="hdr">
+        <div class="hdr-wrap">
+            <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
             <div class="menu-btn glass" onclick="toggleSidebar()">
-                <i data-lucide="menu"></i>
+                <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Hero -->
+    <main class="wrap">
+        <!-- Hero Section -->
         <section class="hero">
             <div class="seasonal-badge" id="seasonal-badge"></div>
-            <div class="hero-glow"></div>
+            
             <div class="hero-top">
-                <div class="hero-avatar" id="dom-hero-avatar"></div>
+                <div class="hero-avatar" id="dom-hero-avatar">HE</div>
                 <div class="hero-meta">
-                    <div class="name" id="dom-hero-name"></div>
-                    <div class="tag" id="dom-hero-tag"></div>
+                    <div class="name" id="dom-hero-name">Hamza Editz</div>
+                    <div class="tag" id="dom-hero-tag">hamzaeditz.pw</div>
                 </div>
             </div>
-            <span class="hero-eyebrow">Welcome back</span>
-            <h1 class="hero-headline" id="dom-hero-headline"></h1>
-            <p class="hero-note" id="dom-hero-note"></p>
+
+            <span class="hero-eyebrow">
+                <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> Workspace Hub
+            </span>
+            <h1 class="hero-headline" id="dom-hero-headline">All Tools · One Place</h1>
+            <p class="hero-note" id="dom-hero-note">Fast utilities built for everyday digital workflows. Completely free and direct.</p>
         </section>
 
         <!-- Banner -->
         <div class="banner-strip glass">
             <div class="banner-text">
-                <div class="b-title" id="dom-banner-title"></div>
-                <div class="b-note" id="dom-banner-note"></div>
+                <div class="b-title" id="dom-banner-title">
+                    <i data-lucide="zap" style="width: 15px; height: 15px;"></i> Fresh Updates Active
+                </div>
+                <div class="b-note" id="dom-banner-note">TikTok &amp; Spotify downloaders optimized for speed.</div>
             </div>
-            <div class="banner-icon">🚀</div>
         </div>
 
         <!-- Tools Grid -->
         <section class="tools-section">
-            <h2 class="section-label">Service Menu</h2>
+            <div class="section-label">
+                Available Tools
+                <span>Click any service to launch</span>
+            </div>
             <div class="tools-grid" id="tools-grid">
-                <!-- Cards injected via JS -->
+                <!-- Injected via JS -->
             </div>
         </section>
-    </div>
+    </main>
 
-    <!-- Bottom Nav -->
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav glass">
         <a href="index.html" class="nav-item">
             <i data-lucide="home"></i>
-            <span class="nav-label">Home</span>
+            <span>Home</span>
         </a>
         <a href="#" class="nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
             <i data-lucide="grid"></i>
-            <span class="nav-label">Tools</span>
+            <span>Tools</span>
         </a>
         <a href="https://t.me/hamzaeditz" target="_blank" class="nav-item">
             <i data-lucide="send"></i>
-            <span class="nav-label">Telegram</span>
+            <span>Telegram</span>
         </a>
         <a href="about.html" class="nav-item">
             <i data-lucide="user"></i>
-            <span class="nav-label">About</span>
+            <span>About</span>
         </a>
     </nav>
 
-    <!-- Sidebar -->
+    <!-- Sidebar Menu -->
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="sidebar">
         <i data-lucide="x" class="sidebar-close" onclick="toggleSidebar()"></i>
-        <a href="#" class="sidebar-link"><i data-lucide="message-circle"></i> WhatsApp Group</a>
+        <a href="#" class="sidebar-link"><i data-lucide="message-circle"></i> WhatsApp Community</a>
         <a href="#" class="sidebar-link"><i data-lucide="youtube"></i> YouTube Channel</a>
-        <a href="https://t.me/hamzaeditz" target="_blank" class="sidebar-link"><i data-lucide="send"></i> Telegram Channel</a>
+        <a href="https://t.me/hamzaeditz" target="_blank" class="sidebar-link"><i data-lucide="send"></i> Telegram Updates</a>
         <hr class="sidebar-divider">
-        <a href="about.html" class="sidebar-link"><i data-lucide="user"></i> About Me</a>
+        <a href="index.html" class="sidebar-link"><i data-lucide="arrow-left"></i> Back to Main Site</a>
+        <a href="about.html" class="sidebar-link"><i data-lucide="user"></i> About Creator</a>
     </aside>
 
-    <!-- Brand Mascot (Sprouty) -->
-    <div id="mascot-container" onclick="triggerMascotJump()">
-        <div class="mascot-shadow"></div>
-        <svg class="mascot-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-            <!-- Body -->
-            <path d="M 50,110 C 20,110 10,70 20,40 C 30,10 50,10 50,10 C 50,10 70,10 80,40 C 90,70 80,110 50,110 Z" fill="var(--leaf-2)" stroke="var(--leaf-1)" stroke-width="3"/>
-            <path d="M 50,110 C 20,110 10,70 20,40 C 30,10 50,10 50,10" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="4" stroke-linecap="round"/>
-            <!-- Eyes -->
-            <circle cx="38" cy="55" r="5" fill="#060b08" class="m-eye" />
-            <circle cx="62" cy="55" r="5" fill="#060b08" class="m-eye" />
-            <!-- Cheeks -->
-            <circle cx="28" cy="62" r="4" fill="var(--coral)" opacity="0.6"/>
-            <circle cx="72" cy="62" r="4" fill="var(--coral)" opacity="0.6"/>
-            <!-- Smile -->
-            <path d="M 45,65 Q 50,70 55,65" fill="none" stroke="#060b08" stroke-width="2.5" stroke-linecap="round"/>
-            <!-- Left Arm -->
-            <path class="m-arm-l" d="M 22,60 Q 5,65 10,80" fill="none" stroke="var(--leaf-1)" stroke-width="4" stroke-linecap="round"/>
-            <!-- Right Arm -->
-            <path class="m-arm-r" d="M 78,60 Q 95,50 90,35" fill="none" stroke="var(--leaf-1)" stroke-width="4" stroke-linecap="round"/>
+    <!-- Mascot (Sprouty) -->
+    <div id="mascot-container" onclick="triggerMascotJump()" title="Say Hi!">
+        <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+            <path d="M 50,110 C 20,110 10,70 20,40 C 30,10 50,10 50,10 C 50,10 70,10 80,40 C 90,70 80,110 50,110 Z" fill="#10b981" />
+            <circle cx="38" cy="55" r="4.5" fill="#090a0f" />
+            <circle cx="62" cy="55" r="4.5" fill="#090a0f" />
+            <circle cx="28" cy="62" r="3.5" fill="#ff5e62" opacity="0.7"/>
+            <circle cx="72" cy="62" r="3.5" fill="#ff5e62" opacity="0.7"/>
+            <path d="M 45,64 Q 50,68 55,64" fill="none" stroke="#090a0f" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
     </div>
 
     <script>
-        /* SITE_CONFIG_START */
+        /* SITE CONFIGURATION */
         const SITE_CONFIG = {
           name: "HamzaEditz 2.0",
           avatarInitials: "HE",
           heroName: "Hamza Editz",
           heroTag: "hamzaeditz.pw",
-          headline: "10+ Free Tools",
-          heroNote: "Sim data, RDPs, TV, downloaders & more — sab aik jagah.",
-          bannerTitle: "New tools weekly",
-          bannerNote: "TikTok & Spotify downloaders just added"
+          headline: "10+ Free Utilities",
+          heroNote: "Sim details, TV, cloud methods, downloaders & converters — all in one clean place.",
+          bannerTitle: "Active & Updated",
+          bannerNote: "Fast servers, clean outputs, zero sign-up friction."
         };
-        /* SITE_CONFIG_END */
 
-        /* OCCASION_CONFIG_START */
         const OCCASION_CONFIG = {
-          active: "auto", // 'auto' | 'eid' | 'holi' | 'christmas' | 'newyear' | 'none'
+          active: "auto",
           eidRange: ["2026-03-20", "2026-03-22"],
           holiRange: ["2026-03-03", "2026-03-04"]
         };
-        /* OCCASION_CONFIG_END */
 
-        /* TOOLS_ARRAY_START */
         const TOOLS = [
-          { icon: "credit-card", label: "Pak Sim Details", href: "paksim.html", c1: "#5fa0ff", c2: "#3d8bfd" },
-          { icon: "send", label: "SMS Tool", href: "smsbomber.html", c1: "#ffab5f", c2: "#ff8a3d" },
-          { icon: "monitor", label: "Free Window Rdp", href: "RdpMethod.html", c1: "#9a85ff", c2: "#7a5cff" },
-          { icon: "tv", label: "Jazz Tv", href: "TvChannels.html", c1: "#4fdb96", c2: "#22a26b" },
-          { icon: "video", label: "TikTok Downloader", href: "tiktokmenu.html", c1: "#ff7a90", c2: "#ff4d67", badge: "NEW" },
-          { icon: "music-2", label: "Spotify Downloader", href: "spotify.html", c1: "#3ddb7a", c2: "#1db954", badge: "NEW" },
-          { icon: "book-open", label: "Hadith", href: "hadith.html", c1: "#e0b65f", c2: "#c99a3d" },
-          { icon: "search", label: "Vehicle Details", href: "vehicledetails.html", c1: "#6f95ff", c2: "#3d6bfd" },
-          { icon: "image", label: "Ai Image Generate", href: "image.html", c1: "#ff9270", c2: "#ff6b4a" },
-          { icon: "download", label: "Apk Download", href: "apk.html", c1: "#79db94", c2: "#4fc06a" }
+          { icon: "credit-card", label: "Pak Sim Details", desc: "Lookup registration details", href: "paksim.html", c1: "#3b82f6", c2: "#1d4ed8" },
+          { icon: "send", label: "SMS Tool", desc: "Fast SMS notification utility", href: "smsbomber.html", c1: "#f97316", c2: "#c2410c" },
+          { icon: "monitor", label: "Free Windows RDP", desc: "Quick methods & setups", href: "RdpMethod.html", c1: "#8b5cf6", c2: "#6d28d9" },
+          { icon: "tv", label: "Jazz TV", desc: "Live streaming portal", href: "TvChannels.html", c1: "#10b981", c2: "#047857" },
+          { icon: "video", label: "TikTok Downloader", desc: "Watermark-free video grabber", href: "tiktokmenu.html", c1: "#ec4899", c2: "#be185d", badge: "NEW" },
+          { icon: "music-2", label: "Spotify Downloader", desc: "Clean MP3 audio fetcher", href: "spotify.html", c1: "#22c55e", c2: "#15803d", badge: "NEW" },
+          { icon: "book-open", label: "Hadith Collection", desc: "Search chapters & text", href: "hadith.html", c1: "#eab308", c2: "#a16207" },
+          { icon: "search", label: "Vehicle Details", desc: "Instant verification lookup", href: "vehicledetails.html", c1: "#06b6d4", c2: "#0e7490" },
+          { icon: "image", label: "AI Image Generator", desc: "Prompt-to-visual engine", href: "image.html", c1: "#f43f5e", c2: "#be123c" },
+          { icon: "download", label: "APK Download", desc: "Direct installer archive", href: "apk.html", c1: "#14b8a6", c2: "#0f766e" }
         ];
-        /* TOOLS_ARRAY_END */
 
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Populate DOM from Config
-            document.getElementById('dom-site-name').innerHTML = `${SITE_CONFIG.name} <i data-lucide="sparkles" style="width:16px; height:16px; color:var(--lime);"></i>`;
+            // Apply Content
             document.getElementById('dom-hero-avatar').textContent = SITE_CONFIG.avatarInitials;
             document.getElementById('dom-hero-name').textContent = SITE_CONFIG.heroName;
             document.getElementById('dom-hero-tag').textContent = SITE_CONFIG.heroTag;
             document.getElementById('dom-hero-headline').textContent = SITE_CONFIG.headline;
             document.getElementById('dom-hero-note').textContent = SITE_CONFIG.heroNote;
-            document.getElementById('dom-banner-title').textContent = SITE_CONFIG.bannerTitle;
+            document.getElementById('dom-banner-title').innerHTML = `<i data-lucide="zap" style="width:15px; height:15px;"></i> ${SITE_CONFIG.bannerTitle}`;
             document.getElementById('dom-banner-note').textContent = SITE_CONFIG.bannerNote;
 
-            // 2. Render Tools Grid
+            // Render Cards
             const grid = document.getElementById('tools-grid');
-            TOOLS.forEach((tool, index) => {
-                const a = document.createElement('a');
-                a.href = tool.href;
-                a.className = 'tool-card glass';
-                a.style.animationDelay = `${index * 0.05}s`;
+            TOOLS.forEach(tool => {
+                const card = document.createElement('a');
+                card.href = tool.href;
+                card.className = 'tool-card';
 
-                let badgeHTML = tool.badge ? `<div class="badge-new">${tool.badge}</div>` : '';
+                const badge = tool.badge ? `<div class="badge-new">${tool.badge}</div>` : '';
                 
-                a.innerHTML = `
-                    ${badgeHTML}
+                card.innerHTML = `
+                    ${badge}
                     <div class="tool-icon-wrap" style="background: linear-gradient(135deg, ${tool.c1}, ${tool.c2})">
-                        <i data-lucide="${tool.icon}"></i>
+                        <i data-lucide="${tool.icon}" style="width: 20px; height: 20px;"></i>
                     </div>
                     <span class="tool-label">${tool.label}</span>
+                    <span class="tool-desc">${tool.desc}</span>
                 `;
-
-                // Add Ripple Effect
-                a.addEventListener('click', function(e) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const ripple = document.createElement('span');
-                    ripple.className = 'ripple';
-                    ripple.style.left = `${x}px`;
-                    ripple.style.top = `${y}px`;
-                    this.appendChild(ripple);
-                    setTimeout(() => ripple.remove(), 600);
-                });
-
-                grid.appendChild(a);
+                grid.appendChild(card);
             });
 
-            // Init Icons
             lucide.createIcons();
-
-            // Init Canvas Systems
-            initNetworkCanvas();
-            initSeasonalCanvas();
+            initSeasonal();
         });
 
-        // --- Sidebar Logic ---
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebar-overlay').classList.toggle('active');
         }
 
-        // --- Mascot Logic ---
         function triggerMascotJump() {
             const mascot = document.getElementById('mascot-container');
             mascot.classList.remove('mascot-jump');
-            void mascot.offsetWidth; // trigger reflow
+            void mascot.offsetWidth;
             mascot.classList.add('mascot-jump');
         }
 
-        // --- Network Canvas Logic ---
-        function initNetworkCanvas() {
-            const canvas = document.getElementById('bg-canvas');
-            const ctx = canvas.getContext('2d');
-            let width, height, particles = [];
-            
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-                initParticles();
-            }
-            
-            function initParticles() {
-                particles = [];
-                const density = width < 700 ? 30 : 55;
-                for(let i=0; i<density; i++) {
-                    particles.push({
-                        x: Math.random() * width,
-                        y: Math.random() * height,
-                        vx: (Math.random() - 0.5) * 0.5,
-                        vy: (Math.random() - 0.5) * 0.5,
-                        radius: Math.random() * 1.5 + 0.5
-                    });
-                }
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, width, height);
-                ctx.fillStyle = 'rgba(186, 242, 74, 0.6)';
-                ctx.strokeStyle = 'rgba(186, 242, 74, 0.05)';
-
-                for(let i=0; i<particles.length; i++) {
-                    let p = particles[i];
-                    p.x += p.vx; p.y += p.vy;
-                    if(p.x < 0 || p.x > width) p.vx *= -1;
-                    if(p.y < 0 || p.y > height) p.vy *= -1;
-
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    for(let j=i+1; j<particles.length; j++) {
-                        let p2 = particles[j];
-                        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                        if(dist < 120) {
-                            ctx.beginPath();
-                            ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(p2.x, p2.y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-                requestAnimationFrame(draw);
-            }
-
-            window.addEventListener('resize', resize);
-            resize(); draw();
-        }
-
-        // --- Seasonal Occasion Canvas Logic ---
-        function initSeasonalCanvas() {
+        function initSeasonal() {
             const canvas = document.getElementById('seasonal-canvas');
             const ctx = canvas.getContext('2d');
             let width = canvas.width = window.innerWidth;
@@ -584,75 +620,66 @@
             const todayStr = `${y}-${m}-${d}`;
             const mdStr = `${m}-${d}`;
 
-            if(mode === 'auto') {
-                if(mdStr >= '12-20' && mdStr <= '12-26') mode = 'christmas';
-                else if(mdStr >= '12-27' || mdStr <= '01-02') mode = 'newyear';
-                else if(todayStr >= OCCASION_CONFIG.eidRange[0] && todayStr <= OCCASION_CONFIG.eidRange[1]) mode = 'eid';
-                else if(todayStr >= OCCASION_CONFIG.holiRange[0] && todayStr <= OCCASION_CONFIG.holiRange[1]) mode = 'holi';
+            if (mode === 'auto') {
+                if (mdStr >= '12-20' && mdStr <= '12-26') mode = 'christmas';
+                else if (mdStr >= '12-27' || mdStr <= '01-02') mode = 'newyear';
+                else if (todayStr >= OCCASION_CONFIG.eidRange[0] && todayStr <= OCCASION_CONFIG.eidRange[1]) mode = 'eid';
+                else if (todayStr >= OCCASION_CONFIG.holiRange[0] && todayStr <= OCCASION_CONFIG.holiRange[1]) mode = 'holi';
                 else mode = 'none';
             }
 
             const badge = document.getElementById('seasonal-badge');
-            if(mode !== 'none') badge.style.display = 'block';
+            if (mode !== 'none') badge.style.display = 'inline-block';
 
-            if(mode === 'christmas') {
+            if (mode === 'christmas') {
                 badge.innerHTML = "🎄 Merry Christmas";
-                for(let i=0; i<40; i++) particles.push({ x: Math.random()*width, y: Math.random()*height, r: Math.random()*3+1, vy: Math.random()*1+0.5, sway: Math.random()*Math.PI });
+                for (let i = 0; i < 35; i++) particles.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 2.5 + 1, vy: Math.random() * 0.8 + 0.4 });
             } else if (mode === 'eid') {
                 badge.innerHTML = "🌙 Eid Mubarak";
-                for(let i=0; i<30; i++) particles.push({ x: Math.random()*width, y: Math.random()*height, r: Math.random()*2+1, vy: Math.random()*1.5+0.5, c: Math.random()>0.5?'#e0b65f':'#fff' });
+                for (let i = 0; i < 25; i++) particles.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 1.5 + 1, vy: Math.random() * 1 + 0.3, c: Math.random() > 0.5 ? '#10b981' : '#f8fafc' });
             } else if (mode === 'newyear' || mode === 'holi') {
                 badge.innerHTML = mode === 'newyear' ? "🎆 Happy New Year" : "🎨 Happy Holi";
-                // burst logic happens in animation frame
             } else {
-                return; // none
+                return;
             }
 
-            function drawSeasonal() {
+            function loop() {
                 ctx.clearRect(0, 0, width, height);
-                
-                if(mode === 'christmas' || mode === 'eid') {
-                    for(let i=0; i<particles.length; i++) {
-                        let p = particles[i];
+
+                if (mode === 'christmas' || mode === 'eid') {
+                    for (let p of particles) {
                         p.y += p.vy;
-                        if(mode === 'christmas') p.x += Math.sin(p.sway += 0.02) * 0.5;
-                        if(p.y > height) { p.y = -10; p.x = Math.random() * width; }
-                        
-                        ctx.fillStyle = p.c || '#fff';
+                        if (p.y > height) { p.y = -5; p.x = Math.random() * width; }
+                        ctx.fillStyle = p.c || 'rgba(255, 255, 255, 0.4)';
                         ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                         ctx.fill();
                     }
-                } 
-                else if(mode === 'newyear' || mode === 'holi') {
-                    // Simple intermittent bursts
-                    if(Math.random() < 0.03) {
-                        let bx = Math.random() * width;
-                        let by = Math.random() * height * 0.5;
-                        const colors = mode === 'newyear' ? ['#ff4d67', '#baf24a', '#3d8bfd', '#fff'] : ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
-                        let col = colors[Math.floor(Math.random()*colors.length)];
-                        for(let i=0; i<20; i++) {
-                            let angle = Math.random() * Math.PI * 2;
-                            let speed = Math.random() * 3 + 1;
-                            particles.push({ x: bx, y: by, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed, r: Math.random()*2+1, c: col, life: 1 });
+                } else if (mode === 'newyear' || mode === 'holi') {
+                    if (Math.random() < 0.02) {
+                        let bx = Math.random() * width, by = Math.random() * height * 0.5;
+                        const colors = ['#10b981', '#3b82f6', '#f43f5e', '#eab308'];
+                        let col = colors[Math.floor(Math.random() * colors.length)];
+                        for (let i = 0; i < 15; i++) {
+                            let angle = Math.random() * Math.PI * 2, sp = Math.random() * 2 + 1;
+                            particles.push({ x: bx, y: by, vx: Math.cos(angle) * sp, vy: Math.sin(angle) * sp, r: 1.5, c: col, life: 1 });
                         }
                     }
-                    for(let i=particles.length-1; i>=0; i--) {
+                    for (let i = particles.length - 1; i >= 0; i--) {
                         let p = particles[i];
-                        p.x += p.vx; p.y += p.vy; p.vy += 0.05; // gravity
-                        p.life -= 0.015;
-                        if(p.life <= 0) { particles.splice(i, 1); continue; }
+                        p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.life -= 0.02;
+                        if (p.life <= 0) { particles.splice(i, 1); continue; }
                         ctx.fillStyle = p.c;
                         ctx.globalAlpha = p.life;
-                        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
                         ctx.globalAlpha = 1;
                     }
                 }
-                requestAnimationFrame(drawSeasonal);
+                requestAnimationFrame(loop);
             }
-            
+
             window.addEventListener('resize', () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
-            drawSeasonal();
+            loop();
         }
     </script>
 </body>
