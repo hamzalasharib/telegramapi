@@ -188,7 +188,7 @@
       border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
     }
 
-    /* Hero / Intro */
+    /* Hero */
     .hero {
       text-align: center;
       padding: 40px 16px 24px;
@@ -274,7 +274,7 @@
       -webkit-backdrop-filter: blur(16px);
     }
 
-    /* Input & Search Form */
+    /* Input Box */
     .input-box {
       display: flex;
       gap: 10px;
@@ -566,7 +566,7 @@
   <script>
     lucide.createIcons();
 
-    // Helper: Format seconds into MM:SS
+    // Helper: Convert seconds to MM:SS
     function formatTime(seconds) {
       if (!seconds) return "--:--";
       const m = Math.floor(seconds / 60);
@@ -574,39 +574,50 @@
       return `${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    // CORS Safe Request Relay (Direct + Proxy Gateways)
+    // Proxy Request Executor (Uses corsproxy.io with auto fallback)
     async function makeRequest(url, method = 'GET', body = null) {
-      const proxies = [
+      const endpoints = [
+        // Primary: https://corsproxy.io/?url=
+        (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+        // Fallback 1: https://corsproxy.io/?
         (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-        (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-        (u) => u // Direct attempt
+        // Fallback 2: Direct call
+        (u) => u
       ];
 
-      for (const proxy of proxies) {
+      let lastError = null;
+
+      for (const getProxyUrl of endpoints) {
         try {
-          const target = proxy(url);
-          const opts = {
+          const target = getProxyUrl(url);
+          const options = {
             method: method,
             headers: {
-              'Accept': '*/*',
-              'Content-Type': 'application/json'
+              'Accept': 'application/json, text/plain, */*'
             }
           };
+
           if (body && method === 'POST') {
-            opts.body = typeof body === 'string' ? body : JSON.stringify(body);
+            options.headers['Content-Type'] = 'application/json';
+            options.body = typeof body === 'string' ? body : JSON.stringify(body);
           }
 
-          const res = await fetch(target, opts);
+          const res = await fetch(target, options);
           if (!res.ok) continue;
 
-          const data = await res.json();
-          const parsed = typeof data === 'string' ? JSON.parse(data) : data;
-          if (parsed) return parsed;
-        } catch (e) {
-          // Continue to next gateway
+          const text = await res.text();
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            // Agar plain text json hai
+            return text;
+          }
+        } catch (err) {
+          lastError = err;
         }
       }
-      throw new Error("Connection failed across gateways.");
+
+      throw lastError || new Error("Failed to connect via proxy gateways.");
     }
 
     async function handleSpotsaverPipeline(e) {
@@ -620,7 +631,6 @@
       const rawUrl = input.value.trim();
       if (!rawUrl) return;
 
-      // Status indicator
       statusMsg.className = "status-msg info";
       statusMsg.textContent = "Step 1/3: Reading Spotify metadata...";
       statusMsg.style.display = "block";
@@ -630,7 +640,7 @@
 
       try {
         /* ========================================================
-           STEP 1: Fetch Track Metadata from spotsaver
+           STEP 1: GET Spotify Metadata (/api/spotify/)
            ======================================================== */
         const step1Url = `https://spotsaver.net/api/spotify/?url=${encodeURIComponent(rawUrl)}`;
         const step1Data = await makeRequest(step1Url, 'GET');
@@ -660,7 +670,7 @@
         }
 
         /* ========================================================
-           STEP 2: Get Video ID from spotsaver get-id API
+           STEP 2: POST to get Video ID (/api/get-id/)
            ======================================================== */
         statusMsg.textContent = "Step 2/3: Locating audio stream ID...";
         const step2Url = "https://spotsaver.net/api/get-id/";
@@ -676,7 +686,7 @@
         const videoId = step2Data.videoId;
 
         /* ========================================================
-           STEP 3: Generate Final MP3 Download Link
+           STEP 3: POST to get Download MP3 URL (/api/download/)
            ======================================================== */
         statusMsg.textContent = "Step 3/3: Generating 320kbps MP3 link...";
         const step3Url = "https://spotsaver.net/api/download/";
