@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Welcome - HamzaEditz 2.0</title>
+    <meta name="color-scheme" content="light dark">
+    <title>HamzaEditz 2.0 | Workspace Hub</title>
 
-    <!-- Typography: Plus Jakarta Sans for clean SaaS look -->
+    <!-- Typography: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,19 +16,51 @@
 
     <style>
         :root {
-            --bg: #090a0f;
-            --surface: #11131b;
-            --surface-hover: #161924;
-            --fg: #f8fafc;
-            --muted: #94a3b8;
-            --line: #1e2230;
-            --line-subtle: #141724;
+            --bg: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.78);
+            --surface-hover: rgba(255, 255, 255, 0.95);
+            --fg: #0f172a;
+            --muted: #64748b;
+            --line: rgba(226, 232, 240, 0.85);
+            --line-subtle: rgba(241, 245, 249, 0.75);
             --accent: #10b981;
             --accent-glow: rgba(16, 185, 129, 0.15);
             --coral: #ff5e62;
             --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 16px 36px -10px rgba(15, 23, 42, 0.1);
+
+            /* Gemini Palette */
+            --gemini-c1: #4285F4;
+            --gemini-c2: #9b51e0;
+            --gemini-c3: #00d2ff;
+            --gemini-c4: #ff5277;
+            --gemini-opacity: 0.35;
+            --gemini-blur: 70px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #07080d;
+                --surface: rgba(17, 19, 27, 0.76);
+                --surface-hover: rgba(24, 28, 40, 0.92);
+                --fg: #f8fafc;
+                --muted: #94a3b8;
+                --line: rgba(255, 255, 255, 0.08);
+                --line-subtle: rgba(255, 255, 255, 0.04);
+                --accent: #10b981;
+                --accent-glow: rgba(16, 185, 129, 0.18);
+                --coral: #ff5e62;
+                --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.5);
+                --shadow-md: 0 18px 40px -8px rgba(0, 0, 0, 0.7);
+
+                --gemini-c1: #3b82f6; 
+                --gemini-c2: #8b5cf6; 
+                --gemini-c3: #06b6d4; 
+                --gemini-c4: #ec4899; 
+                --gemini-opacity: 0.45;
+                --gemini-blur: 85px;
+            }
         }
 
         * {
@@ -48,56 +81,100 @@
             position: relative;
         }
 
-        /* Ambient background glow */
-        body::before {
-            content: "";
-            position: absolute;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 500px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+        /* Living Fluid Background */
+        .gemini-container {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
             z-index: 0;
             pointer-events: none;
+            opacity: var(--gemini-opacity);
+            filter: blur(var(--gemini-blur));
+            transform: translate3d(0, 0, 0);
+        }
+        .gemini-mesh {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 140vw;
+            height: 140vh;
+            transform: translate(-50%, -50%);
+        }
+        .fluid-blob {
+            position: absolute;
+            border-radius: 50%;
+            will-change: transform, border-radius;
+        }
+        .blob-1 {
+            top: 15%; left: 15%; width: clamp(280px, 45vw, 650px); height: clamp(280px, 45vw, 650px);
+            background: radial-gradient(circle, var(--gemini-c1) 0%, transparent 75%);
+            animation: morphG1 18s ease-in-out infinite alternate;
+        }
+        .blob-2 {
+            top: 10%; right: 10%; width: clamp(300px, 50vw, 700px); height: clamp(300px, 50vw, 700px);
+            background: radial-gradient(circle, var(--gemini-c2) 0%, transparent 75%);
+            animation: morphG2 22s ease-in-out infinite alternate;
+        }
+        .blob-3 {
+            bottom: 10%; left: 20%; width: clamp(260px, 42vw, 600px); height: clamp(260px, 42vw, 600px);
+            background: radial-gradient(circle, var(--gemini-c3) 0%, transparent 75%);
+            animation: morphG3 20s ease-in-out infinite alternate;
+        }
+        .blob-4 {
+            bottom: 20%; right: 20%; width: clamp(240px, 38vw, 550px); height: clamp(240px, 38vw, 550px);
+            background: radial-gradient(circle, var(--gemini-c4) 0%, transparent 75%);
+            animation: morphG4 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes morphG1 {
+            0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) rotate(0deg); }
+            100% { border-radius: 35% 65% 60% 40% / 55% 35% 65% 45%; transform: translate(4vw, 10vh) rotate(180deg); }
+        }
+        @keyframes morphG2 {
+            0% { border-radius: 50% 50% 35% 65% / 60% 40% 60% 40%; transform: translate(0, 0) rotate(0deg); }
+            100% { border-radius: 65% 35% 42% 58% / 38% 62% 38% 62%; transform: translate(-6vw, -6vh) rotate(-180deg); }
+        }
+        @keyframes morphG3 {
+            0% { border-radius: 60% 40% 55% 45% / 40% 50% 50% 60%; transform: translate(0, 0); }
+            100% { border-radius: 40% 60% 38% 62% / 62% 38% 62% 38%; transform: translate(6vw, -8vh); }
+        }
+        @keyframes morphG4 {
+            0% { border-radius: 45% 55% 40% 60% / 50% 40% 60% 50%; transform: translate(0, 0); }
+            100% { border-radius: 60% 40% 65% 35% / 40% 60% 40% 60%; transform: translate(-5vw, -6vh); }
         }
 
         #seasonal-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
             z-index: 1;
         }
 
         a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
 
         .wrap {
             position: relative;
             z-index: 10;
             max-width: 920px;
             margin: 0 auto;
-            padding: 0 20px 100px;
+            padding: 0 20px 110px;
         }
 
         .glass {
-            background: color-mix(in srgb, var(--surface) 85%, transparent);
+            background: color-mix(in srgb, var(--surface) 80%, transparent);
             border: 1px solid var(--line);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
-        /* Top Bar */
+        /* Header */
         .hdr {
             position: sticky;
             top: 0;
             z-index: 50;
-            background: color-mix(in srgb, var(--bg) 85%, transparent);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: color-mix(in srgb, var(--bg) 80%, transparent);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--line);
         }
         .hdr-wrap {
@@ -129,7 +206,7 @@
         .menu-btn {
             width: 38px;
             height: 38px;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -146,24 +223,13 @@
         .hero {
             position: relative;
             border-radius: 20px;
-            padding: 32px 28px;
-            margin-top: 24px;
-            background: linear-gradient(135deg, rgba(22, 27, 39, 0.95), rgba(12, 14, 20, 0.95));
+            padding: 28px 24px;
+            margin-top: 20px;
             border: 1px solid var(--line);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
+            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
-            gap: 16px;
-        }
-        .hero-orbit-bg {
-            position: absolute;
-            right: -20px;
-            top: -20px;
-            width: 220px;
-            height: 220px;
-            opacity: 0.18;
-            pointer-events: none;
+            gap: 14px;
         }
         .hero-top {
             display: flex;
@@ -185,7 +251,7 @@
         }
         .hero-meta .name { font-weight: 600; font-size: 0.95rem; }
         .hero-meta .tag { font-size: 0.75rem; color: var(--muted); }
-        
+
         .hero-eyebrow {
             display: inline-flex;
             align-items: center;
@@ -197,10 +263,10 @@
             letter-spacing: 0.08em;
         }
         .hero-headline {
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-size: clamp(1.75rem, 4vw, 2.4rem);
             font-weight: 700;
             letter-spacing: -0.03em;
-            line-height: 1.15;
+            line-height: 1.2;
         }
         .hero-note {
             font-size: 0.92rem;
@@ -209,7 +275,6 @@
             line-height: 1.5;
         }
 
-        /* Seasonal Badge */
         .seasonal-badge {
             align-self: flex-start;
             background: rgba(255, 255, 255, 0.06);
@@ -218,23 +283,20 @@
             font-size: 0.78rem;
             font-weight: 600;
             border: 1px solid var(--line);
-            color: var(--fg);
             display: none;
         }
 
-        /* Banner Strip */
         .banner-strip {
             border-radius: 14px;
-            padding: 16px 20px;
-            margin-top: 16px;
+            padding: 14px 18px;
+            margin-top: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid var(--line);
         }
         .banner-text .b-title {
             font-weight: 600;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             color: var(--accent);
             display: flex;
             align-items: center;
@@ -246,8 +308,8 @@
             margin-top: 2px;
         }
 
-        /* Tools Grid */
-        .tools-section { margin-top: 36px; }
+        /* Tools Section */
+        .tools-section { margin-top: 32px; }
         .section-label {
             font-size: 1.15rem;
             font-weight: 600;
@@ -267,25 +329,73 @@
         @media (min-width: 600px) { .tools-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (min-width: 840px) { .tools-grid { grid-template-columns: repeat(4, 1fr); } }
 
+        /* Gemini Animated Stroke Cards */
         .tool-card {
+            position: relative;
             border-radius: 16px;
-            padding: 20px 16px;
+            padding: 2px;
+            background: var(--line);
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+        }
+
+        .tool-card::before {
+            content: "";
+            position: absolute;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                var(--gemini-c1),
+                var(--gemini-c2),
+                var(--gemini-c4),
+                var(--gemini-c3),
+                var(--gemini-c1)
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: rotateGemini 4s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes rotateGemini {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tool-card:hover, .tool-card.active-card {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px -6px rgba(66, 133, 244, 0.25), var(--shadow-md);
+        }
+
+        .tool-card:hover::before, .tool-card.active-card::before {
+            opacity: 1;
+        }
+
+        .tool-inner {
+            position: relative;
+            z-index: 2;
             background: var(--surface);
-            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 18px 14px;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: background 0.2s ease;
         }
-        .tool-card:hover {
-            transform: translateY(-3px);
-            border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+
+        .tool-card.active-card .tool-inner {
             background: var(--surface-hover);
-            box-shadow: var(--shadow-md);
         }
+
         .tool-icon-wrap {
             width: 42px;
             height: 42px;
@@ -293,9 +403,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         .tool-label {
             font-size: 0.9rem;
@@ -321,6 +431,62 @@
             padding: 2px 7px;
             border-radius: 6px;
             letter-spacing: 0.05em;
+            z-index: 3;
+        }
+
+        /* App View Modal (SPA Screen) */
+        .app-view {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            visibility: hidden;
+        }
+        .app-view.open {
+            transform: translateY(0);
+            visibility: visible;
+        }
+        .app-view-header {
+            height: 56px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface) 90%, transparent);
+            backdrop-filter: blur(12px);
+        }
+        .app-view-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .app-view-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--muted);
+        }
+        .app-view-close:hover {
+            color: var(--fg);
+            background: var(--line);
+        }
+        .app-frame {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: var(--bg);
         }
 
         /* Bottom Nav */
@@ -337,7 +503,7 @@
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             border: 1px solid var(--line);
         }
         .nav-item {
@@ -349,6 +515,7 @@
             transition: color 0.2s;
             font-size: 0.72rem;
             font-weight: 500;
+            cursor: pointer;
         }
         .nav-item svg { width: 18px; height: 18px; }
         .nav-item:hover { color: var(--fg); }
@@ -380,6 +547,7 @@
             transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(16px);
         }
         .sidebar.active { right: 0; }
         .sidebar-close {
@@ -401,6 +569,7 @@
             font-weight: 500;
             border-bottom: 1px solid var(--line-subtle);
             transition: color 0.2s;
+            cursor: pointer;
         }
         .sidebar-link svg { width: 18px; height: 18px; color: var(--muted); }
         .sidebar-link:hover { color: var(--accent); }
@@ -408,33 +577,30 @@
         .sidebar-link:last-child { border-bottom: none; }
         .sidebar-divider { height: 1px; background: var(--line); margin: 16px 0; border: none; }
 
-        /* Mascot Container */
-        #mascot-container {
-            position: fixed;
-            bottom: 24px;
-            left: 20px;
-            z-index: 90;
-            width: 58px;
-            height: 70px;
-            cursor: pointer;
-            animation: mascotFloat 3s infinite ease-in-out;
+        @media (prefers-reduced-motion: reduce) {
+            .fluid-blob, .tool-card::before { animation: none !important; }
+            * { transition: none !important; }
         }
-        @media (max-width: 600px) {
-            #mascot-container { width: 48px; height: 58px; bottom: 84px; left: 16px; }
-        }
-        @keyframes mascotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        .mascot-jump { animation: jumpAnim 0.5s ease !important; }
-        @keyframes jumpAnim { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(0.9, 1.1); } 100% { transform: translateY(0) scale(1); } }
     </style>
 </head>
 <body>
+
+    <!-- Living Fluid Background -->
+    <div class="gemini-container" aria-hidden="true">
+        <div class="gemini-mesh">
+            <div class="fluid-blob blob-1"></div>
+            <div class="fluid-blob blob-2"></div>
+            <div class="fluid-blob blob-3"></div>
+            <div class="fluid-blob blob-4"></div>
+        </div>
+    </div>
 
     <canvas id="seasonal-canvas"></canvas>
 
     <!-- Top Bar -->
     <header class="hdr">
         <div class="hdr-wrap">
-            <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
+            <a href="javascript:void(0)" onclick="closeAppView()" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
             <div class="menu-btn glass" onclick="toggleSidebar()">
                 <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
             </div>
@@ -443,7 +609,7 @@
 
     <main class="wrap">
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero glass">
             <div class="seasonal-badge" id="seasonal-badge"></div>
             
             <div class="hero-top">
@@ -475,7 +641,7 @@
         <section class="tools-section">
             <div class="section-label">
                 Available Tools
-                <span>Click any service to launch</span>
+                <span>Tap any utility to launch inside app</span>
             </div>
             <div class="tools-grid" id="tools-grid">
                 <!-- Injected via JS -->
@@ -483,13 +649,27 @@
         </section>
     </main>
 
+    <!-- In-App Sheet View (SPA Screen) -->
+    <div class="app-view" id="app-view">
+        <div class="app-view-header">
+            <div class="app-view-title" id="app-view-title">
+                <i data-lucide="terminal" style="width: 18px; height: 18px;"></i>
+                <span id="app-title-text">Tool</span>
+            </div>
+            <div class="app-view-close" onclick="closeAppView()" title="Close Workspace">
+                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+            </div>
+        </div>
+        <iframe class="app-frame" id="app-frame" src="about:blank"></iframe>
+    </div>
+
     <!-- Bottom Navigation -->
     <nav class="bottom-nav glass">
-        <a href="index.html" class="nav-item">
+        <a href="javascript:void(0)" class="nav-item" onclick="closeAppView(); window.scrollTo({top:0, behavior:'smooth'})">
             <i data-lucide="home"></i>
             <span>Home</span>
         </a>
-        <a href="#" class="nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+        <a href="javascript:void(0)" class="nav-item active" onclick="closeAppView(); window.scrollTo({top:320, behavior:'smooth'})">
             <i data-lucide="grid"></i>
             <span>Tools</span>
         </a>
@@ -497,7 +677,7 @@
             <i data-lucide="send"></i>
             <span>Telegram</span>
         </a>
-        <a href="about.html" class="nav-item">
+        <a href="javascript:void(0)" class="nav-item" onclick="openToolApp('About Creator', 'about.html', 'user')">
             <i data-lucide="user"></i>
             <span>About</span>
         </a>
@@ -511,26 +691,12 @@
         <a href="#" class="sidebar-link"><i data-lucide="youtube"></i> YouTube Channel</a>
         <a href="https://t.me/hamzaeditz" target="_blank" class="sidebar-link"><i data-lucide="send"></i> Telegram Updates</a>
         <hr class="sidebar-divider">
-        <a href="index.html" class="sidebar-link"><i data-lucide="arrow-left"></i> Back to Main Site</a>
-        <a href="about.html" class="sidebar-link"><i data-lucide="user"></i> About Creator</a>
+        <a href="javascript:void(0)" class="sidebar-link" onclick="closeAppView(); toggleSidebar()"><i data-lucide="arrow-left"></i> Home Hub</a>
+        <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSidebar(); openToolApp('About Creator', 'about.html', 'user')"><i data-lucide="user"></i> About Creator</a>
     </aside>
 
-    <!-- Mascot (Sprouty) -->
-    <div id="mascot-container" onclick="triggerMascotJump()" title="Say Hi!">
-        <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-            <path d="M 50,110 C 20,110 10,70 20,40 C 30,10 50,10 50,10 C 50,10 70,10 80,40 C 90,70 80,110 50,110 Z" fill="#10b981" />
-            <circle cx="38" cy="55" r="4.5" fill="#090a0f" />
-            <circle cx="62" cy="55" r="4.5" fill="#090a0f" />
-            <circle cx="28" cy="62" r="3.5" fill="#ff5e62" opacity="0.7"/>
-            <circle cx="72" cy="62" r="3.5" fill="#ff5e62" opacity="0.7"/>
-            <path d="M 45,64 Q 50,68 55,64" fill="none" stroke="#090a0f" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-    </div>
-
     <script>
-        /* SITE CONFIGURATION */
         const SITE_CONFIG = {
-          name: "HamzaEditz 2.0",
           avatarInitials: "HE",
           heroName: "Hamza Editz",
           heroTag: "hamzaeditz.pw",
@@ -560,7 +726,6 @@
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Apply Content
             document.getElementById('dom-hero-avatar').textContent = SITE_CONFIG.avatarInitials;
             document.getElementById('dom-hero-name').textContent = SITE_CONFIG.heroName;
             document.getElementById('dom-hero-tag').textContent = SITE_CONFIG.heroTag;
@@ -569,23 +734,34 @@
             document.getElementById('dom-banner-title').innerHTML = `<i data-lucide="zap" style="width:15px; height:15px;"></i> ${SITE_CONFIG.bannerTitle}`;
             document.getElementById('dom-banner-note').textContent = SITE_CONFIG.bannerNote;
 
-            // Render Cards
+            // Render Cards with Gemini Stroke Container
             const grid = document.getElementById('tools-grid');
             TOOLS.forEach(tool => {
-                const card = document.createElement('a');
-                card.href = tool.href;
+                const card = document.createElement('div');
                 card.className = 'tool-card';
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
 
                 const badge = tool.badge ? `<div class="badge-new">${tool.badge}</div>` : '';
                 
                 card.innerHTML = `
                     ${badge}
-                    <div class="tool-icon-wrap" style="background: linear-gradient(135deg, ${tool.c1}, ${tool.c2})">
-                        <i data-lucide="${tool.icon}" style="width: 20px; height: 20px;"></i>
+                    <div class="tool-inner">
+                        <div class="tool-icon-wrap" style="background: linear-gradient(135deg, ${tool.c1}, ${tool.c2})">
+                            <i data-lucide="${tool.icon}" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <span class="tool-label">${tool.label}</span>
+                        <span class="tool-desc">${tool.desc}</span>
                     </div>
-                    <span class="tool-label">${tool.label}</span>
-                    <span class="tool-desc">${tool.desc}</span>
                 `;
+
+                // Handle Card Click (Stroke + In-App Open)
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active-card'));
+                    card.classList.add('active-card');
+                    openToolApp(tool.label, tool.href, tool.icon);
+                });
+
                 grid.appendChild(card);
             });
 
@@ -593,16 +769,31 @@
             initSeasonal();
         });
 
+        /* In-App App View Handlers (No reload/page jump) */
+        function openToolApp(title, url, icon) {
+            const appView = document.getElementById('app-view');
+            const frame = document.getElementById('app-frame');
+            const titleEl = document.getElementById('app-title-text');
+
+            titleEl.textContent = title;
+            frame.src = url;
+            appView.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeAppView() {
+            const appView = document.getElementById('app-view');
+            const frame = document.getElementById('app-frame');
+            appView.classList.remove('open');
+            document.body.style.overflow = 'auto';
+            setTimeout(() => { frame.src = 'about:blank'; }, 300);
+            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active-card'));
+        }
+
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('sidebar-overlay').classList.toggle('active');
-        }
-
-        function triggerMascotJump() {
-            const mascot = document.getElementById('mascot-container');
-            mascot.classList.remove('mascot-jump');
-            void mascot.offsetWidth;
-            mascot.classList.add('mascot-jump');
         }
 
         function initSeasonal() {
@@ -633,10 +824,10 @@
 
             if (mode === 'christmas') {
                 badge.innerHTML = "🎄 Merry Christmas";
-                for (let i = 0; i < 35; i++) particles.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 2.5 + 1, vy: Math.random() * 0.8 + 0.4 });
+                for (let i = 0; i < 30; i++) particles.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 2 + 1, vy: Math.random() * 0.8 + 0.4 });
             } else if (mode === 'eid') {
                 badge.innerHTML = "🌙 Eid Mubarak";
-                for (let i = 0; i < 25; i++) particles.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 1.5 + 1, vy: Math.random() * 1 + 0.3, c: Math.random() > 0.5 ? '#10b981' : '#f8fafc' });
+                for (let i = 0; i < 20; i++) particles.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 1.5 + 1, vy: Math.random() * 0.8 + 0.3, c: Math.random() > 0.5 ? '#10b981' : '#f8fafc' });
             } else if (mode === 'newyear' || mode === 'holi') {
                 badge.innerHTML = mode === 'newyear' ? "🎆 Happy New Year" : "🎨 Happy Holi";
             } else {
