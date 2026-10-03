@@ -1,267 +1,483 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>About Me | HamzaEditz 2.0</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<style>
-:root{
-  --bg:#060b08; --panel:rgba(255,255,255,.045); --panel-hi:rgba(255,255,255,.08);
-  --border:rgba(255,255,255,.09); --ink:#eafbf1; --muted:#9fb8a8;
-  --leaf-1:#1f7a4d; --leaf-2:#4fc06a; --lime:#baf24a; --glow:#6dffb0;
-}
-*{ margin:0; padding:0; box-sizing:border-box; }
-body{
-  font-family:'Poppins',sans-serif; background:var(--bg); color:var(--ink);
-  min-height:100vh; display:flex; align-items:center; justify-content:center;
-  padding:24px; overflow-x:hidden; position:relative;
-}
-h1,.font-display{ font-family:'Sora',sans-serif; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>About Creator | HamzaEditz 2.0</title>
 
-/* ---------- Animated background ---------- */
-.bg-fixed{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
-.mesh div{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.5; animation:drift 20s ease-in-out infinite; }
-.m1{ width:44vw; height:44vw; left:-12%; top:-14%; background:radial-gradient(circle,var(--leaf-1),transparent 70%); }
-.m2{ width:38vw; height:38vw; right:-10%; bottom:-12%; background:radial-gradient(circle,var(--lime),transparent 70%); animation-delay:3s; animation-duration:26s; }
-@keyframes drift{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(4%,-4%) scale(1.08);} }
-canvas#particles{ position:fixed; inset:0; z-index:0; pointer-events:none; }
-.noise{ position:fixed; inset:0; z-index:1; opacity:.035; pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  <!-- Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-/* ---------- Card ---------- */
-.about-container{
-  width:100%; max-width:640px; position:relative; z-index:2;
-  background:var(--panel); border:1px solid var(--border); backdrop-filter:blur(20px);
-  border-radius:26px; padding:46px 40px; text-align:center;
-  box-shadow:0 30px 70px -20px rgba(0,0,0,.6);
-  opacity:0; transform:translateY(30px); animation:card-in .8s ease forwards .1s;
-}
-@keyframes card-in{ to{ opacity:1; transform:translateY(0);} }
-.about-container::before{
-  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
-  background:linear-gradient(90deg,transparent,var(--lime),transparent);
-}
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
-.profile-img-wrapper{
-  position:relative; width:128px; height:128px; margin:0 auto 22px; border-radius:50%; padding:4px;
-  background:linear-gradient(135deg,var(--leaf-2),var(--lime));
-  box-shadow:0 0 0 1px rgba(186,242,74,.2), 0 0 40px rgba(109,255,176,.35);
-  animation:avatar-float 5s ease-in-out infinite;
-}
-@keyframes avatar-float{ 0%,100%{ transform:translateY(0) rotateZ(0deg);} 50%{ transform:translateY(-8px) rotateZ(2deg);} }
-.profile-img{ width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid var(--bg); background:#0f2418; }
+  <style>
+    :root {
+      --bg: #090a0f;
+      --surface: #11131b;
+      --surface-hover: #161924;
+      --fg: #f8fafc;
+      --muted: #94a3b8;
+      --line: #1e2230;
+      --line-subtle: #141724;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 16px 36px -10px rgba(0, 0, 0, 0.55);
+    }
 
-h1{ font-size:2rem; font-weight:800; margin-bottom:6px; opacity:0; animation:rise .7s ease forwards .3s; }
-.gradient-text{
-  background:linear-gradient(110deg,var(--leaf-2),var(--lime),var(--leaf-2)); background-size:200% auto;
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:sheen 4s linear infinite;
-}
-@keyframes sheen{ to{ background-position:200% center; } }
-@keyframes rise{ from{ opacity:0; transform:translateY(12px);} to{ opacity:1; transform:translateY(0);} }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-.tagline{ color:var(--muted); font-size:.92rem; margin-bottom:30px; font-weight:300; opacity:0; animation:rise .7s ease forwards .4s; }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-.bio-box{
-  background:rgba(186,242,74,.05); border:1px solid var(--border); border-left:3px solid var(--lime);
-  padding:20px; border-radius:14px; margin-bottom:30px; text-align:left;
-  opacity:0; animation:rise .7s ease forwards .5s;
-}
-.bio-box p{ margin-bottom:10px; line-height:1.65; color:#d7e7dd; font-size:.9rem; }
-.bio-box p:last-child{ margin-bottom:0; }
-.bio-box strong{ color:var(--ink); }
+    /* Ambient background glow */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 760px;
+      height: 480px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
 
-.skills-grid{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:14px; margin-bottom:32px;
-}
-.skill-card{
-  background:var(--panel); border:1px solid var(--border); padding:16px; border-radius:14px;
-  font-size:.85rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px;
-  transition:all .3s ease; opacity:0; transform:translateY(16px); animation:rise .6s ease forwards;
-}
-.skill-card:nth-child(1){ animation-delay:.55s; }
-.skill-card:nth-child(2){ animation-delay:.62s; }
-.skill-card:nth-child(3){ animation-delay:.69s; }
-.skill-card:nth-child(4){ animation-delay:.76s; }
-.skill-card i{ width:16px; height:16px; color:var(--lime); }
-.skill-card:hover{ border-color:var(--lime); background:var(--panel-hi); transform:translateY(-4px); box-shadow:0 10px 24px rgba(109,255,176,.15); }
+    canvas#particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-.social-links{ display:flex; flex-direction:column; gap:13px; opacity:0; animation:rise .7s ease forwards .85s; }
-.social-btn{
-  display:flex; align-items:center; justify-content:center; gap:10px; padding:15px;
-  border-radius:14px; text-decoration:none; font-weight:600; font-size:.9rem; color:#fff;
-  position:relative; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease; isolation:isolate;
-}
-.social-btn i{ width:18px; height:18px; }
-.btn-youtube{ background:linear-gradient(120deg,#ff3b3b,#c81e1e); }
-.btn-whatsapp{ background:linear-gradient(120deg,#2fe07a,#1aa855); }
-.btn-telegram{ background:linear-gradient(120deg,#3db4ff,#0088cc); }
-.social-btn:hover{ transform:translateY(-3px) scale(1.015); box-shadow:0 14px 30px rgba(0,0,0,.35); }
-.ripple-el{ position:absolute; border-radius:50%; background:rgba(255,255,255,.45); transform:scale(0); animation:rip .7s ease-out; pointer-events:none; }
-@keyframes rip{ to{ transform:scale(3.4); opacity:0; } }
+    a { text-decoration: none; color: inherit; }
 
-.back-home{
-  display:inline-flex; align-items:center; gap:6px; margin-top:28px; color:var(--muted); text-decoration:none;
-  font-size:.85rem; transition:color .25s ease; opacity:0; animation:rise .7s ease forwards 1s;
-}
-.back-home i{ width:14px; height:14px; transition:transform .25s ease; }
-.back-home:hover{ color:var(--lime); }
-.back-home:hover i{ transform:translateX(-4px); }
+    /* Header Bar */
+    .hdr {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .hdr-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      color: var(--fg);
+      background: var(--surface-hover);
+    }
 
-@media (max-width:560px){
-  .about-container{ padding:32px 22px; border-radius:22px; }
-  h1{ font-size:1.5rem; }
-  .profile-img-wrapper{ width:100px; height:100px; }
-  .skills-grid{ grid-template-columns:repeat(2,1fr); gap:10px; }
-  .skill-card{ padding:13px; font-size:.78rem; }
-  .social-btn{ padding:13px; font-size:.85rem; }
-  .bio-box{ padding:16px; }
-}
-</style>
+    /* Main Container */
+    .main-wrap {
+      position: relative;
+      z-index: 10;
+      max-width: 580px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .about-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      animation: cardIn 0.5s ease-out;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-img-wrapper {
+      position: relative;
+      width: 108px;
+      height: 108px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--accent), #38bdf8);
+      box-shadow: 0 0 24px var(--accent-glow);
+      animation: avatarFloat 4s ease-in-out infinite;
+    }
+    @keyframes avatarFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid var(--surface);
+      background: #000;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      padding: 3px 12px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .tagline {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+    }
+
+    .bio-box {
+      background: var(--surface-hover);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      padding: 18px 20px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .bio-box p {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .bio-box p:last-child { margin-bottom: 0; }
+    .bio-box strong { color: var(--fg); }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    @media (min-width: 480px) {
+      .skills-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .skill-card {
+      background: var(--surface-hover);
+      border: 1px solid var(--line);
+      padding: 12px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .skill-card i {
+      width: 15px;
+      height: 15px;
+      color: var(--accent);
+    }
+    .skill-card:hover {
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+      transform: translateY(-2px);
+    }
+
+    /* Social Buttons */
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .social-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+    }
+    .btn-youtube {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+    .btn-telegram {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    }
+
+    .ripple-el {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(0);
+      animation: rip 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes rip {
+      to { transform: scale(3.5); opacity: 0; }
+    }
+
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-home:hover {
+      color: var(--accent);
+    }
+
+    /* Sprouty Mascot */
+    .sprouty-stage {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      width: 58px;
+      height: 70px;
+      z-index: 99;
+      cursor: pointer;
+      animation: sproutyFloat 3s ease-in-out infinite;
+    }
+    @media (max-width: 540px) {
+      .sprouty-stage { width: 48px; height: 58px; bottom: 12px; left: 12px; }
+    }
+    @keyframes sproutyFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .sprouty-jump {
+      animation: jumpKf 0.5s ease !important;
+    }
+    @keyframes jumpKf {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-22px) scale(0.9, 1.1); }
+      100% { transform: translateY(0) scale(1); }
+    }
+  </style>
 </head>
 <body>
 
-<div class="bg-fixed"><div class="mesh"><div class="m1"></div><div class="m2"></div></div></div>
-<canvas id="particles"></canvas>
-<div class="noise"></div>
+  <canvas id="particles"></canvas>
 
-<div class="about-container">
-  <div class="profile-img-wrapper">
-    <img src="https://i.postimg.cc/k4dFmf8p/New-Project-4-8D0AF60.png" alt="Hamza Profile" class="profile-img">
+  <!-- Top Bar -->
+  <header class="hdr">
+    <div class="hdr-wrap">
+      <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">Creator</span></a>
+      <a href="welcome.html" class="back-btn">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> All Tools
+      </a>
+    </div>
+  </header>
+
+  <main class="main-wrap">
+    <div class="about-card">
+      <div class="profile-img-wrapper">
+        <img src="https://i.postimg.cc/k4dFmf8p/New-Project-4-8D0AF60.png" alt="Hamza Shafiq" class="profile-img">
+      </div>
+
+      <div class="verified-badge">
+        <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Verified Creator
+      </div>
+
+      <h1>Hamza Shafiq</h1>
+      <p class="tagline">Tech Enthusiast · Creator · Web Developer</p>
+
+      <div class="bio-box">
+        <p>Hi, I'm <strong>Hamza</strong>. Welcome to my digital suite.</p>
+        <p>I focus on creating free, lightweight utilities for creators and builders, including VPN configurations, cloud/RDP setups, and streaming tools for the community.</p>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card"><i data-lucide="shield-check"></i> VPN Configs</div>
+        <div class="skill-card"><i data-lucide="monitor"></i> RDP Tricks</div>
+        <div class="skill-card"><i data-lucide="code"></i> Web Dev</div>
+        <div class="skill-card"><i data-lucide="zap"></i> Free Net</div>
+      </div>
+
+      <div class="social-links">
+        <a href="https://www.youtube.com/@hamzashafiq786" target="_blank" class="social-btn btn-youtube ripple">
+          <i data-lucide="youtube" style="width: 18px; height: 18px;"></i> Subscribe on YouTube
+        </a>
+        <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank" class="social-btn btn-whatsapp ripple">
+          <i data-lucide="message-circle" style="width: 18px; height: 18px;"></i> Join WhatsApp Group
+        </a>
+        <a href="https://t.me/hamzaeditz2" target="_blank" class="social-btn btn-telegram ripple">
+          <i data-lucide="send" style="width: 18px; height: 18px;"></i> Join Telegram Channel
+        </a>
+      </div>
+
+      <a href="index.html" class="back-home">
+        <i data-lucide="arrow-left" style="width: 15px; height: 15px;"></i> Back to Main Tools
+      </a>
+    </div>
+  </main>
+
+  <!-- Mascot (Sprouty) -->
+  <div class="sprouty-stage" onclick="sproutyJump()" title="Say Hi!">
+    <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+      <path d="M 50,110 C 20,110 10,70 20,40 C 30,10 50,10 50,10 C 50,10 70,10 80,40 C 90,70 80,110 50,110 Z" fill="#10b981" />
+      <circle cx="38" cy="55" r="4.5" fill="#090a0f" />
+      <circle cx="62" cy="55" r="4.5" fill="#090a0f" />
+      <circle cx="28" cy="62" r="3.5" fill="#ff5e62" opacity="0.7"/>
+      <circle cx="72" cy="62" r="3.5" fill="#ff5e62" opacity="0.7"/>
+      <path d="M 45,64 Q 50,68 55,64" fill="none" stroke="#090a0f" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
   </div>
-  <h1>Hamza<span class="gradient-text">Editz 2.0</span></h1>
-  <p class="tagline">Tech Enthusiast · YouTuber · Developer</p>
 
-  <div class="bio-box">
-    <p>Hi, I'm <strong>Hamza Shafiq</strong>. Welcome to my digital toolkit.</p>
-    <p>I specialize in providing premium tech solutions for free. My main focus is on decrypting VPN files (HTTPS Custom), discovering RDP tricks, and creating useful web tools for the community.</p>
-  </div>
+  <script>
+    lucide.createIcons();
 
-  <div class="skills-grid">
-    <div class="skill-card"><i data-lucide="unlock"></i> VPN Configs</div>
-    <div class="skill-card"><i data-lucide="monitor"></i> RDP Tricks</div>
-    <div class="skill-card"><i data-lucide="code"></i> Web Dev</div>
-    <div class="skill-card"><i data-lucide="zap"></i> Free Net</div>
-  </div>
-
-  <div class="social-links">
-    <a href="https://www.youtube.com/@hamzashafiq786" target="_blank" class="social-btn btn-youtube ripple">
-      <i data-lucide="youtube"></i> Subscribe on YouTube
-    </a>
-    <a href="https://chat.whatsapp.com/JnSg1CSyEIJ4hWpDRJVF3c" target="_blank" class="social-btn btn-whatsapp ripple">
-      <i data-lucide="message-circle"></i> Join WhatsApp Group
-    </a>
-    <a href="https://t.me/hamzaeditz2" target="_blank" class="social-btn btn-telegram ripple">
-      <i data-lucide="send"></i> Join Telegram Channel
-    </a>
-  </div>
-
-  <a href="index.html" class="back-home"><i data-lucide="arrow-left"></i> Back to Tools</a>
-</div>
-
-<script>
-lucide.createIcons();
-
-/* Ripple on social buttons */
-document.querySelectorAll('.ripple').forEach(btn => {
-  btn.addEventListener('click', function(e){
-    const r = this.getBoundingClientRect();
-    const span = document.createElement('span');
-    const d = Math.max(r.width, r.height);
-    span.className = 'ripple-el';
-    span.style.width = span.style.height = d+'px';
-    span.style.left = (e.clientX - r.left - d/2) + 'px';
-    span.style.top = (e.clientY - r.top - d/2) + 'px';
-    this.appendChild(span);
-    setTimeout(()=>span.remove(), 700);
-  });
-});
-
-/* Particle network background (lightweight, matches index.html) */
-(function(){
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  let w,h,particles;
-  function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-  function init(){
-    resize();
-    const count = window.innerWidth < 700 ? 26 : 50;
-    particles = Array.from({length:count}, () => ({
-      x: Math.random()*w, y: Math.random()*h,
-      vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*1.5+0.6
-    }));
-  }
-  function tick(){
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x<0) p.x=w; if (p.x>w) p.x=0;
-      if (p.y<0) p.y=h; if (p.y>h) p.y=0;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(186,242,74,0.45)'; ctx.fill();
+    /* Ripple Animation */
+    document.querySelectorAll('.ripple').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        const r = this.getBoundingClientRect();
+        const span = document.createElement('span');
+        const d = Math.max(r.width, r.height);
+        span.className = 'ripple-el';
+        span.style.width = span.style.height = d + 'px';
+        span.style.left = (e.clientX - r.left - d/2) + 'px';
+        span.style.top = (e.clientY - r.top - d/2) + 'px';
+        this.appendChild(span);
+        setTimeout(() => span.remove(), 600);
+      });
     });
-    for (let i=0;i<particles.length;i++){
-      for (let j=i+1;j<particles.length;j++){
-        const a=particles[i], b=particles[j];
-        const dx=a.x-b.x, dy=a.y-b.y, dist=Math.sqrt(dx*dx+dy*dy);
-        if (dist < 110){
-          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-          ctx.strokeStyle = 'rgba(79,192,106,' + (0.12*(1-dist/110)) + ')';
-          ctx.lineWidth = 0.6; ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(tick);
-  }
-  window.addEventListener('resize', resize);
-  init(); tick();
-})();
-</script>
 
-<style>
-.sprouty-stage { position: fixed; bottom: 14px; left: 14px; width: 70px; height: 84px; z-index: 999; perspective: 500px; cursor: pointer; }
-.sprouty-shadow { position:absolute; bottom:-4px; left:50%; width:40px; height:8px; background:rgba(0,0,0,0.4); border-radius:50%; transform:translateX(-50%); animation: sprouty-shadow-pulse 3s ease-in-out infinite; }
-.sprouty-char { width:100%; height:100%; transform-style: preserve-3d; animation: sprouty-float 3s ease-in-out infinite; }
-@keyframes sprouty-float { 0%,100%{ transform: translateY(0) rotateY(-6deg);} 50%{ transform: translateY(-12px) rotateY(6deg);} }
-@keyframes sprouty-shadow-pulse { 0%,100%{ transform: translateX(-50%) scale(1); opacity:.5;} 50%{ transform: translateX(-50%) scale(.7); opacity:.25;} }
-.sprouty-eye-l, .sprouty-eye-r { animation: sprouty-blink 4.2s infinite; transform-origin: center; }
-.sprouty-eye-r { animation-delay: .05s; }
-@keyframes sprouty-blink { 0%,94%,100%{ transform: scaleY(1);} 97%{ transform: scaleY(.1);} }
-.sprouty-arm-l { animation: sprouty-wave-l 2.6s ease-in-out infinite; transform-origin: 30px 55px; }
-.sprouty-arm-r { animation: sprouty-wave-r 2.6s ease-in-out infinite .3s; transform-origin: 70px 55px; }
-@keyframes sprouty-wave-l { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(-16deg);} }
-@keyframes sprouty-wave-r { 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(16deg);} }
-.sprouty-jump { animation: sprouty-jump-kf .6s ease !important; }
-@keyframes sprouty-jump-kf { 0%{transform:translateY(0) rotateY(0);} 30%{transform:translateY(-34px) rotateY(-14deg);} 60%{transform:translateY(0) rotateY(14deg);} 100%{transform:translateY(0) rotateY(0);} }
-@media (max-width:480px){ .sprouty-stage{ width:54px; height:64px; bottom:10px; left:10px; } }
-</style>
-<div class="sprouty-stage" onclick="sproutyJump()" title="Sprouty says hi!">
-  <div class="sprouty-shadow"></div>
-  <svg class="sprouty-char" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
-    <path class="sprouty-arm-l" d="M32 60 Q18 55 14 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <path class="sprouty-arm-r" d="M68 60 Q82 55 86 42" stroke="#1f7a4d" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <ellipse cx="50" cy="60" rx="30" ry="34" fill="#4fc06a"/>
-    <path d="M50 26 C40 4 20 2 12 10 C22 14 30 22 36 34 Z" fill="#a4e83c"/>
-    <path d="M50 26 C60 4 80 2 88 10 C78 14 70 22 64 34 Z" fill="#a4e83c"/>
-    <circle cx="38" cy="58" r="7" fill="#fff"/>
-    <circle cx="62" cy="58" r="7" fill="#fff"/>
-    <circle class="sprouty-eye-l" cx="38" cy="58" r="3.4" fill="#10241a"/>
-    <circle class="sprouty-eye-r" cx="62" cy="58" r="3.4" fill="#10241a"/>
-    <path d="M40 72 Q50 80 60 72" stroke="#10241a" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <circle cx="30" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
-    <circle cx="70" cy="66" r="5" fill="#ff9d8a" opacity="0.5"/>
-  </svg>
-</div>
-<script>
-function sproutyJump(){
-  var el = document.querySelector('.sprouty-char');
-  if(!el) return;
-  el.classList.add('sprouty-jump');
-  setTimeout(function(){ el.classList.remove('sprouty-jump'); }, 600);
-}
-</script>
+    /* Lightweight background particles */
+    (function(){
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let w, h, particles;
+      function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+      function init(){
+        resize();
+        const count = window.innerWidth < 700 ? 20 : 38;
+        particles = Array.from({length:count}, () => ({
+          x: Math.random()*w, y: Math.random()*h,
+          vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25, r: Math.random()*1.4+0.5
+        }));
+      }
+      function tick(){
+        ctx.clearRect(0,0,w,h);
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x<0) p.x=w; if (p.x>w) p.x=0;
+          if (p.y<0) p.y=h; if (p.y>h) p.y=0;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+          ctx.fillStyle = 'rgba(16, 185, 129, 0.35)'; ctx.fill();
+        });
+        for (let i=0; i<particles.length; i++){
+          for (let j=i+1; j<particles.length; j++){
+            const a=particles[i], b=particles[j];
+            const dx=a.x-b.x, dy=a.y-b.y, dist=Math.hypot(dx, dy);
+            if (dist < 100){
+              ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+              ctx.strokeStyle = 'rgba(16, 185, 129,' + (0.08*(1-dist/100)) + ')';
+              ctx.lineWidth = 0.5; ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(tick);
+      }
+      window.addEventListener('resize', resize);
+      init(); tick();
+    })();
+
+    /* Mascot Jump */
+    function sproutyJump(){
+      const stage = document.querySelector('.sprouty-stage');
+      if(!stage) return;
+      stage.classList.remove('sprouty-jump');
+      void stage.offsetWidth;
+      stage.classList.add('sprouty-jump');
+    }
+  </script>
 </body>
 </html>
