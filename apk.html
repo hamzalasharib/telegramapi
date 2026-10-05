@@ -276,7 +276,7 @@
       -webkit-backdrop-filter: blur(16px);
     }
 
-    /* Inputs & Form Elements */
+    /* Form Elements */
     .form-group {
       margin-bottom: 14px;
     }
@@ -315,7 +315,7 @@
       color: var(--muted);
     }
 
-    /* Primary & Outline Buttons */
+    /* Buttons */
     .btn {
       width: 100%;
       padding: 13px 18px;
@@ -363,7 +363,7 @@
       transform: none !important;
     }
 
-    /* Dashboard Layout */
+    /* Dashboard UI */
     .dash-header {
       display: flex;
       justify-content: space-between;
@@ -409,7 +409,6 @@
     .stat-label { font-size: 0.75rem; color: var(--muted); }
     .stat-val { font-size: 1.1rem; font-weight: 700; margin-top: 2px; }
 
-    /* Actions Grid */
     .grid-btns {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -548,7 +547,7 @@
           </button>
         </div>
 
-        <!-- STEP 2: OTP FORM (HIDDEN INITIALLY) -->
+        <!-- STEP 2: OTP FORM -->
         <div id="otp-step" style="display: none;">
           <div class="form-group">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -580,7 +579,7 @@
       </div>
     </div>
 
-    <!-- VIEW 2: LOGGED-IN DASHBOARD (HIDDEN INITIALLY) -->
+    <!-- VIEW 2: DASHBOARD -->
     <div class="gemini-card" id="dash-card" style="display: none;">
       <div class="card-body">
         
@@ -649,62 +648,29 @@
     </div>
 
     <footer>
-      Powered by Wasif Ali API Engine &bull; Developed for HamzaEditz 2.0
+      Powered by Wasif Ali API Engine &bull; HamzaEditz 2.0
     </footer>
   </main>
 
   <script>
     lucide.createIcons();
 
-    /* ========================================================
-       API GATEWAY SETUP & PROXY FORWARDER (CORS Bypass)
-       ======================================================== */
+    /* DIRECT API ENDPOINT (NO CORS PROXIES) */
     const BASE_API = "https://wasifali.biz.id/jazz-claimer/api";
     let activeNumber = localStorage.getItem("jazz_active_number") || "";
     let timerInterval = null;
 
-    // Reliable Multi-Gateway POST Handler
     async function apiPost(endpoint, body = {}) {
-      const targetUrl = `${BASE_API}/${endpoint}`;
-      const payload = JSON.stringify(body);
-
-      const gateways = [
-        (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
-        (u) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-        (u) => u // Direct endpoint
-      ];
-
-      let lastError = null;
-
-      for (const getGateway of gateways) {
-        try {
-          const res = await fetch(getGateway(targetUrl), {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-            },
-            body: payload
-          });
-
-          if (!res.ok) continue;
-
-          const text = await res.text();
-          const json = typeof text === "string" ? JSON.parse(text) : text;
-          if (json && typeof json.success !== "undefined") {
-            return json;
-          }
-        } catch (err) {
-          lastError = err;
-        }
-      }
-
-      throw lastError || new Error("Failed to communicate with Jazz API gateway.");
+      const response = await fetch(`${BASE_API}/${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      return await response.json();
     }
 
-    /* ========================================================
-       UI ALERTS
-       ======================================================== */
     function showAlert(boxId, message, type = "info") {
       const box = document.getElementById(boxId);
       box.className = `status-alert ${type}`;
@@ -721,9 +687,7 @@
       box.style.display = "none";
     }
 
-    /* ========================================================
-       STEP 1: SEND OTP
-       ======================================================== */
+    /* STEP 1: SEND OTP */
     async function handleSendOtp() {
       const phoneInput = document.getElementById('input-phone');
       const btn = document.getElementById('btn-send-otp');
@@ -731,7 +695,7 @@
       const num = phoneInput.value.trim();
 
       if (!/^03[0-9]{9}$/.test(num)) {
-        showAlert("auth-alert", "Invalid number format. Please enter 11 digits (e.g., 03123456789).", "error");
+        showAlert("auth-alert", "Invalid phone number. Format: 03XXXXXXXXX", "error");
         return;
       }
 
@@ -744,7 +708,7 @@
 
         if (res.success) {
           activeNumber = num;
-          showAlert("auth-alert", "OTP sent successfully! Enter the code below.", "success");
+          showAlert("auth-alert", "OTP sent successfully!", "success");
           document.getElementById('phone-step').style.display = "none";
           document.getElementById('otp-step').style.display = "block";
           startOtpTimer(60);
@@ -753,7 +717,7 @@
           showAlert("auth-alert", res.message || "Failed to send OTP.", "error");
         }
       } catch (err) {
-        showAlert("auth-alert", err.message || "Network error. Try again.", "error");
+        showAlert("auth-alert", "Request failed. Check internet connection.", "error");
       } finally {
         btn.disabled = false;
         btnTxt.textContent = "Send Verification Code";
@@ -783,13 +747,13 @@
       try {
         const res = await apiPost("send_otp", { number: activeNumber });
         if (res.success) {
-          showAlert("auth-alert", "New OTP sent!", "success");
+          showAlert("auth-alert", "New OTP sent successfully!", "success");
           startOtpTimer(60);
         } else {
           showAlert("auth-alert", res.message || "Failed to resend.", "error");
         }
       } catch (e) {
-        showAlert("auth-alert", "Failed to resend OTP.", "error");
+        showAlert("auth-alert", "Request failed.", "error");
       }
     }
 
@@ -800,9 +764,7 @@
       clearAlert("auth-alert");
     }
 
-    /* ========================================================
-       STEP 2: VERIFY OTP
-       ======================================================== */
+    /* STEP 2: VERIFY OTP */
     async function handleVerifyOtp() {
       const otpInput = document.getElementById('input-otp');
       const btn = document.getElementById('btn-verify-otp');
@@ -810,7 +772,7 @@
       const otp = otpInput.value.trim();
 
       if (otp.length < 4) {
-        showAlert("auth-alert", "Please enter a valid 4-6 digit OTP code.", "error");
+        showAlert("auth-alert", "Invalid OTP. Must be 4-6 digits.", "error");
         return;
       }
 
@@ -824,7 +786,7 @@
         if (res.success) {
           clearInterval(timerInterval);
           localStorage.setItem("jazz_active_number", activeNumber);
-          showAlert("auth-alert", "Verified! Auto-claim is enabled.", "success");
+          showAlert("auth-alert", "Verified! Auto claim enabled.", "success");
           
           setTimeout(() => {
             switchView("dashboard");
@@ -832,25 +794,22 @@
             loadRewardsSchedule();
           }, 800);
         } else {
-          showAlert("auth-alert", res.message || "Invalid OTP code.", "error");
+          showAlert("auth-alert", res.message || "Verification failed.", "error");
         }
       } catch (err) {
-        showAlert("auth-alert", err.message || "Verification failed.", "error");
+        showAlert("auth-alert", "Verification request failed.", "error");
       } finally {
         btn.disabled = false;
         btnTxt.textContent = "Verify & Activate Auto Claim";
       }
     }
 
-    /* ========================================================
-       STEP 3: DASHBOARD ACCOUNT & REWARD CHECKS
-       ======================================================== */
+    /* STEP 3: ACCOUNT & STATUS */
     async function fetchAccountDetails() {
       if (!activeNumber) return;
       clearAlert("dash-alert");
 
       try {
-        // Parallel checks: Account details & Check today's reward
         const [accRes, rewardRes] = await Promise.all([
           apiPost("my_numbers", { number: activeNumber }),
           apiPost("check_rewards", { number: activeNumber })
@@ -901,9 +860,7 @@
       }
     }
 
-    /* ========================================================
-       STEP 4: CLAIM TODAY REWARD
-       ======================================================== */
+    /* STEP 4: CLAIM REWARD */
     async function handleClaimReward() {
       const btn = document.getElementById('btn-claim-now');
       clearAlert("dash-alert");
@@ -924,9 +881,7 @@
       }
     }
 
-    /* ========================================================
-       STEP 5: TOGGLE AUTO CLAIM
-       ======================================================== */
+    /* STEP 5: TOGGLE AUTO CLAIM */
     async function handleToggleAutoClaim() {
       const btn = document.getElementById('btn-toggle-auto');
       clearAlert("dash-alert");
@@ -947,9 +902,7 @@
       }
     }
 
-    /* ========================================================
-       STEP 6: LOGOUT NUMBER
-       ======================================================== */
+    /* STEP 6: LOGOUT NUMBER */
     async function handleLogout() {
       if (!confirm("Are you sure you want to log out this number?")) return;
       clearAlert("dash-alert");
@@ -965,9 +918,7 @@
       document.getElementById('input-phone').value = "";
     }
 
-    /* ========================================================
-       STEP 7: 7-DAY REWARD LADDER
-       ======================================================== */
+    /* STEP 7: REWARDS LIST */
     async function loadRewardsSchedule() {
       const ladder = document.getElementById('rewards-ladder');
       ladder.innerHTML = "";
@@ -994,9 +945,7 @@
           `;
           ladder.appendChild(col);
         });
-      } catch (e) {
-        // Fallback default render
-      }
+      } catch (e) {}
     }
 
     function highlightDay(day) {
@@ -1019,7 +968,6 @@
       lucide.createIcons();
     }
 
-    // Auto-login persistence check
     document.addEventListener('DOMContentLoaded', () => {
       loadRewardsSchedule();
       if (activeNumber) {
