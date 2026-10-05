@@ -1,356 +1,1034 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Hamza App Store | HamzaEditz 2.0</title>
-  <script src="https://unpkg.com/feather-icons"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="color-scheme" content="light dark">
+  <title>Jazz Shake N Win Auto Claimer | HamzaEditz 2.0</title>
+
+  <!-- Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
   <style>
-    /* --- HamzaEditz 2.0 Design System --- */
     :root {
-        --bg-dark: #0f0f12;
-        --card-light: #1f1f1f;
-        --text-main: #ffffff;
-        --text-muted: #a0a0a0;
-        --accent-gradient: linear-gradient(90deg, #8E2DE2, #4A00E0);
-        --accent-glow: 0 4px 15px rgba(142, 45, 226, 0.4);
-        --border-radius: 12px;
-        --border-color: #333;
+      --bg: #f8fafc;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-hover: rgba(255, 255, 255, 0.95);
+      --fg: #0f172a;
+      --muted: #64748b;
+      --line: rgba(226, 232, 240, 0.85);
+      --line-subtle: rgba(241, 245, 249, 0.75);
+      --jazz-red: #e11d48;
+      --jazz-glow: rgba(225, 29, 72, 0.16);
+      --accent: #10b981;
+      --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 16px 36px -10px rgba(15, 23, 42, 0.1);
+
+      /* Gemini Fluid & Stroke Palette */
+      --gemini-c1: #4285F4;
+      --gemini-c2: #9b51e0;
+      --gemini-c3: #00d2ff;
+      --gemini-c4: #ff5277;
+      --gemini-opacity: 0.35;
+      --gemini-blur: 70px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #07080d;
+        --surface: rgba(17, 19, 27, 0.78);
+        --surface-hover: rgba(24, 28, 40, 0.92);
+        --fg: #f8fafc;
+        --muted: #94a3b8;
+        --line: rgba(255, 255, 255, 0.08);
+        --line-subtle: rgba(255, 255, 255, 0.04);
+        --jazz-red: #f43f5e;
+        --jazz-glow: rgba(244, 63, 94, 0.22);
+        --accent: #10b981;
+        --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.5);
+        --shadow-md: 0 18px 40px -8px rgba(0, 0, 0, 0.7);
+
+        --gemini-c1: #3b82f6; 
+        --gemini-c2: #8b5cf6; 
+        --gemini-c3: #06b6d4; 
+        --gemini-c4: #ec4899; 
+        --gemini-opacity: 0.45;
+        --gemini-blur: 85px;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-        margin: 0;
-        font-family: 'Segoe UI', Roboto, sans-serif;
-        background: var(--bg-dark);
-        color: var(--text-main);
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    /* --- Gradient Title Effect (Gemini-style) --- */
-    .gradient-text {
-        font-weight: 800;
-        background: linear-gradient(to right, #8E2DE2, #4A00E0, #00d2ff, #8E2DE2);
-        background-size: 300% auto;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shine 5s linear infinite;
+    /* Living Fluid Background */
+    .gemini-container {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+      opacity: var(--gemini-opacity);
+      filter: blur(var(--gemini-blur));
+      transform: translate3d(0, 0, 0);
     }
-    @keyframes shine { to { background-position: 300% center; } }
-
-    header {
-        background: rgba(31, 31, 31, 0.8); /* Card-light with transparency */
-        backdrop-filter: blur(5px);
-        padding: 20px;
-        position: sticky;
-        top: 0;
-        border-bottom: 1px solid var(--border-color);
-        z-index: 10;
+    .gemini-mesh {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 140vw;
+      height: 140vh;
+      transform: translate(-50%, -50%);
+    }
+    .fluid-blob {
+      position: absolute;
+      border-radius: 50%;
+      will-change: transform, border-radius;
+    }
+    .blob-1 {
+      top: 15%; left: 15%; width: clamp(280px, 45vw, 650px); height: clamp(280px, 45vw, 650px);
+      background: radial-gradient(circle, var(--gemini-c1) 0%, transparent 75%);
+      animation: morphG1 18s ease-in-out infinite alternate;
+    }
+    .blob-2 {
+      top: 10%; right: 10%; width: clamp(300px, 50vw, 700px); height: clamp(300px, 50vw, 700px);
+      background: radial-gradient(circle, var(--gemini-c2) 0%, transparent 75%);
+      animation: morphG2 22s ease-in-out infinite alternate;
+    }
+    .blob-3 {
+      bottom: 10%; left: 20%; width: clamp(260px, 42vw, 600px); height: clamp(260px, 42vw, 600px);
+      background: radial-gradient(circle, var(--gemini-c3) 0%, transparent 75%);
+      animation: morphG3 20s ease-in-out infinite alternate;
+    }
+    .blob-4 {
+      bottom: 20%; right: 20%; width: clamp(240px, 38vw, 550px); height: clamp(240px, 38vw, 550px);
+      background: radial-gradient(circle, var(--gemini-c4) 0%, transparent 75%);
+      animation: morphG4 25s ease-in-out infinite alternate;
     }
 
+    @keyframes morphG1 {
+      0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) rotate(0deg); }
+      100% { border-radius: 35% 65% 60% 40% / 55% 35% 65% 45%; transform: translate(4vw, 10vh) rotate(180deg); }
+    }
+    @keyframes morphG2 {
+      0% { border-radius: 50% 50% 35% 65% / 60% 40% 60% 40%; transform: translate(0, 0) rotate(0deg); }
+      100% { border-radius: 65% 35% 42% 58% / 38% 62% 38% 62%; transform: translate(-6vw, -6vh) rotate(-180deg); }
+    }
+    @keyframes morphG3 {
+      0% { border-radius: 60% 40% 55% 45% / 40% 50% 50% 60%; transform: translate(0, 0); }
+      100% { border-radius: 40% 60% 38% 62% / 62% 38% 62% 38%; transform: translate(6vw, -8vh); }
+    }
+    @keyframes morphG4 {
+      0% { border-radius: 45% 55% 40% 60% / 50% 40% 60% 50%; transform: translate(0, 0); }
+      100% { border-radius: 60% 40% 65% 35% / 40% 60% 40% 60%; transform: translate(-5vw, -6vh); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 10;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* Header */
+    .hdr {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .hdr-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--jazz-glow);
+      color: var(--jazz-red);
+      border: 1px solid color-mix(in srgb, var(--jazz-red) 30%, transparent);
+    }
+
+    /* Hero / Intro */
+    .hero {
+      text-align: center;
+      padding: 36px 16px 20px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--jazz-red);
+      background: var(--jazz-glow);
+      border: 1px solid color-mix(in srgb, var(--jazz-red) 30%, transparent);
+      margin-bottom: 14px;
+    }
     h1 {
-        margin: 0;
-        font-size: 28px;
+      font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+    .sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-top: 6px;
     }
 
-    .search-row {
-        display: flex;
-        gap: 10px;
-        margin-top: 15px;
+    /* Gemini Stroke Container */
+    .gemini-card {
+      position: relative;
+      border-radius: 20px;
+      padding: 2px;
+      background: var(--line);
+      overflow: hidden;
+      margin-top: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
 
-    input {
-        flex: 1;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-        background: rgba(0,0,0,0.3);
-        color: var(--text-main);
-        transition: border-color 0.3s;
-    }
-    input:focus { border-color: #8E2DE2; outline: none; }
-
-    button {
-        padding: 12px 16px;
-        border-radius: 8px;
-        border: 0;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: box-shadow 0.3s, transform 0.2s;
-    }
-    button:active { transform: scale(0.98); }
-
-    button.primary {
-        background: var(--accent-gradient);
-        color: var(--text-main);
-        box-shadow: 0 4px 10px rgba(74, 0, 224, 0.4);
-    }
-    
-    main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
+    .gemini-card::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        var(--gemini-c1),
+        var(--gemini-c2),
+        var(--gemini-c4),
+        var(--gemini-c3),
+        var(--gemini-c1)
+      );
+      opacity: 0.65;
+      animation: rotateStroke 4s linear infinite;
+      z-index: 1;
+      transition: opacity 0.3s ease;
     }
 
-    section {
-        margin-bottom: 40px;
+    .gemini-card:focus-within::before,
+    .gemini-card:hover::before {
+      opacity: 1;
     }
 
-    section h2 {
-        margin-bottom: 20px;
-        font-size: 24px;
-        padding-bottom: 6px;
+    .gemini-card:focus-within {
+      box-shadow: 0 12px 32px -8px rgba(66, 133, 244, 0.3), var(--shadow-md);
     }
 
-    .grid {
-        display: grid;
-        gap: 20px;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    @keyframes rotateStroke {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    .card {
-        background: var(--card-light);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        border-top: 4px solid #4A00E0; /* Purple Top Border */
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s;
-    }
-    .card:hover {
-        transform: translateY(-3px);
+    .card-body {
+      position: relative;
+      z-index: 2;
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 24px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
-    .card img {
-        width: 70px;
-        height: 70px;
-        border-radius: 15px;
-        margin-bottom: 12px;
-        object-fit: cover;
-        box-shadow: 0 0 0 2px var(--card-light), 0 0 0 4px rgba(142, 45, 226, 0.5);
+    /* Inputs & Form Elements */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .input-box {
+      display: flex;
+      gap: 10px;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 14px;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .input-box:focus-within {
+      border-color: var(--jazz-red);
+    }
+    .input-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      color: var(--fg);
+      font-family: inherit;
+    }
+    .input-box input::placeholder {
+      color: var(--muted);
     }
 
-    .card .title {
-        font-weight: 700;
-        margin-bottom: 4px;
-        font-size: 16px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-        color: var(--text-main);
+    /* Primary & Outline Buttons */
+    .btn {
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-jazz {
+      background: linear-gradient(135deg, var(--jazz-red), #be123c);
+      color: #fff;
+      box-shadow: 0 4px 18px var(--jazz-glow);
+    }
+    .btn-jazz:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: var(--line);
+      color: var(--fg);
+    }
+    .btn-secondary:hover {
+      background: color-mix(in srgb, var(--line) 70%, var(--fg));
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--fg);
+    }
+    .btn-outline:hover {
+      background: var(--surface-hover);
+      border-color: var(--jazz-red);
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
     }
 
-    .card .meta {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-bottom: 12px;
+    /* Dashboard Layout */
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+    .dash-num {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .dash-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .badge-active { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .badge-inactive { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat-item {
+      background: color-mix(in srgb, var(--bg) 60%, transparent);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+    .stat-label { font-size: 0.75rem; color: var(--muted); }
+    .stat-val { font-size: 1.1rem; font-weight: 700; margin-top: 2px; }
+
+    /* Actions Grid */
+    .grid-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 440px) {
+      .grid-btns { grid-template-columns: 1fr; }
     }
 
-    .card a {
-        text-decoration: none;
-        background: var(--accent-gradient);
-        color: var(--text-main);
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-weight: 600;
-        margin-top: auto;
-        width: 80%;
-        transition: opacity 0.3s;
+    /* 7-Day Rewards List */
+    .rewards-drawer {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--line);
     }
-    .card a:hover { opacity: 0.9; }
+    .rewards-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+    }
+    .rewards-ladder {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    @media (max-width: 520px) {
+      .rewards-ladder { grid-template-columns: repeat(4, 1fr); }
+    }
+    .ladder-col {
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 4px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .ladder-col.highlight {
+      border-color: var(--jazz-red);
+      background: var(--jazz-glow);
+    }
+    .ladder-day { font-size: 0.68rem; color: var(--muted); font-weight: 600; }
+    .ladder-reward { font-size: 0.78rem; font-weight: 700; margin-top: 2px; }
 
-    .status, .error, .empty {
-        margin-top: 15px;
-        padding: 10px;
-        border-radius: 8px;
-        font-size: 15px;
-        text-align: center;
-        background: rgba(74, 0, 224, 0.1);
+    /* Status Notifications */
+    .status-alert {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      margin-top: 14px;
+      display: none;
+      align-items: center;
+      gap: 8px;
     }
-    .error { background: rgba(255, 0, 0, 0.15); color: #ff6666; }
-    #searchSection.hidden { display: none; }
-    
-    /* Spin animation for loader */
-    .spin { animation: rotate 2s linear infinite; }
-    @keyframes rotate { 100% { transform: rotate(360deg); } }
+    .status-alert.error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      display: flex;
+    }
+    .status-alert.success {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+      display: flex;
+    }
+    .status-alert.info {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #3b82f6;
+      display: flex;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 36px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fluid-blob, .gemini-card::before { animation: none !important; }
+      * { transition: none !important; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1 class="gradient-text">Hamza App Store</h1>
-    <div class="search-row">
-      <input id="query" type="text" placeholder="Search apps, games, tools..."/>
-      <button class="primary" id="searchBtn"><i data-feather="search" stroke-width="3"></i>Search</button>
+
+  <!-- Gemini Living Fluid Background -->
+  <div class="gemini-container" aria-hidden="true">
+    <div class="gemini-mesh">
+      <div class="fluid-blob blob-1"></div>
+      <div class="fluid-blob blob-2"></div>
+      <div class="fluid-blob blob-3"></div>
+      <div class="fluid-blob blob-4"></div>
     </div>
-    <div id="status" class="status"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="hdr-wrap">
+      <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
+      <span style="font-size: 13px; font-weight: 600; color: var(--muted);">Jazz Engine</span>
+    </div>
   </header>
 
-  <main>
-    <section id="searchSection" class="hidden">
-      <h2 class="gradient-text">Search Results</h2>
-      <div class="grid" id="results"></div>
-      <div id="empty" class="empty"></div>
-      <div id="error" class="error"></div>
-    </section>
+  <main class="wrap">
+    <!-- Intro -->
+    <div class="hero">
+      <div class="badge">
+        <i data-lucide="zap" style="width: 14px; height: 14px;"></i> Shake N Win Auto Claim
+      </div>
+      <h1>Daily Jazz Rewards</h1>
+      <p class="sub">Verify via OTP once and toggle automatic daily reward claims.</p>
+    </div>
 
-    <section id="social">
-      <h2 class="gradient-text">Social Apps</h2>
-      <div class="grid" id="socialGrid"></div>
-    </section>
+    <!-- VIEW 1: AUTH CARD (PHONE & OTP) -->
+    <div class="gemini-card" id="auth-card">
+      <div class="card-body">
+        
+        <!-- STEP 1: PHONE FORM -->
+        <div id="phone-step">
+          <div class="form-group">
+            <label class="form-label">Enter Jazz Number</label>
+            <div class="input-box">
+              <i data-lucide="phone" style="width: 18px; height: 18px; color: var(--muted);"></i>
+              <input type="tel" id="input-phone" placeholder="03XXXXXXXXX" maxlength="11" autocomplete="tel">
+            </div>
+          </div>
+          <button class="btn btn-jazz" id="btn-send-otp" onclick="handleSendOtp()">
+            <span id="txt-send-otp">Send Verification Code</span>
+            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
 
-    <section id="tools">
-      <h2 class="gradient-text">Tools & Utilities</h2>
-      <div class="grid" id="toolsGrid"></div>
-    </section>
+        <!-- STEP 2: OTP FORM (HIDDEN INITIALLY) -->
+        <div id="otp-step" style="display: none;">
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label class="form-label">Enter 4-6 Digit OTP</label>
+              <span id="otp-timer" style="font-size: 0.78rem; color: var(--jazz-red); font-weight: 600;">60s</span>
+            </div>
+            <div class="input-box">
+              <i data-lucide="key-round" style="width: 18px; height: 18px; color: var(--muted);"></i>
+              <input type="number" id="input-otp" placeholder="1234" maxlength="6">
+            </div>
+          </div>
+          
+          <button class="btn btn-jazz" id="btn-verify-otp" onclick="handleVerifyOtp()">
+            <span id="txt-verify-otp">Verify & Activate Auto Claim</span>
+            <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+          </button>
 
-    <section id="games">
-      <h2 class="gradient-text">Games</h2>
-      <div class="grid" id="gamesGrid"></div>
-    </section>
-    
-    <section id="productivity">
-      <h2 class="gradient-text">Productivity Tools</h2>
-      <div class="grid" id="productivityGrid"></div>
-    </section>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn btn-outline" style="padding: 10px;" onclick="resendOtp()">
+              <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Resend
+            </button>
+            <button class="btn btn-secondary" style="padding: 10px;" onclick="resetToPhoneStep()">
+              Change Number
+            </button>
+          </div>
+        </div>
 
-    <section id="entertainment">
-      <h2 class="gradient-text">Entertainment & Media</h2>
-      <div class="grid" id="entertainmentGrid"></div>
-    </section>
+        <div class="status-alert" id="auth-alert"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: LOGGED-IN DASHBOARD (HIDDEN INITIALLY) -->
+    <div class="gemini-card" id="dash-card" style="display: none;">
+      <div class="card-body">
+        
+        <div class="dash-header">
+          <div>
+            <div class="dash-num" id="dash-number">03XXXXXXXXX</div>
+            <div class="dash-sub" id="dash-msisdn">923XXXXXXXXX</div>
+          </div>
+          <span class="badge-status badge-active" id="dash-status-badge">
+            <i data-lucide="check" style="width: 12px; height: 12px;"></i> Active
+          </span>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">Auto Claim Status</div>
+            <div class="stat-val" id="stat-auto-claim" style="color: #10b981;">Enabled</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Total Claims</div>
+            <div class="stat-val" id="stat-total-claims">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Today Reward</div>
+            <div class="stat-val" id="stat-today-reward">--</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Last Claimed</div>
+            <div class="stat-val" id="stat-last-claim">Never</div>
+          </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="grid-btns">
+          <button class="btn btn-jazz" id="btn-claim-now" onclick="handleClaimReward()">
+            <i data-lucide="gift" style="width: 16px; height: 16px;"></i> Claim Today Reward
+          </button>
+          <button class="btn btn-secondary" id="btn-toggle-auto" onclick="handleToggleAutoClaim()">
+            <i data-lucide="repeat" style="width: 16px; height: 16px;"></i> Toggle Auto Claim
+          </button>
+        </div>
+
+        <div class="grid-btns">
+          <button class="btn btn-outline" onclick="fetchAccountDetails()">
+            <i data-lucide="refresh-ccw" style="width: 15px; height: 15px;"></i> Refresh Status
+          </button>
+          <button class="btn btn-outline" style="color: #ef4444;" onclick="handleLogout()">
+            <i data-lucide="log-out" style="width: 15px; height: 15px;"></i> Logout Number
+          </button>
+        </div>
+
+        <!-- 7-Day Ladder -->
+        <div class="rewards-drawer">
+          <div class="rewards-title">
+            <span>7-Day Rewards Schedule</span>
+            <span id="current-day-label">Day 1</span>
+          </div>
+          <div class="rewards-ladder" id="rewards-ladder">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="status-alert" id="dash-alert"></div>
+      </div>
+    </div>
+
+    <footer>
+      Powered by Wasif Ali API Engine &bull; Developed for HamzaEditz 2.0
+    </footer>
   </main>
 
   <script>
-    const API_BASE = "https://apk-downloader.bjcoderx.workers.dev/?query=";
+    lucide.createIcons();
 
-    const categories = {
-      // Expanded Social Apps
-      social: ["whatsapp", "instagram", "facebook", "telegram", "snapchat", "twitter", "tiktok", "viber", "signal", "imo"],
-      
-      // Expanded Tools & Utilities
-      tools: ["hide whatsapp", "file manager", "vpn", "cleaner", "notepad", "calculator", "google maps", "adobe acrobat", "shareit", "es file explorer"],
-      
-      // Expanded Games
-      games: ["pubg mobile", "free fire", "clash of clans", "subway surfers", "candy crush", "minecraft", "asphalt 9", "call of duty mobile", "fortnite", "roblox"],
-      
-      // New Category: Productivity
-      productivity: ["microsoft word", "google docs", "evernote", "slack", "trello", "zoom", "google calendar", "notion"],
-      
-      // New Category: Entertainment
-      entertainment: ["netflix", "youtube", "spotify", "amazon prime video", "disney plus", "mx player", "hotstar", "vlc media player"]
-    };
+    /* ========================================================
+       API GATEWAY SETUP & PROXY FORWARDER (CORS Bypass)
+       ======================================================== */
+    const BASE_API = "https://wasifali.biz.id/jazz-claimer/api";
+    let activeNumber = localStorage.getItem("jazz_active_number") || "";
+    let timerInterval = null;
 
-    // Helper to format large numbers
-    function formatDownloads(n) {
-      if (n >= 1e9) return (n / 1e9).toFixed(1) + "B";
-      if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
-      if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
-      return n;
-    }
+    // Reliable Multi-Gateway POST Handler
+    async function apiPost(endpoint, body = {}) {
+      const targetUrl = `${BASE_API}/${endpoint}`;
+      const payload = JSON.stringify(body);
 
-    // Function to create an app card
-    function createCard(app) {
-      const div = document.createElement("div");
-      div.className = "card";
-      
-      const downloadsFormatted = formatDownloads(app.downloads || 0);
+      const gateways = [
+        (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+        (u) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+        (u) => u // Direct endpoint
+      ];
 
-      div.innerHTML = `
-        <img src="${app.image}" alt="${app.name}" onerror="this.style.visibility='hidden'; this.style.width='0'; this.style.height='0'; this.style.margin='0';">
-        <div class="title" title="${app.name}">${app.name}</div>
-        <div class="meta">v${app.version || '1.0'} • ${app.filesize || 'N/A'}<br>⭐ ${app.rating || '5.0'} • ${downloadsFormatted} downloads</div>
-        <a href="${app.path}" target="_blank">Download</a>
-      `;
-      return div;
-    }
+      let lastError = null;
 
-    // Function to fetch category apps (runs concurrently)
-    async function fetchCategory(catId, queries) {
-      const grid = document.getElementById(catId + "Grid");
-      grid.innerHTML = "";
-      
-      const fetchPromises = queries.map(q => 
-        fetch(API_BASE + encodeURIComponent(q))
-          .then(res => res.json())
-          .catch(e => { console.error(`Error fetching ${q}:`, e); return []; })
-      );
+      for (const getGateway of gateways) {
+        try {
+          const res = await fetch(getGateway(targetUrl), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: payload
+          });
 
-      const allResults = await Promise.all(fetchPromises);
-      
-      allResults.flat().forEach(data => {
-        if (Array.isArray(data) && data.length > 0) {
-            // Take the best/first result for category tiles
-            grid.appendChild(createCard(data[0])); 
-        } else if (data && data.name) {
-             grid.appendChild(createCard(data)); 
+          if (!res.ok) continue;
+
+          const text = await res.text();
+          const json = typeof text === "string" ? JSON.parse(text) : text;
+          if (json && typeof json.success !== "undefined") {
+            return json;
+          }
+        } catch (err) {
+          lastError = err;
         }
-      });
-      feather.replace(); // Replace icons after DOM manipulation
+      }
+
+      throw lastError || new Error("Failed to communicate with Jazz API gateway.");
     }
 
-    // Function to handle app search
-    async function searchApps(query) {
-      const searchSection = document.getElementById("searchSection");
-      const results = document.getElementById("results");
-      const empty = document.getElementById("empty");
-      const error = document.getElementById("error");
-      const status = document.getElementById("status");
-      
-      searchSection.classList.remove("hidden");
-      results.innerHTML = "";
-      empty.textContent = "";
-      error.textContent = "";
-      
-      if (!query.trim()) {
-        empty.textContent = "Please enter a search term.";
-        status.textContent = "";
+    /* ========================================================
+       UI ALERTS
+       ======================================================== */
+    function showAlert(boxId, message, type = "info") {
+      const box = document.getElementById(boxId);
+      box.className = `status-alert ${type}`;
+      box.innerHTML = `
+        <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info'}" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+        <span>${message}</span>
+      `;
+      box.style.display = "flex";
+      lucide.createIcons();
+    }
+
+    function clearAlert(boxId) {
+      const box = document.getElementById(boxId);
+      box.style.display = "none";
+    }
+
+    /* ========================================================
+       STEP 1: SEND OTP
+       ======================================================== */
+    async function handleSendOtp() {
+      const phoneInput = document.getElementById('input-phone');
+      const btn = document.getElementById('btn-send-otp');
+      const btnTxt = document.getElementById('txt-send-otp');
+      const num = phoneInput.value.trim();
+
+      if (!/^03[0-9]{9}$/.test(num)) {
+        showAlert("auth-alert", "Invalid number format. Please enter 11 digits (e.g., 03123456789).", "error");
         return;
       }
-      
-      status.innerHTML = `<i data-feather="loader" class="spin"></i> Searching for '<strong>${query}</strong>'...`;
-      feather.replace();
-      
+
+      clearAlert("auth-alert");
+      btn.disabled = true;
+      btnTxt.textContent = "Sending OTP...";
+
       try {
-        const res = await fetch(API_BASE + encodeURIComponent(query));
-        const data = await res.json();
-        
-        if (res.ok && Array.isArray(data) && data.length > 0) {
-          data.forEach(app => results.appendChild(createCard(app)));
+        const res = await apiPost("send_otp", { number: num });
+
+        if (res.success) {
+          activeNumber = num;
+          showAlert("auth-alert", "OTP sent successfully! Enter the code below.", "success");
+          document.getElementById('phone-step').style.display = "none";
+          document.getElementById('otp-step').style.display = "block";
+          startOtpTimer(60);
+          document.getElementById('input-otp').focus();
         } else {
-          empty.textContent = `No results found for "${query}". Please check the spelling.`;
+          showAlert("auth-alert", res.message || "Failed to send OTP.", "error");
         }
-      } catch (e) {
-        error.textContent = "Server Error: Could not fetch results. Please try again later.";
-        console.error("Search Error:", e);
+      } catch (err) {
+        showAlert("auth-alert", err.message || "Network error. Try again.", "error");
       } finally {
-        status.textContent = "";
-        feather.replace(); // Replace icons after DOM manipulation
+        btn.disabled = false;
+        btnTxt.textContent = "Send Verification Code";
       }
     }
 
-    // --- Event Listeners ---
-    document.getElementById("searchBtn").addEventListener("click", () => searchApps(document.getElementById("query").value));
-    document.getElementById("query").addEventListener("keydown", (e) => { 
-        if (e.key === "Enter") searchApps(e.target.value); 
-    });
+    function startOtpTimer(seconds) {
+      clearInterval(timerInterval);
+      let count = seconds;
+      const timerEl = document.getElementById('otp-timer');
+      timerEl.textContent = `${count}s`;
 
-    // Load categories on page load
-    window.onload = () => {
-        fetchCategory("social", categories.social);
-        fetchCategory("tools", categories.tools);
-        fetchCategory("games", categories.games);
-        fetchCategory("productivity", categories.productivity);
-        fetchCategory("entertainment", categories.entertainment);
-        
-        // Initial Feather icon replacement for static elements
-        feather.replace(); 
-    };
+      timerInterval = setInterval(() => {
+        count--;
+        if (count <= 0) {
+          clearInterval(timerInterval);
+          timerEl.textContent = "Expired";
+        } else {
+          timerEl.textContent = `${count}s`;
+        }
+      }, 1000);
+    }
+
+    async function resendOtp() {
+      if (!activeNumber) return;
+      showAlert("auth-alert", "Resending OTP...", "info");
+      try {
+        const res = await apiPost("send_otp", { number: activeNumber });
+        if (res.success) {
+          showAlert("auth-alert", "New OTP sent!", "success");
+          startOtpTimer(60);
+        } else {
+          showAlert("auth-alert", res.message || "Failed to resend.", "error");
+        }
+      } catch (e) {
+        showAlert("auth-alert", "Failed to resend OTP.", "error");
+      }
+    }
+
+    function resetToPhoneStep() {
+      clearInterval(timerInterval);
+      document.getElementById('otp-step').style.display = "none";
+      document.getElementById('phone-step').style.display = "block";
+      clearAlert("auth-alert");
+    }
+
+    /* ========================================================
+       STEP 2: VERIFY OTP
+       ======================================================== */
+    async function handleVerifyOtp() {
+      const otpInput = document.getElementById('input-otp');
+      const btn = document.getElementById('btn-verify-otp');
+      const btnTxt = document.getElementById('txt-verify-otp');
+      const otp = otpInput.value.trim();
+
+      if (otp.length < 4) {
+        showAlert("auth-alert", "Please enter a valid 4-6 digit OTP code.", "error");
+        return;
+      }
+
+      clearAlert("auth-alert");
+      btn.disabled = true;
+      btnTxt.textContent = "Verifying...";
+
+      try {
+        const res = await apiPost("verify_otp", { number: activeNumber, otp: otp });
+
+        if (res.success) {
+          clearInterval(timerInterval);
+          localStorage.setItem("jazz_active_number", activeNumber);
+          showAlert("auth-alert", "Verified! Auto-claim is enabled.", "success");
+          
+          setTimeout(() => {
+            switchView("dashboard");
+            fetchAccountDetails();
+            loadRewardsSchedule();
+          }, 800);
+        } else {
+          showAlert("auth-alert", res.message || "Invalid OTP code.", "error");
+        }
+      } catch (err) {
+        showAlert("auth-alert", err.message || "Verification failed.", "error");
+      } finally {
+        btn.disabled = false;
+        btnTxt.textContent = "Verify & Activate Auto Claim";
+      }
+    }
+
+    /* ========================================================
+       STEP 3: DASHBOARD ACCOUNT & REWARD CHECKS
+       ======================================================== */
+    async function fetchAccountDetails() {
+      if (!activeNumber) return;
+      clearAlert("dash-alert");
+
+      try {
+        // Parallel checks: Account details & Check today's reward
+        const [accRes, rewardRes] = await Promise.all([
+          apiPost("my_numbers", { number: activeNumber }),
+          apiPost("check_rewards", { number: activeNumber })
+        ]);
+
+        if (accRes.success && accRes.data) {
+          const d = accRes.data;
+          document.getElementById('dash-number').textContent = d.number || activeNumber;
+          document.getElementById('dash-msisdn').textContent = d.msisdn ? `+${d.msisdn}` : "";
+          
+          const autoClaimEl = document.getElementById('stat-auto-claim');
+          autoClaimEl.textContent = d.auto_claim ? "Enabled" : "Disabled";
+          autoClaimEl.style.color = d.auto_claim ? "#10b981" : "#ef4444";
+
+          document.getElementById('stat-total-claims').textContent = d.total_claims || "0";
+          document.getElementById('stat-last-claim').textContent = d.last_claim_date || "Never";
+
+          const badge = document.getElementById('dash-status-badge');
+          if (d.is_active) {
+            badge.className = "badge-status badge-active";
+            badge.innerHTML = `<i data-lucide="check" style="width: 12px; height: 12px;"></i> Active`;
+          } else {
+            badge.className = "badge-status badge-inactive";
+            badge.innerHTML = `<i data-lucide="x" style="width: 12px; height: 12px;"></i> Inactive`;
+          }
+        }
+
+        if (rewardRes.success && rewardRes.data) {
+          const rd = rewardRes.data;
+          document.getElementById('stat-today-reward').textContent = rd.reward || "N/A";
+          document.getElementById('current-day-label').textContent = `Day ${rd.day || 1}`;
+
+          const claimBtn = document.getElementById('btn-claim-now');
+          if (rd.claimed) {
+            claimBtn.disabled = true;
+            claimBtn.innerHTML = `<i data-lucide="check" style="width: 16px; height: 16px;"></i> Claimed Today`;
+          } else {
+            claimBtn.disabled = false;
+            claimBtn.innerHTML = `<i data-lucide="gift" style="width: 16px; height: 16px;"></i> Claim ${rd.reward}`;
+          }
+
+          highlightDay(rd.day);
+        }
+
+        lucide.createIcons();
+      } catch (e) {
+        showAlert("dash-alert", "Failed to refresh dashboard details.", "error");
+      }
+    }
+
+    /* ========================================================
+       STEP 4: CLAIM TODAY REWARD
+       ======================================================== */
+    async function handleClaimReward() {
+      const btn = document.getElementById('btn-claim-now');
+      clearAlert("dash-alert");
+      btn.disabled = true;
+
+      try {
+        const res = await apiPost("claim_reward", { number: activeNumber });
+        if (res.success) {
+          showAlert("dash-alert", res.message || "Reward claimed successfully!", "success");
+          fetchAccountDetails();
+        } else {
+          showAlert("dash-alert", res.message || "Could not claim today's reward.", "error");
+        }
+      } catch (e) {
+        showAlert("dash-alert", "Claim request failed.", "error");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    /* ========================================================
+       STEP 5: TOGGLE AUTO CLAIM
+       ======================================================== */
+    async function handleToggleAutoClaim() {
+      const btn = document.getElementById('btn-toggle-auto');
+      clearAlert("dash-alert");
+      btn.disabled = true;
+
+      try {
+        const res = await apiPost("toggle_auto_claim", { number: activeNumber });
+        if (res.success) {
+          showAlert("dash-alert", res.message, "success");
+          fetchAccountDetails();
+        } else {
+          showAlert("dash-alert", res.message || "Failed to toggle status.", "error");
+        }
+      } catch (e) {
+        showAlert("dash-alert", "Could not toggle auto claim.", "error");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    /* ========================================================
+       STEP 6: LOGOUT NUMBER
+       ======================================================== */
+    async function handleLogout() {
+      if (!confirm("Are you sure you want to log out this number?")) return;
+      clearAlert("dash-alert");
+
+      try {
+        await apiPost("logout", { number: activeNumber });
+      } catch (e) {}
+
+      localStorage.removeItem("jazz_active_number");
+      activeNumber = "";
+      switchView("auth");
+      resetToPhoneStep();
+      document.getElementById('input-phone').value = "";
+    }
+
+    /* ========================================================
+       STEP 7: 7-DAY REWARD LADDER
+       ======================================================== */
+    async function loadRewardsSchedule() {
+      const ladder = document.getElementById('rewards-ladder');
+      ladder.innerHTML = "";
+
+      try {
+        const res = await apiPost("rewards_list", {});
+        const rewards = res?.data?.rewards || [
+          { day: 1, reward: "25 MB" },
+          { day: 2, reward: "50 MB" },
+          { day: 3, reward: "100 MB" },
+          { day: 4, reward: "120 MB" },
+          { day: 5, reward: "150 MB" },
+          { day: 6, reward: "175 MB" },
+          { day: 7, reward: "200 MB" }
+        ];
+
+        rewards.forEach(r => {
+          const col = document.createElement('div');
+          col.className = 'ladder-col';
+          col.id = `ladder-day-${r.day}`;
+          col.innerHTML = `
+            <div class="ladder-day">Day ${r.day}</div>
+            <div class="ladder-reward">${r.reward}</div>
+          `;
+          ladder.appendChild(col);
+        });
+      } catch (e) {
+        // Fallback default render
+      }
+    }
+
+    function highlightDay(day) {
+      document.querySelectorAll('.ladder-col').forEach(c => c.classList.remove('highlight'));
+      const activeCol = document.getElementById(`ladder-day-${day}`);
+      if (activeCol) activeCol.classList.add('highlight');
+    }
+
+    function switchView(view) {
+      const auth = document.getElementById('auth-card');
+      const dash = document.getElementById('dash-card');
+
+      if (view === "dashboard") {
+        auth.style.display = "none";
+        dash.style.display = "block";
+      } else {
+        auth.style.display = "block";
+        dash.style.display = "none";
+      }
+      lucide.createIcons();
+    }
+
+    // Auto-login persistence check
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRewardsSchedule();
+      if (activeNumber) {
+        switchView("dashboard");
+        fetchAccountDetails();
+      } else {
+        switchView("auth");
+      }
+    });
   </script>
 </body>
 </html>
