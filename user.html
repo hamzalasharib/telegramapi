@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="color-scheme" content="light dark">
+  <title>TikTok Profile Inspector | HamzaEditz 2.0</title>
+
+  <!-- Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-hover: rgba(255, 255, 255, 0.95);
+      --fg: #0f172a;
+      --muted: #64748b;
+      --line: rgba(226, 232, 240, 0.85);
+      --line-subtle: rgba(241, 245, 249, 0.75);
+      --accent: #00f2fe;
+      --tiktok-pink: #fe2c55;
+      --tiktok-cyan: #25f4ee;
+      --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 16px 36px -10px rgba(15, 23, 42, 0.1);
+
+      /* Gemini Fluid & Conic Stroke Palette */
+      --gemini-c1: #4285F4;
+      --gemini-c2: #9b51e0;
+      --gemini-c3: #00d2ff;
+      --gemini-c4: #ff5277;
+      --gemini-opacity: 0.35;
+      --gemini-blur: 70px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #07080d;
+        --surface: rgba(17, 19, 27, 0.78);
+        --surface-hover: rgba(24, 28, 40, 0.92);
+        --fg: #f8fafc;
+        --muted: #94a3b8;
+        --line: rgba(255, 255, 255, 0.08);
+        --line-subtle: rgba(255, 255, 255, 0.04);
+        --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.5);
+        --shadow-md: 0 18px 40px -8px rgba(0, 0, 0, 0.7);
+
+        --gemini-c1: #3b82f6; 
+        --gemini-c2: #8b5cf6; 
+        --gemini-c3: #06b6d4; 
+        --gemini-c4: #ec4899; 
+        --gemini-opacity: 0.45;
+        --gemini-blur: 85px;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Living Fluid Background */
+    .gemini-container {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+      opacity: var(--gemini-opacity);
+      filter: blur(var(--gemini-blur));
+      transform: translate3d(0, 0, 0);
+    }
+    .gemini-mesh {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 140vw;
+      height: 140vh;
+      transform: translate(-50%, -50%);
+    }
+    .fluid-blob {
+      position: absolute;
+      border-radius: 50%;
+      will-change: transform, border-radius;
+    }
+    .blob-1 {
+      top: 15%; left: 15%; width: clamp(280px, 45vw, 650px); height: clamp(280px, 45vw, 650px);
+      background: radial-gradient(circle, var(--gemini-c1) 0%, transparent 75%);
+      animation: morphG1 18s ease-in-out infinite alternate;
+    }
+    .blob-2 {
+      top: 10%; right: 10%; width: clamp(300px, 50vw, 700px); height: clamp(300px, 50vw, 700px);
+      background: radial-gradient(circle, var(--gemini-c2) 0%, transparent 75%);
+      animation: morphG2 22s ease-in-out infinite alternate;
+    }
+    .blob-3 {
+      bottom: 10%; left: 20%; width: clamp(260px, 42vw, 600px); height: clamp(260px, 42vw, 600px);
+      background: radial-gradient(circle, var(--gemini-c3) 0%, transparent 75%);
+      animation: morphG3 20s ease-in-out infinite alternate;
+    }
+    .blob-4 {
+      bottom: 20%; right: 20%; width: clamp(240px, 38vw, 550px); height: clamp(240px, 38vw, 550px);
+      background: radial-gradient(circle, var(--gemini-c4) 0%, transparent 75%);
+      animation: morphG4 25s ease-in-out infinite alternate;
+    }
+
+    @keyframes morphG1 {
+      0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) rotate(0deg); }
+      100% { border-radius: 35% 65% 60% 40% / 55% 35% 65% 45%; transform: translate(4vw, 10vh) rotate(180deg); }
+    }
+    @keyframes morphG2 {
+      0% { border-radius: 50% 50% 35% 65% / 60% 40% 60% 40%; transform: translate(0, 0) rotate(0deg); }
+      100% { border-radius: 65% 35% 42% 58% / 38% 62% 38% 62%; transform: translate(-6vw, -6vh) rotate(-180deg); }
+    }
+    @keyframes morphG3 {
+      0% { border-radius: 60% 40% 55% 45% / 40% 50% 50% 60%; transform: translate(0, 0); }
+      100% { border-radius: 40% 60% 38% 62% / 62% 38% 62% 38%; transform: translate(6vw, -8vh); }
+    }
+    @keyframes morphG4 {
+      0% { border-radius: 45% 55% 40% 60% / 50% 40% 60% 50%; transform: translate(0, 0); }
+      100% { border-radius: 60% 40% 65% 35% / 40% 60% 40% 60%; transform: translate(-5vw, -6vh); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 10;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* Top Navigation Header */
+    .hdr {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .hdr-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: rgba(254, 44, 85, 0.15);
+      color: var(--tiktok-pink);
+      border: 1px solid rgba(254, 44, 85, 0.3);
+    }
+
+    /* Hero / Intro */
+    .hero {
+      text-align: center;
+      padding: 36px 16px 20px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--tiktok-pink);
+      background: rgba(254, 44, 85, 0.12);
+      border: 1px solid rgba(254, 44, 85, 0.3);
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+    .sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Gemini Stroke Input Card */
+    .gemini-card {
+      position: relative;
+      border-radius: 20px;
+      padding: 2px;
+      background: var(--line);
+      overflow: hidden;
+      margin-top: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .gemini-card::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        var(--gemini-c1),
+        var(--gemini-c2),
+        var(--gemini-c4),
+        var(--gemini-c3),
+        var(--gemini-c1)
+      );
+      opacity: 0.65;
+      animation: rotateStroke 4s linear infinite;
+      z-index: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .gemini-card:focus-within::before,
+    .gemini-card:hover::before {
+      opacity: 1;
+    }
+
+    .gemini-card:focus-within {
+      box-shadow: 0 12px 32px -8px rgba(66, 133, 244, 0.3), var(--shadow-md);
+    }
+
+    @keyframes rotateStroke {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .card-body {
+      position: relative;
+      z-index: 2;
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* Input & Search */
+    .input-box {
+      display: flex;
+      gap: 10px;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 6px 6px 6px 14px;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .input-box:focus-within {
+      border-color: var(--tiktok-pink);
+    }
+    .input-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      color: var(--fg);
+      font-family: inherit;
+    }
+    .input-box input::placeholder {
+      color: var(--muted);
+    }
+    .fetch-btn {
+      background: linear-gradient(135deg, var(--tiktok-pink), #d91b42);
+      color: #fff;
+      border: none;
+      outline: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 11px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(254, 44, 85, 0.3);
+      transition: transform 0.15s ease, opacity 0.2s;
+    }
+    .fetch-btn:hover {
+      opacity: 0.92;
+      transform: scale(0.98);
+    }
+    .fetch-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Result Layout */
+    .result-section {
+      display: none;
+      margin-top: 24px;
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Profile Header */
+    .profile-header {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 520px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--line);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-meta {
+      flex: 1;
+      min-width: 0;
+    }
+    .fullname-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 520px) {
+      .fullname-wrap { justify-content: center; }
+    }
+    .fullname {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .user-handle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .badges-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    @media (max-width: 520px) {
+      .badges-row { justify-content: center; }
+    }
+    .pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .pill-privacy { color: var(--accent); }
+    .pill-verified { color: #f59e0b; }
+
+    /* Core Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 520px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-card {
+      background: color-mix(in srgb, var(--bg) 60%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-top: 2px;
+      letter-spacing: -0.02em;
+    }
+
+    /* Detailed Meta Breakdown */
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--bg) 40%, transparent);
+      font-size: 0.85rem;
+    }
+    .info-key {
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-val {
+      font-weight: 600;
+      text-align: right;
+      max-width: 55%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Action Buttons */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    @media (max-width: 440px) {
+      .action-grid { grid-template-columns: 1fr; }
+    }
+    .btn-act {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid var(--line);
+      font-family: inherit;
+    }
+    .btn-avatar {
+      background: var(--surface);
+      color: var(--fg);
+    }
+    .btn-avatar:hover {
+      background: var(--surface-hover);
+      border-color: var(--tiktok-cyan);
+      transform: translateY(-2px);
+    }
+    .btn-tiktok {
+      background: linear-gradient(135deg, var(--tiktok-pink), #e11d48);
+      color: #fff;
+      border: none;
+    }
+    .btn-tiktok:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+
+    /* Status Alert */
+    .status-msg {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      text-align: center;
+      display: none;
+    }
+    .status-msg.error { color: #f43f5e; display: block; }
+    .status-msg.info { color: var(--muted); display: block; }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 36px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fluid-blob, .gemini-card::before { animation: none !important; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Gemini Living Fluid Background -->
+  <div class="gemini-container" aria-hidden="true">
+    <div class="gemini-mesh">
+      <div class="fluid-blob blob-1"></div>
+      <div class="fluid-blob blob-2"></div>
+      <div class="fluid-blob blob-3"></div>
+      <div class="fluid-blob blob-4"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="hdr-wrap">
+      <a href="index.html" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
+      <span style="font-size: 13px; font-weight: 600; color: var(--muted);">TikTok Tool</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Intro -->
+    <div class="hero">
+      <div class="badge">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> Live Profile Intelligence
+      </div>
+      <h1>TikTok Profile Info</h1>
+      <p class="sub">Check full profile details, account creation timestamp, followers, and original HD avatar.</p>
+    </div>
+
+    <!-- URL / Username Search Card -->
+    <div class="gemini-card">
+      <div class="card-body">
+        <form id="tiktok-form" onsubmit="handleFetchProfile(event)">
+          <div class="input-box">
+            <i data-lucide="at-sign" style="width: 18px; height: 18px; color: var(--muted);"></i>
+            <input 
+              type="text" 
+              id="tiktok-username" 
+              placeholder="Enter username (e.g. hamzakhan78)" 
+              required
+              autocomplete="off"
+            />
+            <button type="submit" class="fetch-btn" id="submit-btn">
+              <span id="btn-text">Inspect</span>
+              <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+            </button>
+          </div>
+        </form>
+        <div class="status-msg" id="status-msg"></div>
+      </div>
+    </div>
+
+    <!-- Profile Details Card (Rendered on Search) -->
+    <div class="result-section" id="result-box">
+      <div class="gemini-card">
+        <div class="card-body">
+          
+          <!-- Header: Avatar, Name, Handle, Status -->
+          <div class="profile-header">
+            <div class="avatar-wrapper">
+              <img id="p-avatar" class="avatar-img" src="" alt="TikTok Avatar" />
+            </div>
+            <div class="profile-meta">
+              <div class="fullname-wrap">
+                <h2 class="fullname" id="p-fullname">Hamza Khan</h2>
+                <span class="pill pill-privacy" id="p-privacy">Public</span>
+              </div>
+              <div class="user-handle" id="p-handle">@hamzakhan78</div>
+              <div class="badges-row">
+                <span class="pill pill-verified" id="p-verified">Not Verified</span>
+                <span class="pill" id="p-region">Unknown Region</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Numbers / Metrics -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Followers</div>
+              <div class="stat-value" id="p-followers">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Following</div>
+              <div class="stat-value" id="p-following">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Likes</div>
+              <div class="stat-value" id="p-likes">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Videos</div>
+              <div class="stat-value" id="p-videos">0</div>
+            </div>
+          </div>
+
+          <!-- Comprehensive Metadata Breakdown -->
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-key"><i data-lucide="hash" style="width: 14px; height: 14px;"></i> User ID</span>
+              <span class="info-val" id="p-userid">--</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key"><i data-lucide="calendar" style="width: 14px; height: 14px;"></i> Account Created</span>
+              <span class="info-val" id="p-created">--</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key"><i data-lucide="clock" style="width: 14px; height: 14px;"></i> Last Name Change</span>
+              <span class="info-val" id="p-last-change">--</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key"><i data-lucide="languages" style="width: 14px; height: 14px;"></i> Language</span>
+              <span class="info-val" id="p-language">English</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key"><i data-lucide="shield-check" style="width: 14px; height: 14px;"></i> SecUID</span>
+              <span class="info-val" id="p-secuid" title="Security User Identifier">--</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="action-grid">
+            <a href="#" id="btn-save-avatar" class="btn-act btn-avatar" target="_blank" rel="noopener">
+              <i data-lucide="image" style="width: 16px; height: 16px;"></i> View HD Avatar
+            </a>
+            <a href="#" id="btn-open-tiktok" class="btn-act btn-tiktok" target="_blank" rel="noopener">
+              <i data-lucide="external-link" style="width: 16px; height: 16px;"></i> Open in TikTok
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Powered by Cloudflare Worker API &bull; HamzaEditz 2.0
+    </footer>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Numbers formatter (e.g. 1500 -> 1.5K)
+    function formatCount(num) {
+      if (!num || isNaN(num)) return num || "0";
+      const n = parseInt(num, 10);
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
+      if (n >= 1000) return (n / 1000).toFixed(1) + "K";
+      return n.toLocaleString();
+    }
+
+    async function handleFetchProfile(e) {
+      e.preventDefault();
+      const input = document.getElementById('tiktok-username');
+      const btn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const statusMsg = document.getElementById('status-msg');
+      const resultBox = document.getElementById('result-box');
+
+      let username = input.value.trim().replace(/^@/, '');
+      if (!username) return;
+
+      statusMsg.className = "status-msg info";
+      statusMsg.textContent = "Fetching profile details...";
+      statusMsg.style.display = "block";
+      resultBox.style.display = "none";
+      btn.disabled = true;
+      btnText.textContent = "Scanning...";
+
+      const targetEndpoint = `https://tiktokinfov10.itfreeforever.workers.dev/?username=${encodeURIComponent(username)}`;
+
+      try {
+        const response = await fetch(targetEndpoint, {
+          method: "GET",
+          headers: {
+            "Accept": "*/*"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("API server responded with error code " + response.status);
+        }
+
+        const res = await response.json();
+
+        if (res && res.status === "ok" && res.data) {
+          const d = res.data;
+
+          // Header Profile Information
+          document.getElementById('p-avatar').src = d.profile || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80";
+          document.getElementById('p-fullname').textContent = d.fullname || d.username || "TikTok User";
+          document.getElementById('p-handle').textContent = `@${d.username || username}`;
+          document.getElementById('p-privacy').textContent = d.private || "Public";
+          document.getElementById('p-verified').textContent = d.verified && d.verified.includes("No") ? "Not Verified" : "Verified Account";
+          document.getElementById('p-region').textContent = `Region: ${d.region || "Unknown"}`;
+
+          // Stats Metrics
+          document.getElementById('p-followers').textContent = formatCount(d.followers);
+          document.getElementById('p-following').textContent = formatCount(d.following);
+          document.getElementById('p-likes').textContent = formatCount(d.likes || d.heart_count);
+          document.getElementById('p-videos').textContent = formatCount(d.video);
+
+          // Details List
+          document.getElementById('p-userid').textContent = d.userid || "N/A";
+          document.getElementById('p-created').textContent = d.created_time || "N/A";
+          document.getElementById('p-last-change').textContent = d.last_change_name || "N/A";
+          document.getElementById('p-language').textContent = d.language || "English";
+          document.getElementById('p-secuid').textContent = d.secUid || "N/A";
+
+          // Action Buttons
+          document.getElementById('btn-save-avatar').href = d.profile || "#";
+          document.getElementById('btn-open-tiktok').href = `https://www.tiktok.com/@${d.username || username}`;
+
+          statusMsg.style.display = "none";
+          resultBox.style.display = "block";
+          lucide.createIcons();
+        } else {
+          throw new Error(res.message || "User profile not found. Verify the username and try again.");
+        }
+      } catch (err) {
+        statusMsg.className = "status-msg error";
+        statusMsg.textContent = err.message || "Failed to inspect TikTok profile.";
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = "Inspect";
+      }
+    }
+  </script>
+</body>
+</html>
