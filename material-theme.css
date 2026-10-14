@@ -1,44 +1,101 @@
-/* Material 3 shared theme for every utility page */
+/* HamzaEditz Material 3 foundation */
 :root {
   color-scheme: light;
-  --md-bg: #f9f9ff;
-  --md-surface: #f0f0f7;
-  --md-surface-container: #e8e8f0;
-  --md-on-surface: #1a1b20;
-  --md-on-surface-variant: #45464f;
-  --md-outline: #757780;
-  --md-primary: #485d92;
-  --md-on-primary: #fff;
-  --md-primary-container: #dbe2ff;
-  --md-on-primary-container: #001945;
-  --md-secondary-container: #dce2f9;
-  --md-shadow: 0 8px 24px rgba(32, 34, 43, .12);
+  --md-bg: #f7f8fc;
+  --md-surface: #ffffff;
+  --md-surface-container: #eef0f7;
+  --md-surface-container-high: #e5e7ef;
+  --md-on-surface: #191b22;
+  --md-on-surface-variant: #454751;
+  --md-outline: #747781;
+  --md-outline-variant: #c5c6cf;
+  --md-primary: #465d91;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #d9e2ff;
+  --md-on-primary-container: #001a41;
+  --md-secondary-container: #dfe2f2;
+  --md-on-secondary-container: #181b2b;
+  --md-error: #ba1a1a;
+  --md-shadow: 0 8px 24px rgba(25, 27, 34, .08);
+  --md-shadow-hover: 0 12px 30px rgba(25, 27, 34, .14);
+  --md-radius-sm: 12px;
+  --md-radius-md: 20px;
+  --md-radius-lg: 28px;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --md-bg: #121318;
-  --md-surface: #1e1f25;
-  --md-surface-container: #282930;
+  --md-bg: #111318;
+  --md-surface: #1b1c21;
+  --md-surface-container: #22242b;
+  --md-surface-container-high: #2c2e36;
   --md-on-surface: #e3e2e9;
   --md-on-surface-variant: #c5c6d0;
   --md-outline: #8f909a;
-  --md-primary: #b6c4ff;
-  --md-on-primary: #1a2e60;
-  --md-primary-container: #304578;
+  --md-outline-variant: #44464f;
+  --md-primary: #b4c5ff;
+  --md-on-primary: #1b3064;
+  --md-primary-container: #304679;
   --md-on-primary-container: #dbe2ff;
   --md-secondary-container: #414659;
-  --md-shadow: 0 8px 28px rgba(0, 0, 0, .32);
+  --md-on-secondary-container: #e1e2f5;
+  --md-error: #ffb4ab;
+  --md-shadow: 0 8px 28px rgba(0, 0, 0, .28);
+  --md-shadow-hover: 0 12px 32px rgba(0, 0, 0, .38);
 }
 html { background: var(--md-bg); transition: background .2s ease; }
-body { background: var(--md-bg) !important; color: var(--md-on-surface) !important; font-family: Inter, Roboto, system-ui, sans-serif !important; }
-.container, .card, .box, .content, main, article, section, form, .wrapper, .panel { border-color: color-mix(in srgb, var(--md-outline) 35%, transparent) !important; }
-.container, .card, .box, .content, .panel { background: var(--md-surface) !important; box-shadow: var(--md-shadow) !important; }
-input, textarea, select { background: var(--md-surface-container) !important; color: var(--md-on-surface) !important; border-color: var(--md-outline) !important; border-radius: 12px !important; }
-button, .btn, a.button, input[type="submit"] { border-radius: 999px !important; background: var(--md-primary) !important; color: var(--md-on-primary) !important; border: 0 !important; transition: transform .18s ease, filter .18s ease !important; }
-button:hover, .btn:hover, a.button:hover, input[type="submit"]:hover { filter: brightness(1.08); transform: translateY(-1px); }
-a { color: var(--md-primary) !important; }
-.md3-toolbar { position: fixed; top: 16px; right: 16px; z-index: 9999; display: flex; gap: 8px; }
-.md3-theme-toggle { width: 42px; height: 42px; padding: 0; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--md-outline) 35%, transparent) !important; background: var(--md-surface-container) !important; color: var(--md-on-surface) !important; box-shadow: var(--md-shadow); font-size: 18px; cursor: pointer; }
-.md3-home { padding: 10px 16px; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; background: var(--md-primary-container) !important; color: var(--md-on-primary-container) !important; border-radius: 999px; }
-@media (max-width: 600px) { .md3-toolbar { top: 10px; right: 10px; } .container { max-width: calc(100vw - 24px) !important; } }
+body {
+  background: var(--md-bg) !important;
+  color: var(--md-on-surface) !important;
+  font-family: Inter, Roboto, system-ui, -apple-system, sans-serif !important;
+  line-height: 1.55;
+}
+img { max-width: 100%; }
+button, input, textarea, select { font: inherit; }
+button, .btn, a.button, input[type="submit"] {
+  min-height: 44px;
+  border-radius: 999px !important;
+  background: var(--md-primary) !important;
+  color: var(--md-on-primary) !important;
+  border: 0 !important;
+  padding: 10px 20px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+}
+button:hover, .btn:hover, a.button:hover, input[type="submit"]:hover { filter: brightness(1.07); transform: translateY(-1px); box-shadow: var(--md-shadow); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid color-mix(in srgb, var(--md-primary) 55%, transparent); outline-offset: 2px; }
+input, textarea, select {
+  background: var(--md-surface-container) !important;
+  color: var(--md-on-surface) !important;
+  border: 1px solid var(--md-outline-variant) !important;
+  border-radius: var(--md-radius-sm) !important;
+  min-height: 46px;
+  padding: 11px 14px;
+}
+input::placeholder, textarea::placeholder { color: var(--md-on-surface-variant); opacity: .78; }
+.container, .card, .box, .content, main, article, section, form, .wrapper, .panel {
+  border-color: color-mix(in srgb, var(--md-outline) 28%, transparent) !important;
+}
+.container, .card, .box, .content, .panel {
+  background: var(--md-surface) !important;
+  box-shadow: var(--md-shadow) !important;
+  border-radius: var(--md-radius-md);
+}
+.md3-toolbar {
+  position: fixed; top: 14px; right: 14px; z-index: 9999;
+  display: flex; align-items: center; gap: 8px;
+}
+.md3-theme-toggle, .md3-home {
+  min-height: 40px; padding: 8px 14px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--md-outline) 32%, transparent) !important;
+  background: var(--md-surface-container) !important; color: var(--md-on-surface) !important;
+  box-shadow: var(--md-shadow); font-size: 13px; text-decoration: none;
+}
+.md3-theme-toggle { padding-inline: 12px; }
+.md3-home { background: var(--md-primary-container) !important; color: var(--md-on-primary-container) !important; }
+@media (max-width: 600px) {
+  .md3-toolbar { top: 10px; right: 10px; }
+  .container { max-width: calc(100vw - 24px) !important; }
+  body { padding-bottom: 18px; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
