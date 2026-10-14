@@ -404,8 +404,53 @@
       .fluid-blob, .card::before { animation: none !important; }
       * { transition: none !important; }
     }
+    /* Redesign: calm editorial developer-tool dashboard */
+    :root {
+      --bg: #f4f7f5;
+      --surface: rgba(255, 255, 255, 0.88);
+      --fg: #10221c;
+      --muted: #63756e;
+      --line: #dce8e1;
+      --line-subtle: #e8f0eb;
+      --accent: #087f5b;
+      --accent-glow: rgba(8, 127, 91, 0.12);
+      --card-hover: #ffffff;
+      --shadow-sm: 0 8px 24px rgba(16, 34, 28, 0.05);
+      --shadow-md: 0 24px 60px rgba(16, 34, 28, 0.10);
+    }
+    body { background: var(--bg); }
+    .gemini-container { opacity: .2; filter: blur(100px); }
+    .gemini-mesh { width: 110vw; height: 110vh; }
+    .hdr { background: rgba(244,247,245,.82); border-bottom-color: var(--line); }
+    .hdr .wrap { max-width: 1080px; height: 72px; }
+    .wrap { max-width: 1080px; }
+    .brand { color: var(--fg); letter-spacing: -.04em; }
+    .brand::before { content: '✦'; color: var(--accent); margin-right: 2px; font-size: .9em; }
+    .nav-btn { border: 1px solid var(--line); background: rgba(255,255,255,.65); color: var(--fg); }
+    .nav-btn:hover { background: var(--fg); color: #fff; }
+    .hero { max-width: 900px; padding: clamp(70px, 12vw, 128px) 24px 84px; text-align: left; }
+    .badge { margin-bottom: 28px; color: var(--accent); background: var(--accent-glow); border-color: rgba(8,127,91,.2); box-shadow: none; }
+    .badge-dot { box-shadow: 0 0 0 5px rgba(8,127,91,.1); }
+    .orbit-box { display: none; }
+    h1 { max-width: 760px; font-size: clamp(3rem, 8vw, 6.4rem); line-height: .98; letter-spacing: -.075em; color: var(--fg); margin-bottom: 28px; }
+    .sub { max-width: 620px; font-size: clamp(1.05rem, 2vw, 1.25rem); line-height: 1.7; color: var(--muted); }
+    .block { padding-bottom: 76px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 22px; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+    .section-head h2 { font-size: 1.45rem; letter-spacing: -.04em; }
+    .section-head p { color: var(--muted); font-size: .9rem; text-align: right; }
+    .grid { gap: 14px; }
+    .card { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-sm); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card:hover { transform: translateY(-4px); border-color: rgba(8,127,91,.45); box-shadow: var(--shadow-md); background: var(--card-hover); }
+    .card-inner { padding: 24px; min-height: 148px; }
+    .tick { background: var(--accent-glow); border-color: rgba(8,127,91,.15); }
+    .card h3 { color: var(--fg); letter-spacing: -.025em; }
+    .card p { color: var(--muted); }
+    .note-box { border-color: var(--line); background: #eaf3ed; color: var(--muted); border-radius: 14px; }
+    footer { border-top-color: var(--line); color: var(--muted); }
+    footer a { color: var(--accent); }
+    @media (max-width: 640px) { .hero { padding-top: 64px; padding-bottom: 64px; } .section-head { display: block; } .section-head p { text-align: left; margin-top: 6px; } h1 { font-size: clamp(3rem, 16vw, 5rem); } }
   </style>
-</head>
+  </head>
 <body>
 
   <!-- Gemini Living Fluid Background -->
@@ -433,8 +478,8 @@
         <span class="badge-dot"></span> 100% Free &amp; Open Utilities
       </div>
       <div class="orbit-box" id="orbit" aria-hidden="true"></div>
-      <h1>Everyday tools for creators &amp; builders.</h1>
-      <p class="sub">Fast, simple, distraction-free utilities tailored to save you time. Zero paywalls, zero clutter.</p>
+<h1>Useful tools.<br><span style="color:var(--accent)">No noise.</span></h1>
+  <p class="sub">A focused collection of lightweight utilities for creators, developers, and curious people who just want to get things done.</p>
     </section>
 
     <!-- Features -->
