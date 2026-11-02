@@ -10,11 +10,11 @@
   <!-- Welcome Redirect Script -->
   <script>
   (function () {
-    var WELCOME = 'https://hamzaeditz.pw/welcome.html';
+    var WELCOME = 'https://hamzaeditz.tech/welcome.html';
     try {
       if (/[?&#]nowelcome\b/.test(location.search + location.hash)) return;
-      if (location.hostname === 'hamzaeditz.pw' && location.pathname === '/welcome.html') return;
-      if (document.referrer && document.referrer.indexOf('hamzaeditz.pw/welcome') > -1) return;
+      if (location.hostname === 'hamzaeditz.tech' && location.pathname === '/welcome.html') return;
+      if (document.referrer && document.referrer.indexOf('hamzaeditz.tech/welcome') > -1) return;
       var seen = false;
       try {
         seen = sessionStorage.getItem('welcomeSeen') === '1';
@@ -526,7 +526,7 @@
       <a href="#" class="brand">HamzaEditz <span class="brand-tag">2.0</span></a>
       <div class="nav-actions">
         <button class="theme-btn" id="themeToggle" type="button" aria-label="Switch theme" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span><span class="theme-label">Dark mode</span></button>
-        <a class="nav-btn" href="https://hamzaeditz.pw/welcome.html">Welcome Guide &rarr;</a>
+        <a class="nav-btn" href="https://hamzaeditz.tech/welcome.html">Welcome Guide &rarr;</a>
       </div>
     </div>
   </header>
@@ -633,7 +633,7 @@
   <footer>
     <div class="wrap">
       <span>&copy; 2026 HamzaEditz. Built for creators.</span>
-      <a href="https://hamzaeditz.pw/welcome.html">Welcome Page</a>
+      <a href="https://hamzaeditz.tech/welcome.html">Welcome Page</a>
     </div>
   </footer>
 
