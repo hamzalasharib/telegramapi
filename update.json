@@ -2,6 +2,17 @@
   "app": "Dhunn",
   "changelog": [
     {
+      "version": "2.23.0",
+      "date": "2026-11-04",
+      "changes": [
+        "Lag fix: cover images now decode at tile size in lists and grids — scrolling is much smoother",
+        "6 NEW album art designs (Neon Ring, Half Disc, Gradient Border, Retro Sunset, EQ Ring, Tape Deck Wide) — 17 in total, and the picker is now a GRID",
+        "Song options (tap the three dots or long-press any song): Share the song file, Rename, Details and Delete",
+        "Songs that have lyrics now show a small lyrics icon; a .lrc file next to a song loads instantly from the phone — online search only happens when no offline lyrics exist",
+        "The favorite heart now pops with an animation when you tap it"
+      ]
+    },
+    {
       "version": "2.22.0",
       "date": "2026-11-04",
       "changes": [
@@ -224,10 +235,10 @@
     }
   ],
   "latest": {
-    "versionName": "2.22.0",
-    "versionCode": 30,
-    "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.22.0.apk",
+    "versionName": "2.23.0",
+    "versionCode": 31,
+    "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.23.0.apk",
     "forceUpdate": false,
-    "notes": "Much faster cover & lyrics downloads, a PixelPlayer-style equalizer with round Bass/Virtualizer/Loudness dials and custom presets, and an album art resolution setting."
+    "notes": "Smoother scrolling, 6 new album art designs in a grid picker, song Share/Rename/Details/Delete, lyrics-file badges, and animated favorite heart."
   }
 }
