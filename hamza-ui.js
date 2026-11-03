@@ -41,6 +41,7 @@
     'alltv.html': ['tv', '#10b981', '#84cc16', 'Infinity Live TV — channels from everywhere, in one place.'],
     'hadith.html': ['book', '#eab308', '#f97316', 'A searchable Hadith collection with structured chapter browsing.'],
     'quran.html': ['book', '#eab308', '#f97316', 'Search the Quran and play recitation, verse by verse.'],
+    'rdp-latest.html': ['monitor', '#8b5cf6', '#ec4899', 'The newest free RDP method — Windows + Tailscale. Watch the full video guide, then copy the ready-made workflow code.'],
     'rdpmethod.html': ['monitor', '#8b5cf6', '#ec4899', 'Step-by-step methods to set up a free Windows RDP.'],
     'rdp.html': ['monitor', '#8b5cf6', '#ec4899', 'The complete free GitHub RDP setup guide.'],
     'rdp3.html': ['monitor', '#8b5cf6', '#ec4899', 'RDP setup guide — follow the steps and connect.'],

