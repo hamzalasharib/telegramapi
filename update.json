@@ -2,6 +2,18 @@
   "app": "Dhunn",
   "changelog": [
     {
+      "version": "2.22.0",
+      "date": "2026-11-04",
+      "changes": [
+        "FAST downloads: covers and lyrics now download several songs at a time over one shared fast connection — no more one-by-one waiting",
+        "Equalizer redesigned, PixelPlayer style: preset chips, tall vertical band sliders, and round dials for Bass Boost, Virtualizer and Loudness with on/off switches",
+        "Save your own equalizer presets: set the bands, tap Save in the equalizer, name it — long-press a saved preset to delete it",
+        "Virtualizer effect added (where the phone supports it)",
+        "Album art resolution setting (Settings, My Library): Low 512px (fastest), Medium 800px, High 1200px",
+        "Animated lyrics on/off and a lyric blur strength slider (Settings, Player & Lyrics)"
+      ]
+    },
+    {
       "version": "2.21.0",
       "date": "2026-11-04",
       "changes": [
@@ -212,10 +224,10 @@
     }
   ],
   "latest": {
-    "versionName": "2.21.0",
-    "versionCode": 29,
-    "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.21.0.apk",
+    "versionName": "2.22.0",
+    "versionCode": 30,
+    "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.22.0.apk",
     "forceUpdate": false,
-    "notes": "New purple icons, one-tap offline lyrics for all songs, auto-refresh with new-song notifications, and Open With from file manager."
+    "notes": "Much faster cover & lyrics downloads, a PixelPlayer-style equalizer with round Bass/Virtualizer/Loudness dials and custom presets, and an album art resolution setting."
   }
 }
