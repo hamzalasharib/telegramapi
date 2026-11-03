@@ -214,7 +214,7 @@
   "latest": {
     "versionName": "2.21.0",
     "versionCode": 29,
-    "apkUrl": "https://github.com/hamzalasharib/telegramapi/releases/download/v2.21.0/DHUNN-v2.21.0.apk",
+    "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.21.0.apk",
     "forceUpdate": false,
     "notes": "New purple icons, one-tap offline lyrics for all songs, auto-refresh with new-song notifications, and Open With from file manager."
   }
