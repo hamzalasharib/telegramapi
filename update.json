@@ -2,6 +2,40 @@
   "app": "Dhunn",
   "changelog": [
     {
+      "version": "2.20.0",
+      "date": "2026-11-03",
+      "changes": [
+        "New: Skip short voice clips — hide voice notes and short clips (15/30/45/60s) so only songs stay. Settings → My Library",
+        "New: Songs folder — pick one folder and only its songs appear in the library",
+        "Player themes removed — the player is back to its clean classic look"
+      ]
+    },
+    {
+      "version": "2.19.1",
+      "date": "2026-11-03",
+      "changes": [
+        "Fixed: music stopping by itself in the background — new fix options in Settings → Equalizer & Playback (battery permission + auto-start), and closing the app from recents no longer stops playback",
+        "Fluid Beat is back inside the player only (the whole-app fluid background was removed)"
+      ]
+    },
+    {
+      "version": "2.19.0",
+      "date": "2026-11-03",
+      "changes": [
+        "Fluid Beat now fills the WHOLE app: pick it as the player background and the liquid beat follows you through Home, Search and Library",
+        "HD cover downloads keep going in the background with a progress notification — and if you stop or close the app, the job RESUMES where it left off",
+        "12 PRO player themes: Neon Nights, Sunset Vibes, Royal Gold, Candy Pop, Arctic Frost and more — Settings → Player & Lyrics → Player theme"
+      ]
+    },
+    {
+      "version": "2.18.0",
+      "date": "2026-11-02",
+      "changes": [
+        "Four app icon variants: Emerald, Ocean, Sunset and Violet — switch in Settings → Appearance → App icon",
+        "The logo inside the app now follows your theme colour"
+      ]
+    },
+    {
       "version": "2.17.0",
       "date": "2026-11-02",
       "changes": [
@@ -168,10 +202,10 @@
     }
   ],
   "latest": {
-    "versionName": "2.17.0",
-    "versionCode": 24,
-    "apkUrl": "https://github.com/hamzalasharib/telegramapi/releases/download/v2.17.0/DHUNN-v2.17.0.apk",
-    "forceUpdate": true,
-    "notes": "New Dhunn icon — a musical note that matches the name!"
+    "versionName": "2.20.0",
+    "versionCode": 28,
+    "apkUrl": "https://github.com/hamzalasharib/telegramapi/releases/download/v2.20.0/DHUNN-v2.20.0.apk",
+    "forceUpdate": false,
+    "notes": "Songs-only library filters: skip voice clips, pick one folder"
   }
 }
