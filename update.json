@@ -2,6 +2,11 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "versionName": "2.25.0",
+   "versionCode": 33,
+   "notes": "Ads added (Monetag, interstitial only): a full-screen ad may appear shortly after opening the app and then only every 6th song, at least 3 minutes apart, max 4 per session. Playback is never interrupted mid-song. Don't want ads? Settings → Equalizer & Playback → Ads → Off."
+  },
+  {
    "versionName": "2.24.0",
    "versionCode": 32,
    "notes": "NEW: Targets the latest Android 16 — ready for new phones and future Play Store rules. Background: if your phone is allowed to kill Dhunn to save battery, Home now shows a warning with a one-tap fix so songs never stop by themselves. Downloads screen: Settings → My Library — tap 'HD covers downloaded' to see every song whose cover image was changed (with the image and date), and 'Lyrics saved offline' to see every song whose lyrics are stored on the phone."
@@ -240,10 +245,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.24.0",
-  "versionCode": 32,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.24.0.apk",
-  "notes": "Latest Android (16) support built in, background playback protection with a one-tap fix on Home, and a new Downloaded covers & lyrics screen in Settings → My Library that shows exactly which song got a new cover image and which songs have lyrics saved offline.",
+  "versionName": "2.25.0",
+  "versionCode": 33,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.25.0.apk",
+  "notes": "NEW: occasional ads (Monetag interstitials) that support Dhunn's development — carefully limited: never in the middle of a song, at most a few per session, and you can turn them off completely in Settings → Equalizer & Playback → Ads.",
   "forceUpdate": false
  }
 }
