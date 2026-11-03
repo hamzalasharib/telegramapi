@@ -2,6 +2,11 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "versionName": "2.26.0",
+   "versionCode": 34,
+   "notes": "Fixed: 'Playback failed: Connection aborted' when tapping a song again and again or switching songs very fast. Song loads no longer collide with each other; only the latest tap is played and interrupted loads stay silent instead of showing an error."
+  },
+  {
    "versionName": "2.25.0",
    "versionCode": 33,
    "notes": "Ads added (Monetag, interstitial only): a full-screen ad may appear shortly after opening the app and then only every 6th song, at least 3 minutes apart, max 4 per session. Playback is never interrupted mid-song. Don't want ads? Settings → Equalizer & Playback → Ads → Off."
@@ -245,10 +250,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.25.0",
-  "versionCode": 33,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.25.0.apk",
-  "notes": "NEW: occasional ads (Monetag interstitials) that support Dhunn's development — carefully limited: never in the middle of a song, at most a few per session, and you can turn them off completely in Settings → Equalizer & Playback → Ads.",
+  "versionName": "2.26.0",
+  "versionCode": 34,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.26.0.apk",
+  "notes": "Bug fix: tapping a song repeatedly (or tapping songs quickly one after another) could pop up 'Playback failed: Connection aborted'. Rapid taps are now handled smoothly — the newest tap wins and no false error appears.",
   "forceUpdate": false
  }
 }
