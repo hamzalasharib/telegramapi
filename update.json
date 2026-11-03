@@ -2,6 +2,16 @@
   "app": "Dhunn",
   "changelog": [
     {
+      "version": "2.21.0",
+      "date": "2026-11-04",
+      "changes": [
+        "New app icons: your purple Dhunn icons — Purple Note (default) and Headphones, in Settings, Appearance, App icon",
+        "New: Download lyrics for all songs in one tap (Settings, My Library) — lyrics are saved on the phone and work fully offline",
+        "New: Auto-refresh — new songs are picked up automatically and you get a 'New song added' notification",
+        "New: Open songs from your file manager — Dhunn now appears in the 'Open with' player list and plays the file at once"
+      ]
+    },
+    {
       "version": "2.20.0",
       "date": "2026-11-03",
       "changes": [
@@ -202,10 +212,10 @@
     }
   ],
   "latest": {
-    "versionName": "2.20.0",
-    "versionCode": 28,
-    "apkUrl": "https://github.com/hamzalasharib/telegramapi/releases/download/v2.20.0/DHUNN-v2.20.0.apk",
+    "versionName": "2.21.0",
+    "versionCode": 29,
+    "apkUrl": "https://github.com/hamzalasharib/telegramapi/releases/download/v2.21.0/DHUNN-v2.21.0.apk",
     "forceUpdate": false,
-    "notes": "Songs-only library filters: skip voice clips, pick one folder"
+    "notes": "New purple icons, one-tap offline lyrics for all songs, auto-refresh with new-song notifications, and Open With from file manager."
   }
 }
