@@ -2,6 +2,11 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "versionName": "2.27.0",
+   "versionCode": 35,
+   "notes": "Fixed: the app no longer pops up a song-count message on every open. NEW UI Themes (Settings → Appearance): Original, Liquid Glass (iPhone frosted glass), YouTube Music, Samsung One UI, SoundCloud, Spotify, Apple Music. Album art designs: 17 → 52. Lyrics effects: 120 → 240, now in a grid with live previews, plus your own custom lyrics colour. Support Dhunn page (Settings): Binance Pay & DPay."
+  },
+  {
    "versionName": "2.26.0",
    "versionCode": 34,
    "notes": "Fixed: 'Playback failed: Connection aborted' when tapping a song again and again or switching songs very fast. Song loads no longer collide with each other; only the latest tap is played and interrupted loads stay silent instead of showing an error."
@@ -250,10 +255,13 @@
   }
  ],
  "latest": {
-  "versionName": "2.26.0",
-  "versionCode": 34,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.26.0.apk",
-  "notes": "Bug fix: tapping a song repeatedly (or tapping songs quickly one after another) could pop up 'Playback failed: Connection aborted'. Rapid taps are now handled smoothly — the newest tap wins and no false error appears.",
+  "versionName": "2.27.0",
+  "versionCode": 35,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.27.0.apk",
+  "notes": "Big update: no more song-count popup on every open; album art designs now 52; lyrics effects doubled to 240 with grid previews and a custom lyrics colour; 7 whole-app UI themes including Liquid Glass (iPhone style), YouTube Music, Samsung One UI, SoundCloud, Spotify and Apple Music; new Support page with Binance Pay & DPay.",
   "forceUpdate": false
+ },
+ "support": {
+  "dpayUrl": ""
  }
 }
