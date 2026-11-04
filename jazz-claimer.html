@@ -42,6 +42,33 @@
 .hz-pillstat{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;padding:6px 12px;border-radius:99px;border:1px solid var(--hz-line);background:var(--hz-card);color:var(--hz-muted)}
 .hz-dot{width:8px;height:8px;border-radius:50%;background:#eab308}
 .hz-dot.on{background:#22c55e;box-shadow:0 0 10px #22c55e}
+
+.hz-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:16px}
+.hz-stat{background:rgba(0,0,0,.22);border:1px solid var(--hz-line);border-radius:14px;padding:13px 10px;text-align:center}
+.hz-stat b{display:block;font-family:Sora,sans-serif;font-size:1.12rem}
+.hz-stat span{font-size:.66rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--hz-muted)}
+.hz-banner{border-radius:14px;padding:14px 16px;font-weight:600;font-size:.92rem;margin-top:14px;border:1px solid}
+.hz-banner.g{color:#4ade80;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.1)}
+.hz-banner.r{color:#f87171;border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.09)}
+.hz-rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;padding:16px 20px}
+.hz-rchip{border:1px solid var(--hz-line);border-radius:13px;padding:11px 8px;text-align:center;background:rgba(0,0,0,.2)}
+.hz-rchip b{display:block;font-size:.95rem}
+.hz-rchip span{font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--hz-muted)}
+.hz-setrow{display:flex;align-items:center;gap:14px;margin-top:18px;padding:16px;border:1px solid var(--hz-line);border-radius:16px;background:rgba(0,0,0,.18)}
+.hz-setrow .tx{flex:1}
+.hz-setrow .tx b{font-family:Sora,sans-serif;display:block;font-size:.97rem}
+.hz-setrow .tx span{font-size:.82rem;color:var(--hz-muted);line-height:1.45;display:block;margin-top:2px}
+.hz-switch{position:relative;width:56px;height:31px;flex:none;display:inline-block}
+.hz-switch input{opacity:0;width:0;height:0}
+.hz-track{position:absolute;inset:0;border-radius:99px;background:rgba(255,255,255,.14);border:1px solid var(--hz-line2);transition:.25s;cursor:pointer}
+.hz-track::after{content:"";position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;background:#e5e7eb;transition:.25s}
+.hz-switch input:checked + .hz-track{background:linear-gradient(115deg,#22c55e,#16a34a);border-color:transparent}
+.hz-switch input:checked + .hz-track::after{transform:translateX(25px);background:#fff}
+.hz-switch input:disabled + .hz-track{opacity:.55;cursor:wait}
+.hz-actgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px}
+@media(max-width:520px){.hz-actgrid{grid-template-columns:1fr}}
+.hz-actgrid button{padding:15px;font-size:.92rem}
+.hz-logout{margin-top:12px;width:100%;padding:13px;font-size:.9rem;background:rgba(248,113,113,.12)!important;border:1px solid rgba(248,113,113,.45)!important;color:#fca5a5!important;animation:none!important}
 </style>
 </head>
 <body>
@@ -69,16 +96,30 @@
 </div>
 
 <div id="stepDash" style="display:none">
-<p style="margin-top:6px">Logged in as <b id="jzLoggedNum" style="color:var(--hz-fg)"></b></p>
-<div class="hz-grid-btns">
-<button type="button" onclick="jzAct('check_rewards')">Check Rewards</button>
-<button type="button" onclick="jzAct('claim_reward')">Claim Reward</button>
-<button type="button" onclick="jzAct('rewards_list')">Rewards List</button>
-<button type="button" onclick="jzAct('my_numbers')">My Numbers</button>
-<button type="button" onclick="jzAct('toggle_auto_claim')">Toggle Auto Claim</button>
-<button type="button" onclick="jzLogout()">Logout</button>
+<div class="hz-rcard" style="margin-top:18px">
+<div class="hz-rhead"><div class="hz-ava" style="--a1:#ef4444;--a2:#f97316">JZ</div>
+<div><h3 id="jzLoggedNum">—</h3><div class="sub">Jazz Shake N Win account</div></div>
+<span class="hz-badge g" id="jzStatus">Active</span></div>
+<div style="padding:0 20px 18px"><div class="hz-stats">
+<div class="hz-stat"><b id="stClaims">–</b><span>Total Claims</span></div>
+<div class="hz-stat"><b id="stCheckins">–</b><span>Check-ins</span></div>
+<div class="hz-stat"><b id="stAuto">–</b><span>Auto Claim</span></div>
+</div></div>
+</div>
+
+<div class="hz-setrow">
+<div class="tx"><b>Auto Claim</b><span>On karne se roz ka Shake N Win reward khud-ba-khud claim ho jayega — roz khud anay ki zaroorat nahi.</span></div>
+<label class="hz-switch"><input type="checkbox" id="jzAutoSwitch" onchange="jzToggleAuto(this)"><span class="hz-track"></span></label>
+</div>
+
+<div class="hz-actgrid">
+<button type="button" onclick="jzAct('check_rewards', this)">Check Rewards</button>
+<button type="button" onclick="jzAct('claim_reward', this)">Claim Reward</button>
+<button type="button" onclick="jzAct('rewards_list', this)">Rewards List</button>
+<button type="button" onclick="jzAct('my_numbers', this)">My Account</button>
 </div>
 <div class="hz-out" id="jzOut"></div>
+<button type="button" class="hz-logout" onclick="jzLogout()">Logout</button>
 </div>
 </section>
 <div class="hz-legal"><b>Jazz Shake N Win Auto Claimer API</b>API by WASIF ALI · Telegram Bot: <a href="https://t.me/Jazz_claimbot" target="_blank" rel="noopener">@Jazz_claimbot</a></div>
@@ -90,6 +131,7 @@ function jzMsg(id, txt, ok){
   m.textContent = txt; m.className = 'hz-msg ' + (ok ? 'ok' : 'err');
   m.style.display = txt ? 'block' : 'none';
 }
+function esc(s){ return s == null ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 async function jazzCall(ep, payload){
   try {
     var r = await fetch('/api/jazz', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ep: ep, payload: payload || {}})});
@@ -100,20 +142,64 @@ async function jazzCall(ep, payload){
     return await r2.json();
   }
 }
-function jzShow(data, title){
-  var out = document.getElementById('jzOut');
-  var html = '';
-  if (data && data.data && Array.isArray(data.data.rewards)) {
-    html = '<div class="hz-rcard"><div class="hz-rhead"><div><h3>' + title + '</h3><div class="sub">' + (data.message || '') + '</div></div></div>' +
-      data.data.rewards.map(function(r){ return '<div class="hz-drow"><span class="k">Day ' + r.day + '</span><span class="v">' + r.reward + '</span></div>'; }).join('') + '</div>';
-  } else if (data && data.data && Array.isArray(data.data.numbers)) {
-    html = '<div class="hz-rcard"><div class="hz-rhead"><div><h3>' + title + '</h3><div class="sub">' + (data.message || '') + '</div></div></div>' +
-      data.data.numbers.map(function(n){ return '<div class="hz-drow"><span class="k">Number</span><span class="v">' + (typeof n === 'string' ? n : JSON.stringify(n)) + '</span></div>'; }).join('') + '</div>';
-  } else {
-    html = '<div class="hz-rcard"><div class="hz-rhead"><div><h3>' + title + '</h3><div class="sub">' + ((data && data.message) || '') + '</div></div></div>' +
-      '<div class="hz-json" style="margin:0;border:0;border-radius:0">' + JSON.stringify(data && data.data ? data.data : data, null, 2) + '</div></div>';
+var LABELS = {number:'Number', msisdn:'Number (Intl)', formatted:'Number (Intl)', is_active:'Account Active',
+  auto_claim:'Auto Claim', total_claims:'Total Claims', total_checkins:'Total Check-ins', status:'Status',
+  reward:'Reward', day:'Day', expires_in:'Expires In', claimed:'Claimed', streak:'Streak', today_reward:"Today's Reward",
+  current_day:'Current Day', last_claim:'Last Claim', next_reward:'Next Reward', name:'Name'};
+function valHtml(v){
+  if (typeof v === 'boolean') return '<span class="hz-badge ' + (v ? 'g' : 'y') + '">' + (v ? 'On' : 'Off') + '</span>';
+  if (v === null || v === undefined || v === '') return '—';
+  return esc(v);
+}
+function rowsHtml(data, skip){
+  if (!data || typeof data !== 'object') return '';
+  var rows = '';
+  Object.keys(data).forEach(function(k){
+    if (skip && skip.indexOf(k) > -1) return;
+    var v = data[k];
+    if (Array.isArray(v) || (v && typeof v === 'object')) return;
+    rows += '<div class="hz-drow"><span class="k">' + esc(LABELS[k] || k.replace(/_/g,' ')) + '</span><span class="v">' + valHtml(v) + '</span></div>';
+  });
+  return rows;
+}
+function bannerHtml(d){
+  if (!d) return '<div class="hz-banner r">Koi jawab nahi aya — dobara try karo</div>';
+  return '<div class="hz-banner ' + (d.success ? 'g' : 'r') + '">' + esc(d.message || (d.success ? 'Ho gaya' : 'Nahi ho saka')) + '</div>';
+}
+function jzShow(d, title){
+  var out = document.getElementById('jzOut'), html = bannerHtml(d);
+  if (d && d.data && Array.isArray(d.data.rewards)) {
+    html += '<div class="hz-rcard" style="margin-top:14px"><div class="hz-rhead"><div><h3>' + esc(title) + '</h3><div class="sub">Roz ke rewards — din ke hisab se</div></div></div><div class="hz-rgrid">' +
+      d.data.rewards.map(function(r){ return '<div class="hz-rchip"><span>Day ' + esc(r.day) + '</span><b>' + esc(r.reward) + '</b></div>'; }).join('') + '</div></div>';
+  } else if (d && d.data && typeof d.data === 'object') {
+    var rows = rowsHtml(d.data, []);
+    if (rows) html += '<div class="hz-rcard" style="margin-top:14px"><div class="hz-rhead"><div><h3>' + esc(title) + '</h3></div></div>' + rows + '</div>';
+    var arrKey = Object.keys(d.data).find(function(k){ return Array.isArray(d.data[k]); });
+    if (arrKey) {
+      html += '<div class="hz-rcard" style="margin-top:14px">' + d.data[arrKey].map(function(it){
+        return typeof it === 'object' ? rowsHtml(it, []) : '<div class="hz-drow"><span class="v">' + esc(it) + '</span></div>';
+      }).join('') + '</div>';
+    }
   }
   out.innerHTML = html; out.style.display = 'block';
+}
+function fillAccount(d){
+  if (!d) return;
+  document.getElementById('stClaims').textContent = d.total_claims != null ? d.total_claims : '–';
+  document.getElementById('stCheckins').textContent = d.total_checkins != null ? d.total_checkins : '–';
+  document.getElementById('stAuto').textContent = typeof d.auto_claim === 'boolean' ? (d.auto_claim ? 'ON' : 'OFF') : '–';
+  var sw = document.getElementById('jzAutoSwitch');
+  if (typeof d.auto_claim === 'boolean') sw.checked = d.auto_claim;
+  var st = document.getElementById('jzStatus');
+  if (d.status) { st.textContent = String(d.status).replace(/_/g,' '); st.className = 'hz-badge ' + (d.is_active ? 'g' : 'y'); }
+}
+async function jzRefreshAccount(showCard){
+  try {
+    var d = await jazzCall('my_numbers', {number: JZ.number});
+    if (d && d.data) fillAccount(d.data);
+    if (showCard) jzShow(d, 'My Account');
+    return d;
+  } catch(e){ return null; }
 }
 async function jzPing(){
   try {
@@ -150,20 +236,40 @@ async function jzVerifyOtp(){
       document.getElementById('stepOtp').style.display = 'none';
       document.getElementById('jzLoggedNum').textContent = JZ.number;
       document.getElementById('stepDash').style.display = 'block';
-      jzShow(d, 'Login ho gaya');
+      var out = document.getElementById('jzOut');
+      out.innerHTML = bannerHtml(d); out.style.display = 'block';
+      jzRefreshAccount(false);
     } else jzMsg('jzMsg2', d.message || 'Ghalat PIN');
   } catch(e){ jzMsg('jzMsg2', 'API se rabta nahi ho saka'); }
   finally { btn.disabled = false; btn.textContent = 'Verify and Login'; }
 }
-async function jzAct(ep){
-  var titles = {check_rewards:'My Rewards', claim_reward:'Claim Reward', rewards_list:'Rewards List', my_numbers:'My Numbers', toggle_auto_claim:'Auto Claim'};
+async function jzAct(ep, btn){
+  var titles = {check_rewards:'My Rewards', claim_reward:'Claim Reward', rewards_list:'Rewards List', my_numbers:'My Account'};
+  var old = btn ? btn.textContent : '';
+  if (btn){ btn.disabled = true; btn.textContent = 'Loading...'; }
   try {
     var d = await jazzCall(ep, {number: JZ.number});
     jzShow(d, titles[ep] || ep);
+    if (d && d.data && !Array.isArray(d.data)) fillAccount(d.data);
+    if (ep === 'claim_reward') jzRefreshAccount(false);
   } catch(e){
     var out = document.getElementById('jzOut');
-    out.innerHTML = '<div class="hz-json">API se rabta nahi ho saka — dobara try karo</div>'; out.style.display = 'block';
-  }
+    out.innerHTML = '<div class="hz-banner r">API se rabta nahi ho saka — dobara try karo</div>'; out.style.display = 'block';
+  } finally { if (btn){ btn.disabled = false; btn.textContent = old; } }
+}
+async function jzToggleAuto(sw){
+  sw.disabled = true;
+  try {
+    var d = await jazzCall('toggle_auto_claim', {number: JZ.number});
+    var out = document.getElementById('jzOut');
+    out.innerHTML = bannerHtml(d); out.style.display = 'block';
+    if (d && d.data && typeof d.data.auto_claim === 'boolean') fillAccount(d.data);
+    else await jzRefreshAccount(false);
+  } catch(e){
+    sw.checked = !sw.checked;
+    var out2 = document.getElementById('jzOut');
+    out2.innerHTML = '<div class="hz-banner r">Auto Claim change nahi ho saka — dobara try karo</div>'; out2.style.display = 'block';
+  } finally { sw.disabled = false; }
 }
 async function jzLogout(){
   try { await jazzCall('logout', {number: JZ.number}); } catch(e){}
