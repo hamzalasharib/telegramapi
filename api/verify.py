@@ -25,7 +25,7 @@ def parse_domicile(html):
             "submission_date": g("lblSubmissionDate")}
     return info, bool(name)
 
-def fetch(url, headers=None, timeout=22, opener=None):
+def fetch(url, headers=None, timeout=15, opener=None):
     req = urllib.request.Request(url, headers=headers or {"User-Agent": UA})
     o = opener or urllib.request.build_opener()
     with o.open(req, timeout=timeout) as r:
@@ -45,10 +45,10 @@ def route_direct(cnic):
     cj = http.cookiejar.CookieJar()
     opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
     try:
-        fetch(BASE + "/", HEADERS, timeout=12, opener=opener)
+        fetch(BASE + "/", HEADERS, timeout=6, opener=opener)
     except Exception:
         pass
-    return fetch("%s/AjaxCall.aspx?ID=%s" % (BASE, cnic), HEADERS, timeout=22, opener=opener)
+    return fetch("%s/AjaxCall.aspx?ID=%s" % (BASE, cnic), HEADERS, timeout=13, opener=opener)
 
 ROUTES = [route_translate, route_allorigins, route_direct]
 
@@ -70,24 +70,29 @@ class handler(BaseHTTPRequestHandler):
         cnic = re.sub(r"\D", "", str(req.get("cnic", "")))
         if len(cnic) != 13:
             return self._send(200, {"success": False, "error": "CNIC 13 digits ka hona chahiye"})
-        reached = False
-        for route in ROUTES:
+        def attempt(route):
             try:
                 html = route(cnic)
             except Exception:
-                continue
+                return None
             if not html:
-                continue
+                return None
             info, has_name = parse_domicile(html)
             if info is None:
-                continue  # not the portal's result page (error/redirect page)
-            reached = True
-            if has_name:
-                return self._send(200, {"success": True, "data": info,
-                                        "cnic": f"{cnic[:5]}-{cnic[5:12]}-{cnic[12]}"})
-            break  # portal answered and the record is genuinely absent
-        if reached:
-            return self._send(200, {"success": False, "error": "Iss CNIC ka record nahi mila"})
+                return None  # not the portal's result page (error/redirect page)
+            return (info, has_name)
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:
+            futures = [ex.submit(attempt, r) for r in ROUTES]
+            for fut in concurrent.futures.as_completed(futures, timeout=48):
+                res = fut.result()
+                if res is None:
+                    continue
+                info, has_name = res
+                if has_name:
+                    return self._send(200, {"success": True, "data": info,
+                                            "cnic": f"{cnic[:5]}-{cnic[5:12]}-{cnic[12]}"})
+                return self._send(200, {"success": False, "error": "Iss CNIC ka record nahi mila"})
         return self._send(200, {"success": False,
                                 "error": "Portal busy/slow hai — aik dafa dobara try karo, aksar doosri try par record aa jata hai"})
 
