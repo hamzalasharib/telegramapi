@@ -221,15 +221,34 @@
             });
 
             try {
-                // Use a CORS proxy to prevent potential errors
-                const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(API_BASE_URL + collection)}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                // Primary: this site's own /api/hadith (the old API deployment
+                // was deleted and corsproxy.io now needs a paid key).
+                let json = null;
+                try {
+                    const r = await fetch('/api/hadith?c=' + collection);
+                    if (r.ok) json = await r.json();
+                } catch (e) { /* fall through to CDN */ }
+
+                if (!json || !json.data) {
+                    // Fallback: fawazahmed0 hadith editions on the jsDelivr CDN
+                    const editions = { bukhari: 'eng-bukhari', muslim: 'eng-muslim', tirmidhi: 'eng-tirmidhi', ibnmajah: 'eng-ibnmajah', abudawud: 'eng-abudawud' };
+                    const cr = await fetch('https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/' + editions[collection] + '.min.json');
+                    if (!cr.ok) throw new Error(`HTTP error! Status: ${cr.status}`);
+                    const cd = await cr.json();
+                    const pool = (cd.hadiths || []).filter(h => (h.text || '').trim());
+                    const h = pool[Math.floor(Math.random() * pool.length)];
+                    const ref = h.reference || {};
+                    const title = (cd.metadata && cd.metadata.name) || currentCollection;
+                    json = { data: {
+                        book: currentCollection,
+                        bookName: title,
+                        chapterName: (cd.metadata && cd.metadata.sections && cd.metadata.sections[String(ref.book)]) || '',
+                        header: h.hadithnumber ? ('Hadith No. ' + h.hadithnumber) : '',
+                        hadith_english: (h.text || '').trim(),
+                        refno: (title + ' ' + (h.hadithnumber || '')).trim()
+                    } };
                 }
 
-                const json = await response.json();
-                
                 if (json && json.data) {
                     displayHadith(json.data);
                 } else {

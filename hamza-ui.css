@@ -16,6 +16,38 @@
   --hz-shadow:0 24px 50px -20px rgba(0,0,0,.6);
   --hz-input:rgba(255,255,255,.05);
   /* legacy variable names used inside older pages, remapped to v4 */
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --hz-bg:#f7f9fb; --hz-bg2:#eef3f6;
+  --hz-card:rgba(255,255,255,.82); --hz-card-solid:#ffffff; --hz-card-hover:#ffffff;
+  --hz-fg:#0c1524; --hz-fg2:#2c3a4f; --hz-muted:#5d6f86; --hz-muted2:#8ea0b5;
+  --hz-line:rgba(12,21,36,.1); --hz-line2:rgba(12,21,36,.22);
+  --hz-header:rgba(247,249,251,.86);
+  --hz-shadow:0 24px 50px -24px rgba(12,21,36,.25);
+  --hz-input:#ffffff;
+}
+
+html{background:var(--hz-bg)}
+html:not(.hz-app) body{
+  background-color:var(--hz-bg)!important;
+  background-image:
+    radial-gradient(560px 320px at 12% -4%,rgba(16,185,129,.14),transparent 65%),
+    radial-gradient(520px 300px at 92% 0%,rgba(34,211,238,.11),transparent 65%),
+    radial-gradient(680px 420px at 50% 112%,rgba(167,139,250,.09),transparent 65%)!important;
+  background-attachment:fixed!important;
+  color:var(--hz-fg)!important;
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif!important;
+  -webkit-font-smoothing:antialiased;
+}
+html:not(.hz-app) h1,html:not(.hz-app) h2,html:not(.hz-app) h3{font-family:"Sora","Plus Jakarta Sans",sans-serif!important;letter-spacing:-.02em}
+::selection{background:rgba(34,211,238,.35)}
+*{scrollbar-width:thin;scrollbar-color:rgba(139,152,173,.5) transparent}
+::-webkit-scrollbar{width:9px;height:9px}
+
+/* Legacy page variables apply only to content pages — full-screen app
+   pages (hz-app) keep 100% of their own design system. */
+:root:not(.hz-app), :root:not(.hz-app)[data-theme="dark"]{
   --bg-color:#070a12; --bg:#070a12; --background:#070a12;
   --card-color:#0e1524; --card-bg:#0e1524; --surface:#0e1524; --surface-color:#0e1524;
   --text-color:#f4f7fb; --text:#f4f7fb; --text-muted:#8b98ad; --text-second:#8b98ad; --secondary-text:#8b98ad; --muted:#8b98ad;
@@ -28,15 +60,7 @@
   --md-primary:#10b981; --md-on-primary:#fff; --md-primary-container:rgba(16,185,129,.16);
   --md-on-primary-container:#34d399; --md-secondary-container:#131c30; --md-shadow:0 24px 50px -20px rgba(0,0,0,.6);
 }
-:root[data-theme="light"]{
-  color-scheme:light;
-  --hz-bg:#f7f9fb; --hz-bg2:#eef3f6;
-  --hz-card:rgba(255,255,255,.82); --hz-card-solid:#ffffff; --hz-card-hover:#ffffff;
-  --hz-fg:#0c1524; --hz-fg2:#2c3a4f; --hz-muted:#5d6f86; --hz-muted2:#8ea0b5;
-  --hz-line:rgba(12,21,36,.1); --hz-line2:rgba(12,21,36,.22);
-  --hz-header:rgba(247,249,251,.86);
-  --hz-shadow:0 24px 50px -24px rgba(12,21,36,.25);
-  --hz-input:#ffffff;
+:root:not(.hz-app)[data-theme="light"]{
   --bg-color:#f7f9fb; --bg:#f7f9fb; --background:#f7f9fb;
   --card-color:#ffffff; --card-bg:#ffffff; --surface:#ffffff; --surface-color:#ffffff;
   --text-color:#0c1524; --text:#0c1524; --text-muted:#5d6f86; --text-second:#5d6f86; --secondary-text:#5d6f86; --muted:#5d6f86;
@@ -48,23 +72,6 @@
   --md-primary:#0f766e; --md-on-primary:#fff; --md-primary-container:rgba(15,118,110,.12);
   --md-on-primary-container:#0f766e; --md-secondary-container:#eef3f6; --md-shadow:0 24px 50px -24px rgba(12,21,36,.25);
 }
-
-html{background:var(--hz-bg)}
-body{
-  background-color:var(--hz-bg)!important;
-  background-image:
-    radial-gradient(560px 320px at 12% -4%,rgba(16,185,129,.14),transparent 65%),
-    radial-gradient(520px 300px at 92% 0%,rgba(34,211,238,.11),transparent 65%),
-    radial-gradient(680px 420px at 50% 112%,rgba(167,139,250,.09),transparent 65%)!important;
-  background-attachment:fixed!important;
-  color:var(--hz-fg)!important;
-  font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif!important;
-  -webkit-font-smoothing:antialiased;
-}
-h1,h2,h3{font-family:"Sora","Plus Jakarta Sans",sans-serif!important;letter-spacing:-.02em}
-::selection{background:rgba(34,211,238,.35)}
-*{scrollbar-width:thin;scrollbar-color:rgba(139,152,173,.5) transparent}
-::-webkit-scrollbar{width:9px;height:9px}
 ::-webkit-scrollbar-thumb{background:rgba(139,152,173,.45);border-radius:99px}
 :focus-visible{outline:2px solid var(--hz-accent2);outline-offset:2px}
 
@@ -131,7 +138,7 @@ h1,h2,h3{font-family:"Sora","Plus Jakarta Sans",sans-serif!important;letter-spac
 
 /* ---------- Floating pill for full-screen app pages (injected) ---------- */
 .hz-pill{
-  position:fixed;top:14px;right:14px;z-index:99999;display:flex;align-items:center;gap:9px;
+  position:fixed;bottom:16px;right:14px;z-index:99999;display:flex;align-items:center;gap:9px;
   background:var(--hz-card);border:1px solid var(--hz-line);border-radius:999px;padding:6px 8px 6px 7px;
   box-shadow:var(--hz-shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   animation:hzFloat 6s ease-in-out infinite;
@@ -143,32 +150,32 @@ h1,h2,h3{font-family:"Sora","Plus Jakarta Sans",sans-serif!important;letter-spac
 @media(max-width:600px){.hz-pill a.hz-pbrand span{display:none}}
 
 /* ---------- Skin for existing page content ---------- */
-.container,.card,.box,.content,.panel,.wrapper{
+html:not(.hz-app) .container,html:not(.hz-app) .card,html:not(.hz-app) .box,html:not(.hz-app) .content,html:not(.hz-app) .panel,html:not(.hz-app) .wrapper{
   background:var(--hz-card)!important;border:1px solid var(--hz-line)!important;border-radius:18px!important;
   box-shadow:var(--hz-shadow)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
-main,article,section,form{border-color:var(--hz-line)!important}
-input,textarea,select{
+html:not(.hz-app) main,html:not(.hz-app) article,html:not(.hz-app) section,html:not(.hz-app) form{border-color:var(--hz-line)!important}
+html:not(.hz-app) input,html:not(.hz-app) textarea,html:not(.hz-app) select{
   background:var(--hz-input)!important;color:var(--hz-fg)!important;
   border:1px solid var(--hz-line2)!important;border-radius:12px!important;
   font-family:inherit!important;transition:border-color .2s,box-shadow .2s!important;
 }
-input:focus,textarea:focus,select:focus{border-color:var(--hz-accent)!important;outline:none!important;box-shadow:0 0 0 4px rgba(16,185,129,.15)!important}
-button,.btn,a.button,input[type="submit"],input[type="button"]{
+html:not(.hz-app) input:focus,html:not(.hz-app) textarea:focus,html:not(.hz-app) select:focus{border-color:var(--hz-accent)!important;outline:none!important;box-shadow:0 0 0 4px rgba(16,185,129,.15)!important}
+html:not(.hz-app) button,html:not(.hz-app) .btn,html:not(.hz-app) a.button,html:not(.hz-app) input[type="submit"],html:not(.hz-app) input[type="button"]{
   background:var(--hz-grad)!important;background-size:180% 180%!important;
   color:#fff!important;border:0!important;border-radius:12px!important;
   font-family:inherit!important;font-weight:700!important;cursor:pointer;
   animation:hzGradPan 6s ease infinite;
   transition:transform .2s,box-shadow .2s,filter .2s!important;
 }
-button:hover,.btn:hover,a.button:hover,input[type="submit"]:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 14px 30px -10px rgba(34,211,238,.5)!important}
-a{color:var(--hz-accent2)}
-table{border-color:var(--hz-line)!important}
-th,td{border-color:var(--hz-line)!important}
-hr{border-color:var(--hz-line)!important}
-code,pre{background:var(--hz-card)!important;border:1px solid var(--hz-line);border-radius:10px}
+html:not(.hz-app) button:hover,html:not(.hz-app) .btn:hover,html:not(.hz-app) a.button:hover,html:not(.hz-app) input[type="submit"]:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 14px 30px -10px rgba(34,211,238,.5)!important}
+html:not(.hz-app) a{color:var(--hz-accent2)}
+html:not(.hz-app) table{border-color:var(--hz-line)!important}
+html:not(.hz-app) th,html:not(.hz-app) td{border-color:var(--hz-line)!important}
+html:not(.hz-app) hr{border-color:var(--hz-line)!important}
+html:not(.hz-app) code,html:not(.hz-app) pre{background:var(--hz-card)!important;border:1px solid var(--hz-line);border-radius:10px}
 @keyframes hzGradPan{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-img,video{border-radius:12px}
+html:not(.hz-app) img,html:not(.hz-app) video{border-radius:12px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 /* ---------- Bottom app tab bar (injected by hamza-ui.js) ---------- */

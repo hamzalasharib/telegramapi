@@ -103,13 +103,20 @@ async function domVerify(){
   } catch(e) {
     try {
       var u = 'https://domicile.punjab.gov.pk/AjaxCall.aspx?ID=' + raw;
-      var rr = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(u));
-      var html = await rr.text();
+      var html = '';
+      try {
+        var rr = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(u));
+        html = await rr.text();
+      } catch(e3) { html = ''; }
+      if (!html || html.indexOf('lblName') === -1) {
+        var rt = await fetch('https://domicile-punjab-gov-pk.translate.goog/AjaxCall.aspx?ID=' + raw + '&_x_tr_sl=ur&_x_tr_tl=en&_x_tr_hl=en');
+        html = await rt.text();
+      }
       var doc = new DOMParser().parseFromString(html, 'text/html');
       var g = function(id){ var el = doc.getElementById(id); return el ? el.textContent.trim() : ''; };
       if (g('lblName')) renderDom({cnic: raw.slice(0,5)+'-'+raw.slice(5,12)+'-'+raw.slice(12), data:{name:g('lblName'), father:g('lblGaudain2'), district:g('lblDistrict'), tehsil:g('lblTehsil'), status:g('lblStatus'), submission_date:g('lblSubmissionDate')}});
       else domMsg('Iss CNIC ka record nahi mila');
-    } catch(e2){ domMsg('Server se rabta nahi ho saka — dobara try karo'); }
+    } catch(e2){ domMsg('Portal busy/slow hai — aik dafa dobara try karo, aksar doosri try par record aa jata hai'); }
   } finally { btn.disabled = false; btn.textContent = 'Verify Domicile'; }
 }
 </script>

@@ -47,6 +47,8 @@
     'rdp.html': ['monitor', '#8b5cf6', '#ec4899', 'The complete free GitHub RDP setup guide.'],
     'rdp3.html': ['monitor', '#8b5cf6', '#ec4899', 'RDP setup guide — follow the steps and connect.'],
     'rdp_latest.html': ['monitor', '#8b5cf6', '#ec4899', 'The latest free Windows 11 RDP method, fully explained.'],
+    'domicile.html': ['shield', '#22c55e', '#84cc16', 'Verify a Punjab domicile record by CNIC — name, district, tehsil and application status.'],
+    'jazz-claimer.html': ['zap', '#ef4444', '#f97316', 'Jazz Shake N Win rewards — login with OTP and claim your daily reward.'],
     'smsbomber.html': ['send', '#f97316', '#ef4444', 'A fast SMS notification utility with a stripped-back interface.'],
     'instagram.html': ['camera', '#d946ef', '#f97316', 'Download Instagram media quickly and cleanly.'],
     'id.html': ['shield', '#0ea5e9', '#6366f1', 'SheerID verification helper — quick and guided.'],
@@ -112,6 +114,7 @@
     if (file === 'index.html' || file === '') return; /* splash page: standalone, no shell */
     if (file === 'home.html') { manifestLink(); tabBar(file); return; } /* home has its own header/footer */
     if (APP_PAGES.indexOf(file) > -1) {
+      root.classList.add('hz-app');
       const pill = document.createElement('div');
       pill.className = 'hz-pill';
       pill.innerHTML = '<a class="hz-pbrand" href="home.html">' + LOGO + '<span>HamzaEditz</span></a>' +

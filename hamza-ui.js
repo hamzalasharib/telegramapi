@@ -113,6 +113,7 @@
     if (file === 'index.html' || file === '') return; /* splash page: standalone, no shell */
     if (file === 'home.html') { manifestLink(); tabBar(file); return; } /* home has its own header/footer */
     if (APP_PAGES.indexOf(file) > -1) {
+      root.classList.add('hz-app');
       const pill = document.createElement('div');
       pill.className = 'hz-pill';
       pill.innerHTML = '<a class="hz-pbrand" href="home.html">' + LOGO + '<span>HamzaEditz</span></a>' +

@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/verify.py": { "maxDuration": 60 },
+    "api/spot.py": { "maxDuration": 60 },
+    "api/hadith.py": { "maxDuration": 30 },
+    "api/jazz.py": { "maxDuration": 30 }
+  }
+}
