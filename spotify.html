@@ -580,6 +580,23 @@
 
     // Proxy Request Executor (Uses corsproxy.io with auto fallback)
     async function makeRequest(url, method = 'GET', body = null) {
+      // Primary route: same-origin server proxy (/api/spot). Fixes the
+      // corsproxy.io outage (now needs a paid key) and spotsaver's
+      // foreign-Origin block. Falls through to the proxy chain below.
+      try {
+        let payload = null;
+        if (url.includes('/api/spotify/')) payload = { step: 'spotify', url: new URL(url).searchParams.get('url') };
+        else if (url.includes('/api/get-id/')) payload = Object.assign({ step: 'get-id' }, body || {});
+        else if (url.includes('/api/download/')) payload = Object.assign({ step: 'download' }, body || {});
+        if (payload) {
+          const r = await fetch('/api/spot', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          if (r.ok) {
+            const j = await r.json();
+            if (j && !j.error) return j;
+          }
+        }
+      } catch (e) { /* fall through to legacy proxy chain */ }
+
       const endpoints = [
         // Primary: https://corsproxy.io/?url=
         (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jazz Shake N Win Claimer | HamzaEditz 2.0</title>
+<meta name="description" content="Jazz Shake N Win auto claimer — OTP login karke daily rewards check aur claim karo.">
+<meta name="theme-color" content="#070a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2334d399'/%3E%3Cstop offset='.5' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='url(%23g)'/%3E%3Crect x='27' y='25' width='11' height='50' rx='4' fill='white'/%3E%3Crect x='62' y='25' width='11' height='50' rx='4' fill='white'/%3E%3Crect x='38' y='44' width='24' height='11' rx='4' fill='white'/%3E%3Cpath d='M46 38.5v23l20-11.5z' fill='%230b101d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="hamza-ui.css"><script src="hamza-ui.js" defer></script><script src="hamza-ads.js" defer></script>
+<style>
+.hz-wrap{max-width:880px;margin:0 auto;padding:10px 22px 20px}
+.hz-sec{background:var(--hz-card);border:1px solid var(--hz-line);border-radius:20px;padding:24px;margin-top:26px;box-shadow:var(--hz-shadow)}
+.hz-sec h2{margin:0 0 8px;font-size:1.22rem}
+.hz-sec p{color:var(--hz-muted);line-height:1.65;margin:0 0 6px}
+.hz-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.hz-row input{flex:1;min-width:200px;padding:14px 16px;font-size:1rem}
+.hz-go{padding:14px 26px;font-size:.95rem;white-space:nowrap}
+.hz-msg{margin-top:14px;font-size:.9rem;font-weight:600;display:none}
+.hz-msg.err{color:#f87171}.hz-msg.ok{color:var(--hz-accent)}
+.hz-out{margin-top:18px;display:none}
+.hz-rcard{border:1px solid var(--hz-line);border-radius:18px;overflow:hidden;background:var(--hz-card)}
+.hz-rhead{display:flex;align-items:center;gap:14px;padding:20px;border-bottom:1px dashed var(--hz-line);flex-wrap:wrap}
+.hz-ava{width:54px;height:54px;flex:none;border-radius:16px;display:grid;place-items:center;font-weight:800;font-size:1.05rem;color:#fff;background:linear-gradient(135deg,var(--a1,#22c55e),var(--a2,#16a34a))}
+.hz-rhead h3{margin:0;font-size:1.12rem}
+.hz-rhead .sub{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--hz-muted);margin-top:3px}
+.hz-badge{margin-left:auto;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:7px 13px;border-radius:99px;border:1px solid}
+.hz-badge.g{color:#22c55e;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.12)}
+.hz-badge.y{color:#eab308;border-color:rgba(234,179,8,.4);background:rgba(234,179,8,.12)}
+.hz-drow{display:flex;gap:13px;padding:13px 20px;border-bottom:1px solid var(--hz-line);align-items:baseline}
+.hz-drow:last-child{border-bottom:0}
+.hz-drow .k{flex:none;width:130px;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--hz-muted)}
+.hz-drow .v{font-weight:600;font-size:.95rem;word-break:break-word}
+.hz-acts{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--hz-line);flex-wrap:wrap}
+.hz-acts button{padding:11px 18px;font-size:.86rem}
+.hz-grid-btns{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px}
+@media(max-width:520px){.hz-grid-btns{grid-template-columns:1fr}}
+.hz-grid-btns button{padding:15px;font-size:.92rem}
+.hz-json{white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:var(--hz-fg2);background:rgba(0,0,0,.25);border:1px solid var(--hz-line);border-radius:12px;padding:14px;margin-top:12px;max-height:300px;overflow:auto}
+.hz-legal{text-align:center;margin-top:30px;color:var(--hz-muted);font-size:.86rem}
+.hz-legal b{display:block;font-family:Sora,sans-serif;color:var(--hz-fg2);font-size:.95rem;margin-bottom:4px}
+.hz-pillstat{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;padding:6px 12px;border-radius:99px;border:1px solid var(--hz-line);background:var(--hz-card);color:var(--hz-muted)}
+.hz-dot{width:8px;height:8px;border-radius:50%;background:#eab308}
+.hz-dot.on{background:#22c55e;box-shadow:0 0 10px #22c55e}
+</style>
+</head>
+<body>
+<div class="hz-wrap">
+<section class="hz-sec">
+<h2>Jazz Shake N Win — Auto Claimer</h2>
+<p>Apna Jazz number likho, SMS par aya hua 4-digit PIN daalo, aur apne daily Shake N Win rewards check / claim karo — sab isi page se.</p>
+<p style="margin-top:12px"><span class="hz-pillstat"><span class="hz-dot" id="apiDot"></span><span id="apiStat">API check ho raha hai...</span></span></p>
+
+<div id="stepLogin">
+<div class="hz-row">
+<input id="jzNum" type="tel" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="03XXXXXXXXX" aria-label="Jazz number">
+<button type="button" class="hz-go" id="jzSend" onclick="jzSendOtp()">Send OTP</button>
+</div>
+<div class="hz-msg" id="jzMsg1"></div>
+</div>
+
+<div id="stepOtp" style="display:none">
+<div class="hz-row">
+<input id="jzOtp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="4" placeholder="4-digit PIN" aria-label="OTP PIN">
+<button type="button" class="hz-go" id="jzVerify" onclick="jzVerifyOtp()">Verify and Login</button>
+</div>
+<div class="hz-msg" id="jzMsg2"></div>
+<p style="margin-top:10px;font-size:.85rem"><a href="#" onclick="jzSendOtp(true);return false;">OTP dobara bhejo</a></p>
+</div>
+
+<div id="stepDash" style="display:none">
+<p style="margin-top:6px">Logged in as <b id="jzLoggedNum" style="color:var(--hz-fg)"></b></p>
+<div class="hz-grid-btns">
+<button type="button" onclick="jzAct('check_rewards')">Check Rewards</button>
+<button type="button" onclick="jzAct('claim_reward')">Claim Reward</button>
+<button type="button" onclick="jzAct('rewards_list')">Rewards List</button>
+<button type="button" onclick="jzAct('my_numbers')">My Numbers</button>
+<button type="button" onclick="jzAct('toggle_auto_claim')">Toggle Auto Claim</button>
+<button type="button" onclick="jzLogout()">Logout</button>
+</div>
+<div class="hz-out" id="jzOut"></div>
+</div>
+</section>
+<div class="hz-legal"><b>Jazz Shake N Win Auto Claimer API</b>API by WASIF ALI · Telegram Bot: <a href="https://t.me/Jazz_claimbot" target="_blank" rel="noopener">@Jazz_claimbot</a></div>
+</div>
+<script>
+var JZ = { number: '' };
+function jzMsg(id, txt, ok){
+  var m = document.getElementById(id);
+  m.textContent = txt; m.className = 'hz-msg ' + (ok ? 'ok' : 'err');
+  m.style.display = txt ? 'block' : 'none';
+}
+async function jazzCall(ep, payload){
+  try {
+    var r = await fetch('/api/jazz', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ep: ep, payload: payload || {}})});
+    if (r.ok) return await r.json();
+    throw new Error('proxy ' + r.status);
+  } catch(e) {
+    var r2 = await fetch('https://wasifali.biz.id/jazz-claimer/api/' + ep, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload || {})});
+    return await r2.json();
+  }
+}
+function jzShow(data, title){
+  var out = document.getElementById('jzOut');
+  var html = '';
+  if (data && data.data && Array.isArray(data.data.rewards)) {
+    html = '<div class="hz-rcard"><div class="hz-rhead"><div><h3>' + title + '</h3><div class="sub">' + (data.message || '') + '</div></div></div>' +
+      data.data.rewards.map(function(r){ return '<div class="hz-drow"><span class="k">Day ' + r.day + '</span><span class="v">' + r.reward + '</span></div>'; }).join('') + '</div>';
+  } else if (data && data.data && Array.isArray(data.data.numbers)) {
+    html = '<div class="hz-rcard"><div class="hz-rhead"><div><h3>' + title + '</h3><div class="sub">' + (data.message || '') + '</div></div></div>' +
+      data.data.numbers.map(function(n){ return '<div class="hz-drow"><span class="k">Number</span><span class="v">' + (typeof n === 'string' ? n : JSON.stringify(n)) + '</span></div>'; }).join('') + '</div>';
+  } else {
+    html = '<div class="hz-rcard"><div class="hz-rhead"><div><h3>' + title + '</h3><div class="sub">' + ((data && data.message) || '') + '</div></div></div>' +
+      '<div class="hz-json" style="margin:0;border:0;border-radius:0">' + JSON.stringify(data && data.data ? data.data : data, null, 2) + '</div></div>';
+  }
+  out.innerHTML = html; out.style.display = 'block';
+}
+async function jzPing(){
+  try {
+    var d = await jazzCall('ping', {});
+    if (d && d.success){ document.getElementById('apiDot').classList.add('on'); document.getElementById('apiStat').textContent = 'API Online'; return; }
+    throw 0;
+  } catch(e){ document.getElementById('apiStat').textContent = 'API Offline — thodi dair baad try karo'; }
+}
+async function jzSendOtp(resend){
+  var num = document.getElementById('jzNum').value.replace(/\D/g,'');
+  if (!/^03\d{9}$/.test(num)){ jzMsg('jzMsg1', 'Sahi Jazz number likho — format: 03XXXXXXXXX'); return; }
+  JZ.number = num;
+  var btn = document.getElementById('jzSend');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    var d = await jazzCall('send_otp', {number: num});
+    if (d.success){
+      document.getElementById('stepOtp').style.display = 'block';
+      jzMsg('jzMsg1', '', true); jzMsg('jzMsg2', d.message + ' — PIN 60 seconds mein expire hota hai', true);
+      document.getElementById('jzOtp').focus();
+    } else jzMsg(resend ? 'jzMsg2' : 'jzMsg1', d.message || 'OTP nahi bheja ja saka');
+  } catch(e){ jzMsg('jzMsg1', 'API se rabta nahi ho saka'); }
+  finally { btn.disabled = false; btn.textContent = 'Send OTP'; }
+}
+async function jzVerifyOtp(){
+  var otp = document.getElementById('jzOtp').value.replace(/\D/g,'');
+  if (otp.length !== 4){ jzMsg('jzMsg2', '4-digit PIN likho'); return; }
+  var btn = document.getElementById('jzVerify');
+  btn.disabled = true; btn.textContent = 'Verifying...';
+  try {
+    var d = await jazzCall('verify_otp', {number: JZ.number, otp: otp});
+    if (d.success){
+      document.getElementById('stepLogin').style.display = 'none';
+      document.getElementById('stepOtp').style.display = 'none';
+      document.getElementById('jzLoggedNum').textContent = JZ.number;
+      document.getElementById('stepDash').style.display = 'block';
+      jzShow(d, 'Login ho gaya');
+    } else jzMsg('jzMsg2', d.message || 'Ghalat PIN');
+  } catch(e){ jzMsg('jzMsg2', 'API se rabta nahi ho saka'); }
+  finally { btn.disabled = false; btn.textContent = 'Verify and Login'; }
+}
+async function jzAct(ep){
+  var titles = {check_rewards:'My Rewards', claim_reward:'Claim Reward', rewards_list:'Rewards List', my_numbers:'My Numbers', toggle_auto_claim:'Auto Claim'};
+  try {
+    var d = await jazzCall(ep, {number: JZ.number});
+    jzShow(d, titles[ep] || ep);
+  } catch(e){
+    var out = document.getElementById('jzOut');
+    out.innerHTML = '<div class="hz-json">API se rabta nahi ho saka — dobara try karo</div>'; out.style.display = 'block';
+  }
+}
+async function jzLogout(){
+  try { await jazzCall('logout', {number: JZ.number}); } catch(e){}
+  location.reload();
+}
+jzPing();
+</script>
+</body>
+</html>
