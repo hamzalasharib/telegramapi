@@ -69,6 +69,16 @@
 @media(max-width:520px){.hz-actgrid{grid-template-columns:1fr}}
 .hz-actgrid button{padding:15px;font-size:.92rem}
 .hz-logout{margin-top:12px;width:100%;padding:13px;font-size:.9rem;background:rgba(248,113,113,.12)!important;border:1px solid rgba(248,113,113,.45)!important;color:#fca5a5!important;animation:none!important}
+
+.hz-saved{margin-top:18px}
+.hz-saved h3{font-size:.95rem;margin:0 0 4px}
+.hz-saved .hintline{font-size:.82rem;color:var(--hz-muted);margin:0 0 10px}
+.hz-srow{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--hz-line);border-radius:15px;background:rgba(0,0,0,.18);margin-top:9px}
+.hz-srow .ava{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:.8rem;color:#fff;background:linear-gradient(135deg,#ef4444,#f97316)}
+.hz-srow .num{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:.95rem}
+.hz-srow .st{font-size:.72rem;color:var(--hz-muted);font-weight:600}
+.hz-srow .open{margin-left:auto;padding:9px 16px;font-size:.83rem}
+.hz-srow .del{flex:none;width:34px;height:34px;border-radius:10px;border:1px solid var(--hz-line);background:var(--hz-card);color:var(--hz-muted);cursor:pointer;font-size:.95rem;line-height:1}
 </style>
 </head>
 <body>
@@ -77,6 +87,12 @@
 <h2>Jazz Shake N Win — Auto Claimer</h2>
 <p>Apna Jazz number likho, SMS par aya hua 4-digit PIN daalo, aur apne daily Shake N Win rewards check / claim karo — sab isi page se.</p>
 <p style="margin-top:12px"><span class="hz-pillstat"><span class="hz-dot" id="apiDot"></span><span id="apiStat">API check ho raha hai...</span></span></p>
+
+<div id="stepSaved" class="hz-saved" style="display:none">
+<h3>Saved Numbers</h3>
+<p class="hintline">Jo number aik dafa login ho jaye woh yahan save ho jata hai — agli dafa bas tap karo, OTP ki zaroorat nahi (jab tak session chal raha ho).</p>
+<div id="jzSavedList"></div>
+</div>
 
 <div id="stepLogin">
 <div class="hz-row">
@@ -126,6 +142,59 @@
 </div>
 <script>
 var JZ = { number: '' };
+var LS_KEY = 'jz_saved_numbers';
+function loadSaved(){ try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch(e){ return []; } }
+function storeSaved(list){ try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch(e){} }
+function addSaved(num){
+  var list = loadSaved().filter(function(n){ return n !== num; });
+  list.unshift(num); storeSaved(list.slice(0, 10)); renderSaved();
+}
+function removeSaved(num, ev){
+  if (ev) ev.stopPropagation();
+  storeSaved(loadSaved().filter(function(n){ return n !== num; }));
+  renderSaved();
+}
+function isActiveData(d){ return !!(d && d.is_active === true); }
+function renderSaved(){
+  var list = loadSaved(), box = document.getElementById('stepSaved'), wrap = document.getElementById('jzSavedList');
+  if (!list.length){ box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  wrap.innerHTML = list.map(function(num){
+    return '<div class="hz-srow"><div class="ava">03</div><div><div class="num">' + esc(num) + '</div><div class="st" id="st-' + num + '">Halat check ho rahi hai...</div></div>' +
+      '<button type="button" class="open" onclick="openSaved(\'' + num + '\')">Open</button>' +
+      '<button type="button" class="del" title="List se hatao" onclick="removeSaved(\'' + num + '\', event)">&#10005;</button></div>';
+  }).join('');
+  list.forEach(function(num){
+    jazzCall('my_numbers', {number: num}).then(function(d){
+      var el = document.getElementById('st-' + num);
+      if (el) el.textContent = isActiveData(d && d.data) ? 'Login hai — tap karke dashboard kholo' : 'Session khatam — OTP lagega';
+    }).catch(function(){
+      var el = document.getElementById('st-' + num);
+      if (el) el.textContent = 'Tap karke try karo';
+    });
+  });
+}
+async function openSaved(num){
+  JZ.number = num;
+  var acc = null;
+  try { var d = await jazzCall('my_numbers', {number: num}); acc = d && d.data; } catch(e){}
+  if (isActiveData(acc)) {
+    document.getElementById('stepSaved').style.display = 'none';
+    document.getElementById('stepLogin').style.display = 'none';
+    document.getElementById('stepOtp').style.display = 'none';
+    document.getElementById('jzLoggedNum').textContent = num;
+    document.getElementById('stepDash').style.display = 'block';
+    fillAccount(acc);
+    var out = document.getElementById('jzOut');
+    out.innerHTML = '<div class="hz-banner g">Welcome back — baghair OTP ke login ho gaya</div>';
+    out.style.display = 'block';
+  } else {
+    document.getElementById('jzNum').value = num;
+    document.getElementById('stepLogin').style.display = 'block';
+    jzMsg('jzMsg1', 'Is number ka session khatam ho chuka hai — naya PIN bhej raha hoon', false);
+    jzSendOtp();
+  }
+}
 function jzMsg(id, txt, ok){
   var m = document.getElementById(id);
   m.textContent = txt; m.className = 'hz-msg ' + (ok ? 'ok' : 'err');
@@ -234,6 +303,8 @@ async function jzVerifyOtp(){
     if (d.success){
       document.getElementById('stepLogin').style.display = 'none';
       document.getElementById('stepOtp').style.display = 'none';
+      document.getElementById('stepSaved').style.display = 'none';
+      addSaved(JZ.number);
       document.getElementById('jzLoggedNum').textContent = JZ.number;
       document.getElementById('stepDash').style.display = 'block';
       var out = document.getElementById('jzOut');
@@ -276,6 +347,7 @@ async function jzLogout(){
   location.reload();
 }
 jzPing();
+renderSaved();
 </script>
 </body>
 </html>
