@@ -79,15 +79,42 @@
     });
     upd(); return b;
   }
+
+  const TABS = [
+    ['home.html', 'Home', '<svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>'],
+    ['home.html#tools', 'Tools', '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'],
+    ['RdpMethod.html', 'RDP', '<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2.5"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>'],
+    ['about.html', 'About', '<svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>']
+  ];
+  function tabBar(file) {
+    if (document.querySelector('.hz-tabbar')) return;
+    const nav = document.createElement('nav');
+    nav.className = 'hz-tabbar'; nav.setAttribute('aria-label', 'App');
+    nav.innerHTML = TABS.map(function (t) {
+      const target = t[0].split('#')[0].toLowerCase();
+      const on = target === file || (t[0].indexOf('#tools') > -1 && file === 'home.html' && location.hash === '#tools');
+      return '<a href="' + t[0] + '"' + (on ? ' class="on"' : '') + '>' + t[2] + t[1] + '</a>';
+    }).join('');
+    document.body.appendChild(nav);
+    document.body.classList.add('hz-has-tab');
+  }
+  function manifestLink() {
+    if (!document.querySelector('link[rel="manifest"]')) {
+      const l = document.createElement('link');
+      l.rel = 'manifest'; l.href = 'manifest.webmanifest';
+      document.head.appendChild(l);
+    }
+  }
   function build() {
     if (!document.body || document.querySelector('.hz-header,.hz-pill')) return;
     const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-    if (file === 'index.html' || file === '') return; /* homepage has its own shell */
+    if (file === 'index.html' || file === '') return; /* splash page: standalone, no shell */
+    if (file === 'home.html') { manifestLink(); tabBar(file); return; } /* home has its own header/footer */
     if (APP_PAGES.indexOf(file) > -1) {
       const pill = document.createElement('div');
       pill.className = 'hz-pill';
-      pill.innerHTML = '<a class="hz-pbrand" href="index.html">' + LOGO + '<span>HamzaEditz</span></a>' +
-        '<a class="hz-phome" href="index.html">Home</a>';
+      pill.innerHTML = '<a class="hz-pbrand" href="home.html">' + LOGO + '<span>HamzaEditz</span></a>' +
+        '<a class="hz-phome" href="home.html">Home</a>';
       pill.appendChild(toggleBtn());
       document.body.appendChild(pill);
       return;
@@ -96,8 +123,8 @@
     const header = document.createElement('header');
     header.className = 'hz-header';
     header.innerHTML = '<div class="hz-header-in">' +
-      '<a class="hz-brand" href="index.html">' + LOGO + 'HamzaEditz <span class="hz-tag">2.0</span></a>' +
-      '<nav class="hz-nav"><a href="index.html">Home</a><a href="index.html#tools">Tools</a>' +
+      '<a class="hz-brand" href="home.html">' + LOGO + 'HamzaEditz <span class="hz-tag">2.0</span></a>' +
+      '<nav class="hz-nav"><a href="home.html">Home</a><a href="home.html#tools">Tools</a>' +
       '<a href="welcome.html" class="hz-hide-s">Welcome</a><a href="about.html">About</a></nav></div>';
     header.querySelector('.hz-nav').appendChild(toggleBtn());
     document.body.insertBefore(header, document.body.firstChild);
@@ -115,8 +142,10 @@
     foot.className = 'hz-foot';
     foot.innerHTML = '<div class="hz-foot-in"><span class="hz-fbrand">' + LOGO + 'HamzaEditz</span>' +
       '<span>© ' + new Date().getFullYear() + ' HamzaEditz · hamzaeditz.tech' +
-      '<a href="index.html#tools">All tools</a><a href="about.html">About</a></span></div>';
+      '<a href="home.html#tools">All tools</a><a href="about.html">About</a></span></div>';
     document.body.appendChild(foot);
+    manifestLink();
+    tabBar(file);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build); else build();
 })();
