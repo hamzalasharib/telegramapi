@@ -1,12 +1,28 @@
 {
  "latest": {
-  "versionName": "2.1",
-  "versionCode": 3,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.1.apk",
-  "notes": "Crash fix: the app could close on the player when a song had no cover art (or in the art-design gallery before covers loaded). The placeholder cover is now drawn safely in code.",
+  "versionName": "2.2",
+  "versionCode": 4,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.2.apk",
+  "notes": "New player layout that fits one screen, no scrollbars anywhere, custom-designed dialogs and options, and Settings rebuilt as a grid of cards.",
   "forceUpdate": false
  },
  "changelog": [
+  {
+   "version": "2.2",
+   "versionName": "2.2",
+   "versionCode": 4,
+   "date": "2026-11-05",
+   "notes": "New player layout that fits one screen, no scrollbars anywhere, custom-designed dialogs and options, and Settings rebuilt as a grid of cards.",
+   "changes": [
+    "Player redesigned: artwork, lyrics card, seek bar and controls all fit on one screen — no more scrolling to reach the buttons",
+    "Scrollbars removed everywhere (library, player, settings, pickers, dialogs)",
+    "Every dialog and menu is now Dhunn's own custom design: rounded cards, option rows with selection dots, pill buttons, bottom-sheet lists",
+    "Accent colours now open in a colour-grid picker",
+    "Settings rebuilt as a 2-column grid of custom cards — Appearance, Playback, Library, Updates",
+    "Lyrics live in their own rounded card on the player; seek bar restyled thin with a round thumb",
+    "Album-art and lyrics-effect grids got rounded selectable cards"
+   ]
+  },
   {
    "version": "2.1",
    "versionName": "2.1",
