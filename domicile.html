@@ -48,8 +48,8 @@
 <div class="hz-wrap">
 
 <section class="hz-sec">
-<h2>CNIC se domicile record check karo</h2>
-<p>Apna 13 digits wala CNIC number likho — Punjab domicile ka record (naam, walid ka naam, district, tehsil aur status) screen par aa jayega.</p>
+<h2>Check a domicile record by CNIC</h2>
+<p>Enter a 13-digit CNIC to see the Punjab domicile record — name, father name, district, tehsil and status.</p>
 <div class="hz-row">
 <input id="cnic" type="text" inputmode="numeric" autocomplete="off" maxlength="15" placeholder="32304-XXXXXXX-X" aria-label="CNIC number">
 <button type="button" class="hz-go" id="domBtn" onclick="domVerify()">Verify Domicile</button>
@@ -57,7 +57,7 @@
 <div class="hz-msg" id="domMsg"></div>
 <div class="hz-out" id="domOut"></div>
 </section>
-<div class="hz-legal"><b>Domicile Punjab Record Legal Advice</b>Record official Punjab domicile portal se verify hota hai — ghalat istemal ki zimme dari user ki apni hai.</div>
+<div class="hz-legal"><b>Domicile Punjab Record Legal Advice</b> Records are verified from the official Punjab domicile portal. Misuse is the responsibility of the user.</div>
 </div>
 <script>
 var cnicEl = document.getElementById('cnic');
@@ -91,7 +91,7 @@ function renderDom(d){
 }
 async function domVerify(){
   var raw = cnicEl.value.replace(/\D/g,'');
-  if (raw.length !== 13){ domMsg('CNIC 13 digits ka hona chahiye'); return; }
+  if (raw.length !== 13){ domMsg('CNIC must be 13 digits'); return; }
   var btn = document.getElementById('domBtn');
   btn.disabled = true; btn.textContent = 'Checking...'; domMsg('');
   document.getElementById('domOut').style.display = 'none';
@@ -99,7 +99,7 @@ async function domVerify(){
     var r = await fetch('/api/verify', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({cnic: raw})});
     var d = await r.json();
     if (d.success){ renderDom(d); domMsg('Record mil gaya', true); }
-    else domMsg(d.error || 'Record nahi mila');
+    else domMsg(d.error || 'Record not found');
   } catch(e) {
     try {
       var u = 'https://domicile.punjab.gov.pk/AjaxCall.aspx?ID=' + raw;
@@ -115,8 +115,8 @@ async function domVerify(){
       var doc = new DOMParser().parseFromString(html, 'text/html');
       var g = function(id){ var el = doc.getElementById(id); return el ? el.textContent.trim() : ''; };
       if (g('lblName')) renderDom({cnic: raw.slice(0,5)+'-'+raw.slice(5,12)+'-'+raw.slice(12), data:{name:g('lblName'), father:g('lblGaudain2'), district:g('lblDistrict'), tehsil:g('lblTehsil'), status:g('lblStatus'), submission_date:g('lblSubmissionDate')}});
-      else domMsg('Iss CNIC ka record nahi mila');
-    } catch(e2){ domMsg('Portal busy/slow hai — aik dafa dobara try karo, aksar doosri try par record aa jata hai'); }
+      else domMsg('No record found for this CNIC');
+    } catch(e2){ domMsg('Portal is slow — try again, it often works on the second try'); }
   } finally { btn.disabled = false; btn.textContent = 'Verify Domicile'; }
 }
 </script>

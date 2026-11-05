@@ -29,39 +29,39 @@ const I = {
   };
 
 const PAGES = {
-    'tiktok.html': ['download', '#ec4899', '#8b5cf6', 'Download TikTok videos without a watermark, in original quality.'],
-    'tiktokmenu.html': ['download', '#ec4899', '#8b5cf6', 'Every TikTok tool in one menu. Pick what you need and go.'],
-    'v2.html': ['download', '#ec4899', '#8b5cf6', 'TikTok Downloader Engine 1 — fast, direct video saving.'],
-    'spotify.html': ['music', '#22c55e', '#0ea5e9', 'Convert public Spotify tracks to clean, high-bitrate MP3 audio.'],
-    'dhunn.html': ['music', '#f59e0b', '#8b5cf6', 'Download Dhunn — the free music player app by Hamza: synced lyrics, 52 album art designs, themes and equalizer.'],
-    'image.html': ['image', '#f43f5e', '#f59e0b', 'Generate high-resolution AI images from a simple text prompt.'],
-    'tvchannels.html': ['tv', '#10b981', '#84cc16', 'Live TV channels, organised and ready to play.'],
-    'alltv.html': ['tv', '#10b981', '#84cc16', 'Infinity Live TV — channels from everywhere, in one place.'],
-    'hadith.html': ['book', '#eab308', '#f97316', 'A searchable Hadith collection with structured chapter browsing.'],
-    'quran.html': ['book', '#eab308', '#f97316', 'Search the Quran and play recitation, verse by verse.'],
-    'rdp-latest.html': ['monitor', '#8b5cf6', '#ec4899', 'The newest free RDP method — Windows + Tailscale. Watch the full video guide, then copy the ready-made workflow code.'],
-    'rdpmethod.html': ['monitor', '#8b5cf6', '#ec4899', 'Step-by-step methods to set up a free Windows RDP.'],
-    'rdp.html': ['monitor', '#8b5cf6', '#ec4899', 'The complete free GitHub RDP setup guide.'],
-    'rdp3.html': ['monitor', '#8b5cf6', '#ec4899', 'RDP setup guide — follow the steps and connect.'],
-    'rdp_latest.html': ['monitor', '#8b5cf6', '#ec4899', 'The latest free Windows 11 RDP method, fully explained.'],
-    'domicile.html': ['shield', '#22c55e', '#84cc16', 'Verify a Punjab domicile record by CNIC — name, district, tehsil and application status.'],
-    'jazz-claimer.html': ['zap', '#ef4444', '#f97316', 'Jazz Shake N Win rewards — login with OTP and claim your daily reward.'],
-    'smsbomber.html': ['send', '#f97316', '#ef4444', 'A fast SMS notification utility with a stripped-back interface.'],
-    'instagram.html': ['camera', '#d946ef', '#f97316', 'Download Instagram media quickly and cleanly.'],
-    'id.html': ['shield', '#0ea5e9', '#6366f1', 'SheerID verification helper — quick and guided.'],
-    'india.html': ['search', '#f59e0b', '#ef4444', 'Number lookup — find details linked to a phone number.'],
-    'paksim.html': ['phone', '#22c55e', '#84cc16', 'SIM tracker — check SIM information instantly.'],
-    'vehicledetails.html': ['search', '#f59e0b', '#ef4444', 'Vehicle RC details — look up registration information.'],
-    'jazz.html': ['phone', '#ef4444', '#f97316', 'Jazz free package information and activation.'],
+    'tiktok.html': ['download', '#ec4899', '#8b5cf6', 'Download TikTok videos without watermark.'],
+    'tiktokmenu.html': ['download', '#ec4899', '#8b5cf6', 'All TikTok tools in one place.'],
+    'v2.html': ['download', '#ec4899', '#8b5cf6', 'TikTok downloader — engine 1.'],
+    'spotify.html': ['music', '#22c55e', '#0ea5e9', 'Convert Spotify tracks to MP3.'],
+    'dhunn.html': ['music', '#f59e0b', '#8b5cf6', 'Free music player with synced lyrics.'],
+    'image.html': ['image', '#f43f5e', '#f59e0b', 'Generate AI images from text.'],
+    'tvchannels.html': ['tv', '#10b981', '#84cc16', 'Watch live TV channels.'],
+    'alltv.html': ['tv', '#10b981', '#84cc16', 'Watch live TV channels.'],
+    'hadith.html': ['book', '#eab308', '#f97316', 'Search Hadith by book and chapter.'],
+    'quran.html': ['book', '#eab308', '#f97316', 'Read and listen to the Quran.'],
+    'rdp-latest.html': ['monitor', '#8b5cf6', '#ec4899', 'Latest free RDP method — video + code.'],
+    'rdpmethod.html': ['monitor', '#8b5cf6', '#ec4899', 'Free Windows RDP — step-by-step guide.'],
+    'rdp.html': ['monitor', '#8b5cf6', '#ec4899', 'Free Windows RDP setup guide.'],
+    'rdp3.html': ['monitor', '#8b5cf6', '#ec4899', 'RDP setup guide.'],
+    'rdp_latest.html': ['monitor', '#8b5cf6', '#ec4899', 'Latest free Windows RDP method.'],
+    'domicile.html': ['shield', '#22c55e', '#84cc16', 'Verify a Punjab domicile by CNIC.'],
+    'jazz-claimer.html': ['zap', '#ef4444', '#f97316', 'Claim daily Jazz Shake N Win rewards.'],
+    'smsbomber.html': ['send', '#f97316', '#ef4444', 'Fast SMS utility.'],
+    'instagram.html': ['camera', '#d946ef', '#f97316', 'Download Instagram media.'],
+    'id.html': ['shield', '#0ea5e9', '#6366f1', 'SheerID verification helper.'],
+    'india.html': ['search', '#f59e0b', '#ef4444', 'Phone number lookup.'],
+    'paksim.html': ['phone', '#22c55e', '#84cc16', 'Check SIM information.'],
+    'vehicledetails.html': ['search', '#f59e0b', '#ef4444', 'Vehicle registration details.'],
+    'jazz.html': ['phone', '#ef4444', '#f97316', 'Jazz packages and activation.'],
     'apk.html': ['zap', '#84cc16', '#22c55e', 'Jazz Shake N Win auto claimer.'],
     'ludo.html': ['zap', '#f43f5e', '#8b5cf6', 'Yalla Ludo device lock solution.'],
-    'earn.html': ['spark', '#f59e0b', '#84cc16', 'Auto task runner for bestvideo.shop.'],
-    'physics.html': ['book', '#38bdf8', '#818cf8', 'PHY101 notes — organised, searchable and easy to revise.'],
-    'user.html': ['user', '#0ea5e9', '#6366f1', 'TikTok profile inspector — view any public profile in detail.'],
-    'vpn.html': ['lock', '#6366f1', '#0ea5e9', 'MsyVpn configuration decrypt tool.'],
-    'sora_remove.html': ['layers', '#a78bfa', '#ec4899', 'Sora bulk downloader — save videos in batches.'],
+    'earn.html': ['spark', '#f59e0b', '#84cc16', 'Auto task runner.'],
+    'physics.html': ['book', '#38bdf8', '#818cf8', 'PHY101 notes.'],
+    'user.html': ['user', '#0ea5e9', '#6366f1', 'View any public TikTok profile.'],
+    'vpn.html': ['lock', '#6366f1', '#0ea5e9', 'MsyVpn config decrypt tool.'],
+    'sora_remove.html': ['layers', '#a78bfa', '#ec4899', 'Download Sora videos in bulk.'],
     'purpose.html': ['heart', '#f43f5e', '#ec4899', 'A page made for you.'],
-    'about.html': ['user', '#0ea5e9', '#6366f1', 'Meet Hamza Shafiq, the creator behind HamzaEditz.']
+    'about.html': ['user', '#0ea5e9', '#6366f1', 'About Hamza Shafiq.']
   };
   const APP_PAGES = ['welcome.html', 'tvchannels.html', 'alltv.html', 'sulu', 'sulu.html', 'spotify'];
 
@@ -89,7 +89,7 @@ const PAGES = {
       document.body.appendChild(back);
       return;
     }
-    const cfg = PAGES[file] || ['spark', '#01875f', '#01a374', 'A free HamzaEditz tool — fast, simple and open to everyone.'];
+    const cfg = PAGES[file] || ['spark', '#01875f', '#01a374', 'A free HamzaEditz tool.'];
     const header = document.createElement('header');
     header.className = 'hz-header';
     header.innerHTML = '<div class="hz-header-in">' +
