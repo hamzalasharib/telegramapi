@@ -294,14 +294,19 @@
             const ownUrl = `/api/image?prompt=${encodedPrompt}&aspectRatio=${aspectRatio}`;
 
             try {
-                let response;
+                let data;
                 try {
-                    response = await fetch(ownUrl);
+                    const response = await fetch(ownUrl);
                     if (!response.ok) throw new Error('own api');
+                    data = await response.json();
+                    if (!data.success) throw new Error('own api failed');
                 } catch (e) {
-                    response = await fetch(`${BASE_API_URL}?prompt=${encodedPrompt}&aspectRatio=${aspectRatio}`);
+                    // Direct fallback: Pollinations (the old famofc API is dead)
+                    const dims = ({square:[1024,1024], landscape:[1280,720], portrait:[720,1280]})[aspectRatio] || [1024,1024];
+                    const seed = Math.floor(Math.random() * 999999);
+                    const u = 'https://image.pollinations.ai/prompt/' + encodedPrompt + '?width=' + dims[0] + '&height=' + dims[1] + '&nologo=true&seed=' + seed;
+                    data = { success: true, images: [{ image_url: u, prompt: prompt, id: seed }] };
                 }
-                const data = await response.json();
 
                 if (data.success && data.images && data.images.length > 0) {
                     
