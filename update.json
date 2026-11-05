@@ -2,6 +2,19 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "version": "2.29.0",
+   "versionName": "2.29.0",
+   "versionCode": 37,
+   "date": "2026-11-05",
+   "notes": "Support page updated: DPay removed — now you can support Dhunn directly via JazzCash, NayaPay or Easypaisa (one number, copy buttons) or Binance Pay. Changelog display hardened so no version can appear blank again.",
+   "changes": [
+    "Support Dhunn page: DPay removed",
+    "JazzCash, NayaPay and Easypaisa added — send to 03287331958, with copy buttons for the number and account title",
+    "Binance Pay stays (Pay ID 774780411)",
+    "Changelog display hardened — no version can appear blank again"
+   ]
+  },
+  {
    "versionName": "2.28.0",
    "versionCode": 36,
    "notes": "Removed: the UI themes experiment — the app is back to its clean original look with the colour presets. Album art: all 52 designs are now animated (spinning discs/reels, pulsing glows, swaying frames, dancing EQ and wave bars) using light transform animations that do not cause lag, and they pause when the music pauses. Lyrics effects: previews in the grid are now LIVE animations — each card plays the effect on sample lines so you can see it before selecting.",
@@ -297,13 +310,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.28.0",
-  "versionCode": 36,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.28.0.apk",
-  "notes": "UI themes removed (back to Dhunn's clean original look, colour presets as before). Album art designs are now ANIMATED — spinning discs and reels, pulsing glows, dancing EQ bars — smooth, no lag. Lyrics effect previews are now LIVE: watch each effect animate in the grid before you pick it.",
+  "versionName": "2.29.0",
+  "versionCode": 37,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.29.0.apk",
+  "notes": "Support page updated: DPay removed — now you can support Dhunn directly via JazzCash, NayaPay or Easypaisa (one number, copy buttons) or Binance Pay.",
   "forceUpdate": false
- },
- "support": {
-  "dpayUrl": ""
  }
 }
