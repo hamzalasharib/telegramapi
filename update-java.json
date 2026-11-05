@@ -1,12 +1,28 @@
 {
  "latest": {
-  "versionName": "2.2",
-  "versionCode": 4,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.2.apk",
-  "notes": "New player layout that fits one screen, no scrollbars anywhere, custom-designed dialogs and options, and Settings rebuilt as a grid of cards.",
+  "versionName": "2.3",
+  "versionCode": 5,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.3.apk",
+  "notes": "Bottom navigation like Dhunn: Home, Search and Library tabs, with categories — Albums, Artists, Folders and Favorites — on Home and in the Library.",
   "forceUpdate": false
  },
  "changelog": [
+  {
+   "version": "2.3",
+   "versionName": "2.3",
+   "versionCode": 5,
+   "date": "2026-11-05",
+   "notes": "Bottom navigation like Dhunn: Home, Search and Library tabs, with categories — Albums, Artists, Folders and Favorites — on Home and in the Library.",
+   "changes": [
+    "Bottom navigation added: Home, Search and Library tabs, with the mini player above it — same structure as Dhunn",
+    "Categories are here: Albums, Artists, Folders and Favorites",
+    "Home tab: greeting, Categories grid, quick picks from recently added, Recently added rail, Your top artists rail, Made for you (Recently Added Mix, Liked Songs) and Your songs",
+    "Library tab: category chips (Songs, Albums, Artists, Folders, Favorites) — tap any album, artist or folder to open its songs, with back and Play all",
+    "Search tab: search box, your search history as chips with Clear all, and Browse artists when empty",
+    "Back button steps out of a category first, then back to Home",
+    "Search keyboard no longer pops up over other tabs"
+   ]
+  },
   {
    "version": "2.2",
    "versionName": "2.2",
