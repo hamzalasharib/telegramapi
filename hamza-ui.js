@@ -36,6 +36,7 @@
     'tiktokmenu.html': ['download', '#ec4899', '#8b5cf6', 'Every TikTok tool in one menu. Pick what you need and go.'],
     'v2.html': ['download', '#ec4899', '#8b5cf6', 'TikTok Downloader Engine 1 — fast, direct video saving.'],
     'spotify.html': ['music', '#22c55e', '#0ea5e9', 'Convert public Spotify tracks to clean, high-bitrate MP3 audio.'],
+    'dhunn.html': ['music', '#f59e0b', '#8b5cf6', 'Download Dhunn — the free music player app by Hamza: synced lyrics, 52 album art designs, themes and equalizer.'],
     'image.html': ['image', '#f43f5e', '#f59e0b', 'Generate high-resolution AI images from a simple text prompt.'],
     'tvchannels.html': ['tv', '#10b981', '#84cc16', 'Live TV channels, organised and ready to play.'],
     'alltv.html': ['tv', '#10b981', '#84cc16', 'Infinity Live TV — channels from everywhere, in one place.'],
