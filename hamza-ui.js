@@ -1,7 +1,7 @@
-/* HamzaEditz UI v5 — clean Play Store-style shell, same spirit as the
-   Dhunn page: a plain header, an app-style page head and a small footer
-   on content pages; full-screen app pages get one tiny Home link.
-   Light theme only — simple, flat, no heavy effects. */
+/* HamzaEditz UI v5.1 — clean Play Store-style theme (CSS). The brand
+   header lives ONLY on the tools page (home.html); tool pages get no
+   injected header/hero/footer (user order 2026-11-05). Full-screen
+   app pages get one tiny Home link. Light theme only. */
 (() => {
   const root = document.documentElement;
   root.dataset.theme = 'light';
@@ -77,10 +77,10 @@ const PAGES = {
     }
   }
   function build() {
-    if (!document.body || document.querySelector('.hz-header,.hz-backlink')) return;
+    if (!document.body || document.querySelector('.hz-backlink')) return;
     const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-    if (file === 'index.html' || file === '') return; /* splash page: standalone */
-    if (file === 'home.html') { manifestLink(); return; } /* home has its own header/footer */
+    if (file === 'index.html' || file === '') return; /* splash: standalone */
+    if (file === 'home.html') { manifestLink(); return; } /* tools page keeps its own header */
     if (APP_PAGES.indexOf(file) > -1) {
       root.classList.add('hz-app');
       const back = document.createElement('a');
@@ -89,30 +89,8 @@ const PAGES = {
       document.body.appendChild(back);
       return;
     }
-    const cfg = PAGES[file] || ['spark', '#01875f', '#01a374', 'A free HamzaEditz tool.'];
-    const header = document.createElement('header');
-    header.className = 'hz-header';
-    header.innerHTML = '<div class="hz-header-in">' +
-      '<a class="hz-brand" href="home.html">' + LOGO + 'HamzaEditz <span class="hz-tag">FREE</span></a>' +
-      '<nav class="hz-nav"><a href="home.html">Home</a><a href="home.html#tools">Tools</a>' +
-      '<a href="about.html">About</a></nav></div>';
-    document.body.insertBefore(header, document.body.firstChild);
-
-    const metaDesc = document.querySelector('meta[name="description"]');
-    const hero = document.createElement('section');
-    hero.className = 'hz-hero';
-    hero.innerHTML = '<div class="hz-medal" style="--c1:' + cfg[1] + ';--c2:' + cfg[2] + '">' + (I[cfg[0]] || I.spark) + '</div>' +
-      '<div><div class="hz-eyebrow">HamzaEditz</div><h1></h1><p></p></div>';
-    hero.querySelector('h1').textContent = cleanTitle();
-    hero.querySelector('p').textContent = (metaDesc && metaDesc.getAttribute('content')) || cfg[3];
-    header.after(hero);
-
-    const foot = document.createElement('footer');
-    foot.className = 'hz-foot';
-    foot.innerHTML = '<div class="hz-foot-in"><span class="hz-fbrand">' + LOGO + 'HamzaEditz</span>' +
-      '<span>\u00a9 ' + new Date().getFullYear() + ' HamzaEditz \u00b7 hamzaeditz.tech' +
-      '<a href="home.html#tools">All tools</a><a href="about.html">About</a></span></div>';
-    document.body.appendChild(foot);
+    /* Tool pages: NO site header/hero/footer (user order 2026-11-05) —
+       the brand header lives only on the tools page (home.html). */
     manifestLink();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build); else build();
