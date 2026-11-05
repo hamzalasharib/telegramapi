@@ -1,12 +1,25 @@
 {
  "latest": {
-  "versionName": "2.3",
-  "versionCode": 5,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.3.apk",
-  "notes": "Bottom navigation like Dhunn: Home, Search and Library tabs, with categories — Albums, Artists, Folders and Favorites — on Home and in the Library.",
+  "versionName": "2.4",
+  "versionCode": 6,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.4.apk",
+  "notes": "Fixed: volume jumping up on Next song. Icons instead of colour dots, and song cards with rounded covers.",
   "forceUpdate": false
  },
  "changelog": [
+  {
+   "version": "2.4",
+   "versionName": "2.4",
+   "versionCode": 6,
+   "date": "2026-11-05",
+   "notes": "Fixed: volume jumping up on Next song. Icons instead of colour dots, and song cards with rounded covers.",
+   "changes": [
+    "FIXED: volume jumping up when the next song starts — the player now keeps one player and one audio session for the whole queue, so the EQ/bass/loudness chain is set up once and never rebuilt per song",
+    "Icons everywhere: category and Settings cards now show real icons (album, artist, folder, heart, palette, equalizer, battery and more) instead of plain colour dots",
+    "Song lists are now cards: every row in Library, Search and Home is a rounded card",
+    "Cover images inside the cards have rounded corners, and the mini player cover is rounded too"
+   ]
+  },
   {
    "version": "2.3",
    "versionName": "2.3",
