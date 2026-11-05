@@ -291,10 +291,16 @@
             resultsArea.innerHTML = '';
             
             const encodedPrompt = encodeURIComponent(prompt);
-            const apiUrl = `${BASE_API_URL}?prompt=${encodedPrompt}&aspectRatio=${aspectRatio}`;
+            const ownUrl = `/api/image?prompt=${encodedPrompt}&aspectRatio=${aspectRatio}`;
 
             try {
-                const response = await fetch(apiUrl);
+                let response;
+                try {
+                    response = await fetch(ownUrl);
+                    if (!response.ok) throw new Error('own api');
+                } catch (e) {
+                    response = await fetch(`${BASE_API_URL}?prompt=${encodedPrompt}&aspectRatio=${aspectRatio}`);
+                }
                 const data = await response.json();
 
                 if (data.success && data.images && data.images.length > 0) {

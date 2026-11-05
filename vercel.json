@@ -1,8 +1,25 @@
 {
   "functions": {
-    "api/verify.py": { "maxDuration": 60 },
-    "api/spot.py": { "maxDuration": 60 },
-    "api/hadith.py": { "maxDuration": 30 },
-    "api/jazz.py": { "maxDuration": 30 }
+    "api/verify.py": {
+      "maxDuration": 60
+    },
+    "api/spot.py": {
+      "maxDuration": 60
+    },
+    "api/hadith.py": {
+      "maxDuration": 30
+    },
+    "api/jazz.py": {
+      "maxDuration": 30
+    },
+    "api/tiktok.py": {
+      "maxDuration": 30
+    },
+    "api/image.py": {
+      "maxDuration": 60
+    },
+    "api/tools.py": {
+      "maxDuration": 10
+    }
   }
 }
