@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,41 +9,39 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2334d399'/%3E%3Cstop offset='.5' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='url(%23g)'/%3E%3Crect x='27' y='25' width='11' height='50' rx='4' fill='white'/%3E%3Crect x='62' y='25' width='11' height='50' rx='4' fill='white'/%3E%3Crect x='38' y='44' width='24' height='11' rx='4' fill='white'/%3E%3Cpath d='M46 38.5v23l20-11.5z' fill='%230b101d'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="hamza-ui.css">
+
+
 <style>
-.sp{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 22px 26px;position:relative;overflow:hidden}
-.sp-logo{position:relative;width:128px;height:128px;display:grid;place-items:center;animation:hzFadeUp .7s cubic-bezier(.16,1,.3,1) both}
-.sp-logo::before{content:"";position:absolute;inset:-16px;border-radius:50%;border:2px dashed rgba(34,211,238,.45);animation:hzSpin 16s linear infinite}
-.sp-logo::after{content:"";position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.22),transparent 65%)}
-.sp-logo svg{width:112px;height:112px;filter:drop-shadow(0 22px 44px rgba(34,211,238,.4));animation:hzFloat 5.5s ease-in-out infinite}
-.sp-wel{margin-top:38px;font-size:.78rem;font-weight:800;letter-spacing:.34em;text-transform:uppercase;color:var(--hz-accent);animation:hzFadeUp .7s .08s cubic-bezier(.16,1,.3,1) both}
-.sp h1{font-size:clamp(2.5rem,9vw,4.2rem);font-weight:800;margin:10px 0 0;line-height:1.05;animation:hzFadeUp .7s .16s cubic-bezier(.16,1,.3,1) both}
-.sp h1 .grad{background:var(--hz-grad);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hzGradPan 6s ease infinite}
-.sp p{color:var(--hz-muted);max-width:460px;line-height:1.65;font-size:1rem;margin:16px 0 0;animation:hzFadeUp .7s .24s cubic-bezier(.16,1,.3,1) both}
-.sp-enter{margin-top:32px;display:inline-flex;align-items:center;gap:11px;padding:16px 34px;border-radius:999px;background:var(--hz-grad);background-size:180% 180%;animation:hzGradPan 6s ease infinite,hzFadeUp .7s .32s cubic-bezier(.16,1,.3,1) both;color:#fff!important;text-decoration:none!important;font-weight:800;font-size:1.02rem;box-shadow:0 20px 42px -12px rgba(34,211,238,.55);transition:transform .25s}
-.sp-enter:hover{transform:translateY(-3px) scale(1.02)}
-.sp-enter svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.sp-chips{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:26px;animation:hzFadeUp .7s .4s cubic-bezier(.16,1,.3,1) both}
-.sp-chips span{font-size:.78rem;font-weight:700;color:var(--hz-fg2);border:1px solid var(--hz-line);background:var(--hz-card);padding:7px 13px;border-radius:99px}
-.sp-social{display:flex;gap:12px;margin-top:30px;animation:hzFadeUp .7s .48s cubic-bezier(.16,1,.3,1) both}
-.sp-social a{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;border:1px solid var(--hz-line);background:var(--hz-card);transition:.25s}
-.sp-social a:hover{transform:translateY(-3px);border-color:var(--hz-line2)}
-.sp-social svg{width:21px;height:21px;fill:var(--hz-fg2)}
-.sp-foot{margin-top:34px;font-size:.78rem;color:var(--hz-muted2);animation:hzFadeUp .7s .56s cubic-bezier(.16,1,.3,1) both}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--green:#01875f;--green-d:#017a55;--ink:#202124;--mut:#5f6368;--line:#e8eaed}
+body{font-family:Roboto,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#fff;color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.sp{max-width:560px;margin:0 auto;padding:64px 24px 40px;text-align:center}
+.sp-logo svg{width:84px;height:84px;border-radius:20px;box-shadow:0 4px 14px rgba(0,0,0,.16)}
+.sp-wel{color:var(--mut);font-size:.9rem;margin-top:22px}
+.sp h1{font-size:2.1rem;font-weight:600;letter-spacing:-.01em;margin-top:2px}
+.sp p{color:var(--mut);font-size:.95rem;max-width:430px;margin:10px auto 0}
+.sp-enter{display:block;max-width:430px;margin:26px auto 0;background:var(--green);color:#fff;text-align:center;font-weight:600;font-size:1rem;padding:13px 20px;border-radius:10px;text-decoration:none}
+.sp-enter:hover{background:var(--green-d)}
+.sp-tags{color:var(--mut);font-size:.82rem;margin-top:16px}
+.sp-social{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.sp-social a{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:9px 16px;color:var(--ink);text-decoration:none;font-size:.88rem;font-weight:600}
+.sp-social a svg{width:17px;height:17px;fill:var(--green)}
+.sp-foot{margin-top:34px;color:var(--mut);font-size:.78rem}
 </style>
 </head>
 <body>
 <main class="sp">
-  <div class="sp-logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="splg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset=".5" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#splg)"/><rect x="27" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="62" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="38" y="44" width="24" height="11" rx="4" fill="#fff"/><path d="M46 38.5v23l20-11.5z" fill="#0b101d" opacity=".92"/></svg></div>
-  <div class="sp-wel">Welcome to</div>
-  <h1>Hamza<span class="grad">Editz</span></h1>
-  <p>Free tools, RDP guides, apps aur bohat kuch — sab kuch aik hi jaga, bilkul free. Andar chal kar apna tool chuno aur shuru karo.</p>
-  <a class="sp-enter" href="home.html">Open App <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-  <div class="sp-chips"><span>Free Tools</span><span>RDP Guides</span><span>Apps</span><span>No Sign-Up</span></div>
-  <div class="sp-social">
-    <a href="https://www.youtube.com/@hamzashafiq786" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23 12s0-3.85-.46-5.58a2.9 2.9 0 0 0-2-2C18.75 4 12 4 12 4s-6.75 0-8.54.42a2.9 2.9 0 0 0-2 2C1 8.15 1 12 1 12s0 3.85.46 5.58a2.9 2.9 0 0 0 2 2C5.25 20 12 20 12 20s6.75 0 8.54-.42a2.9 2.9 0 0 0 2-2C23 15.85 23 12 23 12ZM9.75 15.5v-7L15.5 12Z"/></svg></a>
-    <a href="https://t.me/hamzaeditz2" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21.9 4.4 19 19.5c-.2 1-.8 1.2-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.3-4.7 8.5-7.7c.4-.3-.1-.5-.6-.2L7.6 13.2 3.1 11.8c-1-.3-1-1 .2-1.4l17.6-6.8c.8-.3 1.5.2 1 .8Z"/></svg></a>
-  </div>
-  <div class="sp-foot">hamzaeditz.tech — made by Hamza Shafiq</div>
+<div class="sp-logo"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="hzlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset=".5" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#hzlg)"/><rect x="27" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="62" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="38" y="44" width="24" height="11" rx="4" fill="#fff"/><path d="M46 38.5v23l20-11.5z" fill="#0b101d" opacity=".92"/></svg></div>
+<div class="sp-wel">Welcome to</div>
+<h1>HamzaEditz</h1>
+<p>Free tools, RDP guides, apps aur bohat kuch — sab kuch aik hi jaga, bilkul free. Andar chal kar apna tool chuno aur shuru karo.</p>
+<a class="sp-enter" href="home.html">Open App</a>
+<div class="sp-tags">Free Tools · RDP Guides · Apps · No Sign-Up</div>
+<div class="sp-social">
+<a href="https://www.youtube.com/@hamzashafiq786" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M23 12s0-3.85-.46-5.58a2.9 2.9 0 0 0-2-2C18.75 4 12 4 12 4s-6.75 0-8.54.42a2.9 2.9 0 0 0-2 2C1 8.15 1 12 1 12s0 3.85.46 5.58a2.9 2.9 0 0 0 2 2C5.25 20 12 20 12 20s6.75 0 8.54-.42a2.9 2.9 0 0 0 2-2C23 15.85 23 12 23 12ZM9.75 15.5v-7L15.5 12Z"/></svg>YouTube</a>
+<a href="https://t.me/hamzaeditz2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M21.9 4.4 19 19.5c-.2 1-.8 1.2-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.3-4.7 8.5-7.7c.4-.3-.1-.5-.6-.2L7.6 13.2 3.1 11.8c-1-.3-1-1 .2-1.4l17.6-6.8c.8-.3 1.5.2 1 .8Z"/></svg>Telegram</a>
+</div>
+<div class="sp-foot">hamzaeditz.tech — made by Hamza Shafiq</div>
 </main>
 </body>
 </html>

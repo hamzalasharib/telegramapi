@@ -1,16 +1,14 @@
-/* HamzaEditz UI v4 — built from scratch. Injects one shared shell
-   (header, hero, footer) on content pages and a floating brand pill
-   on full-screen app pages. Theme is saved as 'hamza-theme'. */
+/* HamzaEditz UI v5 — clean Play Store-style shell, same spirit as the
+   Dhunn page: a plain header, an app-style page head and a small footer
+   on content pages; full-screen app pages get one tiny Home link.
+   Light theme only — simple, flat, no heavy effects. */
 (() => {
   const root = document.documentElement;
-  const saved = localStorage.getItem('hamza-theme') || localStorage.getItem('material-theme');
-  if (!root.dataset.theme) root.dataset.theme = saved || 'dark';
+  root.dataset.theme = 'light';
 
-  const LOGO = '<svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="hzlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset=".5" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#hzlg)"/><rect x="27" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="62" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="38" y="44" width="24" height="11" rx="4" fill="#fff"/><path d="M46 38.5v23l20-11.5z" fill="#0b101d" opacity=".92"/></svg>';
-  const SUN = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
-  const MOON = '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+const LOGO = '<svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="hzlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset=".5" stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#hzlg)"/><rect x="27" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="62" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="38" y="44" width="24" height="11" rx="4" fill="#fff"/><path d="M46 38.5v23l20-11.5z" fill="#0b101d" opacity=".92"/></svg>';
 
-  const I = {
+const I = {
     download: '<svg viewBox="0 0 24 24"><g class="hz-anim-arrow"><path d="m7 9 5 5 5-5"/><path d="M12 14V3"/></g><path d="M21 15v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3"/></svg>',
     music: '<svg viewBox="0 0 24 24"><rect class="hz-eq" x="4" y="9" width="3.4" height="9" rx="1.7" fill="#fff" stroke="none"/><rect class="hz-eq e2" x="10.3" y="5" width="3.4" height="13" rx="1.7" fill="#fff" stroke="none"/><rect class="hz-eq e3" x="16.6" y="8" width="3.4" height="10" rx="1.7" fill="#fff" stroke="none"/></svg>',
     image: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>',
@@ -30,8 +28,7 @@
     spark: '<svg viewBox="0 0 24 24"><path class="hz-anim-spin" d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg>'
   };
 
-  /* filename (lowercase, no folder) -> [icon, c1, c2, subtitle] */
-  const PAGES = {
+const PAGES = {
     'tiktok.html': ['download', '#ec4899', '#8b5cf6', 'Download TikTok videos without a watermark, in original quality.'],
     'tiktokmenu.html': ['download', '#ec4899', '#8b5cf6', 'Every TikTok tool in one menu. Pick what you need and go.'],
     'v2.html': ['download', '#ec4899', '#8b5cf6', 'TikTok Downloader Engine 1 — fast, direct video saving.'],
@@ -72,35 +69,6 @@
     let t = (document.title || 'HamzaEditz').replace(/\s*[|–—-]\s*HamzaEditz.*$/i, '').replace(/^HamzaEditz 2\.0\s*[-–—]\s*/i, '').trim();
     return t || 'HamzaEditz';
   }
-  function toggleBtn() {
-    const b = document.createElement('button');
-    b.className = 'hz-toggle'; b.type = 'button'; b.setAttribute('aria-label', 'Toggle color theme');
-    const upd = () => { b.innerHTML = root.dataset.theme === 'dark' ? SUN : MOON; };
-    b.addEventListener('click', () => {
-      root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('hamza-theme', root.dataset.theme); upd();
-    });
-    upd(); return b;
-  }
-
-  const TABS = [
-    ['home.html', 'Home', '<svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>'],
-    ['home.html#tools', 'Tools', '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'],
-    ['RdpMethod.html', 'RDP', '<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2.5"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>'],
-    ['about.html', 'About', '<svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>']
-  ];
-  function tabBar(file) {
-    if (document.querySelector('.hz-tabbar')) return;
-    const nav = document.createElement('nav');
-    nav.className = 'hz-tabbar'; nav.setAttribute('aria-label', 'App');
-    nav.innerHTML = TABS.map(function (t) {
-      const target = t[0].split('#')[0].toLowerCase();
-      const on = target === file || (t[0].indexOf('#tools') > -1 && file === 'home.html' && location.hash === '#tools');
-      return '<a href="' + t[0] + '"' + (on ? ' class="on"' : '') + '>' + t[2] + t[1] + '</a>';
-    }).join('');
-    document.body.appendChild(nav);
-    document.body.classList.add('hz-has-tab');
-  }
   function manifestLink() {
     if (!document.querySelector('link[rel="manifest"]')) {
       const l = document.createElement('link');
@@ -109,35 +77,32 @@
     }
   }
   function build() {
-    if (!document.body || document.querySelector('.hz-header,.hz-pill')) return;
+    if (!document.body || document.querySelector('.hz-header,.hz-backlink')) return;
     const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-    if (file === 'index.html' || file === '') return; /* splash page: standalone, no shell */
-    if (file === 'home.html') { manifestLink(); tabBar(file); return; } /* home has its own header/footer */
+    if (file === 'index.html' || file === '') return; /* splash page: standalone */
+    if (file === 'home.html') { manifestLink(); return; } /* home has its own header/footer */
     if (APP_PAGES.indexOf(file) > -1) {
       root.classList.add('hz-app');
-      const pill = document.createElement('div');
-      pill.className = 'hz-pill';
-      pill.innerHTML = '<a class="hz-pbrand" href="home.html">' + LOGO + '<span>HamzaEditz</span></a>' +
-        '<a class="hz-phome" href="home.html">Home</a>';
-      pill.appendChild(toggleBtn());
-      document.body.appendChild(pill);
+      const back = document.createElement('a');
+      back.className = 'hz-backlink'; back.href = 'home.html';
+      back.textContent = '\u2190 HamzaEditz Home';
+      document.body.appendChild(back);
       return;
     }
-    const cfg = PAGES[file] || ['spark', '#10b981', '#22d3ee', 'A free HamzaEditz tool — fast, simple and open to everyone.'];
+    const cfg = PAGES[file] || ['spark', '#01875f', '#01a374', 'A free HamzaEditz tool — fast, simple and open to everyone.'];
     const header = document.createElement('header');
     header.className = 'hz-header';
     header.innerHTML = '<div class="hz-header-in">' +
-      '<a class="hz-brand" href="home.html">' + LOGO + 'HamzaEditz <span class="hz-tag">2.0</span></a>' +
+      '<a class="hz-brand" href="home.html">' + LOGO + 'HamzaEditz <span class="hz-tag">FREE</span></a>' +
       '<nav class="hz-nav"><a href="home.html">Home</a><a href="home.html#tools">Tools</a>' +
-      '<a href="welcome.html" class="hz-hide-s">Welcome</a><a href="about.html">About</a></nav></div>';
-    header.querySelector('.hz-nav').appendChild(toggleBtn());
+      '<a href="about.html">About</a></nav></div>';
     document.body.insertBefore(header, document.body.firstChild);
 
     const metaDesc = document.querySelector('meta[name="description"]');
     const hero = document.createElement('section');
     hero.className = 'hz-hero';
     hero.innerHTML = '<div class="hz-medal" style="--c1:' + cfg[1] + ';--c2:' + cfg[2] + '">' + (I[cfg[0]] || I.spark) + '</div>' +
-      '<div><div class="hz-eyebrow">HamzaEditz Tool</div><h1></h1><p></p></div>';
+      '<div><div class="hz-eyebrow">HamzaEditz</div><h1></h1><p></p></div>';
     hero.querySelector('h1').textContent = cleanTitle();
     hero.querySelector('p').textContent = (metaDesc && metaDesc.getAttribute('content')) || cfg[3];
     header.after(hero);
@@ -145,11 +110,10 @@
     const foot = document.createElement('footer');
     foot.className = 'hz-foot';
     foot.innerHTML = '<div class="hz-foot-in"><span class="hz-fbrand">' + LOGO + 'HamzaEditz</span>' +
-      '<span>© ' + new Date().getFullYear() + ' HamzaEditz · hamzaeditz.tech' +
+      '<span>\u00a9 ' + new Date().getFullYear() + ' HamzaEditz \u00b7 hamzaeditz.tech' +
       '<a href="home.html#tools">All tools</a><a href="about.html">About</a></span></div>';
     document.body.appendChild(foot);
     manifestLink();
-    tabBar(file);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build); else build();
 })();
