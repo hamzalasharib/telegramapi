@@ -14,15 +14,21 @@ class handler(BaseHTTPRequestHandler):
         ratio = (qs.get("aspectRatio") or ["1:1"])[0].strip()
         if not prompt:
             return self._send({"success": False, "message": "Missing prompt"})
-        api = ("https://famofc.site/api/generate.php?prompt=" + urllib.parse.quote(prompt)
-               + "&aspectRatio=" + urllib.parse.quote(ratio))
-        req = urllib.request.Request(api, headers={"User-Agent": "Mozilla/5.0 (HamzaEditz)"})
-        try:
-            with urllib.request.urlopen(req, timeout=55) as r:
-                data = json.loads(r.read().decode("utf-8", "ignore"))
-            return self._send(data)
-        except Exception as e:
-            return self._send({"success": False, "message": "Upstream error: %s" % e}, 502)
+        query = ("?prompt=" + urllib.parse.quote(prompt)
+                 + "&aspectRatio=" + urllib.parse.quote(ratio))
+        # famofc.site's HTTPS rejects datacenter TLS handshakes (verified
+        # 2026-11-05: curl/python https fail, plain http answers 200), so
+        # try https first, then fall back to http.
+        last_err = None
+        for base in ("https://famofc.site/api/generate.php", "http://famofc.site/api/generate.php"):
+            req = urllib.request.Request(base + query, headers={"User-Agent": "Mozilla/5.0 (HamzaEditz)"})
+            try:
+                with urllib.request.urlopen(req, timeout=50) as r:
+                    data = json.loads(r.read().decode("utf-8", "ignore"))
+                return self._send(data)
+            except Exception as e:
+                last_err = e
+        return self._send({"success": False, "message": "Upstream error: %s" % last_err}, 502)
 
     def _send(self, obj, status=200):
         body = json.dumps(obj).encode()
