@@ -1,12 +1,24 @@
 {
  "latest": {
-  "versionName": "2.0",
-  "versionCode": 2,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.0.apk",
-  "notes": "The FULL Dhunn, now in Java: synced lyrics with 240 effects, 52 animated album-art designs, HD covers, the full equalizer, Monetag ads and the Support page — everything the Flutter app has, in just 306 KB.",
+  "versionName": "2.1",
+  "versionCode": 3,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.1.apk",
+  "notes": "Crash fix: the app could close on the player when a song had no cover art (or in the art-design gallery before covers loaded). The placeholder cover is now drawn safely in code.",
   "forceUpdate": false
  },
  "changelog": [
+  {
+   "version": "2.1",
+   "versionName": "2.1",
+   "versionCode": 3,
+   "date": "2026-11-05",
+   "notes": "Crash fix: the app could close on the player when a song had no cover art (or in the art-design gallery before covers loaded).",
+   "changes": [
+    "Fixed: app closing on the player for songs without cover art",
+    "Fixed: same crash in the album-art design gallery",
+    "Placeholder covers are now drawn in code (brand disc + note) instead of a broken image"
+   ]
+  },
   {
    "version": "2.0",
    "versionName": "2.0",
