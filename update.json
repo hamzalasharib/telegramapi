@@ -2,6 +2,19 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "version": "2.30.0",
+   "versionName": "2.30.0",
+   "versionCode": 38,
+   "date": "2026-11-05",
+   "notes": "Volume-spike fix + 24 progress-bar designs for the player.",
+   "changes": [
+    "Fixed: volume jumping up then coming back down when the first song plays — the equalizer now loads your saved sound first and switches on last, in one clean step",
+    "New: 24 progress-bar designs — Kitty Cat, Spider Web, Arc Core, Smash Green, Neon Glow, Rainbow, Waveform, Heartbeat, Piano Keys, Vinyl, Galaxy, Gold, Lava, Sakura and more",
+    "Pick yours in Settings -> Player & Lyrics -> Progress bar style, or long-press the progress bar in the player",
+    "All designs are drawn in code (no images) — the app stays the same light size"
+   ]
+  },
+  {
    "version": "2.29.0",
    "versionName": "2.29.0",
    "versionCode": 37,
@@ -310,10 +323,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.29.0",
-  "versionCode": 37,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.29.0.apk",
-  "notes": "Support page updated: DPay removed — now you can support Dhunn directly via JazzCash, NayaPay or Easypaisa (one number, copy buttons) or Binance Pay.",
+  "versionName": "2.30.0",
+  "versionCode": 38,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.30.0.apk",
+  "notes": "Fixed: volume jumping up then settling down on the first song. New: 24 progress-bar designs for the player — Kitty Cat, Spider Web, Arc Core, Smash Green, Neon, Galaxy, Piano and more (Settings -> Player & Lyrics -> Progress bar style, or long-press the bar).",
   "forceUpdate": false
  }
 }
