@@ -722,6 +722,12 @@
 
       // 403 Forbidden & CORS Bypass Relay
       const proxyPipelines = [
+        // 0. Own API (server-side — no CORS, no proxy needed)
+        async () => {
+          const r = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
+          if (!r.ok) throw new Error("Own API error");
+          return await r.json();
+        },
         // 1. Allorigins JSON wrap (Worker headers ko neutralize karke clean content lata hai)
         async () => {
           const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetEndpoint)}`);

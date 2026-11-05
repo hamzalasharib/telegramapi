@@ -65,6 +65,11 @@ body { background: #f2f6f2; font-family: 'Poppins', sans-serif; color: #10241a; 
 <link rel="stylesheet" href="hamza-ui.css"><script src="hamza-ui.js" defer></script><script src="hamza-ads.js" defer></script>
 </head>
 <body>
+<script>
+/* API-first: route AlQuran Cloud calls through /api/quran, direct as fallback */
+(function(){ var of = window.fetch; window.fetch = function(u, o){ var s = String(u); var B = 'https://api.alquran.cloud/v1/'; if (s.indexOf(B) === 0) { var p = s.slice(B.length); return of('/api/quran?path=' + encodeURIComponent(p)).then(function(r){ return r.ok ? r : of(u, o); }, function(){ return of(u, o); }); } return of(u, o); }; })();
+</script>
+
 <div id="home-view" class="max-w-4xl mx-auto p-6">
   <header class="text-center py-10">
     <h1 class="arabic-font text-5xl mb-6" style="color:#1f7a4d;">القرآن الكريم</h1>

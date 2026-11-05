@@ -20,6 +20,18 @@
     },
     "api/tools.py": {
       "maxDuration": 10
+    },
+    "api/tv.py": {
+      "maxDuration": 30
+    },
+    "api/profile.py": {
+      "maxDuration": 30
+    },
+    "api/quran.py": {
+      "maxDuration": 30
+    },
+    "api/instagram.py": {
+      "maxDuration": 30
     }
   }
 }

@@ -25,7 +25,7 @@ TOOLS = [
     {"id": "image", "name": "AI Image Generator", "desc": "Generate AI images from a text prompt.",
      "page": "image.html", "icon": "image", "colors": ["#f43f5e", "#f59e0b"], "new": False, "api": "/api/image"},
     {"id": "tv", "name": "Jazz TV", "desc": "Watch live TV channels.",
-     "page": "TvChannels.html", "icon": "tv", "colors": ["#10b981", "#84cc16"], "new": False, "api": None},
+     "page": "TvChannels.html", "icon": "tv", "colors": ["#10b981", "#84cc16"], "new": False, "api": "/api/tv"},
     {"id": "hadith", "name": "Hadith Collection", "desc": "Search Hadith by book and chapter.",
      "page": "hadith.html", "icon": "book", "colors": ["#eab308", "#f97316"], "new": False, "api": "/api/hadith"},
     {"id": "rdp", "name": "Free Windows RDP", "desc": "Step-by-step guide for a free Windows RDP.",
