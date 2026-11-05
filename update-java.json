@@ -1,0 +1,77 @@
+{
+ "latest": {
+  "versionName": "2.0",
+  "versionCode": 2,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.0.apk",
+  "notes": "The FULL Dhunn, now in Java: synced lyrics with 240 effects, 52 animated album-art designs, HD covers, the full equalizer, Monetag ads and the Support page — everything the Flutter app has, in just 306 KB.",
+  "forceUpdate": false
+ },
+ "changelog": [
+  {
+   "version": "2.0",
+   "versionName": "2.0",
+   "versionCode": 2,
+   "date": "2026-11-05",
+   "notes": "The full copy: everything from the Flutter Dhunn, rebuilt in pure Java.",
+   "changes": [
+    "Everything added: this is now the complete Dhunn, not the simple player",
+    "Synced lyrics from LRCLIB with offline cache, sidecar .lrc files, custom lyrics editor and bulk download",
+    "240 lyrics effects in a grid with live previews, plus custom lyrics colour",
+    "52 animated album-art designs with a live-preview gallery",
+    "HD covers from iTunes and Deezer — single or bulk, with a Downloads screen",
+    "Full equalizer: this phone's own bands, system + custom presets, Bass Boost, Virtualizer, Loudness",
+    "Accent colours, cover-matched theme, Fluid Beat, switchable app icons",
+    "Library filters (short clips, folders), sort orders, song menu (Share, Rename, Details, Delete)",
+    "Session restore, battery banner, Monetag ads with the same friendly rules",
+    "Support Dhunn page with JazzCash, NayaPay, Easypaisa and Binance Pay",
+    "All of it in 306 KB — the Flutter edition is 10.5 MB"
+   ]
+  },
+  {
+   "version": "1.0",
+   "versionName": "1.0",
+   "versionCode": 1,
+   "date": "2026-11-05",
+   "notes": "First Java test build: the core player only.",
+   "changes": [
+    "Core player: song list, search, player screen, background playback with notification controls",
+    "Shuffle, repeat and favorites",
+    "Just 106 KB — the size experiment that started it all"
+   ]
+  }
+ ],
+ "faqs": [
+  {
+   "a": "Yes — Dhunn is completely free. No ads, no subscriptions, no locked features.",
+   "q": "Is Dhunn free?"
+  },
+  {
+   "a": "No. Your songs play fully offline from your phone. Internet is only used for lyrics, HD cover images and checking for updates.",
+   "q": "Does Dhunn need an internet connection?"
+  },
+  {
+   "a": "Only for the Fluid Beat background: the app listens to the music's beat (not your voice) to animate the background. Nothing is ever recorded or sent anywhere.",
+   "q": "Why does Dhunn ask for microphone permission?"
+  },
+  {
+   "a": "When a new version is released, Dhunn shows an update message automatically. You can also check any time in Settings → Updates & FAQs → Check for updates.",
+   "q": "How do I update Dhunn?"
+  },
+  {
+   "a": "Make sure you allowed the Music & audio permission, then go to Settings → My Library and scan your device again.",
+   "q": "My songs are not showing up. What do I do?"
+  },
+  {
+   "a": "Yes. Open the song, tap the edit (pencil) icon near the lyrics, and pick a lyrics file or write/paste your own. Your lyrics are saved and used offline.",
+   "q": "Lyrics are missing for a song. Can I add my own?"
+  },
+  {
+   "a": "No. There is no account, no sign-up and no tracking. Your music and your data never leave your phone.",
+   "q": "Does Dhunn collect my personal data?"
+  },
+  {
+   "a": "While a song is playing, tap the style icon at the top of the player — or go to Settings → Player & Lyrics → Album art style. There are 11 styles with a live preview.",
+   "q": "How do I change the album art style?"
+  }
+ ]
+}
