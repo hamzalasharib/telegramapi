@@ -202,7 +202,7 @@
         formatHint.textContent = "Sirf digits (0-9) istemal karein.";
         formatHint.style.display = "block";
       } else if (number.length > 0 && !/^92.*/.test(number)) {
-        formatHint.textContent = "Number 92 se shuru hona chahiye.";
+        formatHint.textContent = "Number must start with 92.";
         formatHint.style.display = "block";
       } else if (number.length > 12) {
         formatHint.textContent = "Number cannot be more than 12 digits.";
