@@ -2,6 +2,11 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "versionName": "2.28.0",
+   "versionCode": 36,
+   "notes": "Removed: the UI themes experiment — the app is back to its clean original look with the colour presets. Album art: all 52 designs are now animated (spinning discs/reels, pulsing glows, swaying frames, dancing EQ and wave bars) using light transform animations that do not cause lag, and they pause when the music pauses. Lyrics effects: previews in the grid are now LIVE animations — each card plays the effect on sample lines so you can see it before selecting."
+  },
+  {
    "versionName": "2.27.0",
    "versionCode": 35,
    "notes": "Fixed: the app no longer pops up a song-count message on every open. NEW UI Themes (Settings → Appearance): Original, Liquid Glass (iPhone frosted glass), YouTube Music, Samsung One UI, SoundCloud, Spotify, Apple Music. Album art designs: 17 → 52. Lyrics effects: 120 → 240, now in a grid with live previews, plus your own custom lyrics colour. Support Dhunn page (Settings): Binance Pay & DPay."
@@ -255,10 +260,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.27.0",
-  "versionCode": 35,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.27.0.apk",
-  "notes": "Big update: no more song-count popup on every open; album art designs now 52; lyrics effects doubled to 240 with grid previews and a custom lyrics colour; 7 whole-app UI themes including Liquid Glass (iPhone style), YouTube Music, Samsung One UI, SoundCloud, Spotify and Apple Music; new Support page with Binance Pay & DPay.",
+  "versionName": "2.28.0",
+  "versionCode": 36,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.28.0.apk",
+  "notes": "UI themes removed (back to Dhunn's clean original look, colour presets as before). Album art designs are now ANIMATED — spinning discs and reels, pulsing glows, dancing EQ bars — smooth, no lag. Lyrics effect previews are now LIVE: watch each effect animate in the grid before you pick it.",
   "forceUpdate": false
  },
  "support": {
