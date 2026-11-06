@@ -2,6 +2,20 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "version": "2.31.0",
+   "versionName": "2.31.0",
+   "versionCode": 39,
+   "date": "2026-11-06",
+   "notes": "Lyrics/covers fetch fixes, home-screen widget with live lyrics, theme ripple.",
+   "changes": [
+    "Fixed: lyrics missing for many songs — the LRCLIB request was missing a required field, so exact matches never worked; search is smarter now too",
+    "Fixed: HD covers missing for many songs — cover matching is no longer over-strict, and the retry wait after a failed lookup is 1 day instead of 7",
+    "Fixed: bulk lyrics download now retries songs it missed instead of marking them done",
+    "New: home-screen player widget — cover on top, play/pause/next/back controls, and the live lyric line underneath",
+    "New: switching themes, accents or dark/light now plays a ripple animation in the new colour"
+   ]
+  },
+  {
    "version": "2.30.0",
    "versionName": "2.30.0",
    "versionCode": 38,
@@ -323,10 +337,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.30.0",
-  "versionCode": 38,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.30.0.apk",
-  "notes": "Fixed: volume jumping up then settling down on the first song. New: 24 progress-bar designs for the player — Kitty Cat, Spider Web, Arc Core, Smash Green, Neon, Galaxy, Piano and more (Settings -> Player & Lyrics -> Progress bar style, or long-press the bar).",
+  "versionName": "2.31.0",
+  "versionCode": 39,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.31.0.apk",
+  "notes": "Lyrics and covers fixed (they now fetch like the Java edition), a home-screen player widget with live lyrics, and a ripple animation when you switch themes.",
   "forceUpdate": false
  }
 }
