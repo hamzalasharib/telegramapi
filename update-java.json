@@ -1,12 +1,24 @@
 {
  "latest": {
-  "versionName": "2.5",
-  "versionCode": 7,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.5.apk",
-  "notes": "New custom seek bar — smooth, big thumb, cover-matched colour — plus a polished player and navigation UI.",
+  "versionName": "2.6",
+  "versionCode": 8,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.6.apk",
+  "notes": "Lyrics now show in full — long lines wrap instead of being cut off with '…'. Includes the v2.5 custom seek bar.",
   "forceUpdate": false
  },
  "changelog": [
+  {
+   "version": "2.6",
+   "versionName": "2.6",
+   "versionCode": 8,
+   "date": "2026-11-06",
+   "notes": "Lyrics now show in full — long lines wrap instead of being cut off with '…'. Includes the v2.5 custom seek bar.",
+   "changes": [
+    "FIXED: lyrics were cut off — every long line ended with '…' because lines were forced onto one row. Lines now wrap onto 2–3 rows and show in full",
+    "Smooth scrolling, tap-a-line-to-seek and all 240 lyrics effects work with the new wrapped layout",
+    "Includes everything from v2.5: the custom Dhunn seek bar (big glowing thumb, tap-anywhere, cover-matched colour), Art / Lyrics FX chips in the player, the bottom-nav pill and the mini-player progress line"
+   ]
+  },
   {
    "version": "2.5",
    "versionName": "2.5",
