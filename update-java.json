@@ -1,12 +1,28 @@
 {
  "latest": {
-  "versionName": "2.4",
-  "versionCode": 6,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.4.apk",
-  "notes": "Fixed: volume jumping up on Next song. Icons instead of colour dots, and song cards with rounded covers.",
+  "versionName": "2.5",
+  "versionCode": 7,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-java/DHUNN-JAVA-v2.5.apk",
+  "notes": "New custom seek bar — smooth, big thumb, cover-matched colour — plus a polished player and navigation UI.",
   "forceUpdate": false
  },
  "changelog": [
+  {
+   "version": "2.5",
+   "versionName": "2.5",
+   "versionCode": 7,
+   "date": "2026-11-06",
+   "notes": "New custom seek bar — smooth, big thumb, cover-matched colour — plus a polished player and navigation UI.",
+   "changes": [
+    "NEW custom seek bar: the stock Android bar is gone — Dhunn now draws its own, with a rounded track, a bigger thumb that grows with a soft glow while you drag, and tap-anywhere-to-jump",
+    "Seek colour now follows the cover theme properly (the old bar tinted its whole track green on some phones)",
+    "While scrubbing, the time and the lyrics preview move live with your finger; playback jumps when you release",
+    "Player polish: the big play button, shuffle, repeat and the heart now all wear the cover-matched colour",
+    "New chips under the artist name — current Art style and Lyrics FX — tap to change them right from the player",
+    "Bottom navigation: the selected tab now sits in a soft accent pill",
+    "Mini player: a thin progress line runs along its top"
+   ]
+  },
   {
    "version": "2.4",
    "versionName": "2.4",
