@@ -2,6 +2,18 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "version": "2.32.0",
+   "versionName": "2.32.0",
+   "versionCode": 40,
+   "date": "2026-11-07",
+   "notes": "Songs-vanish fix.",
+   "changes": [
+    "Fixed: songs disappearing from the library on their own — when the phone's media library answered late or partially (for example right after a restart), the automatic refresh replaced your whole library with that incomplete list",
+    "Automatic refreshes now only ADD new songs and can never remove any; a manual scan from the Scan button still rebuilds the library fully, including removing deleted songs",
+    "A degraded scan can no longer overwrite good song info (artist, album, cover) with bare file names"
+   ]
+  },
+  {
    "version": "2.31.0",
    "versionName": "2.31.0",
    "versionCode": 39,
@@ -337,10 +349,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.31.0",
-  "versionCode": 39,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.31.0.apk",
-  "notes": "Lyrics and covers fixed (they now fetch like the Java edition), a home-screen player widget with live lyrics, and a ripple animation when you switch themes.",
+  "versionName": "2.32.0",
+  "versionCode": 40,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.32.0.apk",
+  "notes": "Fixed: songs disappearing from the library by themselves — automatic refreshes can no longer remove songs; only a manual scan you start can.",
   "forceUpdate": false
  }
 }
