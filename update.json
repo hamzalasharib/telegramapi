@@ -2,6 +2,25 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "version": "2.33.0",
+   "versionName": "2.33.0",
+   "versionCode": 41,
+   "date": "2026-11-08",
+   "notes": "Big one: lyrics fonts, Drive Mode, Connect device, a lyrics-only tab, cleaned-up effects and professional cover designs.",
+   "changes": [
+    "Fixed: theme presets not applying — the playing song's cover colour was overriding your chosen preset; picking a preset or your own colour now wins",
+    "New: 12 lyrics fonts (Settings → Player & Lyrics → Lyrics font) — Poppins, Montserrat, Bebas Neue, Dancing Script and more, applied to synced and plain lyrics everywhere",
+    "New: Drive Mode — giant controls for the car and the screen stays on (Now Playing → Drive, or Player & Lyrics settings)",
+    "New: Connect device sheet (device icon in Now Playing) — this phone's volume, Wi-Fi/Bluetooth state and paired Bluetooth devices",
+    "New: Lyrics tab in Library — only the songs that already have lyrics, with Play all",
+    "New: song locator — the target button in Library jumps straight to the playing song",
+    "Lyrics effects cleaned up: 240 near-identical presets replaced by 40 curated ones with smoother animation, plus 10 new effects (Outline, Focus Pull, Rise, Sweep Pill, Pulse Glow and more) — your saved effect carries over",
+    "Effects and album-art galleries now open at your selected item instead of the top",
+    "6 new professional album-art designs: Gallery Frame, Vinyl Deluxe, Magazine Cover, Cinema Pro, Studio Sleeve, Gallery Card (58 total)",
+    "New in Appearance: bottom navbar corner radius (0–60 dp) and choosing the default tab at launch"
+   ]
+  },
+  {
    "version": "2.32.0",
    "versionName": "2.32.0",
    "versionCode": 40,
@@ -349,10 +368,10 @@
   }
  ],
  "latest": {
-  "versionName": "2.32.0",
-  "versionCode": 40,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.32.0.apk",
-  "notes": "Fixed: songs disappearing from the library by themselves — automatic refreshes can no longer remove songs; only a manual scan you start can.",
+  "versionName": "2.33.0",
+  "versionCode": 41,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.33.0.apk",
+  "notes": "Theme presets fixed, 12 lyrics fonts, Drive Mode, Connect device, a Lyrics-only tab, song locator, 40 cleaned-up lyrics effects and 6 professional cover designs.",
   "forceUpdate": false
  }
 }
