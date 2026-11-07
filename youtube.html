@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube Downloader — HamzaEditz</title>
+<meta name="description" content="Download YouTube videos in any quality — pick a format and save.">
+<link rel="stylesheet" href="hamza-ui.css?v=5">
+<style>
+  .card{max-width:640px;margin:22px auto;padding:0 20px}
+  .fld{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+  .fld input{flex:1;min-width:220px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font:inherit}
+  .fld input:focus{outline:2px solid var(--green);outline-offset:1px;border-color:transparent}
+  .btn{padding:12px 22px;border:0;border-radius:10px;background:var(--green);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+  .btn:hover{background:var(--green-d)}
+  .btn:disabled{opacity:.55;cursor:wait}
+  .note{color:var(--mut);font-size:14px}
+  .err{display:none;margin:14px 0;padding:12px 14px;border:1px solid #f3c2c2;background:#fdf0f0;border-radius:10px;color:#8c1d1d;font-size:14px}
+  .fmt{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--line)}
+  .fmt .q{font-weight:600}
+  .fmt .meta{color:var(--mut);font-size:13px}
+  .fmt .sp{flex:1}
+  .dl{padding:9px 16px;border-radius:999px;background:var(--green);color:#fff;text-decoration:none;font-weight:600;font-size:14px;white-space:nowrap}
+  .dl:hover{background:var(--green-d)}
+  .kind{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--chip);color:var(--mut);border-radius:6px;padding:3px 7px;white-space:nowrap}
+</style>
+</head>
+<body>
+<main class="card">
+  <h1 style="font-size:26px;margin:6px 0 4px">YouTube Downloader</h1>
+  <p class="note" style="margin:0">Paste a YouTube link, pick a quality, download.</p>
+  <div class="fld">
+    <input id="u" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off">
+    <button class="btn" id="go">Get Links</button>
+  </div>
+  <div class="err" id="err"></div>
+  <div id="out"></div>
+  <p class="note">If it fails, wait a few seconds and try again — the source site is sometimes busy.</p>
+</main>
+<script>
+const u=document.getElementById('u'),go=document.getElementById('go'),out=document.getElementById('out'),err=document.getElementById('err');
+function esc(s){const d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+async function run(){
+  const link=u.value.trim();
+  err.style.display='none';out.innerHTML='';
+  if(!link||link.indexOf('youtu')<0){err.textContent='Please paste a YouTube link.';err.style.display='block';return}
+  go.disabled=true;go.textContent='Working...';
+  try{
+    const r=await fetch('/api/youtube?url='+encodeURIComponent(link));
+    const j=await r.json();
+    if(!j.success||!j.formats||!j.formats.length)throw new Error(j.error||'No formats found.');
+    out.innerHTML=j.formats.map(function(f){
+      const meta=[f.size,f.fmt?('Format '+f.fmt):''].filter(Boolean).join(' · ');
+      const btn=f.download?'<a class="dl" href="'+esc(f.download)+'" target="_blank" rel="noopener">Download</a>':'<span class="meta">No link</span>';
+      return '<div class="fmt"><span class="q">'+esc(f.label)+'</span><span class="kind">'+esc(f.kind)+'</span><span class="sp"></span><span class="meta">'+esc(meta)+'</span>'+btn+'</div>';
+    }).join('');
+  }catch(e){
+    err.textContent=e.message||'Something went wrong — please try again.';err.style.display='block';
+  }
+  go.disabled=false;go.textContent='Get Links';
+}
+go.addEventListener('click',run);
+u.addEventListener('keydown',function(e){if(e.key==='Enter')run()});
+</script>
+<script src="hamza-ui.js?v=5"></script>
+<script src="hamza-ads.js?v=3"></script>
+</body>
+</html>

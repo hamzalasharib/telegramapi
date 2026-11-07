@@ -20,6 +20,8 @@ TOOLS = [
      "page": "jazz-claimer.html", "icon": "zap", "colors": ["#ef4444", "#f97316"], "new": True, "api": "/api/jazz"},
     {"id": "tiktok", "name": "TikTok Downloader", "desc": "Download TikTok videos without watermark.",
      "page": "tiktokmenu.html", "icon": "download", "colors": ["#ec4899", "#8b5cf6"], "new": False, "api": "/api/tiktok"},
+    {"id": "youtube", "name": "YouTube Downloader", "desc": "Download YouTube videos in any quality.",
+     "page": "youtube.html", "icon": "play", "colors": ["#ef4444", "#b91c1c"], "new": True, "api": "/api/youtube"},
     {"id": "spotify", "name": "Spotify Downloader", "desc": "Convert Spotify tracks to MP3.",
      "page": "spotify.html", "icon": "music", "colors": ["#22c55e", "#0ea5e9"], "new": False, "api": "/api/spot"},
     {"id": "image", "name": "AI Image Generator", "desc": "Generate AI images from a text prompt.",

@@ -32,6 +32,9 @@
     },
     "api/instagram.py": {
       "maxDuration": 30
+    },
+    "api/youtube.py": {
+      "maxDuration": 60
     }
   }
 }
