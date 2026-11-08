@@ -2,6 +2,18 @@
   "app": "Dhunn",
   "changelog": [
     {
+      "version": "2.35.0",
+      "versionName": "2.35.0",
+      "versionCode": 43,
+      "date": "2026-11-08",
+      "notes": "Custom song covers (long-press or menu) and a proper MediaStore delete flow.",
+      "changes": [
+        "New: set your own cover for any song — long-press a song or use its menu",
+        "Fixed: deleting songs now works — Android's own confirm dialog appears instead of a security error",
+        "New: 'Reset cover' in the same menu brings back the song's normal cover"
+      ]
+    },
+    {
       "version": "2.34.0",
       "versionName": "2.34.0",
       "versionCode": 42,
@@ -383,10 +395,10 @@
     }
   ],
   "latest": {
-    "versionName": "2.34.0",
-    "versionCode": 42,
-    "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.34.0.apk",
-    "notes": "Widget fixed: controls no longer crash the app, Play works even when the app is closed, and the widget now wears your cover + lyrics-effect colours. Lyrics tab gets A-Z / Z-A sorting and the song locator now lands exactly on the playing song.",
+    "versionName": "2.35.0",
+    "versionCode": 43,
+    "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.35.0.apk",
+    "notes": "Custom covers are here: long-press any song (or use its menu) and pick your own picture — it shows everywhere, widget included. Plus deleting songs finally works properly, with Android’s own confirm dialog.",
     "forceUpdate": false
   }
 }
