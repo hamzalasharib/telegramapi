@@ -1,0 +1,78 @@
+name: nova_player
+description: "Hamza Player — Spotify-style music player. Local + online music, synced lyrics, themes, equalizer. Free legal sources only."
+publish_to: 'none'
+version: 2.34.0+42
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.3.2
+  provider: ^6.1.2
+  just_audio: ^0.9.42
+  just_audio_background: ^0.0.1-beta.14
+  audio_service: ^0.18.15
+  permission_handler: ^11.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icon.png
+    - assets/icon_ocean.png
+    - assets/icon_sunset.png
+    - assets/icon_violet.png
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-400.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-700.ttf
+          weight: 700
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-400.ttf
+          weight: 400
+        - asset: assets/fonts/Montserrat-700.ttf
+          weight: 700
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway-400.ttf
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik-400.ttf
+    - family: Oswald
+      fonts:
+        - asset: assets/fonts/Oswald-400.ttf
+    - family: Bebas Neue
+      fonts:
+        - asset: assets/fonts/BebasNeue-400.ttf
+    - family: Anton
+      fonts:
+        - asset: assets/fonts/Anton-400.ttf
+    - family: Playfair Display
+      fonts:
+        - asset: assets/fonts/PlayfairDisplay-400.ttf
+          weight: 400
+        - asset: assets/fonts/PlayfairDisplay-700.ttf
+          weight: 700
+    - family: Dancing Script
+      fonts:
+        - asset: assets/fonts/DancingScript-700.ttf
+          weight: 700
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-400.ttf
+    - family: Lobster
+      fonts:
+        - asset: assets/fonts/Lobster-400.ttf
+    - family: Caveat
+      fonts:
+        - asset: assets/fonts/Caveat-700.ttf
+          weight: 700

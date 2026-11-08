@@ -1,0 +1,79 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace = "com.novaplayer.nova_player"
+    compileSdk = 36 // latest Android (16) — v2.24
+    ndkVersion = "26.3.11579264"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled = true
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.novaplayer.nova_player"
+        minSdk = 24
+        targetSdk = 36 // latest Android (16) — v2.24
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        multiDexEnabled = true
+        resourceConfigurations += ["en"]
+    }
+
+    signingConfigs {
+        release {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = file("../debug.keystore")
+            storePassword = "android"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.release
+            // R8 in AGP 8.1 NPE-crashes on this dependency set (verified twice);
+            // size is controlled instead via single-ABI build + tree-shaken icons.
+            minifyEnabled = true
+            shrinkResources = true
+        }
+    }
+
+    // Download-size first: compress the native .so libraries inside
+    // the APK (legacy packaging). They are extracted once at install;
+    // the app itself runs identically, the APK file is much smaller.
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+}
+
+// Size diet (v2.7): Hamza Player plays LOCAL files only (progressive
+// sources) — it never streams DASH / HLS / SmoothStreaming. just_audio
+// declares those media3 modules, so exclude them from the app: their
+// classes only sit behind switch branches this app never takes.
+// -dontwarn rules for the two referenced factory classes are in
+// proguard-rules.pro.
+configurations.all {
+    exclude group: 'androidx.media3', module: 'media3-exoplayer-dash'
+    exclude group: 'androidx.media3', module: 'media3-exoplayer-hls'
+    exclude group: 'androidx.media3', module: 'media3-exoplayer-smoothstreaming'
+}
