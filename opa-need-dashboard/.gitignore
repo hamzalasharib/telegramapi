@@ -1,0 +1,10 @@
+.env
+data/
+__pycache__/
+*.pyc
+venv/
+.env.*
+!.env.example
+# NEVER commit a service-account key
+*service-account*.json
+*firebase-adminsdk*.json

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPA Need — Redeem Access</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  .gate{max-width:440px;margin:8vh auto 0;padding:0 16px}
+  .gate-card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--border);
+    border-radius:20px;padding:28px 24px;box-shadow:var(--shadow);text-align:center;animation:rise .4s ease both}
+  .gate-card .brand-badge{margin:0 auto 14px;width:56px;height:56px;font-size:27px}
+  .gate-card h1{font-size:23px;margin-bottom:6px}
+  .gate-card form{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .gate-card input{background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+    padding:13px;color:var(--text);text-align:center;font-size:17px;letter-spacing:.12em;text-transform:uppercase;outline:0}
+  .gate-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.25)}
+  .plans{display:flex;gap:10px;margin-top:18px}
+  .plan{flex:1;border:1px solid var(--border);border-radius:12px;padding:12px 6px;background:var(--bg2)}
+  .plan b{display:block;font-size:17px}
+  .plan span{color:var(--muted);font-size:12px}
+  .err{background:#7f1d1d;border:1px solid var(--err);color:#fee2e2;border-radius:10px;padding:10px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="bg-glow" aria-hidden="true"></div>
+<main class="gate">
+  <div class="gate-card">
+    <div class="brand-badge">🎓</div>
+    <h1>OPA Need Dashboard</h1>
+    <p class="muted">This is a paid-access dashboard.<br>Enter your redeem code to continue.</p>
+    <div class="plans">
+      <div class="plan"><b>Weekly</b><span>7 days access</span></div>
+      <div class="plan"><b>Monthly</b><span>30 days access</span></div>
+    </div>
+    <form method="post" action="{{ url_for('redeem_page') }}">
+      {% if error %}<div class="err">{{ error }}</div>{% endif %}
+      <input name="code" placeholder="OPA-XXXXX-XXXXX" autocomplete="off" maxlength="30" required>
+      <button class="btn btn-primary" type="submit">Unlock Dashboard →</button>
+    </form>
+    <p class="muted small" style="margin-top:14px">Your access starts the moment you redeem and lasts for the full plan period. Re-enter the same code on a new device any time before it expires.</p>
+  </div>
+</main>
+</body>
+</html>

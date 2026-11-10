@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPA Need — Dashboard</title>
+<meta name="description" content="Web dashboard for the OPA Need app data.">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+<div class="bg-glow" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-badge">🎓</div>
+    <div>
+      <h1>OPA Need</h1>
+      <p>Web Dashboard</p>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    {% if plan %}
+    <div class="health" title="Your access plan">
+      <span>🔑 {{ plan|capitalize }}{% if days_left is not none %} · {{ days_left }} days left{% endif %}</span>
+      <a href="{{ url_for('access_logout') }}" style="font-size:12px">Logout</a>
+    </div>
+    {% endif %}
+    <div class="health" id="healthBadge" title="Database connection status">
+      <span class="dot dot-wait"></span><span id="healthText">Checking…</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- Stats -->
+  <section class="stats" id="statsRow" aria-label="Overview">
+    <div class="stat-card skeleton-card"><span class="stat-num" data-stat="users">–</span><span class="stat-label">Users</span></div>
+    <div class="stat-card"><span class="stat-num" data-stat="links">–</span><span class="stat-label">Total Links</span></div>
+    <div class="stat-card"><span class="stat-num" data-stat="videos_unique">–</span><span class="stat-label">Unique Videos</span></div>
+    <div class="stat-card"><span class="stat-num" data-stat="courses">–</span><span class="stat-label">Courses</span></div>
+    <div class="stat-card"><span class="stat-num" data-stat="categories">–</span><span class="stat-label">Categories</span></div>
+  </section>
+
+  <!-- Search -->
+  <section class="search-panel">
+    <h2>Find a user</h2>
+    <p class="muted">Search by username or category letter. Each user only ever sees their own videos.</p>
+    <div class="search-box">
+      <span class="search-icon">🔎</span>
+      <input id="searchInput" type="search" placeholder="e.g. fia76, pak654, urdu91…" autocomplete="off" maxlength="100">
+      <button id="searchBtn" class="btn btn-primary">Search</button>
+    </div>
+    <div class="quick-actions">
+      <button class="chip" id="showAllBtn">All users</button>
+      <button class="chip" id="showCoursesBtn">Course catalog</button>
+      <button class="chip" id="showUnassignedBtn">Unassigned videos</button>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  <div class="loading" id="loading" hidden>
+    <div class="spinner"></div><p>Loading…</p>
+  </div>
+
+  <!-- Users grid -->
+  <section id="usersSection">
+    <div class="section-head">
+      <h3 id="usersTitle">Users</h3>
+      <span class="count-pill" id="usersCount"></span>
+    </div>
+    <div class="grid" id="usersGrid"></div>
+    <div class="empty" id="usersEmpty" hidden>
+      <div class="empty-icon">👤</div>
+      <p>No user found for that search.</p>
+      <p class="muted small">Check the spelling — usernames look like <b>fah76</b>-style codes in this app.</p>
+    </div>
+  </section>
+
+  <!-- User detail -->
+  <section id="detailSection" hidden>
+    <button class="btn btn-ghost" id="backBtn">← Back to users</button>
+    <div class="profile-card" id="profileCard"></div>
+
+    <div class="player-wrap" id="playerWrap" hidden>
+      <div class="player">
+        <iframe id="playerFrame" title="Video player" loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <p class="now-playing" id="nowPlaying"></p>
+    </div>
+
+    <div class="section-head">
+      <h3>Videos</h3><span class="count-pill" id="videoCount"></span>
+    </div>
+    <div class="grid grid-videos" id="videosGrid"></div>
+    <div class="empty" id="videosEmpty" hidden>
+      <div class="empty-icon">🎬</div><p>No videos belong to this user.</p>
+    </div>
+
+    <div class="section-head" id="userCoursesHead" hidden>
+      <h3>This user's courses</h3><span class="count-pill" id="userCoursesCount"></span>
+    </div>
+    <div class="grid grid-courses" id="userCoursesGrid"></div>
+  </section>
+
+  <!-- Courses catalog -->
+  <section id="coursesSection" hidden>
+    <button class="btn btn-ghost" data-back>← Back to users</button>
+    <div class="section-head">
+      <h3>Course catalog</h3><span class="count-pill" id="coursesCount"></span>
+    </div>
+    <p class="muted">Courses in this project are a global catalog (created by admins), not owned by individual users — so they are shown separately here.</p>
+    <div class="grid grid-courses" id="coursesGrid"></div>
+    <div class="empty" id="coursesEmpty" hidden>
+      <div class="empty-icon">📚</div><p>No courses found.</p>
+    </div>
+  </section>
+
+  <!-- Unassigned -->
+  <section id="unassignedSection" hidden>
+    <button class="btn btn-ghost" data-back>← Back to users</button>
+    <div class="section-head">
+      <h3>Unassigned videos</h3><span class="count-pill" id="unassignedCount"></span>
+    </div>
+    <p class="muted">These videos carry an owner code that matches no current user, so they are not mixed into anyone's list.</p>
+    <div class="grid grid-videos" id="unassignedGrid"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>OPA Need Dashboard · Data: Firestore project <b>{{ project_id }}</b> · Passwords and private credentials are never displayed.</p>
+</footer>
+
+<div class="toast" id="toast" role="alert" hidden></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
