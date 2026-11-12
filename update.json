@@ -2,18 +2,30 @@
  "app": "Dhunn",
  "changelog": [
   {
+   "version": "2.37.0",
+   "versionName": "2.37.0",
+   "versionCode": 45,
+   "date": "2026-11-12",
+   "notes": "Startup fix \u2014 the app opens instantly again.",
+   "changes": [
+    "Fixed: the app taking 15-20 seconds to open after an online song or radio station was played \u2014 the saved online song used to load over the network before the app could open; it now loads only when you press Play",
+    "The Online tab now starts loading only when you open it, instead of fetching in the background on every launch",
+    "Online hosts that are slow or down now give up in 8 seconds instead of leaving the tab hanging"
+   ]
+  },
+  {
    "version": "2.36.0",
    "versionName": "2.36.0",
    "versionCode": 44,
    "date": "2026-11-12",
-   "notes": "New Online tab — Audius, Radio and Jamendo.",
+   "notes": "New Online tab \u2014 Audius, Radio and Jamendo.",
    "changes": [
-    "New: Online tab — a whole new section for online music, next to Home, Search and Library",
-    "Audius: trending songs and search — full songs from independent artists, free and legal, tap to play",
+    "New: Online tab \u2014 a whole new section for online music, next to Home, Search and Library",
+    "Audius: trending songs and search \u2014 full songs from independent artists, free and legal, tap to play",
     "Radio: top live radio stations from around the world, with search and a LIVE badge",
-    "Jamendo: free-licensed songs — it needs your own free Jamendo client ID; the tab explains how to get one in 2 minutes and paste it in",
-    "Online songs play in the same player — mini player, Now Playing, lyrics and equalizer all work as usual",
-    "Settings → Appearance → Default tab can now also open on Online"
+    "Jamendo: free-licensed songs \u2014 it needs your own free Jamendo client ID; the tab explains how to get one in 2 minutes and paste it in",
+    "Online songs play in the same player \u2014 mini player, Now Playing, lyrics and equalizer all work as usual",
+    "Settings \u2192 Appearance \u2192 Default tab can now also open on Online"
    ]
   },
   {
@@ -23,7 +35,7 @@
    "date": "2026-11-07",
    "notes": "Songs-vanish fix.",
    "changes": [
-    "Fixed: songs disappearing from the library on their own — when the phone's media library answered late or partially (for example right after a restart), the automatic refresh replaced your whole library with that incomplete list",
+    "Fixed: songs disappearing from the library on their own \u2014 when the phone's media library answered late or partially (for example right after a restart), the automatic refresh replaced your whole library with that incomplete list",
     "Automatic refreshes now only ADD new songs and can never remove any; a manual scan from the Scan button still rebuilds the library fully, including removing deleted songs",
     "A degraded scan can no longer overwrite good song info (artist, album, cover) with bare file names"
    ]
@@ -35,10 +47,10 @@
    "date": "2026-11-06",
    "notes": "Lyrics/covers fetch fixes, home-screen widget with live lyrics, theme ripple.",
    "changes": [
-    "Fixed: lyrics missing for many songs — the LRCLIB request was missing a required field, so exact matches never worked; search is smarter now too",
-    "Fixed: HD covers missing for many songs — cover matching is no longer over-strict, and the retry wait after a failed lookup is 1 day instead of 7",
+    "Fixed: lyrics missing for many songs \u2014 the LRCLIB request was missing a required field, so exact matches never worked; search is smarter now too",
+    "Fixed: HD covers missing for many songs \u2014 cover matching is no longer over-strict, and the retry wait after a failed lookup is 1 day instead of 7",
     "Fixed: bulk lyrics download now retries songs it missed instead of marking them done",
-    "New: home-screen player widget — cover on top, play/pause/next/back controls, and the live lyric line underneath",
+    "New: home-screen player widget \u2014 cover on top, play/pause/next/back controls, and the live lyric line underneath",
     "New: switching themes, accents or dark/light now plays a ripple animation in the new colour"
    ]
   },
@@ -49,10 +61,10 @@
    "date": "2026-11-05",
    "notes": "Volume-spike fix + 24 progress-bar designs for the player.",
    "changes": [
-    "Fixed: volume jumping up then coming back down when the first song plays — the equalizer now loads your saved sound first and switches on last, in one clean step",
-    "New: 24 progress-bar designs — Kitty Cat, Spider Web, Arc Core, Smash Green, Neon Glow, Rainbow, Waveform, Heartbeat, Piano Keys, Vinyl, Galaxy, Gold, Lava, Sakura and more",
+    "Fixed: volume jumping up then coming back down when the first song plays \u2014 the equalizer now loads your saved sound first and switches on last, in one clean step",
+    "New: 24 progress-bar designs \u2014 Kitty Cat, Spider Web, Arc Core, Smash Green, Neon Glow, Rainbow, Waveform, Heartbeat, Piano Keys, Vinyl, Galaxy, Gold, Lava, Sakura and more",
     "Pick yours in Settings -> Player & Lyrics -> Progress bar style, or long-press the progress bar in the player",
-    "All designs are drawn in code (no images) — the app stays the same light size"
+    "All designs are drawn in code (no images) \u2014 the app stays the same light size"
    ]
   },
   {
@@ -60,37 +72,37 @@
    "versionName": "2.29.0",
    "versionCode": 37,
    "date": "2026-11-05",
-   "notes": "Support page updated: DPay removed — now you can support Dhunn directly via JazzCash, NayaPay or Easypaisa (one number, copy buttons) or Binance Pay. Changelog display hardened so no version can appear blank again.",
+   "notes": "Support page updated: DPay removed \u2014 now you can support Dhunn directly via JazzCash, NayaPay or Easypaisa (one number, copy buttons) or Binance Pay. Changelog display hardened so no version can appear blank again.",
    "changes": [
     "Support Dhunn page: DPay removed",
-    "JazzCash, NayaPay and Easypaisa added — send to 03287331958, with copy buttons for the number and account title",
+    "JazzCash, NayaPay and Easypaisa added \u2014 send to 03287331958, with copy buttons for the number and account title",
     "Binance Pay stays (Pay ID 774780411)",
-    "Changelog display hardened — no version can appear blank again"
+    "Changelog display hardened \u2014 no version can appear blank again"
    ]
   },
   {
    "versionName": "2.28.0",
    "versionCode": 36,
-   "notes": "Removed: the UI themes experiment — the app is back to its clean original look with the colour presets. Album art: all 52 designs are now animated (spinning discs/reels, pulsing glows, swaying frames, dancing EQ and wave bars) using light transform animations that do not cause lag, and they pause when the music pauses. Lyrics effects: previews in the grid are now LIVE animations — each card plays the effect on sample lines so you can see it before selecting.",
+   "notes": "Removed: the UI themes experiment \u2014 the app is back to its clean original look with the colour presets. Album art: all 52 designs are now animated (spinning discs/reels, pulsing glows, swaying frames, dancing EQ and wave bars) using light transform animations that do not cause lag, and they pause when the music pauses. Lyrics effects: previews in the grid are now LIVE animations \u2014 each card plays the effect on sample lines so you can see it before selecting.",
    "version": "2.28.0",
    "date": "2026-11-05",
    "changes": [
-    "Removed: the UI themes experiment — the app is back to its clean original look with the colour presets",
+    "Removed: the UI themes experiment \u2014 the app is back to its clean original look with the colour presets",
     "Album art: all 52 designs are now animated (spinning discs/reels, pulsing glows, swaying frames, dancing EQ and wave bars) using light transform animations that do not cause lag, and they pause when the music pauses",
-    "Lyrics effects: previews in the grid are now LIVE animations — each card plays the effect on sample lines so you can see it before selecting"
+    "Lyrics effects: previews in the grid are now LIVE animations \u2014 each card plays the effect on sample lines so you can see it before selecting"
    ]
   },
   {
    "versionName": "2.27.0",
    "versionCode": 35,
-   "notes": "Fixed: the app no longer pops up a song-count message on every open. NEW UI Themes (Settings → Appearance): Original, Liquid Glass (iPhone frosted glass), YouTube Music, Samsung One UI, SoundCloud, Spotify, Apple Music. Album art designs: 17 → 52. Lyrics effects: 120 → 240, now in a grid with live previews, plus your own custom lyrics colour. Support Dhunn page (Settings): Binance Pay & DPay.",
+   "notes": "Fixed: the app no longer pops up a song-count message on every open. NEW UI Themes (Settings \u2192 Appearance): Original, Liquid Glass (iPhone frosted glass), YouTube Music, Samsung One UI, SoundCloud, Spotify, Apple Music. Album art designs: 17 \u2192 52. Lyrics effects: 120 \u2192 240, now in a grid with live previews, plus your own custom lyrics colour. Support Dhunn page (Settings): Binance Pay & DPay.",
    "version": "2.27.0",
    "date": "2026-11-05",
    "changes": [
     "Fixed: the app no longer pops up a song-count message on every open",
-    "NEW UI Themes (Settings → Appearance): Original, Liquid Glass (iPhone frosted glass), YouTube Music, Samsung One UI, SoundCloud, Spotify, Apple Music",
-    "Album art designs: 17 → 52",
-    "Lyrics effects: 120 → 240, now in a grid with live previews, plus your own custom lyrics colour",
+    "NEW UI Themes (Settings \u2192 Appearance): Original, Liquid Glass (iPhone frosted glass), YouTube Music, Samsung One UI, SoundCloud, Spotify, Apple Music",
+    "Album art designs: 17 \u2192 52",
+    "Lyrics effects: 120 \u2192 240, now in a grid with live previews, plus your own custom lyrics colour",
     "Support Dhunn page (Settings): Binance Pay & DPay"
    ]
   },
@@ -108,36 +120,36 @@
   {
    "versionName": "2.25.0",
    "versionCode": 33,
-   "notes": "Ads added (Monetag, interstitial only): a full-screen ad may appear shortly after opening the app and then only every 6th song, at least 3 minutes apart, max 4 per session. Playback is never interrupted mid-song. Don't want ads? Settings → Equalizer & Playback → Ads → Off.",
+   "notes": "Ads added (Monetag, interstitial only): a full-screen ad may appear shortly after opening the app and then only every 6th song, at least 3 minutes apart, max 4 per session. Playback is never interrupted mid-song. Don't want ads? Settings \u2192 Equalizer & Playback \u2192 Ads \u2192 Off.",
    "version": "2.25.0",
    "date": "2026-11-04",
    "changes": [
     "Ads added (Monetag, interstitial only): a full-screen ad may appear shortly after opening the app and then only every 6th song, at least 3 minutes apart, max 4 per session",
     "Playback is never interrupted mid-song",
     "Don't want ads?",
-    "Settings → Equalizer & Playback → Ads → Off"
+    "Settings \u2192 Equalizer & Playback \u2192 Ads \u2192 Off"
    ]
   },
   {
    "versionName": "2.24.0",
    "versionCode": 32,
-   "notes": "NEW: Targets the latest Android 16 — ready for new phones and future Play Store rules. Background: if your phone is allowed to kill Dhunn to save battery, Home now shows a warning with a one-tap fix so songs never stop by themselves. Downloads screen: Settings → My Library — tap 'HD covers downloaded' to see every song whose cover image was changed (with the image and date), and 'Lyrics saved offline' to see every song whose lyrics are stored on the phone.",
+   "notes": "NEW: Targets the latest Android 16 \u2014 ready for new phones and future Play Store rules. Background: if your phone is allowed to kill Dhunn to save battery, Home now shows a warning with a one-tap fix so songs never stop by themselves. Downloads screen: Settings \u2192 My Library \u2014 tap 'HD covers downloaded' to see every song whose cover image was changed (with the image and date), and 'Lyrics saved offline' to see every song whose lyrics are stored on the phone.",
    "version": "2.24.0",
    "date": "2026-11-04",
    "changes": [
-    "NEW: Targets the latest Android 16 — ready for new phones and future Play Store rules",
+    "NEW: Targets the latest Android 16 \u2014 ready for new phones and future Play Store rules",
     "Background: if your phone is allowed to kill Dhunn to save battery, Home now shows a warning with a one-tap fix so songs never stop by themselves",
-    "Downloads screen: Settings → My Library — tap 'HD covers downloaded' to see every song whose cover image was changed (with the image and date), and 'Lyrics saved offline' to see every song whose lyrics are stored on the phone"
+    "Downloads screen: Settings \u2192 My Library \u2014 tap 'HD covers downloaded' to see every song whose cover image was changed (with the image and date), and 'Lyrics saved offline' to see every song whose lyrics are stored on the phone"
    ]
   },
   {
    "version": "2.23.0",
    "date": "2026-11-04",
    "changes": [
-    "Lag fix: cover images now decode at tile size in lists and grids — scrolling is much smoother",
-    "6 NEW album art designs (Neon Ring, Half Disc, Gradient Border, Retro Sunset, EQ Ring, Tape Deck Wide) — 17 in total, and the picker is now a GRID",
+    "Lag fix: cover images now decode at tile size in lists and grids \u2014 scrolling is much smoother",
+    "6 NEW album art designs (Neon Ring, Half Disc, Gradient Border, Retro Sunset, EQ Ring, Tape Deck Wide) \u2014 17 in total, and the picker is now a GRID",
     "Song options (tap the three dots or long-press any song): Share the song file, Rename, Details and Delete",
-    "Songs that have lyrics now show a small lyrics icon; a .lrc file next to a song loads instantly from the phone — online search only happens when no offline lyrics exist",
+    "Songs that have lyrics now show a small lyrics icon; a .lrc file next to a song loads instantly from the phone \u2014 online search only happens when no offline lyrics exist",
     "The favorite heart now pops with an animation when you tap it"
    ]
   },
@@ -145,9 +157,9 @@
    "version": "2.22.0",
    "date": "2026-11-04",
    "changes": [
-    "FAST downloads: covers and lyrics now download several songs at a time over one shared fast connection — no more one-by-one waiting",
+    "FAST downloads: covers and lyrics now download several songs at a time over one shared fast connection \u2014 no more one-by-one waiting",
     "Equalizer redesigned, PixelPlayer style: preset chips, tall vertical band sliders, and round dials for Bass Boost, Virtualizer and Loudness with on/off switches",
-    "Save your own equalizer presets: set the bands, tap Save in the equalizer, name it — long-press a saved preset to delete it",
+    "Save your own equalizer presets: set the bands, tap Save in the equalizer, name it \u2014 long-press a saved preset to delete it",
     "Virtualizer effect added (where the phone supports it)",
     "Album art resolution setting (Settings, My Library): Low 512px (fastest), Medium 800px, High 1200px",
     "Animated lyrics on/off and a lyric blur strength slider (Settings, Player & Lyrics)"
@@ -157,26 +169,26 @@
    "version": "2.21.0",
    "date": "2026-11-04",
    "changes": [
-    "New app icons: your purple Dhunn icons — Purple Note (default) and Headphones, in Settings, Appearance, App icon",
-    "New: Download lyrics for all songs in one tap (Settings, My Library) — lyrics are saved on the phone and work fully offline",
-    "New: Auto-refresh — new songs are picked up automatically and you get a 'New song added' notification",
-    "New: Open songs from your file manager — Dhunn now appears in the 'Open with' player list and plays the file at once"
+    "New app icons: your purple Dhunn icons \u2014 Purple Note (default) and Headphones, in Settings, Appearance, App icon",
+    "New: Download lyrics for all songs in one tap (Settings, My Library) \u2014 lyrics are saved on the phone and work fully offline",
+    "New: Auto-refresh \u2014 new songs are picked up automatically and you get a 'New song added' notification",
+    "New: Open songs from your file manager \u2014 Dhunn now appears in the 'Open with' player list and plays the file at once"
    ]
   },
   {
    "version": "2.20.0",
    "date": "2026-11-03",
    "changes": [
-    "New: Skip short voice clips — hide voice notes and short clips (15/30/45/60s) so only songs stay. Settings → My Library",
-    "New: Songs folder — pick one folder and only its songs appear in the library",
-    "Player themes removed — the player is back to its clean classic look"
+    "New: Skip short voice clips \u2014 hide voice notes and short clips (15/30/45/60s) so only songs stay. Settings \u2192 My Library",
+    "New: Songs folder \u2014 pick one folder and only its songs appear in the library",
+    "Player themes removed \u2014 the player is back to its clean classic look"
    ]
   },
   {
    "version": "2.19.1",
    "date": "2026-11-03",
    "changes": [
-    "Fixed: music stopping by itself in the background — new fix options in Settings → Equalizer & Playback (battery permission + auto-start), and closing the app from recents no longer stops playback",
+    "Fixed: music stopping by itself in the background \u2014 new fix options in Settings \u2192 Equalizer & Playback (battery permission + auto-start), and closing the app from recents no longer stops playback",
     "Fluid Beat is back inside the player only (the whole-app fluid background was removed)"
    ]
   },
@@ -185,15 +197,15 @@
    "date": "2026-11-03",
    "changes": [
     "Fluid Beat now fills the WHOLE app: pick it as the player background and the liquid beat follows you through Home, Search and Library",
-    "HD cover downloads keep going in the background with a progress notification — and if you stop or close the app, the job RESUMES where it left off",
-    "12 PRO player themes: Neon Nights, Sunset Vibes, Royal Gold, Candy Pop, Arctic Frost and more — Settings → Player & Lyrics → Player theme"
+    "HD cover downloads keep going in the background with a progress notification \u2014 and if you stop or close the app, the job RESUMES where it left off",
+    "12 PRO player themes: Neon Nights, Sunset Vibes, Royal Gold, Candy Pop, Arctic Frost and more \u2014 Settings \u2192 Player & Lyrics \u2192 Player theme"
    ]
   },
   {
    "version": "2.18.0",
    "date": "2026-11-02",
    "changes": [
-    "Four app icon variants: Emerald, Ocean, Sunset and Violet — switch in Settings → Appearance → App icon",
+    "Four app icon variants: Emerald, Ocean, Sunset and Violet \u2014 switch in Settings \u2192 Appearance \u2192 App icon",
     "The logo inside the app now follows your theme colour"
    ]
   },
@@ -209,7 +221,7 @@
    "changes": [
     "In-app updates: Dhunn now checks GitHub for new versions and shows an update message automatically",
     "New Updates & FAQs section in Settings with the full changelog",
-    "FAQs and changelog are controlled from GitHub — no app release needed to edit them"
+    "FAQs and changelog are controlled from GitHub \u2014 no app release needed to edit them"
    ],
    "date": "2026-11-02",
    "version": "2.16.0"
@@ -217,7 +229,7 @@
   {
    "changes": [
     "The app has a new name: Dhunn",
-    "11 album art styles for the player — Vinyl Disc, Spotify Card, CD, Sleeve & Disc, Polaroid, Glass, Poster, Tilt 3D, Cassette, Minimal and more",
+    "11 album art styles for the player \u2014 Vinyl Disc, Spotify Card, CD, Sleeve & Disc, Polaroid, Glass, Poster, Tilt 3D, Cassette, Minimal and more",
     "New art style gallery with a live animated preview"
    ],
    "date": "2026-11-02",
@@ -233,7 +245,7 @@
   },
   {
    "changes": [
-    "Fluid Beat pulse is stronger — you can really feel the beat now",
+    "Fluid Beat pulse is stronger \u2014 you can really feel the beat now",
     "App theme colour follows the playing song's cover",
     "Tapping the Search tab again opens the keyboard instantly"
    ],
@@ -243,7 +255,7 @@
   {
    "changes": [
     "Fluid Beat rebuilt: background colours come from the album cover",
-    "Real beat sync — the background moves with the actual music"
+    "Real beat sync \u2014 the background moves with the actual music"
    ],
    "date": "2026-11-02",
    "version": "2.12.0"
@@ -264,7 +276,7 @@
   },
   {
    "changes": [
-    "Dhunn now remembers your song and the exact position when you close the app — reopen and press play to continue right where you left off"
+    "Dhunn now remembers your song and the exact position when you close the app \u2014 reopen and press play to continue right where you left off"
    ],
    "date": "2026-11-02",
    "version": "2.9.0"
@@ -272,7 +284,7 @@
   {
    "changes": [
     "Brand new app icon",
-    "120 lyrics effects with a searchable gallery — including the favourite Blur Focus",
+    "120 lyrics effects with a searchable gallery \u2014 including the favourite Blur Focus",
     "HD album covers download automatically for songs with missing or low-quality art"
    ],
    "date": "2026-11-02",
@@ -323,7 +335,7 @@
   },
   {
    "changes": [
-    "First release — a fully offline music player with your own songs, playlists, liked songs and synced lyrics"
+    "First release \u2014 a fully offline music player with your own songs, playlists, liked songs and synced lyrics"
    ],
    "date": "2026-10-31",
    "version": "1.0.0"
@@ -331,7 +343,7 @@
  ],
  "faqs": [
   {
-   "a": "Yes — Dhunn is completely free. No ads, no subscriptions, no locked features.",
+   "a": "Yes \u2014 Dhunn is completely free. No ads, no subscriptions, no locked features.",
    "q": "Is Dhunn free?"
   },
   {
@@ -343,11 +355,11 @@
    "q": "Why does Dhunn ask for microphone permission?"
   },
   {
-   "a": "When a new version is released, Dhunn shows an update message automatically. You can also check any time in Settings → Updates & FAQs → Check for updates.",
+   "a": "When a new version is released, Dhunn shows an update message automatically. You can also check any time in Settings \u2192 Updates & FAQs \u2192 Check for updates.",
    "q": "How do I update Dhunn?"
   },
   {
-   "a": "Make sure you allowed the Music & audio permission, then go to Settings → My Library and scan your device again.",
+   "a": "Make sure you allowed the Music & audio permission, then go to Settings \u2192 My Library and scan your device again.",
    "q": "My songs are not showing up. What do I do?"
   },
   {
@@ -359,15 +371,15 @@
    "q": "Does Dhunn collect my personal data?"
   },
   {
-   "a": "While a song is playing, tap the style icon at the top of the player — or go to Settings → Player & Lyrics → Album art style. There are 11 styles with a live preview.",
+   "a": "While a song is playing, tap the style icon at the top of the player \u2014 or go to Settings \u2192 Player & Lyrics \u2192 Album art style. There are 11 styles with a live preview.",
    "q": "How do I change the album art style?"
   }
  ],
  "latest": {
-  "versionName": "2.36.0",
-  "versionCode": 44,
-  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.36.0.apk",
-  "notes": "New Online tab: free legal online songs from Audius, live radio stations from around the world, and Jamendo (add your own free key in the tab).",
+  "versionName": "2.37.0",
+  "versionCode": 45,
+  "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.37.0.apk",
+  "notes": "Startup fix: Dhunn opens instantly again \u2014 online songs and radio now load only when you press Play, not while the app is opening.",
   "forceUpdate": false
  }
 }
