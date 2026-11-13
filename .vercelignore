@@ -1,0 +1,5 @@
+# APKs are delivered via GitHub raw links, never from this domain.
+# Excluding them keeps the Vercel function bundle under the size limit
+# (repo APKs had grown to ~460 MB, which failed every deployment).
+*.apk
+*.aab
