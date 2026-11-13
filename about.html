@@ -87,7 +87,10 @@ h2.sec{font-size:clamp(32px,5vw,46px);font-weight:700;text-align:center;margin:1
 .strap span{writing-mode:vertical-rl;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.34em;color:#5b6b84;white-space:nowrap}
 .clip{width:58px;height:16px;margin:0 auto;background:#1d1d2c;border:1px solid var(--line2);border-radius:5px}
 .idcard{background:linear-gradient(160deg,#14142a,#0c0c18);border:1px solid var(--line2);border-radius:20px;padding:18px 18px 16px;box-shadow:0 30px 60px rgba(0,0,0,.55);transform-style:preserve-3d;transition:transform .25s ease;position:relative;overflow:hidden}
-.idcard::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.06) 48%,transparent 62%);pointer-events:none}
+.idcard::before{content:"";position:absolute;inset:0;z-index:2;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+.idcard:hover::before{opacity:1}
+.idcard::after{content:"";position:absolute;top:-20%;bottom:-20%;left:0;width:45%;z-index:2;background:linear-gradient(105deg,transparent,rgba(255,255,255,.20) 45%,rgba(160,210,255,.28) 50%,rgba(255,255,255,.20) 55%,transparent);transform:translateX(-220%) skewX(-18deg);animation:cardShine 4.8s ease-in-out infinite;pointer-events:none}
+@keyframes cardShine{0%{transform:translateX(-220%) skewX(-18deg)}38%{transform:translateX(320%) skewX(-18deg)}100%{transform:translateX(320%) skewX(-18deg)}}
 .idcard .hole{width:52px;height:9px;border-radius:99px;background:#05050c;border:1px solid var(--line2);margin:0 auto 14px}
 .idcard .ph{border-radius:13px;overflow:hidden;border:1px solid var(--line2);aspect-ratio:4/4.4;background:#000}
 .idcard .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
@@ -488,6 +491,7 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
     zone.addEventListener('mousemove', function(e){
       var r=card.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
       card.style.transform='rotateY('+(x*16)+'deg) rotateX('+(-y*14)+'deg)';
+      card.style.setProperty('--mx', ((x+.5)*100)+'%'); card.style.setProperty('--my', ((y+.5)*100)+'%');
     });
     zone.addEventListener('mouseleave', function(){ card.style.transform=''; });
   }

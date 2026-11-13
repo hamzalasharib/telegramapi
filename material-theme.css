@@ -1,110 +1,117 @@
 /* ============================================================
-   HamzaEditz UI v5 — Clean. Simple Play Store-style theme,
-   same as the Dhunn page: white, flat, hairline dividers,
-   one green accent. No heavy effects, no animations.
+   HamzaEditz UI v6 — Dark portfolio theme, same design as the
+   About/Portfolio page (alfari-style): near-black navy, royal
+   blue accent, Space Grotesk headings, Inter body, starfield.
    Shared by every page on hamzaeditz.tech
    ============================================================ */
 :root, :root[data-theme="dark"], :root[data-theme="light"]{
-  color-scheme:light;
-  --hz-bg:#ffffff; --hz-bg2:#f8f9fa;
-  --hz-card:#ffffff; --hz-card-solid:#ffffff; --hz-card-hover:#f8f9fa;
-  --hz-fg:#202124; --hz-fg2:#3c4043; --hz-muted:#5f6368; --hz-muted2:#80868b;
-  --hz-line:#e8eaed; --hz-line2:#dadce0;
-  --hz-accent:#01875f; --hz-accent2:#01875f; --hz-accent3:#01875f;
-  --hz-grad:linear-gradient(115deg,#01875f,#01875f);
-  --hz-header:#ffffff;
-  --hz-shadow:0 1px 2px rgba(60,64,67,.08);
-  --hz-input:#ffffff;
-  --hz-chip:#f0f4f9;
+  color-scheme:dark;
+  --hz-bg:#050510; --hz-bg2:#0b0b16;
+  --hz-card:#11111a; --hz-card-solid:#11111a; --hz-card-hover:#171726;
+  --hz-fg:#f8fafc; --hz-fg2:#e2e8f0; --hz-muted:#94a3b8; --hz-muted2:#64748b;
+  --hz-line:#23232f; --hz-line2:#2c2c3d;
+  --hz-accent:#2c67ed; --hz-accent2:#60a5fa; --hz-accent3:#00f0ff;
+  --hz-grad:linear-gradient(115deg,#2c67ed,#00f0ff);
+  --hz-header:rgba(10,10,20,.86);
+  --hz-shadow:0 12px 30px rgba(0,0,0,.45);
+  --hz-input:#0b0b16;
+  --hz-chip:#171726;
 }
-html{background:#fff}
+html{background:#050510}
 html:not(.hz-app) body{
-  background-color:#fff!important;
+  background-color:#050510!important;
   background-image:none!important;
   color:var(--hz-fg)!important;
-  font-family:Roboto,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important;
   -webkit-font-smoothing:antialiased;
   line-height:1.55;
 }
 html:not(.hz-app) h1,html:not(.hz-app) h2,html:not(.hz-app) h3{
-  font-family:Roboto,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important;
-  font-weight:600;letter-spacing:-.01em;color:var(--hz-fg);
+  font-family:"Space Grotesk",Inter,system-ui,sans-serif!important;
+  font-weight:700;letter-spacing:-.01em;color:var(--hz-fg);
 }
-::selection{background:rgba(1,135,95,.18)}
-*{scrollbar-width:thin;scrollbar-color:#dadce0 transparent}
+::selection{background:rgba(44,103,237,.45);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:#2c2c3d transparent}
 ::-webkit-scrollbar{width:9px;height:9px}
-::-webkit-scrollbar-thumb{background:#dadce0;border-radius:99px}
-:focus-visible{outline:2px solid rgba(1,135,95,.55);outline-offset:2px}
+::-webkit-scrollbar-thumb{background:#2c2c3d;border-radius:99px}
+:focus-visible{outline:2px solid rgba(96,165,250,.65);outline-offset:2px}
+
+/* starfield + glows, injected by hamza-ui.js on content pages */
+#hz-stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.hz-glow{position:fixed;border-radius:50%;filter:blur(120px);z-index:0;pointer-events:none;opacity:.45}
+.hz-glow-a{width:460px;height:460px;background:#123a8f;top:-160px;left:-120px}
+.hz-glow-b{width:400px;height:400px;background:#0b3b4d;bottom:-140px;right:-120px}
 
 /* Legacy page variables — content pages only; full-screen app pages
    (hz-app) keep 100% of their own design system. */
 :root:not(.hz-app), :root:not(.hz-app)[data-theme="dark"], :root:not(.hz-app)[data-theme="light"]{
-  --bg-color:#ffffff; --bg:#ffffff; --background:#ffffff;
-  --card-color:#ffffff; --card-bg:#ffffff; --surface:#ffffff; --surface-color:#ffffff;
-  --text-color:#202124; --text:#202124; --text-muted:#5f6368; --text-second:#5f6368; --secondary-text:#5f6368; --muted:#5f6368;
-  --accent:#01875f; --accent-color:#01875f; --primary:#01875f; --primary-color:#01875f;
-  --accent-grad:linear-gradient(115deg,#01875f,#01875f);
-  --border:#e8eaed; --border-color:#e8eaed;
-  --input-bg:#ffffff;
-  --md-bg:#ffffff; --md-surface:#ffffff; --md-surface-container:#f0f4f9;
-  --md-on-surface:#202124; --md-on-surface-variant:#5f6368; --md-outline:#dadce0;
-  --md-primary:#01875f; --md-on-primary:#fff; --md-primary-container:#e6f4ef;
+  --bg-color:#050510; --bg:#050510; --background:#050510;
+  --card-color:#11111a; --card-bg:#11111a; --surface:#11111a; --surface-color:#11111a;
+  --text-color:#f8fafc; --text:#f8fafc; --text-muted:#94a3b8; --text-second:#94a3b8; --secondary-text:#94a3b8; --muted:#94a3b8;
+  --accent:#2c67ed; --accent-color:#2c67ed; --primary:#2c67ed; --primary-color:#2c67ed;
+  --accent-grad:linear-gradient(115deg,#2c67ed,#00f0ff);
+  --border:#23232f; --border-color:#23232f;
+  --input-bg:#0b0b16;
+  --md-bg:#050510; --md-surface:#11111a; --md-surface-container:#171726;
+  --md-on-surface:#f8fafc; --md-on-surface-variant:#94a3b8; --md-outline:#2c2c3d;
+  --md-primary:#2c67ed; --md-on-primary:#fff; --md-primary-container:#16264d;
 }
 
-/* ---------- Header: plain white bar, hairline bottom ---------- */
-.hz-header{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--hz-line)}
+/* ---------- Header: dark glass bar, hairline bottom ---------- */
+.hz-header{position:sticky;top:0;z-index:60;background:var(--hz-header);backdrop-filter:blur(14px);border-bottom:1px solid var(--hz-line)}
 .hz-header-in{max-width:920px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:16px}
 .hz-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--hz-fg);font-weight:600;font-size:1.02rem}
 .hz-brand svg{width:30px;height:30px;border-radius:8px;display:block}
-.hz-brand .hz-tag{font-size:.66rem;font-weight:700;color:var(--hz-accent);background:#e6f4ef;border-radius:6px;padding:2.5px 6px;letter-spacing:.05em}
+.hz-brand .hz-tag{font-size:.66rem;font-weight:700;color:var(--hz-accent2);background:rgba(44,103,237,.16);border-radius:6px;padding:2.5px 6px;letter-spacing:.05em}
 .hz-nav{margin-left:auto;display:flex;align-items:center;gap:20px}
 .hz-nav a{color:var(--hz-muted);text-decoration:none;font-weight:600;font-size:.9rem}
-.hz-nav a:hover{color:var(--hz-accent)}
+.hz-nav a:hover{color:var(--hz-accent2)}
 .hz-toggle{display:none!important}
 @media(max-width:760px){.hz-nav{gap:14px}.hz-nav a{font-size:.86rem}}
 @media(max-width:520px){.hz-hide-s{display:none}}
 
-/* ---------- Page head: app-icon + title, Play Store style ---------- */
-.hz-hero{max-width:920px;margin:0 auto;padding:28px 20px 6px;display:flex;gap:16px;align-items:flex-start}
-.hz-medal{width:64px;height:64px;flex:none;border-radius:18px;background:linear-gradient(135deg,var(--c1),var(--c2));display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+/* ---------- Page head ---------- */
+.hz-hero{max-width:920px;margin:0 auto;padding:28px 20px 6px;display:flex;gap:16px;align-items:flex-start;position:relative;z-index:1}
+.hz-medal{width:64px;height:64px;flex:none;border-radius:18px;background:linear-gradient(135deg,var(--c1),var(--c2));display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.5)}
 .hz-medal svg{width:32px;height:32px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .hz-hero h1{font-size:1.45rem;line-height:1.2;margin:1px 0 0}
-.hz-hero .hz-eyebrow{color:var(--hz-accent);font-weight:600;font-size:.86rem}
+.hz-hero .hz-eyebrow{color:var(--hz-accent2);font-weight:600;font-size:.86rem}
 .hz-hero p{color:var(--hz-muted);font-size:.92rem;margin:3px 0 0;max-width:600px}
 @media(max-width:560px){.hz-medal{width:56px;height:56px;border-radius:15px}.hz-medal svg{width:28px;height:28px}.hz-hero h1{font-size:1.28rem}}
-/* old v4 icon animation helpers — now static */
 .hz-anim-arrow,.hz-eq,.hz-anim-pulse,.hz-anim-spin{animation:none!important}
 
-/* ---------- Footer: small, plain ---------- */
+/* ---------- Footer: small, dark ---------- */
 .hz-foot{border-top:1px solid var(--hz-line);margin-top:44px}
 .hz-foot-in{max-width:920px;margin:0 auto;padding:20px 20px 28px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:center;color:var(--hz-muted);font-size:.8rem;text-align:center}
-.hz-foot a{color:var(--hz-accent);text-decoration:none;font-weight:600;margin-left:14px}
+.hz-foot a{color:var(--hz-accent2);text-decoration:none;font-weight:600;margin-left:14px}
 .hz-foot .hz-fbrand{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--hz-fg);font-size:.9rem}
 .hz-foot .hz-fbrand svg{width:21px;height:21px;border-radius:6px}
 
 /* ---------- App pages: one tiny home link, nothing else ---------- */
-.hz-backlink{position:fixed;top:10px;left:10px;z-index:9999;display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--hz-line2);color:var(--hz-fg);border-radius:999px;padding:7px 13px;font:600 .82rem Roboto,system-ui,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.12)}
-.hz-backlink:hover{color:var(--hz-accent)}
+.hz-backlink{position:fixed;top:10px;left:10px;z-index:9999;display:inline-flex;align-items:center;gap:6px;background:rgba(13,13,24,.88);border:1px solid var(--hz-line2);color:var(--hz-fg);border-radius:999px;padding:7px 13px;font:600 .82rem Inter,system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5);backdrop-filter:blur(10px)}
+.hz-backlink:hover{color:var(--hz-accent2)}
 
 /* ---------- Content skin (content pages only) ---------- */
 html:not(.hz-app) .container,html:not(.hz-app) .card,html:not(.hz-app) .box,html:not(.hz-app) .content,html:not(.hz-app) .panel,html:not(.hz-app) .wrapper{
-  background:#fff!important;border:1px solid var(--hz-line)!important;border-radius:16px!important;
-  box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  background:var(--hz-card)!important;border:1px solid var(--hz-line)!important;border-radius:16px!important;
+  box-shadow:var(--hz-shadow)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  position:relative;z-index:1;
 }
-html:not(.hz-app) main{max-width:920px;margin:0 auto;padding-left:20px;padding-right:20px}
+html:not(.hz-app) main{max-width:920px;margin:0 auto;padding-left:20px;padding-right:20px;position:relative;z-index:1}
 html:not(.hz-app) input,html:not(.hz-app) textarea,html:not(.hz-app) select{
-  background:#fff!important;color:var(--hz-fg)!important;border:1px solid var(--hz-line2)!important;
+  background:var(--hz-input)!important;color:var(--hz-fg)!important;border:1px solid var(--hz-line2)!important;
   border-radius:10px!important;box-shadow:none!important;
 }
+html:not(.hz-app) input::placeholder,html:not(.hz-app) textarea::placeholder{color:var(--hz-muted2)!important}
 html:not(.hz-app) input:focus,html:not(.hz-app) textarea:focus,html:not(.hz-app) select:focus{
-  border-color:var(--hz-accent)!important;box-shadow:0 0 0 3px rgba(1,135,95,.15)!important;outline:none!important;
+  border-color:var(--hz-accent)!important;box-shadow:0 0 0 3px rgba(44,103,237,.28)!important;outline:none!important;
 }
 html:not(.hz-app) button,html:not(.hz-app) .btn,html:not(.hz-app) a.button,html:not(.hz-app) input[type="submit"],html:not(.hz-app) input[type="button"]{
-  background:#01875f!important;background-image:none!important;color:#fff!important;border:1px solid transparent!important;
+  background:#2c67ed!important;background-image:none!important;color:#fff!important;border:1px solid transparent!important;
   border-radius:10px!important;font-weight:600!important;box-shadow:none!important;animation:none!important;
 }
-html:not(.hz-app) button:hover,html:not(.hz-app) .btn:hover,html:not(.hz-app) a.button:hover,html:not(.hz-app) input[type="submit"]:hover{background:#017a55!important}
-html:not(.hz-app) a{color:var(--hz-accent)}
+html:not(.hz-app) button:hover,html:not(.hz-app) .btn:hover,html:not(.hz-app) a.button:hover,html:not(.hz-app) input[type="submit"]:hover{background:#1f55c9!important}
+html:not(.hz-app) a{color:var(--hz-accent2)}
 html:not(.hz-app) table{border-color:var(--hz-line)}
 html:not(.hz-app) th,html:not(.hz-app) td{border-color:var(--hz-line)}
 html:not(.hz-app) th{background:var(--hz-chip)}
