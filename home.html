@@ -73,10 +73,14 @@ h2.sec{font-size:clamp(32px,5vw,46px);font-weight:700;text-align:center;margin:1
 .soc svg{width:20px;height:20px}
 
 /* hero visual card */
-.hcard-zone{display:flex;justify-content:center;perspective:1100px}
-.hcard{width:300px;background:linear-gradient(160deg,#14142a,#0c0c18);border:1px solid var(--line2);border-radius:22px;padding:24px 22px;box-shadow:0 30px 60px rgba(0,0,0,.55);position:relative;overflow:hidden;transform-style:preserve-3d;transition:transform .25s ease}
-.hcard::before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.13),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
-.hcard:hover::before{opacity:1}
+.hcard-zone{display:flex;justify-content:center}
+.lan{position:relative;width:300px;transform-origin:50% 0;will-change:transform}
+.strap{width:44px;height:150px;margin:0 auto;background:repeating-linear-gradient(180deg,#0b0b14 0 26px,#101020 26px 52px);border:1px solid var(--line2);border-bottom:0;border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.strap span{writing-mode:vertical-rl;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.34em;color:#5b6b84;white-space:nowrap}
+.clip{width:56px;height:30px;margin:0 auto;background:linear-gradient(180deg,#e2e7ee,#98a1ae 55%,#c9d1db);border:1px solid #7d8590;border-radius:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 2px 6px rgba(0,0,0,.4);position:relative;z-index:2}
+.ring{width:24px;height:24px;margin:-7px auto -9px;border:3px solid #aeb6c2;border-radius:50%;position:relative;z-index:1}
+.hcard{width:300px;background:linear-gradient(160deg,#14142a,#0c0c18);border:1px solid var(--line2);border-radius:22px;padding:24px 22px;box-shadow:0 30px 60px rgba(0,0,0,.55);position:relative;overflow:hidden;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;transform-origin:50% 0;will-change:transform}
+.hcard:active{cursor:grabbing}
 .hcard::after{content:"";position:absolute;top:-20%;bottom:-20%;left:0;width:45%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.16) 45%,rgba(160,210,255,.22) 50%,rgba(255,255,255,.16) 55%,transparent);transform:translateX(-220%) skewX(-18deg);animation:cardShine 5.2s ease-in-out infinite;pointer-events:none}
 @keyframes cardShine{0%{transform:translateX(-220%) skewX(-18deg)}38%{transform:translateX(320%) skewX(-18deg)}100%{transform:translateX(320%) skewX(-18deg)}}
 .hcard .lg{width:64px;height:64px;border-radius:17px;display:block;box-shadow:0 10px 24px rgba(0,0,0,.5)}
@@ -191,12 +195,17 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
       </div>
     </div>
     <div class="hcard-zone">
-      <div class="hcard" id="hcard">
+      <div class="lan" id="lan">
+        <div class="strap"><span>HAMZAEDITZ • FREE TOOLS • HAMZAEDITZ •</span></div>
+        <div class="clip"></div>
+        <div class="ring"></div>
+        <div class="hcard" id="hcard">
         <svg class="lg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="hzlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c67ed"/><stop offset=".5" stop-color="#0ea5e9"/><stop offset="1" stop-color="#00f0ff"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#hzlg)"/><rect x="27" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="62" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="38" y="44" width="24" height="11" rx="4" fill="#fff"/><path d="M46 38.5v23l20-11.5z" fill="#0b101d" opacity=".92"/></svg>
         <div class="t1">FREE FOREVER</div>
         <div class="t2">13 Tools.<br>One Site.</div>
         <div class="t3">Every tool runs in your browser or its own app — nothing to install, no account, no cost.</div>
         <div class="ft"><span>HAMZAEDITZ.TECH</span><span>EST. 2023</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -368,17 +377,61 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
   step();
 })();
 
-/* ---------- hero card tilt + glare ---------- */
+/* ---------- lanyard physics: real pendulum + drag (same as About) ---------- */
 (function(){
-  var card=document.getElementById('hcard');
-  if(card && matchMedia('(hover:hover)').matches){
-    card.addEventListener('mousemove', function(e){
-      var r=card.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-      card.style.transform='rotateY('+(x*14)+'deg) rotateX('+(-y*12)+'deg)';
-      card.style.setProperty('--mx', ((x+.5)*100)+'%'); card.style.setProperty('--my', ((y+.5)*100)+'%');
-    });
-    card.addEventListener('mouseleave', function(){ card.style.transform=''; });
+  var lan=document.getElementById('lan'), card=document.getElementById('hcard');
+  if(!lan || !card) return;
+  var zone=lan.parentElement;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var K=8.0, C=0.38;
+  var th=reduce?0:-0.72, om=0;
+  var ph=0, po=0;
+  var dragging=false, engaged=false, sx=0, sy=0, lastMove=0, lastTh=0;
+  var MAX=1.15, lastT=0;
+  function anchor(){
+    var r=zone.getBoundingClientRect();
+    return { x:r.left + r.width/2, y:r.top + 6 };
   }
+  function frame(now){
+    var dt=Math.min((now-lastT)/1000, .05); lastT=now;
+    if(dt>0){
+      if(!dragging){
+        om += (-K*Math.sin(th) - C*om) * dt;
+        th += om * dt;
+        if(Math.abs(th)<.0004 && Math.abs(om)<.0004){ th=0; om=0; }
+      }
+      po += (-30*(ph + .45*th) - 4.5*po) * dt;
+      ph += po * dt;
+      if(Math.abs(ph)<.0004 && Math.abs(po)<.0004 && th===0) ph=0;
+    }
+    lan.style.transform='rotate('+(th*57.29578)+'deg)';
+    card.style.transform='rotate('+(ph*57.29578)+'deg)';
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(function(t){ lastT=t; requestAnimationFrame(frame); });
+  function angleTo(e){
+    var p=anchor();
+    var a=Math.atan2(e.clientX-p.x, e.clientY-p.y);
+    return Math.max(-MAX, Math.min(MAX, a));
+  }
+  card.addEventListener('pointerdown', function(e){
+    engaged=false; sx=e.clientX; sy=e.clientY; lastMove=performance.now(); lastTh=th;
+    try{ card.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  card.addEventListener('pointermove', function(e){
+    if(!engaged){
+      var dx=e.clientX-sx, dy=e.clientY-sy;
+      if(Math.abs(dx)>8 && Math.abs(dx)>Math.abs(dy)){ engaged=true; dragging=true; }
+      else return;
+    }
+    var target=angleTo(e), now=performance.now(), dtm=Math.max(now-lastMove,1)/1000;
+    var v=(target-lastTh)/dtm;
+    om = .55*om + .45*Math.max(-6, Math.min(6, v));
+    lastTh=target; lastMove=now; th=target;
+  });
+  function endDrag(){ dragging=false; engaged=false; sx=0; }
+  card.addEventListener('pointerup', endDrag);
+  card.addEventListener('pointercancel', endDrag);
 })();
 
 /* ---------- scroll reveal + active nav ---------- */
