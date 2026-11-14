@@ -417,6 +417,7 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
   card.addEventListener('pointerdown', function(e){
     engaged=false; sx=e.clientX; sy=e.clientY; lastMove=performance.now(); lastTh=th;
     try{ card.setPointerCapture(e.pointerId); }catch(err){}
+    e.preventDefault();
   });
   card.addEventListener('pointermove', function(e){
     if(!engaged){
