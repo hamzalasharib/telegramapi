@@ -11,16 +11,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F6F8FB; --panel:#FFFFFF; --panel2:#EEF3F9; --line:#DFE7F0;
-  --txt:#0D1B2E; --mut:#52657E; --mut2:#8496AD;
-  --acc:#2E7CF6; --acc-d:#1F5FD0;
-  --r:16px; --max:1140px;
+  --bg:#FAF8F4; --panel:#FFFFFF; --panel2:#EEF2FA; --line:#DCE3F2;
+  --txt:#1A202E; --mut:#66728A; --mut2:#8C98AF;
+  --acc:#5478EB; --acc-d:#3D63D8;
+  --r:20px; --max:1140px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 section[id]{scroll-margin-top:84px}
-body{background:var(--bg);color:var(--txt);font:400 16.5px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:linear-gradient(180deg,#FAF8F4 0%,#EDF1FA 55%,#E6EDFC 100%) fixed;color:var(--txt);font:400 16.5px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 ::selection{background:var(--acc);color:#fff}
+.blobs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.blobs i{position:absolute;border-radius:50%;filter:blur(64px)}
+.blobs i:nth-child(1){width:560px;height:560px;left:-140px;top:-120px;background:rgba(168,190,255,.55);animation:drift1 26s ease-in-out infinite alternate}
+.blobs i:nth-child(2){width:460px;height:460px;right:-120px;top:34%;background:rgba(255,205,170,.5);animation:drift2 32s ease-in-out infinite alternate}
+.blobs i:nth-child(3){width:520px;height:520px;left:32%;bottom:-220px;background:rgba(214,196,255,.5);animation:drift3 38s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(90px,60px)}}
+@keyframes drift2{to{transform:translate(-70px,80px)}}
+@keyframes drift3{to{transform:translate(-90px,-50px)}}
+main,footer{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){.blobs i{animation:none}}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
@@ -40,9 +50,9 @@ header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop
 nav{display:flex;gap:30px;margin-left:auto}
 nav a{color:var(--mut);font-size:15px;font-weight:500}
 nav a:hover{color:var(--txt)}
-.btn{display:inline-flex;align-items:center;gap:9px;background:var(--acc);color:#fff;font-weight:600;font-size:15.5px;padding:13px 24px;border-radius:12px;border:1px solid var(--acc);box-shadow:0 8px 18px rgba(46,124,246,.32),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .15s ease,background .15s ease,box-shadow .15s ease}
-.btn:hover{background:var(--acc-d);transform:translateY(-2px);box-shadow:0 12px 22px rgba(46,124,246,.36),inset 0 1px 0 rgba(255,255,255,.25)}
-.btn:active{transform:translateY(1px);box-shadow:0 3px 8px rgba(46,124,246,.3)}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--acc);color:#fff;font-weight:600;font-size:15.5px;padding:13px 24px;border-radius:12px;border:1px solid var(--acc);box-shadow:0 8px 18px rgba(84,120,235,.32),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .15s ease,background .15s ease,box-shadow .15s ease}
+.btn:hover{background:var(--acc-d);transform:translateY(-2px);box-shadow:0 12px 22px rgba(84,120,235,.36),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn:active{transform:translateY(1px);box-shadow:0 3px 8px rgba(84,120,235,.3)}
 .btn:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 .btn.sm{padding:10px 18px;font-size:14.5px;margin-left:6px}
 .btn.ghost{background:transparent;color:var(--txt);border-color:var(--line)}
@@ -58,7 +68,7 @@ nav a:hover{color:var(--txt)}
 .meta span{border:1px solid var(--line);border-radius:999px;padding:6px 13px}
 .phone-zone{position:relative;display:flex;flex-direction:column;align-items:center;perspective:1400px}
 /* --- 3D iPhone mockup --- */
-.iphone{position:relative;width:min(300px,80vw);aspect-ratio:300/620;border-radius:54px;padding:12px;background:linear-gradient(150deg,#5a606b,#191b1f 38%,#454a53 72%,#101216);box-shadow:inset 0 0 0 2px rgba(255,255,255,.13),inset 0 0 5px 2px rgba(0,0,0,.65),0 44px 70px rgba(13,27,46,.35)}
+.iphone{position:relative;width:min(300px,80vw);aspect-ratio:300/620;border-radius:54px;padding:12px;background:linear-gradient(150deg,#5a606b,#191b1f 38%,#454a53 72%,#101216);box-shadow:inset 0 0 0 2px rgba(255,255,255,.13),inset 0 0 5px 2px rgba(0,0,0,.65),0 44px 70px rgba(40,55,95,.35)}
 .iphone .bez{width:100%;height:100%;background:#000;border-radius:43px;padding:7px;box-shadow:inset 0 0 0 1px #2c2f34}
 .iphone .scr{position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;background:#E9EEF7}
 .iphone .scr img{width:100%;height:100%;object-fit:cover;object-position:top center}
@@ -73,7 +83,7 @@ nav a:hover{color:var(--txt)}
 @keyframes sway{0%,100%{transform:rotateY(-15deg) rotateX(4deg) translateY(0)}50%{transform:rotateY(-13deg) rotateX(3deg) translateY(-5px)}}
 .floaty{animation:floaty 9s ease-in-out infinite}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.ip-shadow{width:70%;height:24px;margin-top:36px;background:#0D1B2E;opacity:.28;filter:blur(17px);border-radius:50%;animation:shadowp 9s ease-in-out infinite}
+.ip-shadow{width:70%;height:24px;margin-top:36px;background:#1A202E;opacity:.28;filter:blur(17px);border-radius:50%;animation:shadowp 9s ease-in-out infinite}
 @keyframes shadowp{0%,100%{transform:scaleX(1);opacity:.26}50%{transform:scaleX(.96);opacity:.22}}
 .sgrid{perspective:1300px}
 .sgrid .iphone{width:100%;max-width:272px;margin:0 auto;transition:transform .5s ease}
@@ -81,7 +91,7 @@ nav a:hover{color:var(--txt)}
 .sgrid .tilt-r{transform:rotateY(-11deg)}
 .sgrid .iphone:hover{transform:rotateY(0deg)}
 @media (prefers-reduced-motion:reduce){.iphone{transform:none!important;transition:none}.iphone,.floaty,.ip-shadow{animation:none!important}}
-.chip{position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 15px;font-size:13.5px;box-shadow:0 14px 30px rgba(13,27,46,.13)}
+.chip{position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 15px;font-size:13.5px;box-shadow:0 14px 30px rgba(40,55,95,.13)}
 .chip b{display:block;font-size:15px}
 .chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2FBF71;margin-right:7px}
 .chip.c1{left:-6px;top:110px}
@@ -95,8 +105,8 @@ nav a:hover{color:var(--txt)}
 .trust span{color:var(--mut2);font-size:13.5px}
 /* features */
 .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
-.fcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px;box-shadow:0 12px 26px rgba(13,27,46,.06),inset 0 1px 0 #fff;transition:border-color .18s ease;will-change:transform}
-.fcard:hover{border-color:#B9CFEF;box-shadow:0 22px 38px rgba(13,27,46,.1),inset 0 1px 0 #fff}
+.fcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px;box-shadow:0 12px 26px rgba(40,55,95,.06),inset 0 1px 0 #fff;transition:border-color .18s ease;will-change:transform}
+.fcard:hover{border-color:#B9CFEF;box-shadow:0 22px 38px rgba(40,55,95,.1),inset 0 1px 0 #fff}
 .fcard .ic{width:46px;height:46px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;margin-bottom:18px;background:var(--panel2)}
 .fcard h3{font-size:18.5px;margin-bottom:8px}
 .fcard p{color:var(--mut);font-size:15px}
@@ -119,19 +129,19 @@ nav a:hover{color:var(--txt)}
 .prem .go{background:var(--acc);border-radius:11px;padding:11px;font-weight:600;margin-top:12px;font-size:14.5px}
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
-.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px;box-shadow:0 12px 26px rgba(13,27,46,.06),inset 0 1px 0 #fff;will-change:transform}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px;box-shadow:0 12px 26px rgba(40,55,95,.06),inset 0 1px 0 #fff;will-change:transform}
 .step .n{font:700 13px "Space Grotesk";color:var(--acc);letter-spacing:.18em}
 .step h3{font-size:18.5px;margin:12px 0 8px}
 .step p{color:var(--mut);font-size:15px}
 /* compare */
-table.cmp{width:100%;border-collapse:collapse;margin-top:44px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 14px 30px rgba(13,27,46,.06)}
+table.cmp{width:100%;border-collapse:collapse;margin-top:44px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 14px 30px rgba(40,55,95,.06)}
 .cmp th,.cmp td{padding:16px 20px;text-align:left;font-size:15.5px;border-bottom:1px solid var(--line)}
 .cmp tr:last-child td{border-bottom:none}
 .cmp th{font:600 13px "Space Grotesk";letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
 .cmp td.y{color:#2FBF71;font-weight:600}
 .cmp td.n{color:var(--mut2)}
 /* premium */
-.prem-panel{margin-top:48px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:40px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;box-shadow:0 18px 36px rgba(13,27,46,.08),inset 0 1px 0 #fff;will-change:transform}
+.prem-panel{margin-top:48px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:40px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;box-shadow:0 18px 36px rgba(40,55,95,.08),inset 0 1px 0 #fff;will-change:transform}
 .prem-panel h3{font-size:26px;margin-bottom:10px}
 .prem-panel p{color:var(--mut);font-size:15.5px}
 .paybox{border:1px solid var(--line);border-radius:14px;padding:22px;background:var(--panel2)}
@@ -181,9 +191,10 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px;color:var(--mut2);fo
 </style>
 </head>
 <body>
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
 <header>
   <div class="wrap hbar">
-    <a class="logo" href="#top"><svg width="34" height="34" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 38 12v12c0 10-6.2 16.8-14 20C16.2 40.8 10 34 10 24V12L24 4Z" stroke="#2E7CF6" stroke-width="3" stroke-linejoin="round"/><path d="M17 22l5 3M31 22l-5 3" stroke="#0D1B2E" stroke-width="3" stroke-linecap="round"/><path d="M24 27v7" stroke="#0D1B2E" stroke-width="3" stroke-linecap="round"/></svg> NEXA&nbsp;VPN</a>
+    <a class="logo" href="#top"><svg width="34" height="34" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 38 12v12c0 10-6.2 16.8-14 20C16.2 40.8 10 34 10 24V12L24 4Z" stroke="#5478EB" stroke-width="3" stroke-linejoin="round"/><path d="M17 22l5 3M31 22l-5 3" stroke="#1A202E" stroke-width="3" stroke-linecap="round"/><path d="M24 27v7" stroke="#1A202E" stroke-width="3" stroke-linecap="round"/></svg> NEXA&nbsp;VPN</a>
     <nav>
       <a href="#features">Features</a>
       <a href="#screens">Screens</a>
@@ -229,7 +240,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px;color:var(--mut2);fo
     <h2 class="sec-h rv">What NEXA actually does</h2>
     <p class="sec-p rv">Everything the app does. Nothing extra.</p>
     <div class="fgrid">
-      <article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2E7CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5m0-2a1.5 1.5 0 0 1 3 0v2m0-1a1.5 1.5 0 0 1 3 0v4c0 3.5-2.5 6-6.5 6S6 19 4.8 15.6L3.6 12c-.3-1 .8-1.9 1.7-1.3L6.5 12V7"/></svg></div><h3>One-tap connect</h3><p>One big button. Tap to connect, tap again to disconnect.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2E7CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11L9.8 22 19 10h-6.5L13 2Z"/></svg></div><h3>Real speed numbers</h3><p>Live download, upload and latency, on the home screen.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2E7CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg></div><h3>Servers with real flags</h3><p>Searchable country list. Auto picks the fastest server.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2E7CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16M3 8l4.5 4L12 5l4.5 7L21 8l-1.5 10h-15L3 8Z"/></svg></div><h3>Free Premium minutes</h3><p>Watch one ad, get 30 minutes of Premium free.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2E7CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 7.7-7 9-4-1.3-7-4.4-7-9V6l7-3Z"/><path d="M9.5 12l2 2 3.5-4"/></svg></div><h3>No account needed</h3><p>No name, no email, no sign-up. Install and use.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2E7CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c-6 0-12 6-13 13l-2 3M20 4c1 6-2 13-9 14l-4 1 1-4C9 8 14 4 20 4ZM7 17 17 7"/></svg></div><h3>One complete file</h3><p>19.3 MB, everything built in. Nothing more to download.</p></article>
+      <article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5478EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5m0-2a1.5 1.5 0 0 1 3 0v2m0-1a1.5 1.5 0 0 1 3 0v4c0 3.5-2.5 6-6.5 6S6 19 4.8 15.6L3.6 12c-.3-1 .8-1.9 1.7-1.3L6.5 12V7"/></svg></div><h3>One-tap connect</h3><p>One big button. Tap to connect, tap again to disconnect.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5478EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11L9.8 22 19 10h-6.5L13 2Z"/></svg></div><h3>Real speed numbers</h3><p>Live download, upload and latency, on the home screen.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5478EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg></div><h3>Servers with real flags</h3><p>Searchable country list. Auto picks the fastest server.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5478EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16M3 8l4.5 4L12 5l4.5 7L21 8l-1.5 10h-15L3 8Z"/></svg></div><h3>Free Premium minutes</h3><p>Watch one ad, get 30 minutes of Premium free.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5478EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 7.7-7 9-4-1.3-7-4.4-7-9V6l7-3Z"/><path d="M9.5 12l2 2 3.5-4"/></svg></div><h3>No account needed</h3><p>No name, no email, no sign-up. Install and use.</p></article><article class="fcard rv" data-tilt="6"><div class="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5478EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4c-6 0-12 6-13 13l-2 3M20 4c1 6-2 13-9 14l-4 1 1-4C9 8 14 4 20 4ZM7 17 17 7"/></svg></div><h3>One complete file</h3><p>19.3 MB, everything built in. Nothing more to download.</p></article>
     </div>
   </div>
 </section>
