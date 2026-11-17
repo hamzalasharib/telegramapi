@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>MTH401 — Differential Equations | Midterm Notes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050510; --card:#0b0b22; --card2:#0d0d28; --line:rgba(96,165,250,.20);
+  --blue:#2c67ed; --sky:#60a5fa; --cyan:#00f0ff;
+  --text:#e9edfa; --muted:#9aa7c7; --muted2:#6d7a9e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+   radial-gradient(700px 420px at 12% -6%, rgba(44,103,237,.20), transparent 60%),
+   radial-gradient(620px 380px at 88% 0%, rgba(0,240,255,.10), transparent 60%),
+   radial-gradient(900px 600px at 50% 115%, rgba(44,103,237,.12), transparent 60%);}
+a{color:var(--sky);text-decoration:none}
+a:hover{color:var(--cyan)}
+::selection{background:rgba(44,103,237,.5)}
+
+/* ---------- sticky top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(5,5,16,.85);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1060px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.9rem;color:var(--text);
+  background:rgba(96,165,250,.10);border:1px solid var(--line);padding:8px 14px;border-radius:999px;white-space:nowrap}
+.back:hover{border-color:var(--cyan);color:var(--cyan)}
+.topbar .subj{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:1.02rem;letter-spacing:.2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .subj span{color:var(--cyan)}
+.topbar .tag{margin-left:auto;font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.35);padding:5px 10px;border-radius:999px;white-space:nowrap}
+@media(max-width:560px){.topbar .tag{display:none}.topbar .subj{font-size:.92rem}}
+
+/* ---------- topic jump nav ---------- */
+.topics{position:sticky;top:57px;z-index:40;background:rgba(5,5,16,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(96,165,250,.12)}
+.topics-in{max-width:1060px;margin:0 auto;padding:9px 20px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.topics-in::-webkit-scrollbar{display:none}
+.topics a{flex:0 0 auto;font-size:.78rem;font-weight:500;color:var(--muted);
+  border:1px solid rgba(96,165,250,.16);background:rgba(11,11,34,.7);padding:6px 12px;border-radius:999px}
+.topics a:hover{color:var(--cyan);border-color:rgba(0,240,255,.45)}
+
+/* ---------- article ---------- */
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 20px 90px}
+article{max-width:860px;margin:0 auto;font-size:1.02rem;line-height:1.78;color:#d7def2}
+article h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.2;
+  font-weight:700;margin:38px 0 18px;
+  background:linear-gradient(92deg,#fff 20%,var(--sky) 60%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+article h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.28rem,3.4vw,1.6rem);font-weight:700;line-height:1.3;
+  margin:52px 0 14px;padding:14px 16px;scroll-margin-top:130px;
+  background:linear-gradient(90deg,rgba(44,103,237,.16),rgba(0,240,255,.05) 70%,transparent);
+  border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:12px}
+article h3{font-family:"Space Grotesk",sans-serif;font-size:1.14rem;font-weight:600;margin:30px 0 10px;color:#fff;scroll-margin-top:130px}
+article h4{font-size:1rem;font-weight:600;margin:22px 0 8px;color:var(--sky)}
+article p{margin:0 0 15px}
+article ul,article ol{margin:0 0 16px;padding-left:24px}
+article li{margin-bottom:7px}
+article li::marker{color:var(--cyan)}
+article strong{color:#fff;font-weight:600}
+article em{color:#c3cdf0}
+article hr{border:none;height:1px;margin:34px 0;
+  background:linear-gradient(90deg,transparent,rgba(96,165,250,.4),transparent)}
+article blockquote{margin:0 0 16px;padding:12px 18px;border-left:3px solid var(--blue);
+  background:rgba(44,103,237,.08);border-radius:0 12px 12px 0;color:#c9d4f5}
+article a{border-bottom:1px dotted rgba(96,165,250,.5)}
+code{font-family:"JetBrains Mono",monospace;font-size:.86em;color:#8be9ff;
+  background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.14);padding:1px 6px;border-radius:6px}
+pre{background:#07071a;border:1px solid var(--line);border-radius:14px;padding:18px;overflow-x:auto;margin:0 0 18px;
+  box-shadow:0 10px 34px rgba(0,0,0,.45)}
+pre code{background:none;border:none;padding:0;color:#d9e4ff;font-size:.86rem;line-height:1.65}
+.twrap{overflow-x:auto;margin:0 0 20px;border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.55}
+thead th{background:linear-gradient(90deg,rgba(44,103,237,.35),rgba(0,240,255,.14));color:#fff;
+  font-family:"Space Grotesk",sans-serif;font-weight:600;text-align:left;padding:11px 14px;white-space:nowrap}
+tbody td{padding:10px 14px;border-top:1px solid rgba(96,165,250,.12);vertical-align:top}
+tbody tr:nth-child(even){background:rgba(96,165,250,.05)}
+tbody tr:hover{background:rgba(0,240,255,.05)}
+.foot{max-width:860px;margin:56px auto 0;padding-top:22px;border-top:1px solid rgba(96,165,250,.14);
+  color:var(--muted2);font-size:.85rem;text-align:center}
+.foot a{font-weight:600}
+
+/* ---------- hub ---------- */
+.hero{position:relative;z-index:1;text-align:center;padding:72px 20px 10px;max-width:1060px;margin:0 auto}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.4);padding:7px 16px;border-radius:999px;margin-bottom:22px;
+  background:rgba(0,240,255,.05);box-shadow:0 0 24px rgba(0,240,255,.12)}
+.hero h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(2.1rem,6.5vw,3.4rem);font-weight:700;line-height:1.12;
+  background:linear-gradient(94deg,#fff 15%,var(--sky) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:620px;margin:16px auto 0;font-size:1.02rem;line-height:1.7}
+.grid{position:relative;z-index:1;max-width:1060px;margin:44px auto 0;padding:0 20px 30px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{display:block;background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);
+  border-radius:20px;padding:26px 24px;position:relative;overflow:hidden;color:var(--text);
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.card:hover{transform:translateY(-5px);border-color:rgba(0,240,255,.55);color:var(--text);
+  box-shadow:0 18px 44px rgba(2,6,30,.75),0 0 0 1px rgba(0,240,255,.12),0 0 34px rgba(44,103,237,.25)}
+.card .ic{font-size:1.7rem;line-height:1}
+.card .code{font-family:"Space Grotesk",sans-serif;font-size:1.9rem;font-weight:700;margin-top:12px;letter-spacing:.5px}
+.card .code b{color:var(--cyan);font-weight:700}
+.card .name{color:#fff;font-weight:600;font-size:1.02rem;margin-top:2px}
+.card .meta{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.chip{font-size:.7rem;font-weight:600;letter-spacing:.6px;color:var(--sky);
+  border:1px solid rgba(96,165,250,.35);background:rgba(44,103,237,.12);padding:4px 10px;border-radius:999px}
+.chip.cy{color:var(--cyan);border-color:rgba(0,240,255,.35);background:rgba(0,240,255,.06)}
+.card .teaser{color:var(--muted);font-size:.92rem;line-height:1.65;min-height:3.1em}
+.card .open{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;color:#fff;
+  background:linear-gradient(90deg,var(--blue),#1f8fff);padding:11px 20px;border-radius:999px;
+  box-shadow:0 8px 22px rgba(44,103,237,.4)}
+.card:hover .open{background:linear-gradient(90deg,#1f8fff,var(--cyan));color:#02131f}
+.note{position:relative;z-index:1;max-width:760px;margin:14px auto 0;padding:0 20px}
+.note-in{border:1px dashed rgba(0,240,255,.35);background:rgba(0,240,255,.04);border-radius:14px;
+  padding:14px 18px;color:var(--muted);font-size:.9rem;line-height:1.65;text-align:center}
+.note-in b{color:var(--cyan)}
+.hubfoot{position:relative;z-index:1;text-align:center;color:var(--muted2);font-size:.83rem;padding:44px 20px 54px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="midterm-notes-091.html">← All Notes</a>
+  <div class="subj">MTH401 <span>· Differential Equations</span></div>
+  <div class="tag">MIDTERM</div>
+</div></header>
+<nav class="topics"><div class="topics-in"><a href="#1-basics-classification-lectures-12">1. Basics &amp;amp; Classification</a><a href="#2-separable-equations-lecture-3">2. Separable Equations</a><a href="#3-homogeneous-equations-lecture-4">3. Homogeneous Equations</a><a href="#4-exact-equations-lecture-5">4. Exact Equations</a><a href="#5-integrating-factor-if-technique-lecture-6">5. Integrating Factor (IF) Technique</a><a href="#6-first-order-linear-equations-lecture-7">6. First-Order Linear Equations</a><a href="#7-bernoulli-equations-lecture-8">7. Bernoulli Equations</a><a href="#8-applications-of-first-order-des-lectures-912">8. Applications of First-Order DEs</a><a href="#9-higher-order-linear-des-theory-lectures-1314">9. Higher-Order Linear DEs — Theory</a><a href="#10-reduction-of-order-lecture-15">10. Reduction of Order</a><a href="#11-homogeneous-equations-with-constant-coefficients-lecture-16">11. Homogeneous Equations with Constant Coefficients (Lecture 16) ⭐</a><a href="#12-undetermined-coefficients-superposition-approach-lecture-17">12. Undetermined Coefficients — Superposition Approach (Lecture 17) ⭐</a><a href="#13-annihilator-operator-approach-lectures-1819">13. Annihilator Operator Approach</a><a href="#14-variation-of-parameters-lectures-2021">14. Variation of Parameters (Lectures 20–21) ⭐</a><a href="#15-applications-of-second-order-des-springmass-motion-lecture-22-start">15. Applications of Second-Order DEs — Spring–Mass Motion</a><a href="#one-page-formula-sheet-exam-se-pehle-ye-zaroor-dohrao">⚡ One-Page Formula Sheet (exam se pehle ye zaroor dohrao)</a><a href="#last-day-checklist">🎯 Last-Day Checklist</a></div></nav>
+<div class="wrap">
+<article>
+<h1 id="mth401-differential-equations-midterm-revision-notes">MTH401 — Differential Equations — Midterm Revision Notes</h1>
+<blockquote>
+<p><strong>Course:</strong> MTH401 Differential Equations, Virtual University of Pakistan (Fall 2026)
+<strong>Midterm scope:</strong> Lectures 1–22 (VU's announced midterm range for MTH401; final term = Lectures 23–45). Content follows the official VU MTH401 handouts, chapters 1–22.
+<strong>Paper style (past terms):</strong> mostly MCQs (1 mark) + subjective questions of 2, 3 and 5 marks. So formulas aur method ke steps dono yaad hone chahiye — sirf final answer nahi chalta.</p>
+</blockquote>
+<p><strong>Golden rule of this course:</strong> Pehle equation ko <em>pehchano</em> (identify its type), phir us type ka fixed method lagao. Aadha paper sirf sahi pehchan ka hai.</p>
+<hr />
+<h2 id="1-basics-classification-lectures-12">1. Basics &amp; Classification (Lectures 1–2)</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Differential equation (DE)</td>
+<td>Equation containing derivatives of an unknown function</td>
+</tr>
+<tr>
+<td>ODE</td>
+<td>Only <strong>ordinary</strong> derivatives — one independent variable</td>
+</tr>
+<tr>
+<td>PDE</td>
+<td><strong>Partial</strong> derivatives — two or more independent variables</td>
+</tr>
+<tr>
+<td>Order</td>
+<td>Order of the <strong>highest</strong> derivative present</td>
+</tr>
+<tr>
+<td>Degree</td>
+<td>Power of the highest derivative (after removing radicals/fractions in derivatives)</td>
+</tr>
+<tr>
+<td>Linear DE</td>
+<td>y and its derivatives appear only in power 1, no products like y·y′, no sin y, e^y etc.</td>
+</tr>
+<tr>
+<td>Explicit solution</td>
+<td>y written directly: y = φ(x)</td>
+</tr>
+<tr>
+<td>Implicit solution</td>
+<td>Relation G(x, y) = 0 that defines y</td>
+</tr>
+<tr>
+<td>General solution</td>
+<td>Contains arbitrary constants (as many as the order)</td>
+</tr>
+<tr>
+<td>Particular solution</td>
+<td>Constants fixed by initial/boundary conditions</td>
+</tr>
+<tr>
+<td>Singular solution</td>
+<td>A solution that cannot be obtained from the general solution for any value of the constants</td>
+</tr>
+<tr>
+<td>IVP</td>
+<td>Initial-Value Problem: DE + conditions at <strong>one</strong> point, e.g. y(0) = 1</td>
+</tr>
+<tr>
+<td>BVP</td>
+<td>Boundary-Value Problem: conditions at <strong>two different</strong> points</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Worked example:</strong> For (dy/dx)² + 5y = x → order = 1 (highest derivative is dy/dx), degree = 2 (that derivative is squared). Equation is non-linear because of (y′)².</p>
+<p><strong>Exam points / traps:</strong>
+- Order hamesha highest <em>derivative</em> se hota hai, sab se bari power se nahi.
+- y′′ + (y′)³ + y = 0 is <strong>non-linear</strong> (because of (y′)³) — but its degree is 1, order is 2.
+- sin(y) or e^y makes a DE non-linear; sin(x) does NOT (x is the independent variable).
+- A solution is verified by <strong>substituting</strong> it back into the DE — common 2-mark question.</p>
+<hr />
+<h2 id="2-separable-equations-lecture-3">2. Separable Equations (Lecture 3)</h2>
+<p><strong>Form:</strong> dy/dx = f(x)·g(y) — x aur y alag alag ho sakte hon.</p>
+<p><strong>Steps:</strong>
+1. Separate: dy / g(y) = f(x) dx
+2. Integrate both sides: ∫ dy/g(y) = ∫ f(x) dx + C
+3. Apply initial condition if given.</p>
+<p><strong>Worked example:</strong> dy/dx = y/x → dy/y = dx/x → ln|y| = ln|x| + c → <strong>y = Cx</strong>.</p>
+<p><strong>Exam points / traps:</strong>
+- Constant ko hamesha akheer mein merge karo: ln C likh kar C ko akela karna asaan hota hai.
+- Dividing by g(y) may <strong>lose constant solutions</strong> where g(y) = 0 (e.g. y = 0) — mention them for full marks.
+- Agar integral mushkil ho to "implicit form" mein answer bhi acceptable hota hai.</p>
+<hr />
+<h2 id="3-homogeneous-equations-lecture-4">3. Homogeneous Equations (Lecture 4)</h2>
+<p><strong>Test:</strong> In dy/dx = F(x, y), if F(tx, ty) = F(x, y), the equation is homogeneous. Practically: every term has the <strong>same total degree</strong> (e.g. x² + xy + y²).</p>
+<p><strong>Method:</strong> Put <strong>y = vx</strong> (so dy/dx = v + x·dv/dx). The equation always becomes separable in v and x. Solve, then put v = y/x back.</p>
+<p><strong>Worked example:</strong> dy/dx = (x + y)/x. Put y = vx:
+v + x dv/dx = 1 + v → x dv/dx = 1 → v = ln|x| + C → <strong>y = x ln|x| + Cx</strong>.</p>
+<p><strong>Equations reducible to homogeneous:</strong> dy/dx = (ax + by + c)/(a₁x + b₁y + c₁)
+- <strong>Case 1</strong> (a/a₁ = b/b₁, lines parallel): put <strong>v = ax + by</strong> (or a₁x + b₁y), equation becomes separable.
+- <strong>Case 2</strong> (otherwise): shift origin — put x = X + h, y = Y + k, where (h, k) is the intersection point of the two lines (solve ah + bk + c = 0 and a₁h + b₁k + c₁ = 0). New equation in X, Y is homogeneous.</p>
+<p><strong>Exam points / traps:</strong>
+- dy/dx = v + x dv/dx likhna bhoolna sab se common ghalti hai — sirf v nahi likhte!
+- Case 1 vs Case 2 pehchanna: pehle a/a₁ aur b/b₁ check karo.</p>
+<hr />
+<h2 id="4-exact-equations-lecture-5">4. Exact Equations (Lecture 5)</h2>
+<p><strong>Form:</strong> M(x, y) dx + N(x, y) dy = 0</p>
+<p><strong>Exactness test:</strong> ∂M/∂y = ∂N/∂x → exact.</p>
+<p><strong>Method:</strong>
+1. F(x, y) = ∫ M dx (y ko constant samajh kar) + g(y)
+2. ∂F/∂y = N se g′(y) nikaalo, integrate karke g(y) lagao.
+3. Solution: <strong>F(x, y) = C</strong>.</p>
+<p><strong>Worked example:</strong> (2xy + y²) dx + (x² + 2xy) dy = 0. M_y = 2x + 2y = N_x ✓ exact.
+F = ∫(2xy + y²) dx = x²y + xy² + g(y); F_y = x² + 2xy + g′(y) = N → g′(y) = 0 → <strong>x²y + xy² = C</strong>.</p>
+<p><strong>Exam points / traps:</strong>
+- Pehle test, phir method — test fail ho to exact method mat lagao (integrating factor ki taraf jao, next section).
+- ∫N dy se bhi shuru kar sakte ho; dono se same F aata hai.</p>
+<hr />
+<h2 id="5-integrating-factor-if-technique-lecture-6">5. Integrating Factor (IF) Technique (Lecture 6)</h2>
+<p>Use when M dx + N dy = 0 is <strong>not exact</strong>. Multiply by μ so it becomes exact. Special cases:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Integrating Factor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(M_y − N_x)/N is a function of <strong>x only</strong>, say f(x)</td>
+<td>μ = e^{∫ f(x) dx}</td>
+</tr>
+<tr>
+<td>(N_x − M_y)/M is a function of <strong>y only</strong>, say g(y)</td>
+<td>μ = e^{∫ g(y) dy}</td>
+</tr>
+<tr>
+<td>Equation homogeneous with xM + yN ≠ 0</td>
+<td>μ = 1/(xM + yN)</td>
+</tr>
+<tr>
+<td>Equation of form y·f(xy) dx + x·g(xy) dy = 0, xM − yN ≠ 0</td>
+<td>μ = 1/(xM − yN)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam points / traps:</strong>
+- Sign ka khayal: pehle case mein M_y − N_x hai, doosre mein N_x − M_y — ulta karne se jawab ghalat ho jata hai.
+- IF se multiply karne ke baad exactness test dobara confirm karo, phir Section 4 wala method.</p>
+<hr />
+<h2 id="6-first-order-linear-equations-lecture-7">6. First-Order Linear Equations (Lecture 7)</h2>
+<p><strong>Standard form:</strong> dy/dx + P(x)·y = Q(x)</p>
+<p><strong>Formula (yaad kar lo, har midterm mein aata hai):</strong>
+- Integrating factor: <strong>μ = e^{∫ P(x) dx}</strong>
+- Solution: <strong>y·μ = ∫ Q(x)·μ dx + C</strong></p>
+<p><strong>Worked example:</strong> dy/dx + 2y = e^x. P = 2 → μ = e^{2x}.
+y·e^{2x} = ∫ e^x·e^{2x} dx = ∫ e^{3x} dx = e^{3x}/3 + C → <strong>y = e^x/3 + C e^{−2x}</strong>.</p>
+<p><strong>Exam points / traps:</strong>
+- Pehle equation ko standard form mein lao — dy/dx ka coefficient <strong>1</strong> hona chahiye. Agar 2(dy/dx) + ... ho to pehle 2 se divide karo, warna P ghalat niklega.
+- ∫P dx mein +C nahi likhte (IF ke liye aik hi constant kaafi hai).</p>
+<hr />
+<h2 id="7-bernoulli-equations-lecture-8">7. Bernoulli Equations (Lecture 8)</h2>
+<p><strong>Form:</strong> dy/dx + P(x)·y = Q(x)·yⁿ (n ≠ 0, 1)</p>
+<p><strong>Method:</strong> Divide by yⁿ, then substitute <strong>v = y^{1−n}</strong>. Equation becomes <strong>linear in v</strong> → solve by Section 6, then v ki jagah y^{1−n} wapas rakho.</p>
+<p><strong>Worked example:</strong> dy/dx + y = x y² (n = 2). v = y^{−1}, dv/dx = −y^{−2} dy/dx.
+Divide by y²: y^{−2}y′ + y^{−1} = x → −v′ + v = x → v′ − v = −x.
+IF = e^{−x}: v·e^{−x} = ∫ −x e^{−x} dx = (x + 1)e^{−x} + C → v = x + 1 + C e^x → <strong>y = 1/(x + 1 + C e^x)</strong>.</p>
+<p><strong>Exam points / traps:</strong>
+- n = 0 ya n = 1 ho to Bernoulli nahi — woh already linear hai.
+- dv/dx ka negative sign (jab 1 − n negative ho) sab se common slip hai.</p>
+<hr />
+<h2 id="8-applications-of-first-order-des-lectures-912">8. Applications of First-Order DEs (Lectures 9–12)</h2>
+<table>
+<thead>
+<tr>
+<th>Application</th>
+<th>Model</th>
+<th>Key result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Population growth</td>
+<td>dP/dt = kP</td>
+<td>P = P₀ e^{kt}</td>
+</tr>
+<tr>
+<td>Radioactive decay</td>
+<td>dN/dt = −kN</td>
+<td>N = N₀ e^{−kt}; half-life: t½ = ln 2 / k</td>
+</tr>
+<tr>
+<td>Newton's Law of Cooling</td>
+<td>dT/dt = k(T − T_s)</td>
+<td><strong>T = T_s + (T₀ − T_s) e^{kt}</strong></td>
+</tr>
+<tr>
+<td>Carbon dating</td>
+<td>Same decay law</td>
+<td>Age t = (1/k)·ln(N₀/N)</td>
+</tr>
+<tr>
+<td>Logistic equation</td>
+<td>dP/dt = kP(1 − P/K)</td>
+<td>P = K / (1 + A e^{−kt}), A = (K − P₀)/P₀</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Orthogonal Trajectories (OT):</strong> Curves that cut a given family of curves at <strong>right angles (90°)</strong>.
+Method: (1) family ko differentiate karke dy/dx nikaalo, (2) constant eliminate karo, (3) dy/dx ki jagah <strong>−dx/dy</strong> (i.e. slope → −1/slope) rakho, (4) nayi DE solve karo.</p>
+<p><strong>Worked example (cooling):</strong> Body at 100°C in a room of 25°C: T = 25 + 75 e^{kt}. Agar 10 min baad T = 60 ho to e^{10k} = 35/75 → k = ln(7/15)/10 ≈ −0.0762. Phir kisi bhi time ka T nikaal sakte ho.</p>
+<p><strong>Exam points / traps:</strong>
+- Cooling mein T_s (surroundings ka temperature) minus karna mat bhoolo — sirf T par exponential nahi lagta.
+- Decay mein k negative aata hai; growth mein positive. Half-life wale sawal mein N = N₀/2 rakh kar t solve karte hain.
+- OT mein slope ka negative reciprocal lena hi poora concept hai — MCQ isi par banta hai.</p>
+<hr />
+<h2 id="9-higher-order-linear-des-theory-lectures-1314">9. Higher-Order Linear DEs — Theory (Lectures 13–14)</h2>
+<p><strong>Standard form:</strong> aₙ(x) y⁽ⁿ⁾ + ... + a₁(x) y′ + a₀(x) y = g(x). If g(x) = 0 → <strong>homogeneous</strong>, warna non-homogeneous.</p>
+<p><strong>Existence &amp; Uniqueness (IVP):</strong> If coefficients and g(x) are continuous on an interval I containing x₀, and aₙ(x) ≠ 0 on I, then the IVP has <strong>exactly one</strong> solution on I.</p>
+<p><strong>Linear dependence / independence:</strong>
+- Functions are <strong>linearly dependent</strong> if one is a constant multiple (or combination) of others; warna independent.
+- <strong>Wronskian:</strong> W(y₁, y₂) = | y₁ y₂ ; y₁′ y₂′ | = y₁y₂′ − y₂y₁′
+- <strong>Criterion:</strong> If W ≠ 0 at some point of I → functions are <strong>linearly independent</strong>. If W = 0 for solutions of a linear DE → dependent. (Trap: W = 0 wali baat har functions ke liye converse true nahi hoti — handout khud note karta hai.)</p>
+<p><strong>Worked example:</strong> W(e^x, e^{2x}) = e^x·2e^{2x} − e^{2x}·e^x = e^{3x} ≠ 0 → linearly independent ✓.</p>
+<p><strong>Superposition Principle:</strong> If y₁, y₂ homogeneous equation ke solutions hain to <strong>y = c₁y₁ + c₂y₂</strong> bhi solution hai.</p>
+<p><strong>General solution structure (sab se zyada poochha jane wala concept):</strong>
+- Homogeneous: y = y_c = c₁y₁ + c₂y₂ + ... + cₙyₙ (y₁..yₙ = <strong>fundamental set</strong>: n linearly independent solutions)
+- Non-homogeneous: <strong>y = y_c + y_p</strong> (y_p = koi aik particular solution)</p>
+<p><strong>Exam points / traps:</strong>
+- Fundamental set mein functions ki tadaad = equation ka <strong>order</strong>.
+- y_p mein arbitrary constants NAHI hote; y_c mein hote hain.</p>
+<hr />
+<h2 id="10-reduction-of-order-lecture-15">10. Reduction of Order (Lecture 15)</h2>
+<p>Agar aik solution y₁ maloom ho, doosra nikaalne ka tareeqa: <strong>y₂ = u(x)·y₁</strong>, jahan standard form y′′ + P(x)y′ + Q(x)y = 0 ke liye:</p>
+<p><strong>Formula:</strong> y₂ = y₁ ∫ [ e^{−∫ P(x) dx} / y₁² ] dx</p>
+<p><strong>Exam points / traps:</strong>
+- Formula lagane se pehle equation ko standard form mein lao (y′′ ka coefficient 1) — P wahi se milega.
+- Ye method tab hi jab aik solution diya gaya ho ya guess ho sakta ho (e.g. y₁ = e^x, x, sin x).</p>
+<hr />
+<h2 id="11-homogeneous-equations-with-constant-coefficients-lecture-16">11. Homogeneous Equations with Constant Coefficients (Lecture 16) ⭐</h2>
+<p><strong>Form:</strong> ay′′ + by′ + cy = 0 → <strong>Auxiliary (characteristic) equation: am² + bm + c = 0</strong></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Roots</th>
+<th>General Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Distinct real</td>
+<td>m₁ ≠ m₂</td>
+<td>y = c₁ e^{m₁x} + c₂ e^{m₂x}</td>
+</tr>
+<tr>
+<td>2. Repeated real</td>
+<td>m₁ = m₂ = m</td>
+<td>y = (c₁ + c₂ x) e^{mx}</td>
+</tr>
+<tr>
+<td>3. Complex</td>
+<td>m = α ± iβ</td>
+<td>y = e^{αx} (c₁ cos βx + c₂ sin βx)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Worked examples:</strong>
+- y′′ − 3y′ + 2y = 0 → m² − 3m + 2 = 0 → m = 1, 2 → <strong>y = c₁e^x + c₂e^{2x}</strong>
+- y′′ − 2y′ + y = 0 → (m − 1)² = 0 → <strong>y = (c₁ + c₂x)e^x</strong>
+- y′′ + 4y = 0 → m = ±2i (α = 0, β = 2) → <strong>y = c₁ cos 2x + c₂ sin 2x</strong></p>
+<p><strong>Higher order:</strong> Har root apna term deta hai; root k times repeat ho to x⁰, x¹, ..., x^{k−1} se multiply karte hain; complex pair α ± iβ repeat ho to x ki powers e^{αx}(cos βx, sin βx) ke saath bhi aati hain.</p>
+<p><strong>Exam points / traps:</strong>
+- Repeated root par <strong>x se multiply</strong> karna bhoolna = sab se common number-katai.
+- Complex roots mein e^{αx} factor mat bhoolo (α = 0 ho to khud hi 1 ho jata hai).
+- IVP diya ho to aakhir mein y aur y′ mein conditions laga kar c₁, c₂ solve karo.</p>
+<hr />
+<h2 id="12-undetermined-coefficients-superposition-approach-lecture-17">12. Undetermined Coefficients — Superposition Approach (Lecture 17) ⭐</h2>
+<p>Sirf tab jab g(x) in mein se ho: constant, polynomial, e^{ax}, sin ax / cos ax, ya in ke sums/products.</p>
+<p><strong>Trial y_p table:</strong></p>
+<table>
+<thead>
+<tr>
+<th>g(x)</th>
+<th>Trial y_p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Constant C</td>
+<td>A</td>
+</tr>
+<tr>
+<td>xⁿ (polynomial)</td>
+<td>Aₙxⁿ + ... + A₁x + A₀ (full polynomial, same degree)</td>
+</tr>
+<tr>
+<td>e^{ax}</td>
+<td>A e^{ax}</td>
+</tr>
+<tr>
+<td>sin ax or cos ax</td>
+<td>A cos ax + B sin ax (DONO likhne hain)</td>
+</tr>
+<tr>
+<td>xⁿ e^{ax}</td>
+<td>e^{ax} × (full polynomial of degree n)</td>
+</tr>
+<tr>
+<td>e^{ax} sin bx / cos bx</td>
+<td>e^{ax}(A cos bx + B sin bx)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Duplication rule (sab se important):</strong> Agar trial y_p ka koi term y_c mein pehle se maujood ho, to poori trial ko <strong>x^s</strong> se multiply karo, jahan s = woh smallest power hai jis se duplication khatam ho jaye (s = root ki multiplicity).</p>
+<p><strong>Worked example:</strong> y′′ − 3y′ + 2y = e^{3x}. y_c = c₁e^x + c₂e^{2x}. Trial y_p = Ae^{3x}: 9A − 9A + 2A = 1 → A = 1/2 → y_p = ½e^{3x}. General: y = c₁e^x + c₂e^{2x} + ½e^{3x}.
+Lekin agar RHS e^x hota to trial Ae^x y_c se takrati — tab y_p = A<strong>x</strong>e^x lena parta.</p>
+<p><strong>Exam points / traps:</strong>
+- g(x) = ln x, tan x, 1/x, e^{x²} par ye method <strong>NAHI</strong> chalta — wahan Variation of Parameters lagta hai.
+- Sum wale g(x) ko hisson mein tor kar har hisse ka y_p alag banao (superposition).
+- Polynomial ke liye poora polynomial likho — sirf sab se bari power wala term nahi.</p>
+<hr />
+<h2 id="13-annihilator-operator-approach-lectures-1819">13. Annihilator Operator Approach (Lectures 18–19)</h2>
+<p>D = d/dx operator. <strong>Annihilator</strong> = woh operator jo kisi function ko zero kar de. Equation ko operator form mein likh kar dono taraf annihilator lagao → homogeneous equation banti hai jis se y_p ki <strong>form</strong> mil jati hai (constants phir original equation mein rakh kar).</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Annihilator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xⁿ</td>
+<td>D^{n+1}</td>
+</tr>
+<tr>
+<td>e^{ax}</td>
+<td>(D − a)</td>
+</tr>
+<tr>
+<td>xⁿ e^{ax}</td>
+<td>(D − a)^{n+1}</td>
+</tr>
+<tr>
+<td>sin ax / cos ax</td>
+<td>D² + a²</td>
+</tr>
+<tr>
+<td>e^{ax} sin bx / cos bx</td>
+<td>(D − a)² + b² = D² − 2aD + (a² + b²)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam points / traps:</strong>
+- xⁿ ka annihilator D^{n+1} hai, Dⁿ nahi (power hamesha aik zyada).
+- Ye approach asal mein Section 12 ki duplication rule ki wajah samjhata hai — dono ka result same aata hai.</p>
+<hr />
+<h2 id="14-variation-of-parameters-lectures-2021">14. Variation of Parameters (Lectures 20–21) ⭐</h2>
+<p><strong>Kab lagta hai:</strong> Jab g(x) koi bhi function ho (ln x, tan x, sec x, 1/x...) — Undetermined Coefficients fail ho jaye to yehi rasta hai. Pehle y_c zaroor nikaalo.</p>
+<p><strong>Second-order formulas</strong> — for y′′ + P(x)y′ + Q(x)y = g(x) (<strong>standard form lazmi</strong>), with y_c = c₁y₁ + c₂y₂ and W = Wronskian of y₁, y₂:</p>
+<ul>
+<li>y_p = u₁y₁ + u₂y₂</li>
+<li><strong>u₁′ = −y₂ g(x) / W</strong></li>
+<li><strong>u₂′ = +y₁ g(x) / W</strong></li>
+<li>u₁, u₂ integrate karke nikaalo (integration constants y_p mein nahi lete).</li>
+</ul>
+<p><strong>Worked example:</strong> y′′ − 2y′ + y = e^x / x. y₁ = e^x, y₂ = xe^x, W = e^{2x}, g = e^x/x.
+u₁′ = −(xe^x)(e^x/x)/e^{2x} = −1 → u₁ = −x. u₂′ = (e^x)(e^x/x)/e^{2x} = 1/x → u₂ = ln|x|.
+y_p = −x e^x + x e^x ln|x| → −xe^x wala hissa y_c mein already hai, effective y_p = x e^x ln|x|. General solution: y = (c₁ + c₂x)e^x + x e^x ln|x|.</p>
+<p><strong>Higher order:</strong> Same idea — har u_k′ Wronskian determinants ke ratio se milta hai (W_k / W), jahan W_k mein k-th column ko (0, 0, ..., g) se replace karte hain.</p>
+<p><strong>Exam points / traps:</strong>
+- Equation ko standard form (y′′ ka coefficient 1) mein kiye baghair g(x) ghalat parhoge — sab se bari ghalti.
+- u₁′ mein <strong>negative</strong> sign hai, u₂′ mein positive — ulta karna aam slip hai.
+- y_p ke liye u integrate karte waqt +C nahi lagate (woh y_c mein pehle se hai).</p>
+<hr />
+<h2 id="15-applications-of-second-order-des-springmass-motion-lecture-22-start">15. Applications of Second-Order DEs — Spring–Mass Motion (Lecture 22, start)</h2>
+<p><strong>Model:</strong> m x′′ + c x′ + k x = F(t) — m = mass, c = damping constant, k = spring constant (Hooke's Law: F = −kx).</p>
+<p>Free motion (F = 0) ki pehchan discriminant <strong>c² − 4mk</strong> se:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Type</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c² − 4mk &gt; 0</td>
+<td>Overdamped</td>
+<td>Slow return, no oscillation</td>
+</tr>
+<tr>
+<td>c² − 4mk = 0</td>
+<td>Critically damped</td>
+<td>Fastest return without oscillation</td>
+</tr>
+<tr>
+<td>c² − 4mk &lt; 0</td>
+<td>Underdamped</td>
+<td>Oscillations with decreasing amplitude</td>
+</tr>
+</tbody>
+</table>
+<p>Undamped (c = 0): x′′ + ω²x = 0 with ω² = k/m → Simple Harmonic Motion, period T = 2π/ω.</p>
+<p><strong>Exam points / traps:</strong>
+- Auxiliary equation yahan mλ² + cλ + k = 0 banti hai — Section 11 wale hi teen cases hain, bas naam badal jate hain.
+- Weight W = mg se mass nikaalte hain (English system mein m = W/g, g = 32 ft/s²) — units wala sawal aata hai.</p>
+<hr />
+<h2 id="one-page-formula-sheet-exam-se-pehle-ye-zaroor-dohrao">⚡ One-Page Formula Sheet (exam se pehle ye zaroor dohrao)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Formula / Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Linear 1st order: μ = e^{∫P dx}; y·μ = ∫Qμ dx + C</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bernoulli: v = y^{1−n}</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Exact test: M_y = N_x</td>
+</tr>
+<tr>
+<td>4</td>
+<td>IF case 1: (M_y − N_x)/N = f(x) → μ = e^{∫f dx}</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Cooling: T = T_s + (T₀ − T_s)e^{kt}</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Decay half-life: t½ = ln 2 / k</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Wronskian: W = y₁y₂′ − y₂y₁′; W ≠ 0 ⇒ independent</td>
+</tr>
+<tr>
+<td>8</td>
+<td>General solution: y = y_c + y_p</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Reduction of order: y₂ = y₁ ∫ e^{−∫P dx} / y₁² dx</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Auxiliary: distinct → e^{mx}; repeated → (c₁ + c₂x)e^{mx}; complex α±iβ → e^{αx}(cos βx, sin βx)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>UC duplication: y_c se takraye to × x^s</td>
+</tr>
+<tr>
+<td>12</td>
+<td>VoP: u₁′ = −y₂g/W, u₂′ = y₁g/W (standard form first!)</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Annihilators: xⁿ → D^{n+1}; e^{ax} → (D−a); sin/cos ax → D² + a²</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Damping: c² − 4mk → over / critical / under</td>
+</tr>
+</tbody>
+</table>
+<h2 id="last-day-checklist">🎯 Last-Day Checklist</h2>
+<ul>
+<li>[ ] Har type ki pehchan: separable, homogeneous, exact, linear, Bernoulli — 30 second mein pehchan sakte ho?</li>
+<li>[ ] Auxiliary equation ke teenon cases bina dekhe likh sakte ho?</li>
+<li>[ ] UC trial table + duplication rule clear hai?</li>
+<li>[ ] VoP ke dono formulas (sign ke saath) yaad hain?</li>
+<li>[ ] Cooling / decay / logistic ke final formulas yaad hain?</li>
+<li>[ ] Wronskian se independence check karna aata hai?</li>
+</ul>
+<p><em>Notes prepared from the official VU MTH401 handouts (Differential Equations), midterm range Lectures 1–22. Good luck, Hamza!</em></p>
+</article>
+<div class="foot">Made from the official VU handouts · Lectures 1–22 · <a href="midterm-notes-091.html">← Back to all notes</a></div>
+</div>
+
+<script>
+document.querySelectorAll('article table').forEach(function(t){
+  var w=document.createElement('div'); w.className='twrap';
+  t.parentNode.insertBefore(w,t); w.appendChild(t);
+});
+</script>
+
+</body>
+</html>

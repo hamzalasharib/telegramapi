@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>CS302 — Digital Logic Design | Midterm Notes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050510; --card:#0b0b22; --card2:#0d0d28; --line:rgba(96,165,250,.20);
+  --blue:#2c67ed; --sky:#60a5fa; --cyan:#00f0ff;
+  --text:#e9edfa; --muted:#9aa7c7; --muted2:#6d7a9e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+   radial-gradient(700px 420px at 12% -6%, rgba(44,103,237,.20), transparent 60%),
+   radial-gradient(620px 380px at 88% 0%, rgba(0,240,255,.10), transparent 60%),
+   radial-gradient(900px 600px at 50% 115%, rgba(44,103,237,.12), transparent 60%);}
+a{color:var(--sky);text-decoration:none}
+a:hover{color:var(--cyan)}
+::selection{background:rgba(44,103,237,.5)}
+
+/* ---------- sticky top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(5,5,16,.85);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1060px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.9rem;color:var(--text);
+  background:rgba(96,165,250,.10);border:1px solid var(--line);padding:8px 14px;border-radius:999px;white-space:nowrap}
+.back:hover{border-color:var(--cyan);color:var(--cyan)}
+.topbar .subj{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:1.02rem;letter-spacing:.2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .subj span{color:var(--cyan)}
+.topbar .tag{margin-left:auto;font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.35);padding:5px 10px;border-radius:999px;white-space:nowrap}
+@media(max-width:560px){.topbar .tag{display:none}.topbar .subj{font-size:.92rem}}
+
+/* ---------- topic jump nav ---------- */
+.topics{position:sticky;top:57px;z-index:40;background:rgba(5,5,16,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(96,165,250,.12)}
+.topics-in{max-width:1060px;margin:0 auto;padding:9px 20px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.topics-in::-webkit-scrollbar{display:none}
+.topics a{flex:0 0 auto;font-size:.78rem;font-weight:500;color:var(--muted);
+  border:1px solid rgba(96,165,250,.16);background:rgba(11,11,34,.7);padding:6px 12px;border-radius:999px}
+.topics a:hover{color:var(--cyan);border-color:rgba(0,240,255,.45)}
+
+/* ---------- article ---------- */
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 20px 90px}
+article{max-width:860px;margin:0 auto;font-size:1.02rem;line-height:1.78;color:#d7def2}
+article h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.2;
+  font-weight:700;margin:38px 0 18px;
+  background:linear-gradient(92deg,#fff 20%,var(--sky) 60%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+article h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.28rem,3.4vw,1.6rem);font-weight:700;line-height:1.3;
+  margin:52px 0 14px;padding:14px 16px;scroll-margin-top:130px;
+  background:linear-gradient(90deg,rgba(44,103,237,.16),rgba(0,240,255,.05) 70%,transparent);
+  border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:12px}
+article h3{font-family:"Space Grotesk",sans-serif;font-size:1.14rem;font-weight:600;margin:30px 0 10px;color:#fff;scroll-margin-top:130px}
+article h4{font-size:1rem;font-weight:600;margin:22px 0 8px;color:var(--sky)}
+article p{margin:0 0 15px}
+article ul,article ol{margin:0 0 16px;padding-left:24px}
+article li{margin-bottom:7px}
+article li::marker{color:var(--cyan)}
+article strong{color:#fff;font-weight:600}
+article em{color:#c3cdf0}
+article hr{border:none;height:1px;margin:34px 0;
+  background:linear-gradient(90deg,transparent,rgba(96,165,250,.4),transparent)}
+article blockquote{margin:0 0 16px;padding:12px 18px;border-left:3px solid var(--blue);
+  background:rgba(44,103,237,.08);border-radius:0 12px 12px 0;color:#c9d4f5}
+article a{border-bottom:1px dotted rgba(96,165,250,.5)}
+code{font-family:"JetBrains Mono",monospace;font-size:.86em;color:#8be9ff;
+  background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.14);padding:1px 6px;border-radius:6px}
+pre{background:#07071a;border:1px solid var(--line);border-radius:14px;padding:18px;overflow-x:auto;margin:0 0 18px;
+  box-shadow:0 10px 34px rgba(0,0,0,.45)}
+pre code{background:none;border:none;padding:0;color:#d9e4ff;font-size:.86rem;line-height:1.65}
+.twrap{overflow-x:auto;margin:0 0 20px;border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.55}
+thead th{background:linear-gradient(90deg,rgba(44,103,237,.35),rgba(0,240,255,.14));color:#fff;
+  font-family:"Space Grotesk",sans-serif;font-weight:600;text-align:left;padding:11px 14px;white-space:nowrap}
+tbody td{padding:10px 14px;border-top:1px solid rgba(96,165,250,.12);vertical-align:top}
+tbody tr:nth-child(even){background:rgba(96,165,250,.05)}
+tbody tr:hover{background:rgba(0,240,255,.05)}
+.foot{max-width:860px;margin:56px auto 0;padding-top:22px;border-top:1px solid rgba(96,165,250,.14);
+  color:var(--muted2);font-size:.85rem;text-align:center}
+.foot a{font-weight:600}
+
+/* ---------- hub ---------- */
+.hero{position:relative;z-index:1;text-align:center;padding:72px 20px 10px;max-width:1060px;margin:0 auto}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.4);padding:7px 16px;border-radius:999px;margin-bottom:22px;
+  background:rgba(0,240,255,.05);box-shadow:0 0 24px rgba(0,240,255,.12)}
+.hero h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(2.1rem,6.5vw,3.4rem);font-weight:700;line-height:1.12;
+  background:linear-gradient(94deg,#fff 15%,var(--sky) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:620px;margin:16px auto 0;font-size:1.02rem;line-height:1.7}
+.grid{position:relative;z-index:1;max-width:1060px;margin:44px auto 0;padding:0 20px 30px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{display:block;background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);
+  border-radius:20px;padding:26px 24px;position:relative;overflow:hidden;color:var(--text);
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.card:hover{transform:translateY(-5px);border-color:rgba(0,240,255,.55);color:var(--text);
+  box-shadow:0 18px 44px rgba(2,6,30,.75),0 0 0 1px rgba(0,240,255,.12),0 0 34px rgba(44,103,237,.25)}
+.card .ic{font-size:1.7rem;line-height:1}
+.card .code{font-family:"Space Grotesk",sans-serif;font-size:1.9rem;font-weight:700;margin-top:12px;letter-spacing:.5px}
+.card .code b{color:var(--cyan);font-weight:700}
+.card .name{color:#fff;font-weight:600;font-size:1.02rem;margin-top:2px}
+.card .meta{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.chip{font-size:.7rem;font-weight:600;letter-spacing:.6px;color:var(--sky);
+  border:1px solid rgba(96,165,250,.35);background:rgba(44,103,237,.12);padding:4px 10px;border-radius:999px}
+.chip.cy{color:var(--cyan);border-color:rgba(0,240,255,.35);background:rgba(0,240,255,.06)}
+.card .teaser{color:var(--muted);font-size:.92rem;line-height:1.65;min-height:3.1em}
+.card .open{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;color:#fff;
+  background:linear-gradient(90deg,var(--blue),#1f8fff);padding:11px 20px;border-radius:999px;
+  box-shadow:0 8px 22px rgba(44,103,237,.4)}
+.card:hover .open{background:linear-gradient(90deg,#1f8fff,var(--cyan));color:#02131f}
+.note{position:relative;z-index:1;max-width:760px;margin:14px auto 0;padding:0 20px}
+.note-in{border:1px dashed rgba(0,240,255,.35);background:rgba(0,240,255,.04);border-radius:14px;
+  padding:14px 18px;color:var(--muted);font-size:.9rem;line-height:1.65;text-align:center}
+.note-in b{color:var(--cyan)}
+.hubfoot{position:relative;z-index:1;text-align:center;color:var(--muted2);font-size:.83rem;padding:44px 20px 54px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="midterm-notes-091.html">← All Notes</a>
+  <div class="subj">CS302 <span>· Digital Logic Design</span></div>
+  <div class="tag">MIDTERM</div>
+</div></header>
+<nav class="topics"><div class="topics-in"><a href="#1-analogue-vs-digital-lecture-1">1. Analogue vs Digital</a><a href="#2-number-systems-conversions-lectures-14">2. Number Systems &amp;amp; Conversions</a><a href="#3-binary-arithmetic-signed-numbers-lecture-2">3. Binary Arithmetic &amp;amp; Signed Numbers</a><a href="#4-floating-point-numbers-lecture-3">4. Floating-Point Numbers</a><a href="#5-codes-bcd-excess-3-gray-ascii-parity-lecture-4">5. Codes: BCD, Excess-3, Gray, ASCII, Parity</a><a href="#6-logic-gates-lectures-56">6. Logic Gates</a><a href="#7-operational-characteristics-lectures-67">7. Operational Characteristics</a><a href="#8-boolean-algebra-laws-rules-lecture-8">8. Boolean Algebra — Laws &amp;amp; Rules</a><a href="#9-sop-pos-minterms-maxterms-lecture-9">9. SOP, POS, Minterms &amp;amp; Maxterms</a><a href="#10-karnaugh-maps-lectures-1011-sab-se-important">10. Karnaugh Maps (Lectures 10–11) ⭐ sab se important</a><a href="#11-combinational-design-procedure-handout-examples-lectures-1214">11. Combinational Design Procedure + Handout Examples</a><a href="#12-adders-bcd-adder-lectures-2-15">12. Adders &amp;amp; BCD Adder</a><a href="#13-16-bit-alu-look-ahead-carry-lecture-16">13. 16-Bit ALU &amp;amp; Look-Ahead Carry</a><a href="#14-decoder-encoder-lecture-17">14. Decoder &amp;amp; Encoder</a><a href="#15-multiplexer-demultiplexer-lectures-1819">15. Multiplexer &amp;amp; Demultiplexer</a><a href="#16-plds-tri-state-gal-lectures-1921">16. PLDs, Tri-State &amp;amp; GAL</a><a href="#17-abel-lectures-2122">17. ABEL</a><a href="#last-day-quick-revision-checklist">⚡ Last-Day Quick Revision Checklist</a></div></nav>
+<div class="wrap">
+<article>
+<h1 id="cs302-digital-logic-design-midterm-revision-notes">CS302 — Digital Logic Design: Midterm Revision Notes</h1>
+<p><strong>Student:</strong> Hamza Shafiq (BC250420711) — Fall 2026
+<strong>Source:</strong> Official VU CS302 handouts (Lectures 1–45), saved as <code>handouts/CS302.pdf</code>
+<strong>Midterm scope used: Lectures 1–22.</strong> ⚠️ This is the standard VU midterm coverage (first half of the course). The officially announced Fall 2026 midterm lecture range could not be confirmed from public sources, so Lectures 1–22 are <strong>assumed</strong>. Agar LMS announcement mein range mukhtalif ho to ye notes usi hisaab se adjust kar lena.</p>
+<p><strong>Notation:</strong> <code>A'</code> means NOT A (complement). <code>·</code> or simple jama (juxtaposition) = AND, <code>+</code> = OR, <code>⊕</code> = XOR.</p>
+<hr />
+<h2 id="1-analogue-vs-digital-lecture-1">1. Analogue vs Digital (Lecture 1)</h2>
+<ul>
+<li><strong>Analogue quantity:</strong> continuous — har darmiyani value le sakti hai (temperature, light, speed).</li>
+<li><strong>Digital quantity:</strong> discrete — sirf fixed steps/intervals par values (samples).</li>
+<li>Analogue signal ko digital banane ke liye <strong>sampling</strong> karte hain: fixed intervals par values note karna. Zyada samples = zyada accurate representation.</li>
+<li>Digital systems do voltage levels par kaam karte hain: <strong>+5V = logic 1 (HIGH)</strong>, <strong>0V = logic 0 (LOW)</strong>.</li>
+<li><strong>Nyquist rule (exam favourite):</strong> minimum sampling frequency = <strong>2 × highest frequency</strong> in the signal. Example: signal ki highest frequency 20 kHz ho to minimum sample rate = <strong>40 kHz</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Trap:</strong> Sampling kam ho to reconstructed signal asal se mukhtalif hota hai (peaks/dips miss ho jate hain) — isay under-sampling kehte hain.</p>
+</blockquote>
+<h2 id="2-number-systems-conversions-lectures-14">2. Number Systems &amp; Conversions (Lectures 1–4)</h2>
+<h3 id="positional-value-rule">Positional value rule</h3>
+<p>Har digit ki value = digit × (base)^position. Binary point ke left powers barhti hain (…, 2², 2¹, 2⁰), right par fractions (2⁻¹, 2⁻², …).</p>
+<h3 id="binary-decimal">Binary → Decimal</h3>
+<p>Har 1 wali position ki power add kar do.
+<strong>Example:</strong> 1011.101₂ = 8 + 2 + 1 + 0.5 + 0.125 = <strong>11.625</strong></p>
+<h3 id="decimal-binary">Decimal → Binary</h3>
+<ul>
+<li>Integer part: <strong>2 se divide</strong> karte jao, remainders neeche se upar (last remainder = MSB).</li>
+<li>Fraction part: <strong>2 se multiply</strong> karte jao, integer parts upar se neeche likho.
+<strong>Example:</strong> 25₁₀ → 11001₂. 0.625₁₀ → 0.101₂ (0.625×2=1.25 → 1; 0.25×2=0.5 → 0; 0.5×2=1.0 → 1).</li>
+</ul>
+<h3 id="shortcuts-bohat-kaam-ke">Shortcuts (bohat kaam ke)</h3>
+<ul>
+<li><strong>Binary ↔ Octal:</strong> 3 bits ke groups (binary point se dono taraf).</li>
+<li><strong>Binary ↔ Hex:</strong> 4 bits ke groups.</li>
+<li><strong>Example:</strong> 101111₂ = 101 111 = <strong>57₈</strong>; = 0010 1111 = <strong>2F₁₆</strong>.</li>
+<li>Octal ↔ Hex hamesha binary ke through jao.</li>
+</ul>
+<h3 id="hex-octal-decimal">Hex / Octal → Decimal</h3>
+<p>Positional weights use karo: hex mein weights 16ⁿ, digits 10–15 = A–F.
+<strong>Example:</strong> 2F₁₆ = 2×16 + 15 = <strong>47</strong>.</p>
+<blockquote>
+<p><strong>Exam points:</strong> Conversion sawal har paper mein aata hai. Fraction conversions mein rukna kab hai — jab fraction 0 ho jaye ya required bits poori ho jayen. Binary point ki jagah group banate waqt hamesha point se shuru karo, left side se nahi.</p>
+</blockquote>
+<h2 id="3-binary-arithmetic-signed-numbers-lecture-2">3. Binary Arithmetic &amp; Signed Numbers (Lecture 2)</h2>
+<h3 id="addition-subtraction-multiplication">Addition / Subtraction / Multiplication</h3>
+<ul>
+<li>Addition rules: 1+1 = 0, carry 1. Subtraction: 0−1 par borrow.</li>
+<li><strong>Multiplication/division</strong> decimal ki tarah, binary rules ke saath.</li>
+</ul>
+<h3 id="three-signed-representations-n-bits">Three signed representations (n bits)</h3>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Rule</th>
+<th>Range (n bits)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sign-Magnitude</td>
+<td>Pehla bit sign (0=+, 1=−), baqi magnitude</td>
+<td>−(2ⁿ⁻¹−1) to +(2ⁿ⁻¹−1)</td>
+</tr>
+<tr>
+<td>1's Complement</td>
+<td>Negative = saare bits ulta (flip)</td>
+<td>−(2ⁿ⁻¹−1) to +(2ⁿ⁻¹−1)</td>
+</tr>
+<tr>
+<td>2's Complement</td>
+<td>Negative = 1's complement + 1</td>
+<td>−(2ⁿ⁻¹) to +(2ⁿ⁻¹−1)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example (8-bit):</strong> −25 → 25 = 00011001 → 1's comp = 11100110 → 2's comp = <strong>11100111</strong>.
+8-bit 2's complement range: <strong>−128 to +127</strong>.</p>
+<h3 id="subtraction-using-2s-complement-sab-se-important-method">Subtraction using 2's complement (sab se important method)</h3>
+<p>A − B = A + (2's complement of B). Aakhri carry <strong>discard</strong> kar do.
+<strong>Example:</strong> 47 − 25 → 00101111 + 11100111 = (1)00010110 → <strong>22</strong> ✔ (carry gira diya).</p>
+<blockquote>
+<p><strong>Traps:</strong> Sign-magnitude aur 1's complement mein <strong>do zero</strong> hote hain (+0 aur −0); 2's complement mein sirf aik zero — yehi is ki khaasiyat hai. Overflow tab hota hai jab do same-sign numbers ka result opposite sign de.</p>
+</blockquote>
+<h2 id="4-floating-point-numbers-lecture-3">4. Floating-Point Numbers (Lecture 3)</h2>
+<ul>
+<li>Form: <strong>Number = Sign × Mantissa × 2^Exponent</strong> — teeno hisse store hote hain: sign bit, exponent, mantissa (fraction).</li>
+<li>Exponent aksar <strong>excess (biased)</strong> form mein hota hai: stored value = actual exponent + bias. Single precision (32-bit): 1 sign bit, 8 exponent bits (bias 127), 23 mantissa bits.</li>
+<li>Mantissa normalized hoti hai (binary point ke baad pehla bit 1, jo store nahi hota — "hidden bit").</li>
+<li>Zero, bohat chhoti aur bohat bari values represent karna floating point ka maqsad hai; fixed-point se range zyada, precision kam.</li>
+</ul>
+<blockquote>
+<p><strong>Exam point:</strong> Decimal ko floating point mein convert karna aur exponent par bias add karna — ye steps lazmi practice karo.</p>
+</blockquote>
+<h2 id="5-codes-bcd-excess-3-gray-ascii-parity-lecture-4">5. Codes: BCD, Excess-3, Gray, ASCII, Parity (Lecture 4)</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Key baat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BCD (8421)</strong></td>
+<td>Har decimal digit = 4 bits. 0–9 valid; 1010–1111 <strong>invalid</strong>. Digit-wise conversion, pure binary nahi!</td>
+</tr>
+<tr>
+<td><strong>Excess-3</strong></td>
+<td>Har digit mein 3 add karke BCD. Self-complementing code hai.</td>
+</tr>
+<tr>
+<td><strong>Gray Code</strong></td>
+<td>Adjacent numbers mein sirf <strong>1 bit</strong> change hota hai. Errors kam hote hain (shaft encoders).</td>
+</tr>
+<tr>
+<td><strong>ASCII</strong></td>
+<td>7-bit code, 128 characters. 'A' = 65 (1000001), 'a' = 97, '0' = 48.</td>
+</tr>
+<tr>
+<td><strong>Parity Bit</strong></td>
+<td>Error detection: even parity = total 1s even; odd parity = total 1s odd.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="binary-gray-rules-yaad-kar-lo">Binary ↔ Gray rules (yaad kar lo)</h3>
+<ul>
+<li><strong>Binary → Gray:</strong> pehla (MSB) bit same; har agla Gray bit = current binary bit XOR previous binary bit. <code>G = B ⊕ (B shifted right)</code></li>
+<li><strong>Gray → Binary:</strong> pehla bit same; har agla binary bit = previous binary bit XOR current Gray bit.
+<strong>Example:</strong> Binary 1011 → Gray: 1, 1⊕0=1, 0⊕1=1, 1⊕1=0 → <strong>1110</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Trap:</strong> BCD mein 59 = 0101 1001 (digit-wise), jabke pure binary mein 59 = 111011. Dono ko mix karna sab se aam ghalti hai.</p>
+</blockquote>
+<h2 id="6-logic-gates-lectures-56">6. Logic Gates (Lectures 5–6)</h2>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Symbol behaviour</th>
+<th>Output 1 kab?</th>
+<th>Equation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AND</td>
+<td>Series switches</td>
+<td>Sab inputs 1 hon</td>
+<td>F = A·B</td>
+</tr>
+<tr>
+<td>OR</td>
+<td>Parallel switches</td>
+<td>Koi aik input 1 ho</td>
+<td>F = A+B</td>
+</tr>
+<tr>
+<td>NOT</td>
+<td>Inverter</td>
+<td>Input ka ulta</td>
+<td>F = A'</td>
+</tr>
+<tr>
+<td>NAND</td>
+<td>AND + NOT</td>
+<td>Sab 1 <strong>na</strong> hon</td>
+<td>F = (A·B)'</td>
+</tr>
+<tr>
+<td>NOR</td>
+<td>OR + NOT</td>
+<td>Sab 0 hon</td>
+<td>F = (A+B)'</td>
+</tr>
+<tr>
+<td>XOR</td>
+<td>Odd detector</td>
+<td>Inputs mukhtalif hon (odd # of 1s)</td>
+<td>F = A⊕B = A'B + AB'</td>
+</tr>
+<tr>
+<td>XNOR</td>
+<td>Equality detector</td>
+<td>Inputs barabar hon</td>
+<td>F = (A⊕B)' = AB + A'B'</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Universal gates: NAND aur NOR</strong> — sirf inhi se koi bhi circuit ban sakta hai. NOT = NAND/NOR with both inputs tied together.</li>
+<li>XOR ka doosra naam: <strong>odd function</strong>; XNOR: <strong>equivalence/equality</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Exam points:</strong> Kisi bhi gate combination ki truth table banana; NAND-only implementation. XNOR ka output 1 = inputs same — ye MCQ bohat aata hai.</p>
+</blockquote>
+<h2 id="7-operational-characteristics-lectures-67">7. Operational Characteristics (Lectures 6–7)</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Matlab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Propagation Delay</strong></td>
+<td>Input change se output change tak ka waqt (ns). Speed isi se measure hoti hai.</td>
+</tr>
+<tr>
+<td><strong>Fan-Out</strong></td>
+<td>Aik output kitne standard inputs ko drive kar sakta hai.</td>
+</tr>
+<tr>
+<td><strong>Fan-In</strong></td>
+<td>Gate ke inputs ki tadaad.</td>
+</tr>
+<tr>
+<td><strong>Noise Margin</strong></td>
+<td>Woh unwanted voltage jo system bardasht kar le: NM_H = V_OH − V_IH; NM_L = V_IL − V_OL. Handout example: 0.9 V noise margin.</td>
+</tr>
+<tr>
+<td><strong>Power Dissipation</strong></td>
+<td>Gate kitni power khata hai; total = per-gate × gates ki tadaad.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>TTL:</strong> fast, zyada power, 5V supply. Standard TTL sab se slow aur zyada power leta hai; LS (Low-power Schottky) aam istemal hota hai.</li>
+<li><strong>CMOS:</strong> bohat kam power, slower (purane versions), 3–15V (3.3V series fast + low power). Static electricity se sensitive.</li>
+<li><strong>Unused inputs:</strong> TTL ke floating inputs 1 ki tarah behave karte hain lekin noise pakarte hain — unhe Vcc ya ground se jorna chahiye. CMOS ke unused inputs <strong>lazmi</strong> tie karo.</li>
+</ul>
+<blockquote>
+<p><strong>Trap:</strong> Fan-out exceed karne se voltage levels kharab ho jate hain aur circuit ghalat kaam karta hai.</p>
+</blockquote>
+<h2 id="8-boolean-algebra-laws-rules-lecture-8">8. Boolean Algebra — Laws &amp; Rules (Lecture 8)</h2>
+<h3 id="laws">Laws</h3>
+<ul>
+<li><strong>Commutative:</strong> A+B = B+A; A·B = B·A</li>
+<li><strong>Associative:</strong> A+(B+C) = (A+B)+C; A·(B·C) = (A·B)·C</li>
+<li><strong>Distributive:</strong> A·(B+C) = A·B + A·C; A + (B·C) = (A+B)·(A+C)</li>
+</ul>
+<h3 id="12-rules-exam-ki-jaan">12 Rules (exam ki jaan)</h3>
+<ol>
+<li>A + 0 = A  2. A + 1 = 1  3. A·0 = 0  4. A·1 = A</li>
+<li>A + A = A  6. A·A = A  7. A + A' = 1  8. A·A' = 0</li>
+<li>(A')' = A  10. A + A·B = A (<strong>Absorption</strong>)  11. A + A'·B = A + B  12. (A+B)(A+C) = A + B·C</li>
+</ol>
+<h3 id="de-morgans-theorems-sab-se-zyada-use-hone-wale">De Morgan's Theorems (sab se zyada use hone wale)</h3>
+<ul>
+<li><strong>(A·B)' = A' + B'</strong> — "AND ka ulta = ulton ka OR"</li>
+<li><strong>(A+B)' = A'·B'</strong> — "OR ka ulta = ulton ka AND"</li>
+<li>Rule: complement todo, AND↔OR badal do, har variable ka apna complement lo.</li>
+</ul>
+<h3 id="worked-simplification">Worked simplification</h3>
+<p>F = A·B + A·B' = A·(B + B') = A·1 = <strong>A</strong> ✔
+F = (A+B)' + C = A'·B' + C (De Morgan seedha apply).</p>
+<blockquote>
+<p><strong>Traps:</strong> (A+B)' ≠ A' + B' — De Morgan mein operation lazmi badalta hai. Rule 11 (A + A'B = A + B) aksar bhool jata hai, ye K-map ke baghair simplification ka shortcut hai.</p>
+</blockquote>
+<h2 id="9-sop-pos-minterms-maxterms-lecture-9">9. SOP, POS, Minterms &amp; Maxterms (Lecture 9)</h2>
+<ul>
+<li><strong>SOP (Sum of Products):</strong> pehle AND, phir OR — jaise AB + CD. <strong>POS (Product of Sums):</strong> pehle OR, phir AND — jaise (A+B)(C+D).</li>
+<li><strong>Minterm:</strong> woh product term jisme <strong>har variable</strong> aik dafa aaye (complement ya normal). mᵢ ka output sirf usi row par 1 hota hai jiska number i ho. n variables → 2ⁿ minterms.</li>
+<li><strong>Maxterm:</strong> woh sum term jisme har variable aik dafa aaye. Mᵢ ka output sirf row i par <strong>0</strong> hota hai.</li>
+<li><strong>Canonical SOP:</strong> F = Σm(…) — jin rows par output 1, unke minterms ka sum.</li>
+<li><strong>Canonical POS:</strong> F = ΠM(…) — jin rows par output 0, unke maxterms ka product.</li>
+<li><strong>Relation:</strong> F ke minterms aur maxterms aik doosre ke complement hote hain: agar F = Σm(1,3,5) (3 variables) to F = ΠM(0,2,4,6,7) — baqi saare numbers.</li>
+<li><strong>Standard form</strong> mein har term mein saare variables hona lazmi nahi; <strong>canonical form</strong> mein hona lazmi hai.</li>
+<li>Non-standard term ko canonical banane ke liye missing variable ke liye (X + X') se multiply (SOP) ya (X·X') add (POS) karo — bilkul waisa hi jaisa CS302 Assignment 1 mein minterm expansion thi.</li>
+</ul>
+<p><strong>Worked example:</strong> F(A,B,C) = A + B'C → canonical SOP:
+A = A(B+B')(C+C') → ABC + ABC' + AB'C + AB'C' = m7+m6+m5+m4; B'C = B'C(A+A') = AB'C + A'B'C = m5 + m1.
+F = Σm(1,4,5,6,7). (m5 do dafa aaya — aik hi dafa likhte hain.)</p>
+<blockquote>
+<p><strong>Trap:</strong> Maxterm numbering minterm jaisi hi hoti hai lekin output 0 wali rows se banti hai. Σ aur Π mein numbers kabhi same nahi hote (same function ke liye).</p>
+</blockquote>
+<h2 id="10-karnaugh-maps-lectures-1011-sab-se-important">10. Karnaugh Maps (Lectures 10–11) ⭐ sab se important</h2>
+<h3 id="rules-of-grouping">Rules of grouping</h3>
+<ul>
+<li>2 variables = 4 cells, 3 var = 8, 4 var = 16, 5 var = 2 sheets of 16 (A=0 sheet aur A=1 sheet, overlapping cells adjacent hote hain).</li>
+<li>Cells <strong>Gray code order</strong> mein hote hain (00, 01, 11, 10) — isiliye kinare (edges) bhi adjacent hain, map <strong>wrap</strong> hota hai (left-right aur top-bottom judte hain).</li>
+<li>Groups sirf <strong>1, 2, 4, 8, 16</strong> cells ke (powers of 2), rectangle/square shape mein.</li>
+<li><strong>Sab se bare groups</strong> banao, har 1 cover ho, groups overlap kar sakte hain. Group jitna bara → term utna chhota (har doubling par 1 variable khatam).</li>
+<li><strong>Don't care (X)</strong> ko 1 samajh sakte ho agar group bara bane; majboori nahi.</li>
+<li>Group se term: jo variable group ke andar <strong>change</strong> ho raha hai woh gayab; jo constant hai woh rehta hai (1 = normal, 0 = complement).</li>
+</ul>
+<h3 id="worked-example-1-3-var">Worked example 1 (3-var)</h3>
+<p>F(A,B,C) = Σm(1,3,5,6,7)
+- m1,m3,m5,m7 → poora C=1 wala hissa = <strong>C</strong>
+- m6,m7 → <strong>AB</strong>
+- <strong>F = C + AB</strong></p>
+<h3 id="worked-example-2-4-var-wrap-around">Worked example 2 (4-var, wrap-around)</h3>
+<p>F(A,B,C,D) = Σm(0,2,5,7,8,10,13,15)
+- m0,m2,m8,m10 → chaaron corners jurne wala group = <strong>B'D'</strong>
+- m5,m7,m13,m15 → <strong>BD</strong>
+- <strong>F = B'D' + BD</strong> (yeh XNOR jaisa pattern hai — pehchan lo!)</p>
+<h3 id="worked-example-3-5-var-assignment-style">Worked example 3 (5-var — assignment style)</h3>
+<p>5-variable map = do 4-var maps (A=0 aur A=1). Dono sheets mein <strong>same position</strong> wale cells adjacent hote hain.
+F(A,B,C,D,E) = Σm(0,2,4,6,9,13,21,23,25,29,31) jaisi soorat mein pehle har sheet par groups banao, phir dono sheets ke overlapping groups ko mila kar dekho — jo group dono sheets mein same jagah par ho, us se variable <strong>A gayab</strong> ho jata hai.
+General approach: pehle baray groups (8/16), phir chhote; har minterm cover lazmi.</p>
+<blockquote>
+<p><strong>Traps:</strong> Diagonal cells adjacent <strong>nahi</strong> hote. Group banana rectangle hi ho — L-shape nahi. POS ke liye 0s ko group karte hain aur maxterm-style term likhte hain. "Essential prime implicant" woh hai jo kisi 1 ko sirf wahi cover kare.</p>
+</blockquote>
+<h2 id="11-combinational-design-procedure-handout-examples-lectures-1214">11. Combinational Design Procedure + Handout Examples (Lectures 12–14)</h2>
+<h3 id="design-ke-steps-har-design-sawal-mein-yahi-likhna-hai">Design ke steps (har design sawal mein yahi likhna hai)</h3>
+<ol>
+<li>Problem se inputs/outputs tay karo. 2. Truth table banao. 3. Har output ki Boolean expression (canonical SOP). 4. K-map/algebra se simplify. 5. Gates se circuit banao.</li>
+</ol>
+<h3 id="comparator-lecture-12">Comparator (Lecture 12)</h3>
+<p>Do numbers compare karke 3 outputs: **A&gt;B, A=B, A<B** (sirf aik 1 hota hai).
+2-bit comparator: A=B tab jab A1=B1 aur A0=B0 → XNOR pattern: (A1⊙B1)(A0⊙B0).
+**74HC85** = 4-bit magnitude comparator IC; cascading inputs (A>B, A=B, A&lt;B) se 4-bit se bare numbers bhi compare hote hain.</p>
+<h3 id="odd-prime-number-detector-lecture-13">Odd-Prime Number Detector (Lecture 13)</h3>
+<p>4-bit input (0–15); output 1 sirf odd primes par: <strong>3, 5, 7, 11, 13</strong> → F = Σm(3,5,7,11,13). K-map se simplify karke circuit — ye poora design example midterm ka classic sawal hai.</p>
+<h3 id="odd-parity-generator-lecture-14">Odd-Parity Generator (Lecture 14)</h3>
+<ul>
+<li><strong>Parity generator:</strong> data bits ke saath aik parity bit jodta hai taake total 1s odd (odd parity) hon.</li>
+<li>3-bit data ka odd-parity bit = teeno bits ka <strong>XNOR-of-XOR pattern</strong>: P = A⊕B⊕C ka complement... asal mein odd parity ke liye P aisa ho ke A⊕B⊕C⊕P = 1.</li>
+<li><strong>Parity checker</strong> receiver par error detect karta hai (even number of bit errors detect <strong>nahi</strong> hote — limitation yaad rakho).</li>
+</ul>
+<h2 id="12-adders-bcd-adder-lectures-2-15">12. Adders &amp; BCD Adder (Lectures 2, 15)</h2>
+<h3 id="half-adder-2-inputs">Half Adder (2 inputs)</h3>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>Sum</th>
+<th>Carry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>Sum = A⊕B; Carry = A·B</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="full-adder-3-inputs-a-b-cin">Full Adder (3 inputs: A, B, Cin)</h3>
+<p><strong>Sum = A⊕B⊕Cin; Cout = A·B + Cin(A⊕B)</strong> — 2 half adders + OR gate se banta hai.
+4-bit ripple adder = 4 full adders chain mein; carry har stage se agle mein — delay zyada. <strong>74LS283</strong> = 4-bit binary adder IC (look-ahead carry ke saath fast).</p>
+<h3 id="bcd-adder-lecture-15">BCD Adder (Lecture 15)</h3>
+<p>Do BCD digits ko binary adder (7483/74LS283) se add karo, phir:
+- Agar sum <strong>&gt; 9</strong> ya carry aaye → <strong>0110 (6) add</strong> karo (correction). Warna koi correction nahi.
+<strong>Example:</strong> 47 + 38: 0111 + 1000 = 1111 (15 &gt; 9) → +0110 = 1 0101 → pehle digit ka carry banta hai; final BCD = <strong>1000 0101 = 85</strong> ✔</p>
+<blockquote>
+<p><strong>Trap:</strong> BCD addition mein correction check har digit par alag hota hai. 6 isiliye add karte hain kyun ke binary adder 16 states ginta hai, BCD sirf 10 — 6 invalid states skip karne ke liye.</p>
+</blockquote>
+<h2 id="13-16-bit-alu-look-ahead-carry-lecture-16">13. 16-Bit ALU &amp; Look-Ahead Carry (Lecture 16)</h2>
+<ul>
+<li><strong>74XX381 ALU:</strong> 4-bit ALU jo arithmetic + logic operations karta hai (select inputs se operation choose hota hai).</li>
+<li>4 ALUs jod kar 16-bit ALU — lekin <strong>ripple carry</strong> ki wajah se har ALU ko pehle wale ke carry ka intezaar: delay bohat zyada.</li>
+<li>Hal: <strong>Look-Ahead Carry Generator</strong> — har ALU <strong>Group Generate (G)</strong> aur <strong>Group Propagate (P)</strong> terms deta hai; generator unse C4, C8, C12 carries aik saath calculate kar deta hai. Carry ab ALUs ke andar se nahi guzarta → fast.</li>
+</ul>
+<blockquote>
+<p><strong>Exam point:</strong> "Ripple carry slow kyun hai aur look-ahead isay kaise theek karta hai" — ye short question bar bar aata hai.</p>
+</blockquote>
+<h2 id="14-decoder-encoder-lecture-17">14. Decoder &amp; Encoder (Lecture 17)</h2>
+<h3 id="decoder">Decoder</h3>
+<p>n inputs → 2ⁿ outputs; sirf aik output active hota hai (binary input ka number wala).
+- <strong>74XX138 = 3-to-8 decoder:</strong> 3 select inputs, 8 outputs jo <strong>active-LOW</strong> hain (selected output 0, baqi 1). 3 enable inputs (1 active-high, 2 active-low) — teeno sahi hon tab hi kaam karta hai.
+- Decoder se minterms milte hain → koi bhi Boolean function decoder + OR gate se ban sakta hai (active-low outputs ke saath NAND gate use hota hai).
+- <strong>Encoder</strong> is ka ulta: 2ⁿ inputs → n outputs (jaise decimal-to-BCD encoder). <strong>Priority encoder</strong> mein sab se bari active input jeetti hai.</p>
+<blockquote>
+<p><strong>Trap:</strong> 74138 ke outputs active-low hain — truth table mein selected output par <strong>0</strong> likhna hai. Yahi sab se aam number-katne wali ghalti hai.</p>
+</blockquote>
+<h2 id="15-multiplexer-demultiplexer-lectures-1819">15. Multiplexer &amp; Demultiplexer (Lectures 18–19)</h2>
+<h3 id="multiplexer-mux-data-selector">Multiplexer (MUX) — "data selector"</h3>
+<p>Bohat se inputs mein se <strong>aik</strong> output par bhejna. s select lines → 2^s inputs.
+- <strong>4-to-1 MUX:</strong> Y = S1'S0'D0 + S1'S0D1 + S1S0'D2 + S1S0D3 — ye expression yaad kar lo, adha sawal yahin se banta hai.
+- Handout example: <strong>2-input 4-bit MUX</strong> — 4-bit wide data ke do sources mein se aik choose karna (har bit par aik 2-to-1 MUX, common select).
+- <strong>MUX as function generator:</strong> kisi bhi truth table ko MUX par implement kar sakte ho — inputs par data/constants, select par variables.
+- <strong>Demultiplexer (DEMUX):</strong> ulta kaam — aik input ko select lines ke mutabiq 2^s outputs mein se kisi aik par bhejna. Decoder with enable = demux ki tarah kaam karta hai (enable pin data input ban jata hai).</p>
+<h2 id="16-plds-tri-state-gal-lectures-1921">16. PLDs, Tri-State &amp; GAL (Lectures 19–21)</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>AND array</th>
+<th>OR array</th>
+<th>Khaasiyat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PROM</strong></td>
+<td>Fixed</td>
+<td>Programmable</td>
+<td>Memory ki tarah bhi use hota hai</td>
+</tr>
+<tr>
+<td><strong>PLA</strong></td>
+<td>Programmable</td>
+<td>Programmable</td>
+<td>Sab se flexible, mehnga/slow</td>
+</tr>
+<tr>
+<td><strong>PAL</strong></td>
+<td>Programmable</td>
+<td>Fixed</td>
+<td>Fast, aam istemal</td>
+</tr>
+<tr>
+<td><strong>GAL</strong></td>
+<td>Programmable</td>
+<td>Fixed</td>
+<td>PAL jaisa lekin <strong>reprogrammable</strong> (E²CMOS), output par OLMC</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>GAL16V8:</strong> 16 inputs tak, 8 outputs; har output par <strong>OLMC (Output Logic Macrocell)</strong> jo output ko combinational/registered, active-high/low configure karta hai.</li>
+<li><strong>Tri-state buffer:</strong> teesri state <strong>Hi-Z (high impedance)</strong> — output effectively disconnect. Buses par bohat se outputs jodne ke liye lazmi; aik waqt mein sirf aik buffer enable hota hai warna <strong>bus contention</strong>.</li>
+<li>Constant 0s/1s implement karna: unused inputs/outputs ko sahi logic level par tie karna PLD design ka hissa hai (Lecture 20).</li>
+</ul>
+<h2 id="17-abel-lectures-2122">17. ABEL (Lectures 21–22)</h2>
+<p>ABEL = PLD design ki hardware description language. <strong>Case-sensitive</strong> hai ('A' ≠ 'a'); har equation <strong><code>;</code></strong> par khatam hoti hai.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Boolean</th>
+<th>ABEL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NOT</td>
+<td>A'</td>
+<td><strong>!A</strong></td>
+</tr>
+<tr>
+<td>AND</td>
+<td>A·B</td>
+<td><strong>A &amp; B</strong></td>
+</tr>
+<tr>
+<td>OR</td>
+<td>A+B</td>
+<td><strong>A # B</strong></td>
+</tr>
+<tr>
+<td>XOR</td>
+<td>A⊕B</td>
+<td><strong>A $ B</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Precedence: <strong>!</strong> sab se pehle, phir <strong>&amp;</strong>, phir <strong>#</strong>, phir <strong>$</strong>.
+<strong>Example:</strong> F = AB' + AC + B'D → ABEL: <code>F = A &amp; !B # A &amp; C # !B &amp; !D;</code></p>
+<p>ABEL input file ki structure (Quad 1-of-4 MUX example, Lecture 22):
+1. <code>MODULE</code> header + title
+2. Pin declarations (<code>PIN</code> inputs/outputs, device name jaise GAL16V8)
+3. <code>EQUATIONS</code> section — logic equations
+4. <code>TEST_VECTORS</code> — simulation/checking ke liye input-output table
+5. <code>END</code></p>
+<blockquote>
+<p><strong>Exam points:</strong> ABEL symbols wala sawal (NOT/AND/OR/XOR ke symbols) taqreeban lazmi aata hai — ! &amp; # $ yaad kar lo. Kisi Boolean expression ko ABEL mein likhna bhi aata hai.</p>
+</blockquote>
+<hr />
+<h2 id="last-day-quick-revision-checklist">⚡ Last-Day Quick Revision Checklist</h2>
+<ul>
+<li>[ ] Conversions: binary↔decimal (fraction ke saath), octal/hex shortcuts</li>
+<li>[ ] 2's complement subtraction + ranges (−128..127 for 8-bit)</li>
+<li>[ ] BCD vs binary ka farq; Gray code conversion rule</li>
+<li>[ ] Saare gates ki truth tables; NAND/NOR universal</li>
+<li>[ ] De Morgan + Rule 10/11 (absorption wale)</li>
+<li>[ ] Σm ↔ ΠM conversion; canonical expansion</li>
+<li>[ ] K-map: 4-var lazmi, 5-var ki technique (do sheets, overlap)</li>
+<li>[ ] Half/Full adder expressions; BCD correction (+6 kab?)</li>
+<li>[ ] 74138 active-low outputs; MUX expression (4-to-1)</li>
+<li>[ ] PROM/PLA/PAL/GAL farq; ABEL symbols ! &amp; # $</li>
+</ul>
+<p><em>Ye notes official handouts (Lectures 1–22) se tayyar kiye gaye hain — details aur mazeed examples ke liye handout ke mutalliq lectures dekho. Allah Hafiz, best of luck! 🍀</em></p>
+</article>
+<div class="foot">Made from the official VU handouts · Lectures 1–22 · <a href="midterm-notes-091.html">← Back to all notes</a></div>
+</div>
+
+<script>
+document.querySelectorAll('article table').forEach(function(t){
+  var w=document.createElement('div'); w.className='twrap';
+  t.parentNode.insertBefore(w,t); w.appendChild(t);
+});
+</script>
+
+</body>
+</html>

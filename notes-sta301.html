@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>STA301 — Statistics and Probability | Midterm Notes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050510; --card:#0b0b22; --card2:#0d0d28; --line:rgba(96,165,250,.20);
+  --blue:#2c67ed; --sky:#60a5fa; --cyan:#00f0ff;
+  --text:#e9edfa; --muted:#9aa7c7; --muted2:#6d7a9e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+   radial-gradient(700px 420px at 12% -6%, rgba(44,103,237,.20), transparent 60%),
+   radial-gradient(620px 380px at 88% 0%, rgba(0,240,255,.10), transparent 60%),
+   radial-gradient(900px 600px at 50% 115%, rgba(44,103,237,.12), transparent 60%);}
+a{color:var(--sky);text-decoration:none}
+a:hover{color:var(--cyan)}
+::selection{background:rgba(44,103,237,.5)}
+
+/* ---------- sticky top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(5,5,16,.85);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1060px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.9rem;color:var(--text);
+  background:rgba(96,165,250,.10);border:1px solid var(--line);padding:8px 14px;border-radius:999px;white-space:nowrap}
+.back:hover{border-color:var(--cyan);color:var(--cyan)}
+.topbar .subj{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:1.02rem;letter-spacing:.2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .subj span{color:var(--cyan)}
+.topbar .tag{margin-left:auto;font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.35);padding:5px 10px;border-radius:999px;white-space:nowrap}
+@media(max-width:560px){.topbar .tag{display:none}.topbar .subj{font-size:.92rem}}
+
+/* ---------- topic jump nav ---------- */
+.topics{position:sticky;top:57px;z-index:40;background:rgba(5,5,16,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(96,165,250,.12)}
+.topics-in{max-width:1060px;margin:0 auto;padding:9px 20px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.topics-in::-webkit-scrollbar{display:none}
+.topics a{flex:0 0 auto;font-size:.78rem;font-weight:500;color:var(--muted);
+  border:1px solid rgba(96,165,250,.16);background:rgba(11,11,34,.7);padding:6px 12px;border-radius:999px}
+.topics a:hover{color:var(--cyan);border-color:rgba(0,240,255,.45)}
+
+/* ---------- article ---------- */
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 20px 90px}
+article{max-width:860px;margin:0 auto;font-size:1.02rem;line-height:1.78;color:#d7def2}
+article h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.2;
+  font-weight:700;margin:38px 0 18px;
+  background:linear-gradient(92deg,#fff 20%,var(--sky) 60%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+article h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.28rem,3.4vw,1.6rem);font-weight:700;line-height:1.3;
+  margin:52px 0 14px;padding:14px 16px;scroll-margin-top:130px;
+  background:linear-gradient(90deg,rgba(44,103,237,.16),rgba(0,240,255,.05) 70%,transparent);
+  border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:12px}
+article h3{font-family:"Space Grotesk",sans-serif;font-size:1.14rem;font-weight:600;margin:30px 0 10px;color:#fff;scroll-margin-top:130px}
+article h4{font-size:1rem;font-weight:600;margin:22px 0 8px;color:var(--sky)}
+article p{margin:0 0 15px}
+article ul,article ol{margin:0 0 16px;padding-left:24px}
+article li{margin-bottom:7px}
+article li::marker{color:var(--cyan)}
+article strong{color:#fff;font-weight:600}
+article em{color:#c3cdf0}
+article hr{border:none;height:1px;margin:34px 0;
+  background:linear-gradient(90deg,transparent,rgba(96,165,250,.4),transparent)}
+article blockquote{margin:0 0 16px;padding:12px 18px;border-left:3px solid var(--blue);
+  background:rgba(44,103,237,.08);border-radius:0 12px 12px 0;color:#c9d4f5}
+article a{border-bottom:1px dotted rgba(96,165,250,.5)}
+code{font-family:"JetBrains Mono",monospace;font-size:.86em;color:#8be9ff;
+  background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.14);padding:1px 6px;border-radius:6px}
+pre{background:#07071a;border:1px solid var(--line);border-radius:14px;padding:18px;overflow-x:auto;margin:0 0 18px;
+  box-shadow:0 10px 34px rgba(0,0,0,.45)}
+pre code{background:none;border:none;padding:0;color:#d9e4ff;font-size:.86rem;line-height:1.65}
+.twrap{overflow-x:auto;margin:0 0 20px;border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.55}
+thead th{background:linear-gradient(90deg,rgba(44,103,237,.35),rgba(0,240,255,.14));color:#fff;
+  font-family:"Space Grotesk",sans-serif;font-weight:600;text-align:left;padding:11px 14px;white-space:nowrap}
+tbody td{padding:10px 14px;border-top:1px solid rgba(96,165,250,.12);vertical-align:top}
+tbody tr:nth-child(even){background:rgba(96,165,250,.05)}
+tbody tr:hover{background:rgba(0,240,255,.05)}
+.foot{max-width:860px;margin:56px auto 0;padding-top:22px;border-top:1px solid rgba(96,165,250,.14);
+  color:var(--muted2);font-size:.85rem;text-align:center}
+.foot a{font-weight:600}
+
+/* ---------- hub ---------- */
+.hero{position:relative;z-index:1;text-align:center;padding:72px 20px 10px;max-width:1060px;margin:0 auto}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.4);padding:7px 16px;border-radius:999px;margin-bottom:22px;
+  background:rgba(0,240,255,.05);box-shadow:0 0 24px rgba(0,240,255,.12)}
+.hero h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(2.1rem,6.5vw,3.4rem);font-weight:700;line-height:1.12;
+  background:linear-gradient(94deg,#fff 15%,var(--sky) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:620px;margin:16px auto 0;font-size:1.02rem;line-height:1.7}
+.grid{position:relative;z-index:1;max-width:1060px;margin:44px auto 0;padding:0 20px 30px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{display:block;background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);
+  border-radius:20px;padding:26px 24px;position:relative;overflow:hidden;color:var(--text);
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.card:hover{transform:translateY(-5px);border-color:rgba(0,240,255,.55);color:var(--text);
+  box-shadow:0 18px 44px rgba(2,6,30,.75),0 0 0 1px rgba(0,240,255,.12),0 0 34px rgba(44,103,237,.25)}
+.card .ic{font-size:1.7rem;line-height:1}
+.card .code{font-family:"Space Grotesk",sans-serif;font-size:1.9rem;font-weight:700;margin-top:12px;letter-spacing:.5px}
+.card .code b{color:var(--cyan);font-weight:700}
+.card .name{color:#fff;font-weight:600;font-size:1.02rem;margin-top:2px}
+.card .meta{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.chip{font-size:.7rem;font-weight:600;letter-spacing:.6px;color:var(--sky);
+  border:1px solid rgba(96,165,250,.35);background:rgba(44,103,237,.12);padding:4px 10px;border-radius:999px}
+.chip.cy{color:var(--cyan);border-color:rgba(0,240,255,.35);background:rgba(0,240,255,.06)}
+.card .teaser{color:var(--muted);font-size:.92rem;line-height:1.65;min-height:3.1em}
+.card .open{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;color:#fff;
+  background:linear-gradient(90deg,var(--blue),#1f8fff);padding:11px 20px;border-radius:999px;
+  box-shadow:0 8px 22px rgba(44,103,237,.4)}
+.card:hover .open{background:linear-gradient(90deg,#1f8fff,var(--cyan));color:#02131f}
+.note{position:relative;z-index:1;max-width:760px;margin:14px auto 0;padding:0 20px}
+.note-in{border:1px dashed rgba(0,240,255,.35);background:rgba(0,240,255,.04);border-radius:14px;
+  padding:14px 18px;color:var(--muted);font-size:.9rem;line-height:1.65;text-align:center}
+.note-in b{color:var(--cyan)}
+.hubfoot{position:relative;z-index:1;text-align:center;color:var(--muted2);font-size:.83rem;padding:44px 20px 54px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="midterm-notes-091.html">← All Notes</a>
+  <div class="subj">STA301 <span>· Statistics and Probability</span></div>
+  <div class="tag">MIDTERM</div>
+</div></header>
+<nav class="topics"><div class="topics-in"><a href="#topic-1-introduction-data-variables-measurement-scales-lectures-12">Topic 1 — Introduction: Data, Variables, Measurement Scales</a><a href="#topic-2-presentation-of-data-frequency-distributions-graphs-lectures-35">Topic 2 — Presentation of Data: Frequency Distributions &amp;amp; Graphs</a><a href="#topic-3-measures-of-central-tendency-lectures-69-sab-se-important">Topic 3 — Measures of Central Tendency (Lectures 6–9) ⭐ sab se important</a><a href="#topic-4-measures-of-dispersion-lectures-1011">Topic 4 — Measures of Dispersion (Lectures 10–11) ⭐</a><a href="#topic-5-chebyshev-empirical-rule-skewness-kurtosis-moments-lectures-1214">Topic 5 — Chebyshev, Empirical Rule, Skewness, Kurtosis &amp;amp; Moments</a><a href="#topic-6-regression-correlation-lecture-15-short-but-examinable">Topic 6 — Regression &amp;amp; Correlation (Lecture 15) — short but examinable</a><a href="#topic-7-probability-basics-counting-rules-lectures-1619">Topic 7 — Probability Basics &amp;amp; Counting Rules (Lectures 16–19) ⭐</a><a href="#topic-8-conditional-probability-multiplication-theorem-independence-lectures-2021">Topic 8 — Conditional Probability, Multiplication Theorem &amp;amp; Independence (Lectures 20–21) ⭐</a><a href="#topic-9-bayes-theorem-lecture-22-numerical-pakka-aata-hai">Topic 9 — Bayes&#x27; Theorem (Lecture 22) ⭐⭐ numerical pakka aata hai</a><a href="#topic-10-discrete-random-variables-probability-distributions-lecture-22">Topic 10 — Discrete Random Variables &amp;amp; Probability Distributions (Lecture 22) ⭐</a><a href="#complete-formula-sheet-lectures-122">📋 COMPLETE FORMULA SHEET</a><a href="#last-day-checklist">✅ Last-Day Checklist</a></div></nav>
+<div class="wrap">
+<article>
+<h1 id="sta301-statistics-and-probability">STA301 — Statistics and Probability</h1>
+<h1 id="midterm-revision-notes-lectures-122">Midterm Revision Notes (Lectures 1–22)</h1>
+<p><strong>Basis:</strong> Official VU STA301 handouts (Lectures 1–45), downloaded and checked against the handout table of contents.
+<strong>Midterm range used: Lectures 1–22.</strong> ⚠️ This range is an <em>assumption</em> — it follows VU's standard midterm split for 45-lecture courses (first half), and no separate Fall 2026 STA301 midterm announcement could be confirmed from public sources. <strong>Apne VULMS course announcement se ek dafa confirm kar lena.</strong> Agar range mukhtalif hua, to jo topics extra hain woh final ke kaam bhi aayenge.
+<strong>Coverage:</strong> Descriptive Statistics (Lectures 1–15) + Probability basics, conditional probability, Bayes' theorem and discrete random variables (Lectures 16–22).</p>
+<p>How to use: pehle har topic ke formulas, phir chhota sa worked example, phir <strong>Exam points / traps</strong>. Aakhir mein complete <strong>Formula Sheet</strong> hai — paper se pehle wali raat sirf wahi revise karna.</p>
+<hr />
+<h2 id="topic-1-introduction-data-variables-measurement-scales-lectures-12">Topic 1 — Introduction: Data, Variables, Measurement Scales (Lectures 1–2)</h2>
+<p><strong>Key ideas</strong>
+- <strong>Statistics:</strong> science of collecting, organising, analysing and interpreting data to draw conclusions. Two branches: <strong>Descriptive</strong> (summarise data — tables, graphs, averages) and <strong>Inferential</strong> (sample se population ke baare mein conclusion).
+- <strong>Population</strong> = complete set under study; <strong>Sample</strong> = a part of it. <strong>Parameter</strong> = population ki value (μ, σ); <strong>Statistic</strong> = sample ki value (x̄, s).
+- <strong>Observation</strong> = one recorded value; <strong>Variable</strong> = characteristic that changes from unit to unit.
+- <strong>Types of variables:</strong> Qualitative (categorical: gender, colour) vs Quantitative (numerical). Quantitative → <strong>Discrete</strong> (countable: number of students — beech wali value nahi ho sakti) vs <strong>Continuous</strong> (measurable: height, weight — koi bhi value ho sakti hai).
+- <strong>Measurement scales (sab se zyada MCQ yahin se aata hai):</strong>
+  1. <strong>Nominal</strong> — sirf naam/labels (gender, blood group). Koi order nahi.
+  2. <strong>Ordinal</strong> — order hai magar gap barabar nahi (grades A/B/C, ranks).
+  3. <strong>Interval</strong> — barabar gap, magar <strong>true zero nahi</strong> (temperature in °C, calendar year). 20°C is NOT "twice as hot" as 10°C.
+  4. <strong>Ratio</strong> — barabar gap + <strong>true zero</strong> (height, weight, income). Ratios meaningful hain.
+- <strong>Error of measurement</strong> = observed value − true value. <strong>Relative error</strong> = absolute error ÷ true value.
+- <strong>Data collection / sampling:</strong> Census = poori population; Sampling = hissa. Random sampling types: <strong>Simple random</strong> (har unit ko barabar chance), <strong>Stratified</strong> (population ko groups/strata mein baant kar har group se random), <strong>Systematic</strong> (har k-th unit), <strong>Cluster</strong> (groups chun kar un ke andar sab).</p>
+<p><strong>Exam points / traps</strong>
+- Temperature °C = <strong>interval</strong>, Kelvin = ratio (true zero hai).
+- "Number of cars" discrete hai; "speed of cars" continuous.
+- Statistic vs parameter ki pehchan: sample → statistic, population → parameter.</p>
+<hr />
+<h2 id="topic-2-presentation-of-data-frequency-distributions-graphs-lectures-35">Topic 2 — Presentation of Data: Frequency Distributions &amp; Graphs (Lectures 3–5)</h2>
+<p><strong>Key ideas</strong>
+- <strong>Raw data</strong> = unorganised data. Pehla step hamesha organisation hai.
+- <strong>Frequency distribution:</strong> values/classes ke saath un ki counts (frequencies). Discrete variable ke liye simple tally table; continuous ke liye <strong>class intervals</strong>.
+- Class interval ki terms: <strong>class limits</strong> (e.g. 10–20), <strong>class boundaries</strong> (9.5–20.5 — jab gap ho to half gap adjust), <strong>midpoint/mark</strong> x = (lower + upper)/2, <strong>class width</strong> h = upper boundary − lower boundary.
+- Number of classes (Sturges' rule): <strong>k = 1 + 3.322 log₁₀N</strong>. Class width ≈ Range ÷ k, jahan Range = largest − smallest.
+- <strong>Relative frequency</strong> = f ÷ N (sab ka sum = 1). <strong>Percentage frequency</strong> = relative × 100.
+- <strong>Cumulative frequency:</strong> "less than" type (uper ki taraf jama hoti hai) aur "more than" type.
+- <strong>Graphs:</strong>
+  - <strong>Bar chart</strong> — categories ke liye, bars ke beech gap hota hai.
+  - <strong>Histogram</strong> — continuous data, bars mile hue (no gaps), area ∝ frequency.
+  - <strong>Frequency polygon</strong> — midpoints par points jod kar line; histogram ke upar bhi banta hai.
+  - <strong>Frequency curve</strong> — smoothed polygon.
+  - <strong>Ogive</strong> — cumulative frequency curve; do ogives ("less than" + "more than") jahan milti hain, wahan se <strong>median</strong> milta hai.
+  - <strong>Pie chart</strong> — har slice ka angle = (f ÷ N) × 360°.
+  - <strong>Stem-and-leaf</strong> — data ko stem (pehle digits) aur leaf (aakhri digit) mein; asal values bhi mehfooz rehti hain.
+- <strong>Frequency curve shapes:</strong> symmetric (bell), positively skewed (lambi tail <strong>right</strong> ki taraf), negatively skewed (tail <strong>left</strong>), U-shaped, J-shaped.</p>
+<p><strong>Worked example:</strong> 40 students, class 20–30 ki frequency 8 hai → relative frequency = 8/40 = 0.20; pie chart angle = 0.20 × 360° = <strong>72°</strong>.</p>
+<p><strong>Exam points / traps</strong>
+- Histogram mein bars ke beech gap <strong>nahi</strong> hota; bar chart mein hota hai.
+- Skewness ki tail: positive skew = tail right side (mean sab se bara hota hai — Topic 5 dekho).
+- Ogive hamesha cumulative frequency se banti hai, simple frequency se nahi.</p>
+<hr />
+<h2 id="topic-3-measures-of-central-tendency-lectures-69-sab-se-important">Topic 3 — Measures of Central Tendency (Lectures 6–9) ⭐ sab se important</h2>
+<p>Central tendency = poore data ki <strong>ek representative value</strong> (average). Har average ke apne formulas hain — sab yaad karne hain.</p>
+<h3 id="31-mode">3.1 Mode</h3>
+<ul>
+<li>Sab se zyada repeat hone wali value. Data mein 0, 1 ya zyada modes ho sakte hain (unimodal, bimodal).</li>
+<li><strong>Grouped data:</strong> Mode = L + [(f₁ − f₀) ÷ (2f₁ − f₀ − f₂)] × h, jahan L = modal class ki lower boundary, f₁ = modal class ki frequency, f₀ = us se pehli class ki, f₂ = us ke baad wali class ki.</li>
+</ul>
+<h3 id="32-arithmetic-mean-am">3.2 Arithmetic Mean (AM)</h3>
+<ul>
+<li><strong>Ungrouped:</strong> x̄ = Σx ÷ n</li>
+<li><strong>Grouped:</strong> x̄ = Σfx ÷ Σf (x = class midpoint)</li>
+<li><strong>Short-cut / step-deviation:</strong> x̄ = A + (Σfd ÷ N) × h, jahan d = (x − A) ÷ h, A = assumed mean.</li>
+<li><strong>Weighted mean:</strong> x̄ = Σwx ÷ Σw (weights = importance, e.g. credit hours in GPA).</li>
+<li><strong>Combined mean</strong> (do groups): x̄ = (n₁x̄₁ + n₂x̄₂) ÷ (n₁ + n₂)</li>
+<li><strong>Properties:</strong> Σ(x − x̄) = 0 (deviations ka sum hamesha zero); har value change ho to mean bhi change hota hai; extreme values se sab se zyada affect hota hai.</li>
+</ul>
+<h3 id="33-median">3.3 Median</h3>
+<ul>
+<li>Data ko sort karke <strong>beech wali value</strong>; data ko do barabar hisson mein baantti hai.</li>
+<li><strong>Ungrouped:</strong> odd n → ((n+1)/2)-th value; even n → n/2-th aur (n/2 + 1)-th values ka average.</li>
+<li><strong>Grouped:</strong> Median = L + [((N/2) − C) ÷ f] × h, jahan C = median class se pehle ki cumulative frequency, f = median class ki frequency.</li>
+<li><strong>Open-ended distribution</strong> (pehli/aakhri class khuli, e.g. "60 and above") mein mean nahi nikal sakta (midpoints nahi milte) — <strong>median aur mode hi use hote hain</strong>. Ye classic exam point hai.</li>
+<li>Median extreme values se affect nahi hota → skewed data ke liye best average.</li>
+</ul>
+<h3 id="34-empirical-relation-moderately-skewed-data-ke-liye">3.4 Empirical Relation (moderately skewed data ke liye)</h3>
+<p><strong>Mode = 3 × Median − 2 × Mean</strong> — teeno mein se koi do maloom hon to teesra nikal aata hai. Ye observation par based hai, exact law nahi.</p>
+<h3 id="35-quantiles-quartiles-deciles-percentiles">3.5 Quantiles — Quartiles, Deciles, Percentiles</h3>
+<ul>
+<li><strong>Quartiles</strong> Q₁, Q₂ (= median), Q₃ data ko 4 barabar hisso mein; <strong>Deciles</strong> 10 mein (D₁…D₉); <strong>Percentiles</strong> 100 mein (P₁…P₉₉).</li>
+<li><strong>Grouped formula (Q₁ ki misaal):</strong> Q₁ = L + [((N/4) − C) ÷ f] × h. Isi tarah Q₃ ke liye 3N/4, Dₖ ke liye kN/10, Pₖ ke liye kN/100 use hota hai.</li>
+<li>Quantiles ko graph par <strong>ogive</strong> se bhi locate kiya jata hai.</li>
+</ul>
+<h3 id="36-geometric-mean-gm-harmonic-mean-hm">3.6 Geometric Mean (GM) &amp; Harmonic Mean (HM)</h3>
+<ul>
+<li><strong>GM</strong> = (x₁ · x₂ · … · xₙ)^(1/n), ya antilog of (Σ log x ÷ n). <strong>Rates, ratios aur percentage changes</strong> ke average ke liye (growth rates, index numbers).</li>
+<li><strong>HM</strong> = n ÷ Σ(1/x). <strong>Speed</strong> ke average ke liye jab distance barabar ho (jaana aana same route).</li>
+<li><strong>Relation: AM ≥ GM ≥ HM</strong> (barabari sirf jab sab values barabar hon).</li>
+</ul>
+<h3 id="37-kaunsa-average-kab-favourite-mcq-area">3.7 Kaunsa average kab? (favourite MCQ area)</h3>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Best average</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aam numerical data, further calculation chahiye</td>
+<td>Mean</td>
+</tr>
+<tr>
+<td>Skewed data / open-ended classes</td>
+<td>Median</td>
+</tr>
+<tr>
+<td>Sab se common item (shoe size, shirt size stock)</td>
+<td>Mode</td>
+</tr>
+<tr>
+<td>Growth rates, ratios, % change</td>
+<td>GM</td>
+</tr>
+<tr>
+<td>Average speed (equal distances)</td>
+<td>HM</td>
+</tr>
+<tr>
+<td>Qualitative "most typical"</td>
+<td>Mode</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Worked example 1:</strong> Data: 4, 6, 6, 8, 10, 12, 14 → Σx = 60, n = 7 → Mean = 60/7 = <strong>8.57</strong>; sorted data ka beech = <strong>Median 8</strong>; <strong>Mode = 6</strong>. Check empirical relation: 3(8) − 2(8.57) = 6.86 ≈ 6 (lagbhag — empirical hai, exact nahi).</p>
+<p><strong>Worked example 2 (grouped median):</strong> Classes 0–10(5), 10–20(8), 20–30(12), 30–40(6), 40–50(4). N = 35, N/2 = 17.5 → median class 20–30 (C = 13, f = 12). Median = 20 + [(17.5 − 13)/12] × 10 = 20 + 3.75 = <strong>23.75</strong>.</p>
+<p><strong>Worked example 3 (HM):</strong> Car 60 km @ 30 km/h jaati hai, wapas 60 km @ 60 km/h → average speed = HM = 2 ÷ (1/30 + 1/60) = 2 ÷ 0.05 = <strong>40 km/h</strong> (45 nahi! — ye classic trap hai).</p>
+<p><strong>Exam points / traps</strong>
+- Median ke formula mein <strong>N/2</strong> use hota hai, (N+1)/2 nahi (woh ungrouped position ke liye hai).
+- Mode wala data "bimodal" ho sakta hai — mode hamesha unique nahi hota.
+- Mean har value use karta hai, is liye ek bohat bari/chhoti value poora mean kharab kar deti hai.</p>
+<hr />
+<h2 id="topic-4-measures-of-dispersion-lectures-1011">Topic 4 — Measures of Dispersion (Lectures 10–11) ⭐</h2>
+<p>Dispersion = data kitna <strong>phaila hua</strong> hai. Do data sets ka mean same ho sakta hai magar phailaav mukhtalif — is liye average akela kaafi nahi.</p>
+<p><strong>Absolute measures</strong> (asal units mein: marks, kg) vs <strong>Relative measures</strong> (unit-free coefficients — do mukhtalif data sets ka comparison inhi se hota hai).</p>
+<h3 id="41-range">4.1 Range</h3>
+<ul>
+<li>Range = Largest − Smallest. <strong>Coefficient of range</strong> = (L − S) ÷ (L + S).</li>
+<li>Sab se asan, magar sirf 2 values use karta hai → sab se kam reliable.</li>
+</ul>
+<h3 id="42-quartile-deviation-qd">4.2 Quartile Deviation (QD)</h3>
+<ul>
+<li>QD = (Q₃ − Q₁) ÷ 2 (ye <strong>semi-interquartile range</strong> hai). Interquartile range IQR = Q₃ − Q₁.</li>
+<li><strong>Coefficient of QD</strong> = (Q₃ − Q₁) ÷ (Q₃ + Q₁).</li>
+</ul>
+<h3 id="43-mean-deviation-md">4.3 Mean Deviation (MD)</h3>
+<ul>
+<li>MD = Σ|x − x̄| ÷ n (mean se) ya Σ|x − Median| ÷ n. Absolute values is liye ke deviations ka sum warna zero ho jata hai.</li>
+<li><strong>Coefficient of MD</strong> = MD ÷ Mean (ya MD ÷ Median, jis se calculate kiya ho).</li>
+</ul>
+<h3 id="44-variance-standard-deviation-sab-se-important">4.4 Variance &amp; Standard Deviation ⭐ sab se important</h3>
+<ul>
+<li><strong>Population variance:</strong> σ² = Σ(x − μ)² ÷ N; <strong>Sample variance:</strong> s² = Σ(x − x̄)² ÷ (n − 1)</li>
+<li><strong>Short-cut:</strong> σ² = (Σx² ÷ N) − μ²; grouped: σ² = (Σfx² ÷ N) − x̄²</li>
+<li><strong>Standard deviation</strong> = √variance (positive root). Variance units ka square hota hai, SD asal units mein wapas aa jata hai.</li>
+<li><strong>Coefficient of Variation:</strong> <strong>CV = (s ÷ x̄) × 100%</strong> — consistency compare karne ke liye. <strong>CV chhota = zyada consistent / kam risky.</strong></li>
+</ul>
+<p><strong>Worked example:</strong> Data: 2, 4, 6, 8, 10. Mean = 6. Squared deviations: 16 + 4 + 0 + 4 + 16 = 40.
+- Population: σ² = 40/5 = 8 → σ = 2.83
+- Sample: s² = 40/4 = 10 → s = 3.16; CV = (3.16/6) × 100 = <strong>52.7%</strong></p>
+<p><strong>Exam points / traps</strong>
+- Sample variance mein denominator <strong>n − 1</strong> hai, population mein <strong>N</strong>. Paper mein data "sample" kaha gaya ho to n − 1.
+- Do teams/shares ki consistency compare karni ho to SD nahi, <strong>CV</strong> compare karo (units aur means mukhtalif ho sakte hain).
+- SD hamesha ≥ 0 hota hai; sab values barabar hon to SD = 0.
+- Variance kabhi negative nahi ho sakti.</p>
+<hr />
+<h2 id="topic-5-chebyshev-empirical-rule-skewness-kurtosis-moments-lectures-1214">Topic 5 — Chebyshev, Empirical Rule, Skewness, Kurtosis &amp; Moments (Lectures 12–14)</h2>
+<h3 id="51-chebyshevs-theorem-kisi-bhi-shape-ke-data-ke-liye">5.1 Chebyshev's Theorem (kisi bhi shape ke data ke liye)</h3>
+<p>Kisi bhi data set mein, k &gt; 1 ke liye, <strong>kam az kam (1 − 1/k²)</strong> hissa values mean se <strong>k standard deviations</strong> ke andar hota hai, i.e. interval (x̄ − ks, x̄ + ks) mein.
+- k = 2 → kam az kam 1 − 1/4 = <strong>75%</strong>
+- k = 3 → kam az kam 1 − 1/9 = <strong>88.9%</strong>
+- k = 1 par theorem kuch nahi kehta (0%) — ye trap hai.</p>
+<h3 id="52-empirical-rule-sirf-bell-shaped-symmetric-data-ke-liye">5.2 Empirical Rule (sirf bell-shaped / symmetric data ke liye)</h3>
+<ul>
+<li>x̄ ± 1s ke andar ≈ <strong>68%</strong></li>
+<li>x̄ ± 2s ke andar ≈ <strong>95%</strong></li>
+<li>x̄ ± 3s ke andar ≈ <strong>99.7%</strong> (handout: "practically all")
+<strong>Farq yaad rakho:</strong> Chebyshev = har distribution, guarantee "at least"; Empirical = sirf mound-shaped/symmetric, values "approximately".</li>
+</ul>
+<h3 id="53-five-number-summary-box-plot">5.3 Five-Number Summary &amp; Box Plot</h3>
+<p>Five numbers: <strong>Minimum, Q₁, Median, Q₃, Maximum</strong>. Inhi se <strong>box-and-whisker plot</strong> banta hai: box Q₁ se Q₃ tak (beech mein median ki line), whiskers min aur max tak. Box plot se skewness bhi nazar aata hai (median box ke kis taraf zyada qareeb hai).</p>
+<h3 id="54-skewness-distribution-ki-asymmetry">5.4 Skewness (distribution ki asymmetry)</h3>
+<ul>
+<li>Symmetric: Mean = Median = Mode, skewness = 0.</li>
+<li><strong>Positively skewed:</strong> tail right ki taraf; <strong>Mean &gt; Median &gt; Mode</strong>.</li>
+<li><strong>Negatively skewed:</strong> tail left ki taraf; <strong>Mean &lt; Median &lt; Mode</strong>.</li>
+<li><strong>Pearson's coefficient:</strong> Sk = (Mean − Mode) ÷ SD; doosri soorat: <strong>Sk = 3(Mean − Median) ÷ SD</strong> (range −3 se +3).</li>
+<li><strong>Bowley's coefficient</strong> (quartiles par): Sk = (Q₃ + Q₁ − 2·Median) ÷ (Q₃ − Q₁) (range −1 se +1).</li>
+</ul>
+<h3 id="55-moments-kurtosis">5.5 Moments &amp; Kurtosis</h3>
+<ul>
+<li><strong>r-th moment about the mean:</strong> μᵣ = Σf(x − x̄)ʳ ÷ N. Note: μ₁ = 0 hamesha; <strong>μ₂ = variance</strong>.</li>
+<li><strong>Moments about arbitrary origin A:</strong> μ′ᵣ = Σf(x − A)ʳ ÷ N. Conversion: μ₂ = μ′₂ − (μ′₁)²; μ₃ = μ′₃ − 3μ′₂μ′₁ + 2(μ′₁)³; μ₄ = μ′₄ − 4μ′₃μ′₁ + 6μ′₂(μ′₁)² − 3(μ′₁)⁴.</li>
+<li><strong>Moment ratios:</strong> β₁ = μ₃² ÷ μ₂³ (skewness ki measure; γ₁ = √β₁ = μ₃ ÷ μ₂^1.5, sign μ₃ wala). β₂ = μ₄ ÷ μ₂² (<strong>kurtosis</strong> — curve kitni nok-daar/flat hai).</li>
+<li><strong>Kurtosis:</strong> β₂ = 3 → <strong>Mesokurtic</strong> (normal jaisi); β₂ &gt; 3 → <strong>Leptokurtic</strong> (zyada nok-daar); β₂ &lt; 3 → <strong>Platykurtic</strong> (flat). Excess kurtosis γ₂ = β₂ − 3.</li>
+<li><strong>Kelly's percentile coefficient of kurtosis:</strong> k = [(Q₃ − Q₁) ÷ 2] ÷ (P₉₀ − P₁₀); normal curve ke liye ≈ <strong>0.263</strong>.</li>
+<li><strong>Sheppard's corrections</strong> (grouping error theek karne ke liye, sirf continuous distribution jo dono ends par zero par taper ho, barabar class intervals hon):</li>
+<li>μ₂ (corrected) = μ₂ − <strong>h²/12</strong></li>
+<li>μ₃ (corrected) = μ₃ (koi tabdeeli nahi)</li>
+<li>μ₄ (corrected) = μ₄ − (h²/2)μ₂ + <strong>7h⁴/240</strong></li>
+<li>Highly skewed distribution ya unequal intervals par <strong>apply nahi hotay</strong>.</li>
+</ul>
+<p><strong>Worked example (Chebyshev):</strong> Mean = 50, SD = 5. Interval 40–60 matlab k = 2 → <strong>kam az kam 75%</strong> students ke marks 40 aur 60 ke darmiyan hain — chahe distribution kisi bhi shape ki ho.</p>
+<p><strong>Exam points / traps</strong>
+- Positive skew mein mean sab se <strong>bara</strong> hota hai (tail mean ko apni taraf kheenchti hai).
+- β₂ = 3 benchmark hai — is se zyada/kam hi kurtosis ki pehchan hai.
+- Sheppard mein μ₃ change <strong>nahi</strong> hota — favourite MCQ.</p>
+<hr />
+<h2 id="topic-6-regression-correlation-lecture-15-short-but-examinable">Topic 6 — Regression &amp; Correlation (Lecture 15) — short but examinable</h2>
+<ul>
+<li><strong>Regression:</strong> ek variable (Y) ki value doosre (X) se predict karna. Line: <strong>Ŷ = a + bX</strong>, jahan <strong>b = Σ(x − x̄)(y − ȳ) ÷ Σ(x − x̄)²</strong> aur <strong>a = ȳ − b·x̄</strong>. Line hamesha point (x̄, ȳ) se guzarti hai.</li>
+<li><strong>Standard error of estimate:</strong> S = √[ Σ(y − Ŷ)² ÷ (n − 2) ] — predictions kitni bikhri hui hain asal values se; chhota S = behtar fit.</li>
+<li><strong>Correlation (r):</strong> do variables ke linear taluq ki strength aur direction: <strong>r = Σ(x − x̄)(y − ȳ) ÷ √[Σ(x − x̄)² · Σ(y − ȳ)²]</strong>, hamesha <strong>−1 ≤ r ≤ +1</strong>.</li>
+<li>r = +1 perfect positive; r = −1 perfect negative; r = 0 koi <strong>linear</strong> taluq nahi (non-linear ho sakta hai!).</li>
+<li><strong>Traps:</strong> Correlation ≠ causation (taluq hai matlab wajah hai — zaroori nahi). r sirf <strong>linear</strong> relation measure karta hai. Regression ki do lines hoti hain (Y on X, X on Y); un ke slopes ka product = r².</li>
+</ul>
+<hr />
+<h2 id="topic-7-probability-basics-counting-rules-lectures-1619">Topic 7 — Probability Basics &amp; Counting Rules (Lectures 16–19) ⭐</h2>
+<h3 id="71-basic-language">7.1 Basic language</h3>
+<ul>
+<li><strong>Random experiment</strong> = jis ka result pehle se pakka na ho (coin toss, dice). <strong>Sample space S</strong> = tamam possible outcomes ka set. <strong>Event</strong> = sample space ka subset.</li>
+<li><strong>Mutually exclusive events:</strong> aik saath nahi ho sakte (A ∩ B = ∅). <strong>Exhaustive:</strong> mila kar poora sample space cover kar dein. <strong>Equally likely:</strong> har outcome ka chance barabar.</li>
+<li><strong>Set notation:</strong> A ∪ B (A ya B), A ∩ B (dono), A′ / Ā (A nahi — complement), ∅ (empty/impossible), S (sure event).</li>
+</ul>
+<h3 id="72-counting-rules-probability-se-pehle-ye-pakkay-karo">7.2 Counting rules (probability se pehle ye pakkay karo)</h3>
+<ul>
+<li><strong>Multiplication rule of counting:</strong> pehla kaam m tareeqon se, doosra n tareeqon se → dono mila kar <strong>m × n</strong> tareeqay.</li>
+<li><strong>Permutation (order matter karta hai):</strong> ⁿPᵣ = n! ÷ (n − r)! — e.g. race mein 1st/2nd positions.</li>
+<li><strong>Combination (order matter NAHI karta):</strong> ⁿCᵣ = n! ÷ [r!(n − r)!] — e.g. committee chunna. Note: ⁿCᵣ = ⁿCₙ₋ᵣ.</li>
+<li>n! = n × (n−1) × … × 1; 0! = 1.</li>
+</ul>
+<p><strong>Worked example:</strong> 10 students mein se 3 ki committee: C(10,3) = 120. Agar unhi 3 ko President/VP/Secretary banana ho (order matter): P(10,3) = 720.</p>
+<h3 id="73-definitions-of-probability">7.3 Definitions of probability</h3>
+<ul>
+<li><strong>Classical (a priori):</strong> P(A) = favourable outcomes ÷ total equally-likely outcomes = m ÷ n. Sirf jab outcomes equally likely hon.</li>
+<li><strong>Relative frequency (empirical):</strong> P(A) ≈ (times A occurred) ÷ (total trials), jab trials bohat zyada hon (limit).</li>
+<li><strong>Axiomatic:</strong> (i) 0 ≤ P(A) ≤ 1; (ii) P(S) = 1; (iii) mutually exclusive events ke liye P(A ∪ B) = P(A) + P(B).</li>
+</ul>
+<h3 id="74-basic-laws">7.4 Basic laws</h3>
+<ul>
+<li><strong>Complement rule:</strong> P(A′) = 1 − P(A). "At least one" wale sawal hamesha is se hal hote hain.</li>
+<li><strong>Addition theorem (general):</strong> <strong>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</strong></li>
+<li>Mutually exclusive hon to: P(A ∪ B) = P(A) + P(B).</li>
+<li>Impossible event ki probability 0; sure event ki 1.</li>
+</ul>
+<p><strong>Worked example ("at least one"):</strong> Coin 3 dafa toss — kam az kam ek Head ki probability = 1 − P(no head) = 1 − (1/2)³ = 1 − 1/8 = <strong>7/8</strong>.</p>
+<p><strong>Exam points / traps</strong>
+- P(A ∪ B) mein P(A ∩ B) minus karna mat bhoolna — warna overlap do dafa count ho jata hai.
+- "At least one" dekha → seedha complement rule.
+- Permutation vs combination: positions/ranks/arrangement = P; selection/group = C.</p>
+<hr />
+<h2 id="topic-8-conditional-probability-multiplication-theorem-independence-lectures-2021">Topic 8 — Conditional Probability, Multiplication Theorem &amp; Independence (Lectures 20–21) ⭐</h2>
+<ul>
+<li><strong>Conditional probability:</strong> B pehle ho chuka ho, to A ki probability: <strong>P(A|B) = P(A ∩ B) ÷ P(B)</strong>, (P(B) &gt; 0). Asan alfaaz mein: sample space chhota ho gaya — ab sirf B wali duniya mein hisaab hai.</li>
+<li><strong>Multiplication theorem:</strong> <strong>P(A ∩ B) = P(A) · P(B|A) = P(B) · P(A|B)</strong> — "aur" (dono) wale sawalon ka formula.</li>
+<li><strong>Independent events:</strong> ek ke hone se doosre ki probability <strong>nahi</strong> badalti: P(A|B) = P(A), aur <strong>P(A ∩ B) = P(A) · P(B)</strong>.</li>
+<li><strong>Dependent events:</strong> with replacement vs without replacement — baghair wapas rakhe doosri draw ki probability badal jati hai (dependent).</li>
+<li><strong>Marginal probability / Law of total probability:</strong> agar A₁, A₂, …, Aₖ sample space ki partition hain, to <strong>P(B) = Σ P(Aᵢ) · P(B|Aᵢ)</strong> — Bayes' theorem ki buniyaad yahi hai.</li>
+</ul>
+<p><strong>Worked example:</strong> Bag mein 4 red, 6 green balls. Do balls baghair replacement ke: P(dono red) = (4/10) × (3/9) = 12/90 = <strong>2/15 ≈ 0.133</strong>. (Replacement ke saath hota to (4/10)² = 0.16 — farq dependent/independent ka hai.)</p>
+<p><strong>Exam points / traps</strong> ⭐ sab se mashhoor trap:
+- <strong>Mutually exclusive ≠ Independent!</strong> Mutually exclusive hon to P(A ∩ B) = 0, jabke independent hon to P(A ∩ B) = P(A)P(B) (jo aam tor par 0 nahi hota). Dono aik saath sirf tab ho sakte hain jab kisi event ki probability 0 ho.
+- P(A|B) aur P(B|A) <strong>mukhtalif</strong> hain — formula mein numerator same, denominator badal jata hai.</p>
+<hr />
+<h2 id="topic-9-bayes-theorem-lecture-22-numerical-pakka-aata-hai">Topic 9 — Bayes' Theorem (Lecture 22) ⭐⭐ numerical pakka aata hai</h2>
+<p><strong>Idea:</strong> Result (effect) maloom hai, <strong>wajah (cause)</strong> ki probability nikalni hai — probability ko "ulta" karna.</p>
+<p><strong>Formula:</strong> Agar A₁, …, Aₖ causes (partition) hain aur B observed event hai:</p>
+<p><strong>P(Aᵢ|B) = [ P(Aᵢ) · P(B|Aᵢ) ] ÷ [ Σⱼ P(Aⱼ) · P(B|Aⱼ) ]</strong></p>
+<ul>
+<li>P(Aᵢ) = <strong>prior</strong> probability (pehle se maloom); P(Aᵢ|B) = <strong>posterior</strong> (evidence ke baad updated).</li>
+<li>Denominator = total probability of B (Topic 8 wala formula).</li>
+</ul>
+<p><strong>Worked example (factory — VU ki favourite type):</strong> Factory mein Machine A total production ka 60% banati hai, jin mein 2% defective hain. Machine B 40% banati hai, 3% defective. Ek item defective mila — probability woh Machine A ka hai?
+- P(A) = 0.60, P(D|A) = 0.02 → 0.60 × 0.02 = 0.012
+- P(B) = 0.40, P(D|B) = 0.03 → 0.40 × 0.03 = 0.012
+- P(A|D) = 0.012 ÷ (0.012 + 0.012) = <strong>0.50</strong></p>
+<p><strong>Hal karne ka tareeqa (table bana lo):</strong> har cause ke liye prior × likelihood ka column banao, sum karo, phir jis cause ki probability poochhi hai usay sum se divide kar do. Ghalti ki gunjaish khatam ho jati hai.</p>
+<p><strong>Exam points / traps</strong>
+- Sawal mein "given that defective hai, kis machine se aaya hoga" — yehi pehchan hai Bayes ki.
+- Denominator mein <strong>sab</strong> causes shamil karna mat bhoolna.</p>
+<hr />
+<h2 id="topic-10-discrete-random-variables-probability-distributions-lecture-22">Topic 10 — Discrete Random Variables &amp; Probability Distributions (Lecture 22) ⭐</h2>
+<ul>
+<li><strong>Random variable (RV):</strong> har outcome ko number dene wala function. <strong>Discrete RV</strong> = ginay ja sakne wali values (0, 1, 2, …); continuous = kisi interval mein koi bhi value (woh Lecture 23+ hai, midterm se bahir).</li>
+<li><strong>Probability distribution / pmf f(x)</strong> ki 2 shartein: <strong>(i) f(x) ≥ 0 har x ke liye; (ii) Σf(x) = 1.</strong> Koi value in ke khilaf jaye to woh valid distribution nahi.</li>
+<li><strong>Distribution function (CDF):</strong> F(x) = P(X ≤ x) — step function hoti hai; F(x) = Σ over all values ≤ x. Aur P(a &lt; X ≤ b) = F(b) − F(a).</li>
+<li><strong>Mean of a discrete RV (= expected value):</strong> μ = E(X) = <strong>Σ x·f(x)</strong></li>
+<li><strong>Variance:</strong> σ² = E(X²) − [E(X)]², jahan E(X²) = Σ x²·f(x). (Doosri soorat: σ² = Σ (x − μ)² f(x) — dono same, pehli wali zyada fast hai.)</li>
+<li><strong>SD</strong> = √σ²; <strong>CV</strong> = (σ ÷ μ) × 100% (discrete distribution ke liye bhi wahi CV wala usool).</li>
+</ul>
+<p><strong>Worked example:</strong> 2 coins toss, X = number of Heads. Distribution: X=0 → 1/4, X=1 → 1/2, X=2 → 1/4.
+- E(X) = 0(1/4) + 1(1/2) + 2(1/4) = <strong>1</strong>
+- E(X²) = 0 + 1(1/2) + 4(1/4) = 1.5 → Var = 1.5 − 1² = <strong>0.5</strong>, SD = <strong>0.707</strong>
+- F(1) = P(X ≤ 1) = 1/4 + 1/2 = <strong>0.75</strong></p>
+<p><strong>Exam points / traps</strong>
+- "k ki value nikalo taake ye valid distribution ho" → Σf(x) = 1 laga kar k nikalta hai. Pakka aane wala sawal hai.
+- E(X) hamesha X ki koi asal value ho — zaroori nahi (E = 1.5 heads ho sakta hai, aadha head nahi hota).
+- Var ke shortcut formula mein [E(X)]² minus karna mat bhoolna.</p>
+<hr />
+<h2 id="complete-formula-sheet-lectures-122">📋 COMPLETE FORMULA SHEET (Lectures 1–22)</h2>
+<p><strong>Central tendency</strong>
+- Mean: x̄ = Σx/n | grouped: Σfx/N | step-deviation: A + (Σfd/N)·h
+- Weighted mean: Σwx/Σw | Combined mean: (n₁x̄₁ + n₂x̄₂)/(n₁ + n₂)
+- Median (grouped): L + [(N/2 − C)/f]·h
+- Mode (grouped): L + [(f₁ − f₀)/(2f₁ − f₀ − f₂)]·h
+- Empirical relation: Mode = 3·Median − 2·Mean
+- Quartile (grouped): Q₁ = L + [(N/4 − C)/f]·h (Q₃ → 3N/4; Dₖ → kN/10; Pₖ → kN/100)
+- GM = (Πx)^(1/n) | HM = n/Σ(1/x) | AM ≥ GM ≥ HM</p>
+<p><strong>Dispersion</strong>
+- Range = L − S; Coeff = (L − S)/(L + S)
+- QD = (Q₃ − Q₁)/2; Coeff of QD = (Q₃ − Q₁)/(Q₃ + Q₁)
+- MD = Σ|x − x̄|/n; Coeff of MD = MD/Mean
+- Variance: σ² = Σ(x − μ)²/N (population) | s² = Σ(x − x̄)²/(n − 1) (sample) | shortcut: Σx²/N − x̄²
+- SD = √variance | <strong>CV = (SD/Mean) × 100%</strong>
+- Chebyshev: within k SD ≥ (1 − 1/k²) | Empirical rule: 68% / 95% / 99.7% (1s/2s/3s, bell-shaped only)</p>
+<p><strong>Shape (skewness, kurtosis, moments)</strong>
+- Pearson Sk = (Mean − Mode)/SD = 3(Mean − Median)/SD
+- Bowley Sk = (Q₃ + Q₁ − 2Median)/(Q₃ − Q₁)
+- μᵣ = Σf(x − x̄)ʳ/N; μ₁ = 0; μ₂ = variance
+- β₁ = μ₃²/μ₂³; γ₁ = μ₃/μ₂^1.5 | β₂ = μ₄/μ₂² (kurtosis: =3 meso, &gt;3 lepto, &lt;3 platy)
+- Sheppard: μ₂ corr = μ₂ − h²/12; μ₃ same; μ₄ corr = μ₄ − (h²/2)μ₂ + 7h⁴/240</p>
+<p><strong>Regression &amp; correlation</strong>
+- Ŷ = a + bX; b = Σ(x − x̄)(y − ȳ)/Σ(x − x̄)²; a = ȳ − b·x̄
+- r = Σ(x − x̄)(y − ȳ)/√[Σ(x − x̄)²Σ(y − ȳ)²]; −1 ≤ r ≤ 1
+- S.E. of estimate = √[Σ(y − Ŷ)²/(n − 2)]</p>
+<p><strong>Counting &amp; probability</strong>
+- Multiplication rule: m × n | ⁿPᵣ = n!/(n − r)! | ⁿCᵣ = n!/[r!(n − r)!]
+- P(A) = m/n (classical) | P(A′) = 1 − P(A)
+- P(A ∪ B) = P(A) + P(B) − P(A ∩ B)
+- P(A|B) = P(A ∩ B)/P(B) | P(A ∩ B) = P(A)·P(B|A)
+- Independent: P(A ∩ B) = P(A)·P(B)
+- Total probability: P(B) = Σ P(Aᵢ)·P(B|Aᵢ)
+- <strong>Bayes:</strong> P(Aᵢ|B) = P(Aᵢ)·P(B|Aᵢ) / Σ P(Aⱼ)·P(B|Aⱼ)</p>
+<p><strong>Discrete random variable</strong>
+- Valid pmf: f(x) ≥ 0, Σf(x) = 1 | F(x) = P(X ≤ x)
+- E(X) = Σx·f(x) | Var(X) = E(X²) − [E(X)]² | SD = √Var | CV = (σ/μ) × 100%</p>
+<hr />
+<h2 id="last-day-checklist">✅ Last-Day Checklist</h2>
+<ol>
+<li>Grouped median/mode ke formulas ek dafa haath se likh kar practice kar lo — sab se zyada numerical yahin se aate hain.</li>
+<li>CV wala comparison sawal (consistency) pakka revise karo.</li>
+<li>Chebyshev (k=2 → 75%, k=3 → 88.9%) vs Empirical rule (68/95/99.7) ka farq clear rakho.</li>
+<li>Bayes ka table wala tareeqa ek example se practice kar lo.</li>
+<li>"Valid distribution ke liye k nikalo" wala sawal (Σf(x) = 1) zaroor dekh lo.</li>
+<li>Traps dobara parho: mutually exclusive ≠ independent; average speed = HM; sample variance mein n − 1.</li>
+</ol>
+<p><em>Notes prepared from the official VU STA301 handouts, Lectures 1–22 (midterm range — assumed standard VU split, VULMS announcement se confirm kar lena).</em></p>
+</article>
+<div class="foot">Made from the official VU handouts · Lectures 1–22 · <a href="midterm-notes-091.html">← Back to all notes</a></div>
+</div>
+
+<script>
+document.querySelectorAll('article table').forEach(function(t){
+  var w=document.createElement('div'); w.className='twrap';
+  t.parentNode.insertBefore(w,t); w.appendChild(t);
+});
+</script>
+
+</body>
+</html>

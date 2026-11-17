@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>CS301 — Data Structures | Midterm Notes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050510; --card:#0b0b22; --card2:#0d0d28; --line:rgba(96,165,250,.20);
+  --blue:#2c67ed; --sky:#60a5fa; --cyan:#00f0ff;
+  --text:#e9edfa; --muted:#9aa7c7; --muted2:#6d7a9e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+   radial-gradient(700px 420px at 12% -6%, rgba(44,103,237,.20), transparent 60%),
+   radial-gradient(620px 380px at 88% 0%, rgba(0,240,255,.10), transparent 60%),
+   radial-gradient(900px 600px at 50% 115%, rgba(44,103,237,.12), transparent 60%);}
+a{color:var(--sky);text-decoration:none}
+a:hover{color:var(--cyan)}
+::selection{background:rgba(44,103,237,.5)}
+
+/* ---------- sticky top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(5,5,16,.85);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1060px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.9rem;color:var(--text);
+  background:rgba(96,165,250,.10);border:1px solid var(--line);padding:8px 14px;border-radius:999px;white-space:nowrap}
+.back:hover{border-color:var(--cyan);color:var(--cyan)}
+.topbar .subj{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:1.02rem;letter-spacing:.2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .subj span{color:var(--cyan)}
+.topbar .tag{margin-left:auto;font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.35);padding:5px 10px;border-radius:999px;white-space:nowrap}
+@media(max-width:560px){.topbar .tag{display:none}.topbar .subj{font-size:.92rem}}
+
+/* ---------- topic jump nav ---------- */
+.topics{position:sticky;top:57px;z-index:40;background:rgba(5,5,16,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(96,165,250,.12)}
+.topics-in{max-width:1060px;margin:0 auto;padding:9px 20px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.topics-in::-webkit-scrollbar{display:none}
+.topics a{flex:0 0 auto;font-size:.78rem;font-weight:500;color:var(--muted);
+  border:1px solid rgba(96,165,250,.16);background:rgba(11,11,34,.7);padding:6px 12px;border-radius:999px}
+.topics a:hover{color:var(--cyan);border-color:rgba(0,240,255,.45)}
+
+/* ---------- article ---------- */
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 20px 90px}
+article{max-width:860px;margin:0 auto;font-size:1.02rem;line-height:1.78;color:#d7def2}
+article h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.2;
+  font-weight:700;margin:38px 0 18px;
+  background:linear-gradient(92deg,#fff 20%,var(--sky) 60%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+article h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.28rem,3.4vw,1.6rem);font-weight:700;line-height:1.3;
+  margin:52px 0 14px;padding:14px 16px;scroll-margin-top:130px;
+  background:linear-gradient(90deg,rgba(44,103,237,.16),rgba(0,240,255,.05) 70%,transparent);
+  border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:12px}
+article h3{font-family:"Space Grotesk",sans-serif;font-size:1.14rem;font-weight:600;margin:30px 0 10px;color:#fff;scroll-margin-top:130px}
+article h4{font-size:1rem;font-weight:600;margin:22px 0 8px;color:var(--sky)}
+article p{margin:0 0 15px}
+article ul,article ol{margin:0 0 16px;padding-left:24px}
+article li{margin-bottom:7px}
+article li::marker{color:var(--cyan)}
+article strong{color:#fff;font-weight:600}
+article em{color:#c3cdf0}
+article hr{border:none;height:1px;margin:34px 0;
+  background:linear-gradient(90deg,transparent,rgba(96,165,250,.4),transparent)}
+article blockquote{margin:0 0 16px;padding:12px 18px;border-left:3px solid var(--blue);
+  background:rgba(44,103,237,.08);border-radius:0 12px 12px 0;color:#c9d4f5}
+article a{border-bottom:1px dotted rgba(96,165,250,.5)}
+code{font-family:"JetBrains Mono",monospace;font-size:.86em;color:#8be9ff;
+  background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.14);padding:1px 6px;border-radius:6px}
+pre{background:#07071a;border:1px solid var(--line);border-radius:14px;padding:18px;overflow-x:auto;margin:0 0 18px;
+  box-shadow:0 10px 34px rgba(0,0,0,.45)}
+pre code{background:none;border:none;padding:0;color:#d9e4ff;font-size:.86rem;line-height:1.65}
+.twrap{overflow-x:auto;margin:0 0 20px;border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.55}
+thead th{background:linear-gradient(90deg,rgba(44,103,237,.35),rgba(0,240,255,.14));color:#fff;
+  font-family:"Space Grotesk",sans-serif;font-weight:600;text-align:left;padding:11px 14px;white-space:nowrap}
+tbody td{padding:10px 14px;border-top:1px solid rgba(96,165,250,.12);vertical-align:top}
+tbody tr:nth-child(even){background:rgba(96,165,250,.05)}
+tbody tr:hover{background:rgba(0,240,255,.05)}
+.foot{max-width:860px;margin:56px auto 0;padding-top:22px;border-top:1px solid rgba(96,165,250,.14);
+  color:var(--muted2);font-size:.85rem;text-align:center}
+.foot a{font-weight:600}
+
+/* ---------- hub ---------- */
+.hero{position:relative;z-index:1;text-align:center;padding:72px 20px 10px;max-width:1060px;margin:0 auto}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.4);padding:7px 16px;border-radius:999px;margin-bottom:22px;
+  background:rgba(0,240,255,.05);box-shadow:0 0 24px rgba(0,240,255,.12)}
+.hero h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(2.1rem,6.5vw,3.4rem);font-weight:700;line-height:1.12;
+  background:linear-gradient(94deg,#fff 15%,var(--sky) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:620px;margin:16px auto 0;font-size:1.02rem;line-height:1.7}
+.grid{position:relative;z-index:1;max-width:1060px;margin:44px auto 0;padding:0 20px 30px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{display:block;background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);
+  border-radius:20px;padding:26px 24px;position:relative;overflow:hidden;color:var(--text);
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.card:hover{transform:translateY(-5px);border-color:rgba(0,240,255,.55);color:var(--text);
+  box-shadow:0 18px 44px rgba(2,6,30,.75),0 0 0 1px rgba(0,240,255,.12),0 0 34px rgba(44,103,237,.25)}
+.card .ic{font-size:1.7rem;line-height:1}
+.card .code{font-family:"Space Grotesk",sans-serif;font-size:1.9rem;font-weight:700;margin-top:12px;letter-spacing:.5px}
+.card .code b{color:var(--cyan);font-weight:700}
+.card .name{color:#fff;font-weight:600;font-size:1.02rem;margin-top:2px}
+.card .meta{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.chip{font-size:.7rem;font-weight:600;letter-spacing:.6px;color:var(--sky);
+  border:1px solid rgba(96,165,250,.35);background:rgba(44,103,237,.12);padding:4px 10px;border-radius:999px}
+.chip.cy{color:var(--cyan);border-color:rgba(0,240,255,.35);background:rgba(0,240,255,.06)}
+.card .teaser{color:var(--muted);font-size:.92rem;line-height:1.65;min-height:3.1em}
+.card .open{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;color:#fff;
+  background:linear-gradient(90deg,var(--blue),#1f8fff);padding:11px 20px;border-radius:999px;
+  box-shadow:0 8px 22px rgba(44,103,237,.4)}
+.card:hover .open{background:linear-gradient(90deg,#1f8fff,var(--cyan));color:#02131f}
+.note{position:relative;z-index:1;max-width:760px;margin:14px auto 0;padding:0 20px}
+.note-in{border:1px dashed rgba(0,240,255,.35);background:rgba(0,240,255,.04);border-radius:14px;
+  padding:14px 18px;color:var(--muted);font-size:.9rem;line-height:1.65;text-align:center}
+.note-in b{color:var(--cyan)}
+.hubfoot{position:relative;z-index:1;text-align:center;color:var(--muted2);font-size:.83rem;padding:44px 20px 54px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="midterm-notes-091.html">← All Notes</a>
+  <div class="subj">CS301 <span>· Data Structures</span></div>
+  <div class="tag">MIDTERM</div>
+</div></header>
+<nav class="topics"><div class="topics-in"><a href="#1-introduction-what-is-a-data-structure-lecture-1">1. Introduction — What is a Data Structure?</a><a href="#2-arrays-and-the-list-adt-lectures-12">2. Arrays and the List ADT</a><a href="#3-singly-linked-list-lectures-24">3. Singly Linked List</a><a href="#4-doubly-circular-linked-lists-josephus-problem-lectures-45">4. Doubly &amp;amp; Circular Linked Lists + Josephus Problem</a><a href="#5-abstract-data-type-adt-lecture-5">5. Abstract Data Type (ADT)</a><a href="#6-stack-lectures-56">6. Stack</a><a href="#7-infix-prefix-postfix-conversion-evaluation-lectures-68">7. Infix, Prefix, Postfix — Conversion &amp;amp; Evaluation</a><a href="#8-function-call-stack-memory-c-support-topics-lectures-8-9-1719">8. Function Call Stack, Memory &amp;amp; C++ Support Topics</a><a href="#9-queue-lectures-910">9. Queue</a><a href="#10-priority-queue-lectures-1011">10. Priority Queue</a><a href="#11-trees-binary-tree-basics-lectures-1112">11. Trees &amp;amp; Binary Tree Basics</a><a href="#12-binary-search-tree-bst-lectures-1213">12. Binary Search Tree (BST)</a><a href="#13-tree-traversals-lectures-1315">13. Tree Traversals</a><a href="#14-deleting-a-node-from-bst-lectures-1516">14. Deleting a Node from BST</a><a href="#15-degenerate-bst-avl-trees-lectures-1922">15. Degenerate BST &amp;amp; AVL Trees</a><a href="#16-master-big-o-table-sab-ek-jagah">16. Master Big-O Table (sab ek jagah)</a><a href="#17-last-minute-checklist-paper-se-pehle">17. Last-Minute Checklist (paper se pehle)</a></div></nav>
+<div class="wrap">
+<article>
+<h1 id="cs301-data-structures-midterm-revision-notes">CS301 – Data Structures — Midterm Revision Notes</h1>
+<p><strong>Scope: Lectures 1–22</strong> (Lists, Linked Lists, Stacks, Queues, Priority Queues, Trees, BST, AVL Trees).
+<em>Basis of range:</em> VU's published midterm/final lecture split for CS301 is <strong>Midterm = Lecture 1–22, Final = Lecture 23–45</strong>, and this matches the standard VU midterm coverage for this course. A Fall-2026-specific announcement page could not be independently confirmed, so if your LMS announcement says something different, follow the LMS.
+<em>Source:</em> Official VU CS301 handouts (505 pages, Lectures 1–45).</p>
+<p><strong>How to use:</strong> Har topic mein pehle definition, phir "kaise kaam karta hai", phir exam wale points. Code sirf wahan diya hai jahan exam mein aata hai. Aakhir mein ek Big-O table aur last-minute checklist hai — paper se pehle woh zaroor dekhna.</p>
+<hr />
+<h2 id="1-introduction-what-is-a-data-structure-lecture-1">1. Introduction — What is a Data Structure? (Lecture 1)</h2>
+<p><strong>Definition:</strong> A data structure is a way of organizing and storing data in a computer so that operations on the data can be performed <strong>efficiently</strong> (fast, with less memory).</p>
+<p><strong>Key ideas:</strong>
+- A program = algorithms + data structures. Data ko sahi tareeqay se rakho ge to program khud fast ho jayega.
+- <strong>No single data structure is best for all situations.</strong> Ek structure ek kaam mein best hai, doosray mein bekaar. This is the "philosophy" of the course.
+- <strong>Selecting a data structure</strong> — steps: (1) analyze the problem, (2) decide the basic operations needed (insert, delete, search…), (3) quantify the resources (time/space) for those operations, (4) pick the structure that best meets those requirements.
+- Course covers: arrays, lists, linked lists, stacks, queues, trees, (later) graphs, heaps, hashing.</p>
+<p><strong>Exam points / traps:</strong>
+- "Data structure philosophy" wala sawal aata hai: <em>there is no data structure that is better than others in all situations.</em>
+- Efficiency do cheezon se measure hoti hai: <strong>time</strong> (running time) aur <strong>space</strong> (memory).</p>
+<hr />
+<h2 id="2-arrays-and-the-list-adt-lectures-12">2. Arrays and the List ADT (Lectures 1–2)</h2>
+<p><strong>Array:</strong> Fixed-size collection of same-type elements stored in <strong>contiguous</strong> (saath saath) memory locations. Indexing se kisi bhi element tak foran access: <code>A[i]</code> ka address = base + i × element size.</p>
+<p><strong>List (ADT):</strong> An ordered sequence of elements with operations:
+- <code>add(x)</code> / insert — element shamil karna
+- <code>remove(x)</code> — element nikalna
+- <code>find(x)</code> — element dhoondna
+- <code>next()</code> — current position se aglay element par jana (list has a "current position" concept in VU's implementation)
+- <code>length()</code>, <code>isEmpty()</code> etc.</p>
+<p><strong>Array-based list — analysis (bohat important):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Cost</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Access by index</td>
+<td>O(1)</td>
+<td>direct address calculation</td>
+</tr>
+<tr>
+<td>Find (search a value)</td>
+<td>O(n)</td>
+<td>worst case poori list dekhni parti hai</td>
+</tr>
+<tr>
+<td>Insert in middle</td>
+<td>O(n)</td>
+<td>baqi elements ko shift karna parta hai</td>
+</tr>
+<tr>
+<td>Remove from middle</td>
+<td>O(n)</td>
+<td>gap band karne ke liye shift karna parta hai</td>
+</tr>
+<tr>
+<td>Insert at end</td>
+<td>O(1)</td>
+<td>agar jagah khaali ho</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Limitations of array list:</strong> size pehle se fixed hai — full ho jaye to naya data store nahi ho sakta; insert/remove mein shifting mehngi hai. <strong>Yehi limitation linked list ki wajah bani.</strong></p>
+<p><strong>Exam points / traps:</strong>
+- ADT ka matlab: sirf <em>what</em> operations hain, <em>how</em> implement hoti hain woh alag baat hai. Same List ADT array se bhi ban sakti hai, linked memory se bhi.
+- Shifting cost hi array list ka sab se bara exam point hai.</p>
+<hr />
+<h2 id="3-singly-linked-list-lectures-24">3. Singly Linked List (Lectures 2–4)</h2>
+<p><strong>Definition:</strong> A collection of <strong>nodes</strong>, where each node has two parts: <strong>data</strong> and a <strong>next pointer</strong> (address of the next node). Nodes memory mein scatter hote hain — array ki tarah contiguous nahi hote. Ek <code>head</code> pointer pehle node ko point karta hai; aakhri node ka next = <code>NULL</code>.</p>
+<pre><code>head -&gt; [data|next] -&gt; [data|next] -&gt; [data|NULL]
+</code></pre>
+<p><strong>How it works (operations):</strong>
+- <strong>Insert at start:</strong> new node ka next = head; head = new node. → <strong>O(1)</strong>
+- <strong>Insert in middle / after a node:</strong> pehle woh node dhoondo (traverse), phir do pointers badlo: <code>newNode-&gt;next = p-&gt;next; p-&gt;next = newNode;</code> → search O(n), actual insert O(1)
+- <strong>Delete a node:</strong> previous node ka next ko deleted node ke next se jor do, phir memory free karo. → search O(n), delete O(1)
+- <strong>Traverse/Find:</strong> head se shuru karke next follow karte jao jab tak NULL ya value na mil jaye. → O(n)
+- <strong>No random access:</strong> <code>list[5]</code> nahi kar sakte — 5th element ke liye pehle 4 se guzarna parega.</p>
+<p><strong>Pointer steps yaad rakhna (exam mein code/trace aata hai):</strong>
+Insert after node <code>p</code>: pehle <code>newNode-&gt;next = p-&gt;next</code> (order ulta karoge to baqi list kho jayegi — classic trap!)</p>
+<p><strong>Analysis vs array list:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Array List</th>
+<th>Linked List</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Access i-th element</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Find value</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Insert/Delete (position known)</td>
+<td>O(n) shifting</td>
+<td>O(1) pointer change</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>Fixed</td>
+<td>Dynamic (grows as needed)</td>
+</tr>
+<tr>
+<td>Extra memory</td>
+<td>None</td>
+<td>One pointer per node</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam points / traps:</strong>
+- Linked list mein size ki koi limit nahi (memory tak), lekin har node ke saath pointer ki extra memory lagti hai.
+- Delete/insert "O(1)" tab kehte hain jab node ka address pehle se maloom ho; dhoondna shamil karo to O(n).
+- Head par insert/delete special case hota hai — code mein alag handle hota hai.</p>
+<hr />
+<h2 id="4-doubly-circular-linked-lists-josephus-problem-lectures-45">4. Doubly &amp; Circular Linked Lists + Josephus Problem (Lectures 4–5)</h2>
+<p><strong>Doubly Linked List:</strong> Har node mein <strong>three</strong> parts: <code>prev</code> pointer, data, <code>next</code> pointer. Dono taraf traverse kar sakte ho.
+- Faida: kisi node par kharay ho to pichla node foran mil jata hai — delete asaan (previous dhoondna nahi parta).
+- Nuqsan: har node par ek extra pointer ki memory; insert/delete mein zyada pointers badalne parte hain (4 tak).</p>
+<p><strong>Circular Linked List:</strong> Aakhri node ka next wapas <strong>head</strong> ko point karta hai — list gol ghoomti hai, koi NULL end nahi.
+- Kisi bhi node se shuru karke poori list traverse ho sakti hai.
+- Faida: end par pohanch kar dobara shuru karna asaan; queue jaise kaam ke liye mufeed.</p>
+<p><strong>Josephus Problem (famous example):</strong> N log gol ghare (circle) mein kharay hain. Har M-th (e., har 3rd) banda eliminate hota hai, jab tak ek leader reh jaye. Circular list se isay simulate karte hain: current node se M steps chalo, us node ko delete karo, phir wahan se aage continue karo. Handout example: 10 logon mein se leader select kiya gaya.
+- <strong>Trap:</strong> elimination ke baad counting wahi se shuru hoti hai jahan se banda nikla tha (next node se).</p>
+<p><strong>Exam points:</strong>
+- Doubly list ka delete code doubly pointers ki wajah se lamba hota hai — steps yaad rakho.
+- Circular list mein traversal rokne ki condition NULL nahi hoti — wapas start node par aana hota hai, warna infinite loop!</p>
+<hr />
+<h2 id="5-abstract-data-type-adt-lecture-5">5. Abstract Data Type (ADT) (Lecture 5)</h2>
+<p><strong>Definition:</strong> An ADT is a mathematical model of a data structure that defines <strong>what</strong> operations are allowed, without saying <strong>how</strong> they are implemented. (Interface alag, implementation alag.)</p>
+<ul>
+<li>List, Stack, Queue — sab ADTs hain. Har ek ko array se bhi implement kar sakte ho, linked list se bhi.</li>
+<li>User ko sirf operations dikhte hain; andar ka mechanism chhupa hota hai (<strong>data hiding / encapsulation</strong>).</li>
+</ul>
+<p><strong>Exam point:</strong> "ADT implementation se independent hota hai" — yehi is ka sab se bara point hai. Stack array se bano ya linked list se, push/pop ka behavior same rahega.</p>
+<hr />
+<h2 id="6-stack-lectures-56">6. Stack (Lectures 5–6)</h2>
+<p><strong>Definition:</strong> A stack is a <strong>LIFO (Last In First Out)</strong> structure — jo element sab se aakhir mein gaya, wahi sab se pehle bahir aayega. Real example: plates ka stack, tray stack.</p>
+<p><strong>Operations (sirf top par hoti hain):</strong>
+- <code>push(x)</code> — top par element rakhna
+- <code>pop()</code> — top wala element nikalna (aur return karna)
+- <code>top()</code> / <code>peek()</code> — top wala element sirf dekhna, nikalna nahi
+- <code>isEmpty()</code>, <code>isFull()</code> (array implementation mein)</p>
+<p><strong>Array implementation:</strong> ek array + ek <code>top</code> variable (index of top element, empty par −1).</p>
+<pre><code>push(x):  top++; A[top] = x;
+pop():    x = A[top]; top--; return x;
+</code></pre>
+<ul>
+<li>push/pop dono <strong>O(1)</strong>.</li>
+<li><strong>Stack overflow:</strong> full stack par push karna. <strong>Stack underflow:</strong> empty stack par pop karna. Dono errors exam mein pooche jate hain.</li>
+</ul>
+<p><strong>Linked list implementation:</strong> head hi top hota hai — push = insert at head, pop = delete at head. Dono <strong>O(1)</strong>, aur size ki koi fixed limit nahi.</p>
+<p><strong>Array vs Linked List implementation (handout ka comparison):</strong>
+- Array: simple, lekin size fixed — overflow ka khatra.
+- Linked list: dynamic size, lekin har element ke saath pointer ki memory + new/delete ka overhead.</p>
+<p><strong>Uses of stack:</strong> expression evaluation/conversion, function calls (call stack), undo feature, backtracking, parentheses checking.</p>
+<p><strong>Exam points / traps:</strong>
+- Stack mein beech se element nahi nikal sakte — sirf top.
+- pop() element <strong>remove bhi karta hai</strong>, top() sirf batata hai — farq yaad rakho.</p>
+<hr />
+<h2 id="7-infix-prefix-postfix-conversion-evaluation-lectures-68">7. Infix, Prefix, Postfix — Conversion &amp; Evaluation (Lectures 6–8)</h2>
+<p><strong>Notations:</strong>
+- <strong>Infix:</strong> operator darmiyan mein — <code>A + B</code> (insaanon ke liye asaan, computer ke liye mushkil — precedence aur parentheses handle karne parte hain)
+- <strong>Postfix (Reverse Polish):</strong> operator baad mein — <code>A B +</code> (na parentheses, na precedence ka masla — stack se seedha evaluate hoti hai)
+- <strong>Prefix (Polish):</strong> operator pehle — <code>+ A B</code></p>
+<p><strong>Operator precedence:</strong> <code>^</code> (power) sab se zyada, phir <code>*</code> <code>/</code>, phir <code>+</code> <code>-</code>. Parentheses sab par bhaari.</p>
+<h3 id="infix-postfix-conversion-stack-algorithm">Infix → Postfix conversion (stack algorithm)</h3>
+<p>Expression ko left se right parho:
+1. <strong>Operand</strong> (A, B, 5…) → seedha output mein likh do.
+2. <strong><code>(</code></strong> → stack par push karo.
+3. <strong><code>)</code></strong> → stack se pop karke output mein likhte jao jab tak <code>(</code> na aaye; <code>(</code> ko discard karo.
+4. <strong>Operator</strong> → jab stack top par maujood operator ki precedence <strong>zyada ya barabar</strong> hai, usay pop karke output mein likho; phir current operator push karo.
+5. End par stack ke bache hue operators pop karke output mein likh do.</p>
+<p><strong>Worked example:</strong> <code>A + B * C</code> → postfix: <code>A B C * +</code>
+(Because * pehle hoga.) Aur <code>(A + B) * C</code> → <code>A B + C *</code></p>
+<p><strong>Worked example (bigger):</strong> <code>A * (B + C)</code> → <code>A B C + *</code></p>
+<h3 id="postfix-evaluation-stack-algorithm">Postfix evaluation (stack algorithm)</h3>
+<p>Left se right parho:
+1. <strong>Operand</strong> → stack par push karo.
+2. <strong>Operator</strong> → do operands pop karo (pehla pop = right operand, doosra pop = left operand — <strong>order matter karta hai</strong> <code>−</code> aur <code>/</code> mein!), result calculate karke push karo.
+3. End par stack mein bacha ek hi number = jawab.</p>
+<p><strong>Worked example:</strong> <code>5 3 + 2 *</code> → 5 push, 3 push, <code>+</code> → pop 3, pop 5 → 8 push; 2 push; <code>*</code> → 16. <strong>Answer = 16.</strong></p>
+<p><strong>Exam points / traps (ye section midterm ka favourite hai):</strong>
+- Evaluation mein pop ka order: <code>8 2 -</code> = 8 − 2 = 6, lekin stack se pehle 2 pop hoga, phir 8. Galti yahin hoti hai.
+- Conversion mein operands ka order <strong>kabhi nahi badalta</strong> — sirf operators idhar udhar hote hain.
+- Equal precedence par left-to-right associativity: <code>A - B - C</code> → <code>A B - C -</code>.
+- Trace table bana kar practice karo — exam mein poora conversion/evaluation trace aata hai.</p>
+<hr />
+<h2 id="8-function-call-stack-memory-c-support-topics-lectures-8-9-1719">8. Function Call Stack, Memory &amp; C++ Support Topics (Lectures 8, 9, 17–19)</h2>
+<p><strong>Memory organization (program ki memory):</strong> Code/text segment, static/global data, <strong>stack</strong> (function calls, local variables), <strong>heap</strong> (dynamic memory — <code>new</code> se milti hai).</p>
+<p><strong>Function call stack:</strong> Jab function call hota hai to us ki information (return address, parameters, local variables) ek <strong>activation record / stack frame</strong> ki shakal mein stack par push hoti hai. Function khatam ho to frame pop ho jata hai aur control return address par wapas jata hai.
+- Isi liye <strong>recursion</strong> kaam karti hai: har recursive call ka apna alag frame, apni alag local variables ki copy.
+- Call by value: parameter ki <strong>copy</strong> frame mein banti hai — original change nahi hota.
+- Call by reference / by pointer: address jata hai — original change ho sakta hai.</p>
+<p><strong>C++ Templates:</strong> Ek hi code mukhtalif data types ke liye. Jaise <code>Stack&lt;int&gt;</code>, <code>Stack&lt;float&gt;</code> — class ek dafa likho, har type ke liye compiler khud version bana deta hai. Handout mein stack ko template class se implement kiya gaya hai taake kisi bhi type ka stack ban sake.</p>
+<p><strong>Reference variables (<code>&amp;</code>):</strong> Ek existing variable ka <strong>alias</strong> (doosra naam). <code>int&amp; r = x;</code> — r aur x ek hi memory hain.
+- Reference ko declare karte waqt initialize karna <strong>lazmi</strong> hai; baad mein kisi aur variable ki taraf nahi mor sakte.
+- Faida: function ko bari object ki copy bhejne ki bajaye reference bhejo — time/memory bachta hai.</p>
+<p><strong><code>const</code> keyword:</strong> <code>const</code> parameter/value ko function ke andar change hone se rokta hai.
+- <strong>Best combination (handout ki tip):</strong> <code>const Type&amp;</code> parameter — na copy bane (reference ki wajah se) aur na value change ho (const ki wajah se). BST ke interface mein yehi use hua hai.</p>
+<p><strong>Exam points / traps:</strong>
+- Reference ≠ pointer: reference ko NULL nahi kar sakte, reseat nahi kar sakte, initialize karna lazmi hai.
+- Recursion khatam na ho (base case na ho) to <strong>stack overflow</strong> ho jata hai — frames bharte rehte hain.</p>
+<hr />
+<h2 id="9-queue-lectures-910">9. Queue (Lectures 9–10)</h2>
+<p><strong>Definition:</strong> A queue is a <strong>FIFO (First In First Out)</strong> structure — jo pehle aaya, wahi pehle jayega. Real example: bank ki line, ticket counter.</p>
+<p><strong>Operations:</strong>
+- <code>enqueue(x)</code> — <strong>rear</strong> (end) par element daalna
+- <code>dequeue()</code> — <strong>front</strong> se element nikalna
+- <code>front()</code> — front wala element dekhna
+- <code>isEmpty()</code>, <code>isFull()</code></p>
+<p><strong>Array implementation ki problem:</strong> Agar front ko aage barhate jao to shuru ki jagah khaali reh jati hai lekin array "full" lagta hai — jagah waste.</p>
+<p><strong>Solution — Circular Array (handout ka tareeqa):</strong> Array ko gol (circular) samjho — jab rear aakhir par pohanchay aur shuru mein jagah khaali ho to rear wapas index 0 par aa jata hai (<strong>wrap around</strong>). Index aise barhta hai: <code>rear = (rear + 1) % size</code>.
+- enqueue/dequeue dono <strong>O(1)</strong>.
+- <strong>Trap:</strong> Circular queue mein "full" aur "empty" ko alag pehchanna hota hai — aam tareeqa: ya to ek slot hamesha khaali rakho, ya elements ki count rakho. Warna front == rear dono halaton mein ho sakta hai.</p>
+<p><strong>Linked list implementation:</strong> front aur rear dono pointers rakho — enqueue rear par (O(1)), dequeue front se (O(1)). Ek hi pointer (sirf front) ho to enqueue O(n) ho jayega — <strong>ye exam trap hai.</strong></p>
+<p><strong>Uses:</strong> simulation models (bank queue — handout ka example), printer jobs, CPU scheduling, BFS (baad mein), keyboard buffer.</p>
+<p><strong>Exam points:</strong>
+- Stack vs Queue ka farq lazmi yaad rakho: LIFO vs FIFO; insert/delete dono ends alag (queue) vs ek hi end (stack).
+- Circular queue ka modulo wala index calculation trace mein aata hai.</p>
+<hr />
+<h2 id="10-priority-queue-lectures-1011">10. Priority Queue (Lectures 10–11)</h2>
+<p><strong>Definition:</strong> Aisi queue jahan har element ke saath ek <strong>priority</strong> hoti hai. Dequeue hamesha <strong>sab se zyada priority</strong> wala element nikalta hai — line mein pehle aana zaroori nahi. (Hospital emergency, bank mein VIP customer — handout ka bank simulation isi se extend hota hai.)</p>
+<p><strong>Implementation choices (trade-off yaad rakho):</strong>
+- <strong>Unsorted list/array:</strong> enqueue O(1) (bas daal do), lekin dequeue O(n) (poori list mein max priority dhoondna parta hai).
+- <strong>Sorted list:</strong> dequeue O(1) (front se max nikal lo), lekin enqueue O(n) (sahi jagah par insert + shifting/pointer work).
+- (Heap se behtareen implementation final term mein aati hai — midterm mein list wali implementation hi hai.)</p>
+<p><strong>Bank simulation (Lecture 10):</strong> Customers bank aate hain, tellers ke saamne queue lagti hai; simulation se average waiting time waghera calculate hota hai. Queue data structure real-world events ko model karne ke liye use hota hai — ye "simulation model" ka concept exam mein short question mein aata hai.</p>
+<p><strong>Exam point:</strong> Priority queue mein FIFO rule <strong>toot jata hai</strong> — priority FIFO par jeet jati hai. Agar do elements ki priority barabar ho to un ke darmiyan FIFO lagta hai.</p>
+<hr />
+<h2 id="11-trees-binary-tree-basics-lectures-1112">11. Trees &amp; Binary Tree Basics (Lectures 11–12)</h2>
+<p><strong>Tree terminology (definitions lazmi yaad karo):</strong>
+- <strong>Tree:</strong> nodes ka hierarchical (darja-band) collection; ek khaas node <strong>root</strong> hota hai.
+- <strong>Parent / Children:</strong> node jis se branch nikli = parent; neeche walay = children. Same parent ke children = <strong>siblings</strong>.
+- <strong>Leaf node:</strong> jis ke koi children na hon. <strong>Internal node:</strong> jis ke kam az kam ek child ho.
+- <strong>Edge/Link:</strong> do nodes ko jorne wali line. n nodes wale tree mein hamesha <strong>n − 1 edges</strong> hoti hain.
+- <strong>Level:</strong> root level 0 (ya 1 — handout root ko level 0 se shuru karta hai, question ke context se samajhna); har neeche wali generation +1.
+- <strong>Depth (of tree):</strong> sab se gehray leaf ka level = maximum level.
+- <strong>Height (of node):</strong> node se neeche sab se lambe path par edges ki tadaad; leaf ki height 0.
+- <strong>Subtree:</strong> kisi node ko root maan kar us ke neeche ka poora hissa.
+- <strong>Path / ancestor / descendant:</strong> ancestor = node se root tak ke saare nodes; descendant = node ke neeche ke saare nodes.</p>
+<p><strong>Binary Tree:</strong> Har node ke <strong>zyada se zyada 2 children</strong> — left child aur right child (dono alag pehchan rakhte hain; sirf ek child ho to left hai ya right, farq parta hai!).
+- <strong>Strictly binary tree:</strong> har internal node ke <strong>bilkul 2</strong> children (0 ya 2 — 1 wala allowed nahi).
+- <strong>Complete binary tree (handout definition):</strong> depth d ki woh strictly binary tree jis ke <strong>saare leaves level d par</strong> hon... practically: saare levels poori tarah bhare hon, aakhri level left se bharta hai. (Handout ki exact definition: strictly binary tree all of whose leaves are at level d.)
+- <strong>Full binary tree:</strong> har level completely bhara hua.</p>
+<p><strong>Properties (numbers walay sawal aate hain):</strong>
+- Level L par zyada se zyada nodes = <strong>2^L</strong> (level 0 se ginna).
+- Height/depth h walay binary tree mein zyada se zyada nodes = <strong>2^(h+1) − 1</strong>.
+- Leaves aur internal nodes (strictly binary tree): <strong>leaves = internal nodes + 1</strong>.</p>
+<p><strong>Applications:</strong> expression trees, searching (BST), file system, decision trees. Binary tree mein <strong>duplicates search</strong> wala topic (Lecture 12): tree mein repeated values dhoondna traversal se hota hai.</p>
+<p><strong>C++ implementation:</strong> Node class jismein data + <code>left</code> pointer + <code>right</code> pointer; <code>insert</code> node ko tree mein lagata hai (trace practice karo — Lecture 12 mein insert ka trace diya hai).</p>
+<p><strong>Exam traps:</strong>
+- Binary tree ≠ BST. Aam binary tree mein values ka koi order nahi hota; order wala BST hai (agla topic).
+- Ek child walay node mein "left ya right" ka farq binary tree mein count hota hai — do mukhtalif trees bante hain.</p>
+<hr />
+<h2 id="12-binary-search-tree-bst-lectures-1213">12. Binary Search Tree (BST) (Lectures 12–13)</h2>
+<p><strong>Definition / BST property:</strong> Har node ke liye:
+- <strong>Left subtree</strong> ki saari values node ki value se <strong>chhoti</strong>
+- <strong>Right subtree</strong> ki saari values node ki value se <strong>bari</strong>
+- Dono subtrees khud bhi BST hain.</p>
+<p><strong>Search:</strong> Root se shuru karo. Value == node → mil gaya. Value chhoti → left jao. Value bari → right jao. NULL par pohanchay to value maujood nahi.</p>
+<pre><code>search(x, node):
+  if node == NULL: return NOT FOUND
+  if x == node.data: return FOUND
+  if x &lt; node.data: search(x, node.left)
+  else: search(x, node.right)
+</code></pre>
+<p><strong>Insert:</strong> Pehle search ki tarah neeche jao; jahan NULL mile wahan naya node laga do (hamesha <strong>leaf</strong> banta hai). Duplicate value aam tor par insert nahi karte (ya ek taraf bhej dete hain — handout duplicates ko alag handle karta hai).</p>
+<p><strong>Cost of search (Lecture 13 — bohat important):</strong>
+- Search ki cost = jitne nodes compare hue = tree ki <strong>height</strong> par depend.
+- Balanced tree: height ≈ log₂(n) → search <strong>O(log n)</strong>.
+- Degenerate (skewed) tree: height = n → search <strong>O(n)</strong> — bilkul linked list jaisa!
+- Sorted data ko seedha insert karne se degenerate tree banta hai (har naya element sab se bara → sirf right children). <strong>Yehi masla AVL tree solve karta hai.</strong></p>
+<p><strong>Worked example:</strong> Insert 50, 30, 70, 20, 40 → root 50; 30 left, 70 right; 20 → 30 ka left; 40 → 30 ka right. Search 40: 50 → 30 → 40 = 3 comparisons.</p>
+<p><strong>Exam traps:</strong>
+- BST ki inorder traversal hamesha <strong>sorted</strong> order deti hai (agle topic mein hai — ye link wala sawal bohat aata hai).
+- Insert hamesha leaf par hota hai, beech mein kabhi nahi.</p>
+<hr />
+<h2 id="13-tree-traversals-lectures-1315">13. Tree Traversals (Lectures 13–15)</h2>
+<p>Traversal = har node ko <strong>exactly ek dafa</strong> visit karna. 4 tareeqay:</p>
+<table>
+<thead>
+<tr>
+<th>Traversal</th>
+<th>Order</th>
+<th>Yaad rakhne ka tareeqa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Preorder</strong></td>
+<td>Root → Left → Right</td>
+<td>Root <strong>pehle</strong></td>
+</tr>
+<tr>
+<td><strong>Inorder</strong></td>
+<td>Left → Root → Right</td>
+<td>Root <strong>darmiyan</strong> mein</td>
+</tr>
+<tr>
+<td><strong>Postorder</strong></td>
+<td>Left → Right → Root</td>
+<td>Root <strong>aakhir</strong> mein</td>
+</tr>
+<tr>
+<td><strong>Level-order</strong></td>
+<td>Level by level, left to right</td>
+<td><strong>Queue</strong> use hoti hai (BFS)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recursive code (teenon ek jaise, sirf root-visit ki position badalti hai):</strong></p>
+<pre><code>inorder(node):
+  if node == NULL: return
+  inorder(node.left)
+  print(node.data)        // preorder mein ye line sab se pehle, postorder mein sab se aakhir
+  inorder(node.right)
+</code></pre>
+<p><strong>Non-recursive traversal:</strong> Recursion ke baghair <strong>stack</strong> use karke hota hai (Lecture 14) — function call stack ki jagah apna stack. Exam mein aksar poochte hain: "non-recursive inorder mein stack kab push/pop hota hai" — trace: left jaate hue nodes push karo; NULL aaye to pop karke print karo, phir us ke right par jao.</p>
+<p><strong>Level-order traversal:</strong> Queue use hoti hai: root enqueue karo; loop: dequeue karke print karo, us ke left/right children enqueue karo. (Lecture 15)</p>
+<p><strong>Worked example</strong> — tree: root 50, left 30 (children 20, 40), right 70:
+- Preorder: <strong>50, 30, 20, 40, 70</strong>
+- Inorder: <strong>20, 30, 40, 50, 70</strong> ← sorted! (BST hai is liye)
+- Postorder: <strong>20, 40, 30, 70, 50</strong>
+- Level-order: <strong>50, 30, 70, 20, 40</strong></p>
+<p><strong>Exam points / traps (traversal midterm ka sab se pakka topic hai):</strong>
+- Diya gaya tree → chaaron traversals likhna. Practice lazmi.
+- Inorder of BST = ascending sorted order. Ye property bohat dafa poochi jati hai.
+- Preorder + inorder se original tree wapas banaya ja sakta hai (unique) — concept yaad rakho.
+- Level-order mein stack nahi, <strong>queue</strong> lagti hai — ye farq trap hai.</p>
+<hr />
+<h2 id="14-deleting-a-node-from-bst-lectures-1516">14. Deleting a Node from BST (Lectures 15–16)</h2>
+<p>Delete ke <strong>teen cases</strong> — ye poora topic ek hi sawal ki shakal mein aata hai:</p>
+<p><strong>Case 1 — Leaf node (koi child nahi):</strong> Bas node delete kar do, parent ka pointer NULL kar do. Asaan tareen.</p>
+<p><strong>Case 2 — Ek child hai:</strong> Node ko hata kar us ke <strong>ek hi child ko parent se seedha jor do</strong> (child node ki jagah "promote" ho jata hai). Bilkul linked list wale delete jaisa.</p>
+<p><strong>Case 3 — Do children hain (mushkil case):</strong> Node ki value ko replace karo:
+- Us ke <strong>right subtree ke sab se chhote node</strong> (inorder successor) se — ya left subtree ke sab se bare node (inorder predecessor) se.
+- Phir jis node se value copy ki thi, usay delete karo — woh hamesha Case 1 ya Case 2 mein hota hai (successor ke left child nahi hota).</p>
+<pre><code>delete(x):
+  find node
+  if leaf: remove
+  else if one child: replace node with that child
+  else: copy inorder-successor's value here; delete successor node
+</code></pre>
+<p><strong>Worked example:</strong> Upar walay tree (50, 30, 70, 20, 40) se 30 delete karo → 30 ke do children (20, 40) hain → successor = right subtree (40) ka sab se chhota = 40 → 30 ki jagah 40 likho, purana 40 wala leaf delete kar do. Naya tree: 50 ke left = 40, us ka left = 20. ✔</p>
+<p><strong>Exam traps:</strong>
+- Case 3 mein node physically delete <strong>nahi</strong> hota pehle — pehle value copy hoti hai, delete successor hota hai.
+- Successor = right subtree ka <strong>leftmost</strong> node. Predecessor = left subtree ka <strong>rightmost</strong> node. Ulta mat karna.</p>
+<hr />
+<h2 id="15-degenerate-bst-avl-trees-lectures-1922">15. Degenerate BST &amp; AVL Trees (Lectures 19–22)</h2>
+<p><strong>Degenerate BST:</strong> Sorted (ya reverse sorted) data insert karne se tree ek seedhi line ban jata hai — har node ka sirf ek child. Search O(n) ho jata hai; tree ka faida khatam. <strong>Solution: khud ko balance rakhne wala tree — AVL.</strong></p>
+<p><strong>AVL Tree:</strong> Ek BST jo har node par balance check rakhta hai (Adelson-Velsky &amp; Landis ke naam par).
+- <strong>Balance factor</strong> of a node = <strong>height(left subtree) − height(right subtree)</strong>.
+- AVL mein har node ka balance factor sirf <strong>−1, 0, ya +1</strong> ho sakta hai. Is se bahir jaye to tree "unbalanced" — <strong>rotation</strong> se theek karte hain.
+- Faida: height hamesha O(log n) rehti hai → search/insert/delete sab <strong>O(log n)</strong> guaranteed.</p>
+<p><strong>Insertion:</strong> Pehle aam BST insert karo. Phir wapas root ki taraf jate hue har ancestor ka balance factor check karo. Pehla node jahan balance ±2 ho jaye, wahan rotation lagao. Sirf <strong>ek</strong> (single ya double) rotation se poora tree dobara balance ho jata hai.</p>
+<p><strong>The 4 cases (rotation selection — ye table ratta kar lo):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Problem ki shakal</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Case 1: Left-Left (LL)</strong></td>
+<td>Insertion left subtree ke <strong>left</strong> mein hui</td>
+<td><strong>Single right rotation</strong></td>
+</tr>
+<tr>
+<td><strong>Case 4: Right-Right (RR)</strong></td>
+<td>Insertion right subtree ke <strong>right</strong> mein hui</td>
+<td><strong>Single left rotation</strong></td>
+</tr>
+<tr>
+<td><strong>Case 2: Left-Right (LR)</strong></td>
+<td>Insertion left subtree ke <strong>right</strong> mein hui</td>
+<td><strong>Double rotation:</strong> pehle left rotation (child par), phir right rotation</td>
+</tr>
+<tr>
+<td><strong>Case 3: Right-Left (RL)</strong></td>
+<td>Insertion right subtree ke <strong>left</strong> mein hui</td>
+<td><strong>Double rotation:</strong> pehle right rotation (child par), phir left rotation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Yaad rakhne ka rule:</strong> Insertion jis "zigzag" shakal mein hui (LR ya RL) wahan double rotation; seedhi shakal (LL ya RR) wahan single rotation — aur rotation hamesha unbalanced node ko <strong>neeche dhakel</strong> kar us ke child ko upar lati hai.</p>
+<p><strong>Worked example (LL):</strong> Insert 30, 20, 10 → 30 ka balance = +2 (left height 2, right 0) → LL case → right rotation on 30 → naya root <strong>20</strong>, left 10, right 30. Balanced ✔
+<strong>Worked example (LR):</strong> Insert 30, 10, 20 → 30 ka balance +2 lekin insertion left child (10) ke right mein hui → pehle 10 par left rotation (20 upar aata hai), phir 30 par right rotation → root <strong>20</strong>, left 10, right 30 ✔</p>
+<p><strong>C++ <code>avlInsert</code>:</strong> recursive insert; wapas aate hue height/balance update, zaroorat paray to rotation; handout mein poora code Lecture 22 mein hai — steps ka concept samajhna code ratne se zyada important hai.</p>
+<p><strong>Exam points / traps:</strong>
+- Balance factor ki definition mein <strong>left − right</strong> hai (kuch books right − left likhte hain — VU handout left − right use karta hai; sign ulta karoge to case ulta ho jayega).
+- Rotation ke baad BST property kharab nahi hoti — inorder traversal rotation se pehle aur baad <strong>same</strong> rehta hai. Ye ek khoobsurat exam point hai.
+- AVL mein delete ke baad multiple rotations lag sakti hain (insert mein sirf ek jagah) — lekin delete ka detailed rotation midterm handouts mein kam emphasize hai; insert par focus rakho.
+- Har rotation O(1) hai — sirf chand pointers badalte hain.</p>
+<hr />
+<h2 id="16-master-big-o-table-sab-ek-jagah">16. Master Big-O Table (sab ek jagah)</h2>
+<table>
+<thead>
+<tr>
+<th>Structure</th>
+<th>Access</th>
+<th>Search</th>
+<th>Insert</th>
+<th>Delete</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Array</td>
+<td>O(1)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>insert/delete par shifting</td>
+</tr>
+<tr>
+<td>Array List (end par)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>jagah ho to</td>
+</tr>
+<tr>
+<td>Singly Linked List</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(1)*</td>
+<td>O(1)*</td>
+<td>*position/address maloom ho to</td>
+</tr>
+<tr>
+<td>Stack (array ya list)</td>
+<td>top O(1)</td>
+<td>—</td>
+<td>push O(1)</td>
+<td>pop O(1)</td>
+<td>sirf top accessible</td>
+</tr>
+<tr>
+<td>Queue (circular array / list)</td>
+<td>front O(1)</td>
+<td>—</td>
+<td>enqueue O(1)</td>
+<td>dequeue O(1)</td>
+<td>circular mein modulo</td>
+</tr>
+<tr>
+<td>Priority Queue (list)</td>
+<td>—</td>
+<td>—</td>
+<td>O(1) ya O(n)</td>
+<td>O(n) ya O(1)</td>
+<td>unsorted vs sorted list ka trade-off</td>
+</tr>
+<tr>
+<td>BST (balanced)</td>
+<td>—</td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>height par depend</td>
+</tr>
+<tr>
+<td>BST (degenerate)</td>
+<td>—</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>sorted input ki saza</td>
+</tr>
+<tr>
+<td>AVL Tree</td>
+<td>—</td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>hamesha balanced — guaranteed</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="17-last-minute-checklist-paper-se-pehle">17. Last-Minute Checklist (paper se pehle)</h2>
+<ul>
+<li>[ ] Stack = LIFO, Queue = FIFO — operations ke naam (push/pop, enqueue/dequeue) ke saath.</li>
+<li>[ ] Infix → postfix conversion aur postfix evaluation ke 2–2 trace haath se karke dekho.</li>
+<li>[ ] Linked list insert/delete ke pointer steps sahi order mein (pehle newNode-&gt;next, phir p-&gt;next).</li>
+<li>[ ] Circular queue ka <code>(index + 1) % size</code> aur full/empty ka masla.</li>
+<li>[ ] Ek diye gaye tree ke chaaron traversals (pre/in/post/level) likhne ki practice.</li>
+<li>[ ] BST delete ke 3 cases — khaas kar do-children wala (successor copy + successor delete).</li>
+<li>[ ] AVL: balance factor = left height − right height; 4 cases aur un ke rotations wali table.</li>
+<li>[ ] Degenerate BST banta kaise hai (sorted insert) aur AVL usay kaise rokta hai.</li>
+<li>[ ] Definitions: ADT, leaf, depth, height, complete/strictly binary tree, LIFO/FIFO, overflow/underflow.</li>
+<li>[ ] Big-O table upar wala — kam az kam har structure ki search/insert/delete cost.</li>
+</ul>
+<p><em>Good luck! Pehle woh topics pakke karo jin par tumhara haath saaf hai (traversals, stack expressions, AVL rotations) — midterm mein yehi sab se zyada marks dete hain.</em></p>
+</article>
+<div class="foot">Made from the official VU handouts · Lectures 1–22 · <a href="midterm-notes-091.html">← Back to all notes</a></div>
+</div>
+
+<script>
+document.querySelectorAll('article table').forEach(function(t){
+  var w=document.createElement('div'); w.className='twrap';
+  t.parentNode.insertBefore(w,t); w.appendChild(t);
+});
+</script>
+
+</body>
+</html>

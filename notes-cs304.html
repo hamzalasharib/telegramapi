@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>CS304 — Object Oriented Programming | Midterm Notes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050510; --card:#0b0b22; --card2:#0d0d28; --line:rgba(96,165,250,.20);
+  --blue:#2c67ed; --sky:#60a5fa; --cyan:#00f0ff;
+  --text:#e9edfa; --muted:#9aa7c7; --muted2:#6d7a9e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+   radial-gradient(700px 420px at 12% -6%, rgba(44,103,237,.20), transparent 60%),
+   radial-gradient(620px 380px at 88% 0%, rgba(0,240,255,.10), transparent 60%),
+   radial-gradient(900px 600px at 50% 115%, rgba(44,103,237,.12), transparent 60%);}
+a{color:var(--sky);text-decoration:none}
+a:hover{color:var(--cyan)}
+::selection{background:rgba(44,103,237,.5)}
+
+/* ---------- sticky top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(5,5,16,.85);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1060px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.9rem;color:var(--text);
+  background:rgba(96,165,250,.10);border:1px solid var(--line);padding:8px 14px;border-radius:999px;white-space:nowrap}
+.back:hover{border-color:var(--cyan);color:var(--cyan)}
+.topbar .subj{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:1.02rem;letter-spacing:.2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .subj span{color:var(--cyan)}
+.topbar .tag{margin-left:auto;font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.35);padding:5px 10px;border-radius:999px;white-space:nowrap}
+@media(max-width:560px){.topbar .tag{display:none}.topbar .subj{font-size:.92rem}}
+
+/* ---------- topic jump nav ---------- */
+.topics{position:sticky;top:57px;z-index:40;background:rgba(5,5,16,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(96,165,250,.12)}
+.topics-in{max-width:1060px;margin:0 auto;padding:9px 20px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.topics-in::-webkit-scrollbar{display:none}
+.topics a{flex:0 0 auto;font-size:.78rem;font-weight:500;color:var(--muted);
+  border:1px solid rgba(96,165,250,.16);background:rgba(11,11,34,.7);padding:6px 12px;border-radius:999px}
+.topics a:hover{color:var(--cyan);border-color:rgba(0,240,255,.45)}
+
+/* ---------- article ---------- */
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 20px 90px}
+article{max-width:860px;margin:0 auto;font-size:1.02rem;line-height:1.78;color:#d7def2}
+article h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.2;
+  font-weight:700;margin:38px 0 18px;
+  background:linear-gradient(92deg,#fff 20%,var(--sky) 60%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+article h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.28rem,3.4vw,1.6rem);font-weight:700;line-height:1.3;
+  margin:52px 0 14px;padding:14px 16px;scroll-margin-top:130px;
+  background:linear-gradient(90deg,rgba(44,103,237,.16),rgba(0,240,255,.05) 70%,transparent);
+  border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:12px}
+article h3{font-family:"Space Grotesk",sans-serif;font-size:1.14rem;font-weight:600;margin:30px 0 10px;color:#fff;scroll-margin-top:130px}
+article h4{font-size:1rem;font-weight:600;margin:22px 0 8px;color:var(--sky)}
+article p{margin:0 0 15px}
+article ul,article ol{margin:0 0 16px;padding-left:24px}
+article li{margin-bottom:7px}
+article li::marker{color:var(--cyan)}
+article strong{color:#fff;font-weight:600}
+article em{color:#c3cdf0}
+article hr{border:none;height:1px;margin:34px 0;
+  background:linear-gradient(90deg,transparent,rgba(96,165,250,.4),transparent)}
+article blockquote{margin:0 0 16px;padding:12px 18px;border-left:3px solid var(--blue);
+  background:rgba(44,103,237,.08);border-radius:0 12px 12px 0;color:#c9d4f5}
+article a{border-bottom:1px dotted rgba(96,165,250,.5)}
+code{font-family:"JetBrains Mono",monospace;font-size:.86em;color:#8be9ff;
+  background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.14);padding:1px 6px;border-radius:6px}
+pre{background:#07071a;border:1px solid var(--line);border-radius:14px;padding:18px;overflow-x:auto;margin:0 0 18px;
+  box-shadow:0 10px 34px rgba(0,0,0,.45)}
+pre code{background:none;border:none;padding:0;color:#d9e4ff;font-size:.86rem;line-height:1.65}
+.twrap{overflow-x:auto;margin:0 0 20px;border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.55}
+thead th{background:linear-gradient(90deg,rgba(44,103,237,.35),rgba(0,240,255,.14));color:#fff;
+  font-family:"Space Grotesk",sans-serif;font-weight:600;text-align:left;padding:11px 14px;white-space:nowrap}
+tbody td{padding:10px 14px;border-top:1px solid rgba(96,165,250,.12);vertical-align:top}
+tbody tr:nth-child(even){background:rgba(96,165,250,.05)}
+tbody tr:hover{background:rgba(0,240,255,.05)}
+.foot{max-width:860px;margin:56px auto 0;padding-top:22px;border-top:1px solid rgba(96,165,250,.14);
+  color:var(--muted2);font-size:.85rem;text-align:center}
+.foot a{font-weight:600}
+
+/* ---------- hub ---------- */
+.hero{position:relative;z-index:1;text-align:center;padding:72px 20px 10px;max-width:1060px;margin:0 auto}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--cyan);
+  border:1px solid rgba(0,240,255,.4);padding:7px 16px;border-radius:999px;margin-bottom:22px;
+  background:rgba(0,240,255,.05);box-shadow:0 0 24px rgba(0,240,255,.12)}
+.hero h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(2.1rem,6.5vw,3.4rem);font-weight:700;line-height:1.12;
+  background:linear-gradient(94deg,#fff 15%,var(--sky) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:620px;margin:16px auto 0;font-size:1.02rem;line-height:1.7}
+.grid{position:relative;z-index:1;max-width:1060px;margin:44px auto 0;padding:0 20px 30px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{display:block;background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);
+  border-radius:20px;padding:26px 24px;position:relative;overflow:hidden;color:var(--text);
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.card:hover{transform:translateY(-5px);border-color:rgba(0,240,255,.55);color:var(--text);
+  box-shadow:0 18px 44px rgba(2,6,30,.75),0 0 0 1px rgba(0,240,255,.12),0 0 34px rgba(44,103,237,.25)}
+.card .ic{font-size:1.7rem;line-height:1}
+.card .code{font-family:"Space Grotesk",sans-serif;font-size:1.9rem;font-weight:700;margin-top:12px;letter-spacing:.5px}
+.card .code b{color:var(--cyan);font-weight:700}
+.card .name{color:#fff;font-weight:600;font-size:1.02rem;margin-top:2px}
+.card .meta{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.chip{font-size:.7rem;font-weight:600;letter-spacing:.6px;color:var(--sky);
+  border:1px solid rgba(96,165,250,.35);background:rgba(44,103,237,.12);padding:4px 10px;border-radius:999px}
+.chip.cy{color:var(--cyan);border-color:rgba(0,240,255,.35);background:rgba(0,240,255,.06)}
+.card .teaser{color:var(--muted);font-size:.92rem;line-height:1.65;min-height:3.1em}
+.card .open{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;color:#fff;
+  background:linear-gradient(90deg,var(--blue),#1f8fff);padding:11px 20px;border-radius:999px;
+  box-shadow:0 8px 22px rgba(44,103,237,.4)}
+.card:hover .open{background:linear-gradient(90deg,#1f8fff,var(--cyan));color:#02131f}
+.note{position:relative;z-index:1;max-width:760px;margin:14px auto 0;padding:0 20px}
+.note-in{border:1px dashed rgba(0,240,255,.35);background:rgba(0,240,255,.04);border-radius:14px;
+  padding:14px 18px;color:var(--muted);font-size:.9rem;line-height:1.65;text-align:center}
+.note-in b{color:var(--cyan)}
+.hubfoot{position:relative;z-index:1;text-align:center;color:var(--muted2);font-size:.83rem;padding:44px 20px 54px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="midterm-notes-091.html">← All Notes</a>
+  <div class="subj">CS304 <span>· Object Oriented Programming</span></div>
+  <div class="tag">MIDTERM</div>
+</div></header>
+<nav class="topics"><div class="topics-in"><a href="#1-object-orientation-models-lecture-1">1. Object Orientation &amp;amp; Models</a><a href="#2-information-hiding-encapsulation-interface-lecture-2">2. Information Hiding, Encapsulation, Interface</a><a href="#3-abstraction-classes-lecture-3">3. Abstraction &amp;amp; Classes</a><a href="#4-inheritance-concepts-lectures-34">4. Inheritance — Concepts</a><a href="#5-object-relationships-uml-notation-lecture-5">5. Object Relationships &amp;amp; UML Notation</a><a href="#6-class-compatibility-polymorphism-intro-lecture-6">6. Class Compatibility &amp;amp; Polymorphism — Intro</a><a href="#7-classes-in-c-lecture-7">7. Classes in C++</a><a href="#8-member-functions-constructors-lecture-8">8. Member Functions &amp;amp; Constructors</a><a href="#9-shallow-vs-deep-copy-destructor-accessors-this-lecture-9">9. Shallow vs Deep Copy, Destructor, Accessors, this</a><a href="#10-this-pointer-const-member-functions-lecture-10">10. this Pointer &amp;amp; const Member Functions</a><a href="#11-initializer-list-const-objects-static-members-lectures-1112">11. Initializer List, const Objects, Static Members</a><a href="#12-pointers-to-objects-the-new-operator-lecture-13">12. Pointers to Objects &amp;amp; the new Operator</a><a href="#13-composition-aggregation-in-c-lectures-1415">13. Composition &amp;amp; Aggregation in C++</a><a href="#14-operator-overloading-lectures-1621">14. Operator Overloading</a><a href="#15-inheritance-in-c-lecture-22">15. Inheritance in C++</a><a href="#quick-one-page-recap-exam-se-pehle-ye-parh-lena">Quick One-Page Recap (exam se pehle ye parh lena)</a></div></nav>
+<div class="wrap">
+<article>
+<h1 id="cs304-object-oriented-programming-midterm-revision-notes">CS304 — Object Oriented Programming — Midterm Revision Notes</h1>
+<p><strong>Student:</strong> Hamza Shafiq (VU, Fall 2026) · <strong>Source:</strong> Official VU CS304 Handouts (Lectures 1–45, © Virtual University of Pakistan)</p>
+<blockquote>
+<p><strong>⚠ Midterm scope assumption:</strong> The official Fall 2026 midterm lecture range is announced inside VULMS and could not be confirmed from public sources. These notes follow the <strong>standard VU midterm range: Lectures 1–22</strong> (the first half of the course). Agar VULMS announcement mein range mukhtalif ho to pehle woh check kar lena.</p>
+</blockquote>
+<p><strong>How to use:</strong> Har topic ke end par <strong>Exam points / traps</strong> hain — ye wohi cheezein hain jo MCQs aur subjective mein bar bar aati hain. Pehle woh parhna, phir tafseel.</p>
+<hr />
+<h2 id="1-object-orientation-models-lecture-1">1. Object Orientation &amp; Models (Lecture 1)</h2>
+<ul>
+<li><strong>Object Orientation (OO)</strong> = a technique in which we visualize a programming problem in the form of <strong>objects and their interactions</strong>, just like real life. (Problem ko asli duniya ki cheezon ki tarah sochna.)</li>
+<li><strong>Model</strong> = an abstraction of something real or conceptual. We need models to <strong>understand</strong> an aspect of reality before building it. Examples: highway maps, architectural models.</li>
+<li><strong>OO Model</strong> = shows several <strong>interacting objects</strong> to describe a system. Example: objects <em>Ali, Car, House, Tree</em>; interactions: <em>Ali lives-in House</em>, <em>Ali drives Car</em>.</li>
+<li><strong>Object</strong> = a thing having <strong>state (attributes / data members)</strong> and <strong>behavior (operations / member functions)</strong>, plus a unique <strong>identity</strong>.</li>
+<li>Ali → attributes: Name, Age; behavior: Walks, Eats. Identified by name.</li>
+<li>Car → attributes: Color, Model; behavior: Accelerate, Start, Change Gear. Identified by registration number.</li>
+<li><strong>Tangible objects</strong> = physical, can be seen/touched (Ali, Car, House).</li>
+<li><strong>Intangible (conceptual) objects</strong> = cannot be touched (Time, Date). We assign them our own generated unique ID.</li>
+<li><strong>Finding objects:</strong> in a problem description, <strong>nouns are candidates</strong> for objects.</li>
+<li><strong>Advantages of OO:</strong> closer to real life → easier to develop; all information of an object is stored inside the object itself and hidden from the outside world; it can only be manipulated by the object itself.</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- Object ke teen pehlu yaad rakho: <strong>identity, state, behavior</strong> — MCQ favourite.
+- "Model is an abstraction" — model asal cheez nahi hoti, us ki simplified representation hoti hai.
+- Not every noun becomes an object; some objects in a scenario have <strong>no role</strong> in the implementation (e.g. school parking in a school system).</p>
+<hr />
+<h2 id="2-information-hiding-encapsulation-interface-lecture-2">2. Information Hiding, Encapsulation, Interface (Lecture 2)</h2>
+<ul>
+<li><strong>Information Hiding</strong> = the internal details (data + implementation) of an object are hidden from the outside world; only the object itself can manipulate them.</li>
+<li>Advantages: (1) simplifies the OO model, (2) acts as a <strong>barrier against change propagation</strong> — implementation change karne se model/users affect nahi hote.</li>
+<li>It is achieved using <strong>Encapsulation and Abstraction</strong>.</li>
+<li><strong>Encapsulation</strong> = "we have enclosed all the characteristics of an object <strong>in the object itself</strong>." Data and behavior are <strong>tightly coupled</strong> inside the object.</li>
+<li>Advantages: simplicity &amp; clarity, low complexity, better understanding.</li>
+<li><strong>Interface</strong> = the list of operations/functions an object offers to the outside world (what it can do). An object may have <strong>more than one interface</strong>.</li>
+<li><strong>Implementation</strong> = the internal working — <em>how</em> those operations are actually done (data structures + mechanisms).</li>
+<li>Example (car gear box): data structure = mechanical structure of gear box; functionality = mechanism to change gear. Driver uses a <strong>standard interface</strong> (steering, gear lever) and can drive any car without knowing its engine.</li>
+<li><strong>Separation of Interface &amp; Implementation</strong> = interface shown to the world is <strong>independent</strong> of the internal implementation, so implementation can change without affecting users.</li>
+<li><strong>Messages</strong> = objects communicate by sending messages (stimuli) — i.e. invoking an operation on the target object. The messages an object can receive depend on its <strong>interface</strong>. Example: Person sends message "stop" to Car by applying brakes.</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- <strong>Encapsulation vs Information Hiding:</strong> encapsulation is the <em>mechanism</em> (band karna), information hiding is the <em>result/principle</em> (chhupana). Dono related hain lekin same nahi.
+- Interface = <strong>what</strong>, Implementation = <strong>how</strong>. Ye pair har dafa paper mein aata hai.</p>
+<hr />
+<h2 id="3-abstraction-classes-lecture-3">3. Abstraction &amp; Classes (Lecture 3)</h2>
+<ul>
+<li><strong>Abstraction</strong> = "Capture <strong>only those details</strong> about an object that are <strong>relevant to the current perspective</strong>." It is a way to cope with complexity by simplifying things.</li>
+<li>Example: <em>Ali</em> as a <strong>student</strong> → Roll No, CGPA, Year of Study, Study, GiveExam. Ali as a <strong>teacher</strong> → Employee ID, Designation, Salary, DeliverLecture. Same object, different perspective, different details.</li>
+<li>Cat: ordinary view (legs, tail) vs surgeon's view (skeleton, heart, kidney). Car: driver's view vs engineer's view.</li>
+<li>Advantages: helps solve problems in OO way by hiding irrelevant detail; focusing on one perspective gives freedom to change other aspects later.</li>
+<li>Abstraction also helps achieve <strong>information hiding</strong> (show relevant, hide the rest).</li>
+<li><strong>Class</strong> = a <strong>sketch / prototype / map</strong> from which objects are created. All objects of the same class have <strong>identical characteristics</strong> (same information structure and behavior) but <strong>their own data values</strong>.</li>
+<li>Ali, Anam, Sohail are <strong>instances (objects)</strong> of class <strong>Student</strong>.</li>
+<li>Class = type; Object = instance of that type.</li>
+</ul>
+<p><strong>Comparison — Abstraction vs Encapsulation</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Abstraction</th>
+<th>Encapsulation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Focus</td>
+<td>Only relevant details shown (perspective)</td>
+<td>Data + functions bound together in one unit</td>
+</tr>
+<tr>
+<td>Level</td>
+<td>Design level (what to show)</td>
+<td>Implementation level (how to bind/hide)</td>
+</tr>
+<tr>
+<td>Roman Urdu</td>
+<td>Sirf kaam ki cheez dikhao</td>
+<td>Sab kuch aik dabbe mein band karo</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam points / traps</strong>
+- Abstraction ka keyword hai <strong>"relevant to current perspective"</strong> — definition mein ye phrase lazmi likhna.
+- Class aur object ka farq: class is a <strong>blueprint</strong>, object is a <strong>real instance</strong>. "Identical characteristics, own data" — ye line MCQ hai.</p>
+<hr />
+<h2 id="4-inheritance-concepts-lectures-34">4. Inheritance — Concepts (Lectures 3–4)</h2>
+<ul>
+<li><strong>Inheritance</strong> = a class (derived/child) acquires the characteristics (data + behavior) of another class (base/parent). Biggest benefit: <strong>reuse</strong>.</li>
+<li>Three purposes/views of inheritance:
+  1. <strong>Generalization</strong> — common characteristics of several classes are extracted into a <strong>general</strong> superclass. (Neeche se oopar: Student + Teacher → Person.)
+  2. <strong>Sub-typing / Extension</strong> — derived class <strong>adds new</strong> characteristics to the inherited ones (extends the base).
+  3. <strong>Specialization / Restriction</strong> — derived class <strong>restricts or modifies</strong> inherited behavior for a specific purpose.</li>
+<li><strong>Overriding</strong> = derived class redefines a function already defined in the base class (same name/signature, new body). Used for specialization, extension, restriction, and performance.</li>
+<li><strong>Abstract class</strong> = represents an <strong>abstract concept</strong>; it is a general class meant to be inherited, <strong>cannot be used to create objects directly</strong> (concept level, e.g. Shape, Animal).</li>
+<li><strong>Concrete class</strong> = represents a concrete concept; objects <strong>can</strong> be created from it (e.g. Circle, Student).</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- Generalization = bottom-up (common cheezein oopar wali class mein); Specialization = top-down.
+- Abstract class ka object <strong>nahi</strong> banta — ye sab se common trap hai.
+- Overriding (inheritance, runtime concept) ≠ Overloading (same name, different parameters) — comparison neeche bhi hai.</p>
+<hr />
+<h2 id="5-object-relationships-uml-notation-lecture-5">5. Object Relationships &amp; UML Notation (Lecture 5)</h2>
+<h3 id="51-simple-association">5.1 Simple Association</h3>
+<ul>
+<li><strong>Association</strong> = the <strong>weakest</strong> link between objects; a reference by which one object interacts with another. There is <strong>no intrinsic (ownership) relationship</strong>. Examples: <em>Ali lives-in House</em>, <em>Ali drives Car</em>, <em>Employee works-for Company</em>, <em>Customer gets cash from Cashier</em>.</li>
+<li><strong>By navigation (direction):</strong></li>
+<li><strong>One-way association</strong> — navigate in one direction only; shown by a line with an <strong>arrow</strong> towards the server object.</li>
+<li><strong>Two-way association</strong> — navigate in both directions; shown by a <strong>plain line</strong> (no arrow). Example: <em>friend</em> (Yasir ↔ Ali).</li>
+<li><strong>By number of classes (arity):</strong></li>
+<li><strong>Binary</strong> — exactly 2 classes (line/arrow between them).</li>
+<li><strong>Ternary</strong> — exactly 3 classes; shown by a <strong>diamond</strong> connected to the three classes (Student–Teacher–Course).</li>
+<li><strong>N-ary</strong> — 3 or more classes; practical examples are very rare.</li>
+<li><strong>Multiplicity / cardinality</strong> is written at the ends: <code>1</code>, <code>*</code> (many), e.g. Ali <code>1</code> —— drives —— <code>*</code> Car (one Ali, many cars); Employee <code>*</code> —— <code>1</code> Company.</li>
+</ul>
+<h3 id="52-composition-strong-part-of">5.2 Composition (strong "part-of")</h3>
+<ul>
+<li>A whole object is <strong>made of</strong> part objects (Ali is composed of Head, Arms...; Car is composed of Engine, Wheels).</li>
+<li><strong>Filled diamond (◆)</strong> at the <strong>whole/composer</strong> end.</li>
+<li>Strong ownership: parts are <strong>created and destroyed with the whole</strong>; a part belongs to <strong>only one</strong> whole at a time. Lifetime of parts depends on the whole.</li>
+</ul>
+<h3 id="53-aggregation-weak-has-a">5.3 Aggregation (weak "has-a")</h3>
+<ul>
+<li>A whole object <strong>contains</strong> other objects, but they have their <strong>own independent life</strong> (e.g. a Department has Teachers; department band ho jaye to teachers phir bhi exist karte hain).</li>
+<li><strong>Hollow diamond (◇)</strong> at the whole end.</li>
+<li>Parts can be <strong>shared</strong> between wholes and can exist before/after the whole.</li>
+</ul>
+<h3 id="uml-notation-summary-lecture-5-22-paper-mein-diagram-lazmi-aata-hai">UML Notation Summary (Lecture 5 + 22) — ⭐ paper mein diagram lazmi aata hai</h3>
+<table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Line style</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Association</td>
+<td>Solid line (arrow = one-way navigation)</td>
+<td>objects interact / know each other</td>
+</tr>
+<tr>
+<td>Composition</td>
+<td>Line with <strong>filled diamond ◆</strong> at whole end</td>
+<td>strong part-of, same lifetime</td>
+</tr>
+<tr>
+<td>Aggregation</td>
+<td>Line with <strong>hollow diamond ◇</strong> at whole end</td>
+<td>weak has-a, independent lifetime</td>
+</tr>
+<tr>
+<td>Inheritance (Generalization)</td>
+<td>Line with <strong>hollow triangle △</strong> pointing to <strong>parent</strong></td>
+<td>"is-a"</td>
+</tr>
+<tr>
+<td>Class box</td>
+<td>Rectangle: <strong>Name</strong> / attributes / operations (3 compartments)</td>
+<td><code>-</code> private, <code>+</code> public, <code>#</code> protected</td>
+</tr>
+</tbody>
+</table>
+<h3 id="54-multiple-inheritance-lecture-5">5.4 Multiple Inheritance (Lecture 5)</h3>
+<ul>
+<li>One class derived from <strong>two or more</strong> base classes. Example: <code>class Mermaid : public Woman, public Fish { };</code> — Mermaid can <code>walk()</code> (Woman) and <code>swim()</code> (Fish). Amphibious Vehicle ← LandVehicle + WaterVehicle.</li>
+<li><strong>Advantage:</strong> more reuse, less redundant code.</li>
+<li><strong>Problems (exam favourite):</strong> increased complexity, reduced understanding, <strong>duplicate features → ambiguity</strong>. If both Woman and Fish have <code>eat()</code>, which one does Mermaid inherit?</li>
+<li><strong>Solution:</strong> override <code>eat()</code> in Mermaid and explicitly call the desired parent version using scope resolution: <code>Woman::eat();</code></li>
+</ul>
+<p><strong>Comparison — Association vs Aggregation vs Composition</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Association</th>
+<th>Aggregation</th>
+<th>Composition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strength</td>
+<td>Weakest</td>
+<td>Weak</td>
+<td>Strong</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>None</td>
+<td>Has-a (no ownership of life)</td>
+<td>Part-of (owns parts)</td>
+</tr>
+<tr>
+<td>Lifetime of parts</td>
+<td>Independent</td>
+<td>Independent</td>
+<td><strong>Depends on whole</strong></td>
+</tr>
+<tr>
+<td>Diamond</td>
+<td>None (plain line)</td>
+<td>Hollow ◇</td>
+<td>Filled ◆</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>Ali drives Car</td>
+<td>Department has Teachers</td>
+<td>Car has Engine</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam points / traps</strong>
+- Diamond hamesha <strong>whole</strong> wali taraf hota hai, part wali taraf nahi — diagram trap.
+- Composition mein part do wholes ke darmiyan share <strong>nahi</strong> ho sakta; aggregation mein ho sakta hai.
+- Multiplicity <code>*</code> ka matlab "many" hai, <code>1</code> ka matlab exactly one.</p>
+<hr />
+<h2 id="6-class-compatibility-polymorphism-intro-lecture-6">6. Class Compatibility &amp; Polymorphism — Intro (Lecture 6)</h2>
+<ul>
+<li><strong>Class compatibility</strong> = an object of a derived class can be used <strong>wherever an object of the base class is expected</strong>, because the derived class has all the characteristics of the base (is-a relationship).</li>
+<li><strong>Polymorphism</strong> = "many forms" — the <strong>same message/operation</strong> produces <strong>different behavior</strong> depending on the object that receives it. (Aik hi call, mukhtalif jawab.)</li>
+<li>In OO model: a general class defines an operation (e.g. <code>draw()</code> in Shape); each derived class (Circle, Triangle, Line) implements it in its own way. The client sends the same message to all.</li>
+<li>Graphic editor example: editor holds different shapes and calls <code>draw()</code> on each — correct version runs for each shape.</li>
+<li><strong>Advantages of polymorphism:</strong> simplifies code (no type-checking chains), new derived classes can be added without changing existing client code (extensibility).</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- Polymorphism ki working example graphic editor / shapes wala hai — subjective mein yehi manga jata hai.
+- Compatibility sirf <strong>derived → base</strong> direction mein hoti hai (Student object Person ki jagah chal sakta hai; Person object Student ki jagah nahi).</p>
+<hr />
+<h2 id="7-classes-in-c-lecture-7">7. Classes in C++ (Lecture 7)</h2>
+<ul>
+<li>In C++, a <strong>class is a user-defined type</strong> — once defined, it can be used like built-in types (<code>int</code>, <code>float</code>).</li>
+<li>Defining a class = defining a <strong>new type</strong> (abstraction in C++): we bundle the data and the functions that operate on it.</li>
+</ul>
+<pre><code class="language-cpp">class Student {
+private:
+    int rollNo;
+    float cgpa;
+public:
+    void setRollNo(int r) { rollNo = r; }
+    int  getRollNo()      { return rollNo; }
+};
+Student s1;            // s1 is an object (instance) of class Student
+s1.setRollNo(101);     // accessing member through object: object.function()
+</code></pre>
+<ul>
+<li><strong>Access specifiers:</strong></li>
+<li><code>private</code> — accessible <strong>only inside the class</strong> (default for class members).</li>
+<li><code>public</code> — accessible <strong>from anywhere</strong>; forms the object's interface.</li>
+<li>Data members are normally kept <strong>private</strong> (information hiding); member functions that provide services are <strong>public</strong>.</li>
+<li>Members are accessed with the <strong>dot operator</strong> <code>object.member</code>.</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- Class mein default access <strong>private</strong> hota hai (struct mein public) — classic MCQ.
+- Object banana = constructor call hota hai (neeche dekho).</p>
+<hr />
+<h2 id="8-member-functions-constructors-lecture-8">8. Member Functions &amp; Constructors (Lecture 8)</h2>
+<ul>
+<li><strong>Member functions</strong> can be defined <strong>inside</strong> the class body, or <strong>outside</strong> using the <strong>scope resolution operator</strong>:</li>
+</ul>
+<pre><code class="language-cpp">void Student::setRollNo(int r) { rollNo = r; }   // outside definition
+</code></pre>
+<ul>
+<li><strong>Inline functions:</strong> a member function defined <strong>inside the class body</strong> is automatically inline; outside functions can be made inline with the <code>inline</code> keyword. Inline = compiler replaces the call with the function code (saves call overhead) — suitable for <strong>small</strong> functions only.</li>
+<li><strong>Constructor</strong> = a special member function that is called <strong>automatically when an object is created</strong>; used to initialize the object.</li>
+<li><strong>Properties:</strong> same name as the class; <strong>no return type</strong> (not even <code>void</code>); cannot be called explicitly like normal functions; usually public.</li>
+<li><strong>Default constructor</strong> = constructor with <strong>no parameters</strong> (or all default parameters). If we define <strong>no</strong> constructor, the compiler provides one. If we define <strong>any</strong> constructor, the compiler does <strong>not</strong> provide the default one.</li>
+<li><strong>Constructor overloading</strong> = multiple constructors with different parameter lists (e.g. <code>Student()</code>, <code>Student(int)</code>, <code>Student(int, float)</code>).</li>
+<li><strong>Copy constructor</strong> = constructor that creates a new object as a <strong>copy of an existing object</strong> of the same class:</li>
+</ul>
+<pre><code class="language-cpp">Student(const Student &amp; s);   // takes reference to object of same class
+</code></pre>
+<ul>
+<li>Called when: object is initialized with another object (<code>Student s2 = s1;</code>), object is passed <strong>by value</strong> to a function, object is <strong>returned by value</strong> from a function.</li>
+<li>If we don't write it, the compiler generates one that does <strong>member-by-member (shallow) copy</strong>.</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- Constructor ka <strong>return type nahi hota</strong> — agar option mein <code>void Student()</code> aaye to woh constructor nahi, ghalat hai.
+- <code>Student s2 = s1;</code> — ye <strong>assignment nahi, copy constructor</strong> hai kyun ke s2 pehli dafa ban raha hai. (Initialization vs assignment — Lecture 11 bhi dekho.)</p>
+<hr />
+<h2 id="9-shallow-vs-deep-copy-destructor-accessors-this-lecture-9">9. Shallow vs Deep Copy, Destructor, Accessors, <code>this</code> (Lecture 9)</h2>
+<ul>
+<li><strong>Shallow copy</strong> = member-by-member copy; if a member is a <strong>pointer</strong>, only the address is copied → both objects point to the <strong>same memory</strong>. Problem: changing one object's data changes the other's; both destructors may free the same memory (<strong>double deletion</strong> crash).</li>
+<li><strong>Deep copy</strong> = copy the <strong>actual data</strong> pointed to, into newly allocated memory, so each object has its <strong>own</strong> copy. Achieved by writing our <strong>own copy constructor</strong> (and assignment operator) for classes with pointer members / dynamic memory.</li>
+<li><strong>Important points about copy constructor:</strong></li>
+<li>Parameter must be a <strong>reference</strong> (<code>const Student &amp;</code>) — by-value parameter would itself need a copy constructor → infinite recursion.</li>
+<li>Compiler-generated copy constructor is enough <strong>only</strong> when the class has no dynamically allocated memory.</li>
+<li><strong>Destructor</strong> = special function called automatically when an object is <strong>destroyed</strong> (goes out of scope / <code>delete</code>); used to release resources (e.g. <code>delete[]</code> dynamic memory).</li>
+<li>Name = <code>~ClassName()</code>; no parameters, no return type; <strong>only one</strong> destructor per class (cannot be overloaded).</li>
+<li><strong>Accessor functions</strong> = <strong>getters</strong> (read a data member) and <strong>setters/mutators</strong> (write a data member with validation). They protect private data while giving controlled access.</li>
+<li><strong><code>this</code> pointer</strong> = every non-static member function receives a hidden pointer <code>this</code> that points to the <strong>object through which the function was called</strong>. <code>this-&gt;rollNo</code> is the same as <code>rollNo</code> inside a member function.</li>
+</ul>
+<p><strong>Comparison — Shallow vs Deep Copy</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Shallow Copy</th>
+<th>Deep Copy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pointer members</td>
+<td>Address copied</td>
+<td>Data copied into new memory</td>
+</tr>
+<tr>
+<td>Memory shared?</td>
+<td>Yes — both objects share data</td>
+<td>No — separate copies</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>Double deletion, unwanted changes</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td>Who provides</td>
+<td>Compiler's default copy ctor</td>
+<td>Programmer-written copy ctor</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam points / traps</strong>
+- "Copy constructor ka parameter reference kyun hota hai?" — ye subjective ka pakka sawal hai (warna infinite loop/recursion).
+- Destructor overload <strong>nahi</strong> ho sakta; constructor ho sakta hai.</p>
+<hr />
+<h2 id="10-this-pointer-const-member-functions-lecture-10">10. <code>this</code> Pointer &amp; const Member Functions (Lecture 10)</h2>
+<ul>
+<li><strong>Uses of <code>this</code>:</strong>
+  1. To resolve <strong>name conflicts</strong> when a parameter has the same name as a data member: <code>this-&gt;x = x;</code>
+  2. To <strong>return the object itself</strong> from a member function (<code>return *this;</code>) — enables <strong>chaining</strong> of function calls.
+  3. Compiler uses it internally to identify which object's data is being accessed.</li>
+<li><strong>Separation of interface &amp; implementation in C++:</strong> class declaration (interface) goes in a <strong>header file (.h)</strong>, function definitions (implementation) in a <strong>.cpp file</strong> — user sirf interface dekhta hai.</li>
+<li><strong>const member functions</strong> = functions that <strong>cannot modify</strong> the data members of the object; declared with <code>const</code> after the parameter list:</li>
+</ul>
+<pre><code class="language-cpp">int getRollNo() const { return rollNo; }   // promises not to change the object
+</code></pre>
+<ul>
+<li>Only const member functions can be called on <strong>const objects</strong>.</li>
+<li>Inside a const member function, <code>this</code> becomes a <strong>pointer to const object</strong>, so data members cannot be changed through it.</li>
+<li>Handout example throughout Lectures 10–11: <strong>Complex number class</strong> (<code>real</code>, <code>img</code>) used to demonstrate const functions and operators.</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- const object sirf <strong>const member functions</strong> call kar sakta hai — agar non-const function call ki to compile error.
+- <code>const</code> function ke andar data member change karna = compile error (MCQ trap).</p>
+<hr />
+<h2 id="11-initializer-list-const-objects-static-members-lectures-1112">11. Initializer List, const Objects, Static Members (Lectures 11–12)</h2>
+<ul>
+<li><strong>Initialization vs Assignment:</strong></li>
+<li><strong>Initialization</strong> = value given at the time of <strong>creation</strong> (<code>int x = 5;</code>, copy constructor case).</li>
+<li><strong>Assignment</strong> = value given to an <strong>already existing</strong> object (<code>x = 5;</code>, assignment operator case).</li>
+<li><strong>Member Initializer List</strong> = values given to data members <strong>before the constructor body runs</strong>:</li>
+</ul>
+<pre><code class="language-cpp">Student::Student(int r, float c) : rollNo(r), cgpa(c) { }
+</code></pre>
+<ul>
+<li><strong>Must</strong> be used when a data member is: (1) <code>const</code>, (2) a <strong>reference</strong>, (3) an <strong>object of another class that has no default constructor</strong>. (Ye teen cases subjective mein lazmi aate hain.)</li>
+<li>Member objects are initialized in the order they are <strong>declared in the class</strong>, not the order in the list.</li>
+<li><strong>const objects</strong> = <code>const Student s;</code> — their data cannot change after creation; only const member functions can be called on them.</li>
+<li><strong>Static data member</strong> = a member <strong>shared by all objects</strong> of the class — only <strong>one copy</strong> exists for the whole class (e.g. count of students).</li>
+<li>Declared inside the class, <strong>defined/initialized outside</strong> the class: <code>int Student::count = 0;</code></li>
+<li>It is created when the program starts and lives for the <strong>whole program</strong> (not tied to any object).</li>
+<li>Accessed as <code>Student::count</code> or through any object.</li>
+<li><strong>Static member function</strong> = belongs to the class, called as <code>Student::getCount();</code> without an object.</li>
+<li>It can access <strong>only static data members</strong> (and other static functions) — because it has <strong>no <code>this</code> pointer</strong>.</li>
+<li><strong>Global variable vs static member:</strong> a global is accessible everywhere in the program (risky, no hiding); a static member is inside the class scope, so access can be controlled (private static + public static getter).</li>
+<li><strong>Array of objects</strong> = <code>Student s[10];</code> — the <strong>default constructor</strong> is called for every element; is liye default constructor lazmi chahiye hota hai.</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- Static member function mein <code>this</code> <strong>nahi</strong> hota → non-static member access = error. Pakka MCQ.
+- Static data member ki definition class ke <strong>bahir</strong> likhi jati hai; sirf declaration andar hoti hai.
+- Initializer list ke teen "must" cases ratta maar lo.</p>
+<hr />
+<h2 id="12-pointers-to-objects-the-new-operator-lecture-13">12. Pointers to Objects &amp; the <code>new</code> Operator (Lecture 13)</h2>
+<ul>
+<li><strong>Pointer to object:</strong> <code>Student *ptr = &amp;s1;</code> — members accessed with arrow operator: <code>ptr-&gt;getRollNo();</code></li>
+<li><strong><code>new</code> operator</strong> creates an object <strong>dynamically (on heap)</strong> and returns its pointer. The <code>new</code> operation is a combination of <strong>two steps</strong>:
+  1. <strong>Memory allocation</strong> for the object.
+  2. <strong>Constructor call</strong> to initialize that memory.
+  <code>cpp
+  Student *p = new Student(101, 3.5);   // allocate + construct
+  delete p;                              // destructor call + memory freed</code></li>
+<li><strong><code>delete</code></strong> does the reverse: <strong>destructor is called first</strong>, then memory is released. <code>new[]</code>/<code>delete[]</code> are used for arrays of objects.</li>
+<li>Handout case study: complete code of the <strong>Date class</strong> (day/month/year with setters/getters and validation).</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- "new ke do steps" (allocation + construction) aur "delete ke do steps" (destruction + deallocation) — order ulta hota hai, yehi trap hai.
+- <code>new</code> se bana object <strong>khud destroy nahi hota</strong> — <code>delete</code> na kiya to memory leak.</p>
+<hr />
+<h2 id="13-composition-aggregation-in-c-lectures-1415">13. Composition &amp; Aggregation in C++ (Lectures 14–15)</h2>
+<ul>
+<li><strong>Composition in C++</strong> = a class contains <strong>objects of other classes as data members</strong> (by value):</li>
+</ul>
+<pre><code class="language-cpp">class Car {
+    Engine engine;        // member object — composition
+    Wheel wheels[4];
+};
+</code></pre>
+<ul>
+<li>Member objects are constructed <strong>before</strong> the containing object's constructor body runs (in declaration order), and destroyed <strong>after</strong> it, in <strong>reverse order</strong>.</li>
+<li>Container constructor passes arguments to member objects through the <strong>member initializer list</strong>.</li>
+<li><strong>Aggregation in C++</strong> = a class contains <strong>pointers/references</strong> to objects that are created <strong>outside</strong> and passed in:</li>
+</ul>
+<pre><code class="language-cpp">class Department {
+    Teacher *teachers[20];   // aggregated — Department does not own their lifetime
+};
+</code></pre>
+<ul>
+<li>The whole does <strong>not</strong> create or destroy the parts; parts can be shared.</li>
+</ul>
+<h3 id="friend-functions-lecture-15">Friend Functions (Lecture 15)</h3>
+<ul>
+<li>A <strong>friend function</strong> is a <strong>non-member</strong> function that is given access to the <strong>private and protected</strong> members of a class:</li>
+</ul>
+<pre><code class="language-cpp">class Student {
+    friend void printData(const Student &amp; s);   // declaration inside class
+};
+</code></pre>
+<ul>
+<li><strong>Properties (exam favourite list):</strong></li>
+<li>It is <strong>not</strong> a member function — it is called <strong>without an object</strong> (<code>printData(s);</code>, not <code>s.printData();</code>).</li>
+<li>It is declared inside the class with keyword <code>friend</code>, but defined <strong>outside</strong> without scope resolution.</li>
+<li>Friendship is <strong>not inherited</strong>, <strong>not transitive</strong> (friend of a friend is not a friend), and <strong>not mutual/reciprocal</strong> unless explicitly declared both ways.</li>
+<li>A whole class can also be declared friend (<code>friend class X;</code>) — all its member functions become friends.</li>
+<li>Use sparingly: friends <strong>break encapsulation</strong>, so they are used only when genuinely needed (e.g. operator overloading with streams).</li>
+</ul>
+<p><strong>Exam points / traps</strong>
+- Composition = member <strong>object by value</strong>; Aggregation = member <strong>pointer/reference</strong>. Code dekh kar pehchanna paper mein aata hai.
+- Friend function object ke <strong>baghair</strong> call hoti hai lekin private data access kar sakti hai — yehi us ki pehchan hai.</p>
+<hr />
+<h2 id="14-operator-overloading-lectures-1621">14. Operator Overloading (Lectures 16–21)</h2>
+<h3 id="141-basics-lecture-16">14.1 Basics (Lecture 16)</h3>
+<ul>
+<li><strong>Operator overloading</strong> = giving an existing C++ operator (like <code>+</code>) a new meaning for a <strong>user-defined type</strong>, so objects can be used naturally: <code>Complex c3 = c1 + c2;</code> instead of <code>c1.Add(c2)</code>.</li>
+</ul>
+<pre><code class="language-cpp">class Complex {
+    double real, img;
+public:
+    Complex operator + (const Complex &amp; c) const {
+        Complex t;
+        t.real = real + c.real;
+        t.img  = img  + c.img;
+        return t;
+    }
+};
+</code></pre>
+<ul>
+<li><strong>Rules (⭐ sab se zyada MCQs yahin se):</strong></li>
+<li>You <strong>cannot create new operators</strong>; only existing ones can be overloaded.</li>
+<li>You <strong>cannot change</strong> an operator's <strong>precedence</strong> or <strong>number of operands (arity)</strong> — <code>+</code> binary hai to binary hi rahega.</li>
+<li>At least <strong>one operand must be a user-defined type</strong>.</li>
+<li>Operators that <strong>cannot</strong> be overloaded: <code>.</code> (member access), <code>.*</code>, <code>::</code> (scope resolution), <code>?:</code> (conditional), <code>sizeof</code>.</li>
+<li>Overloading does not change the operator's meaning for built-in types.</li>
+<li>When a binary operator is overloaded as a <strong>member function</strong>, it takes <strong>one</strong> explicit parameter (the left operand is the calling object, via <code>this</code>). As a <strong>friend/non-member</strong>, it takes <strong>two</strong>.</li>
+</ul>
+<h3 id="142-assignment-operator-lecture-17">14.2 Assignment Operator <code>=</code> (Lecture 17)</h3>
+<ul>
+<li>The compiler generates a default assignment operator that does <strong>member-by-member (shallow) assignment</strong> — fine for simple classes, <strong>dangerous</strong> for classes with dynamic memory (same double-deletion problem as shallow copy).</li>
+<li>We overload <code>operator=</code> to do <strong>deep copy</strong>, and it should <strong>return a reference to <code>*this</code></strong> so chained assignment works: <code>a = b = c;</code></li>
+</ul>
+<pre><code class="language-cpp">String &amp; String::operator = (const String &amp; other) {
+    if (this != &amp;other) {          // self-assignment check (Lecture 18)
+        delete[] data;             // free old memory
+        data = new char[strlen(other.data) + 1];
+        strcpy(data, other.data);
+    }
+    return *this;
+}
+</code></pre>
+<h3 id="143-self-assignment-other-operators-lecture-18">14.3 Self-Assignment &amp; Other Operators (Lecture 18)</h3>
+<ul>
+<li><strong>Self-assignment problem</strong> = <code>a = a;</code> — if we <code>delete[]</code> our own data first, the source data is lost. <strong>Solution:</strong> check <code>if (this != &amp;other)</code> before deleting, or compare addresses.</li>
+<li>Other binary operators (<code>-</code>, <code>*</code>, <code>/</code>, <code>+=</code>, <code>-=</code>...) are overloaded with the same pattern as <code>+</code>. Compound operators (<code>+=</code>) modify the calling object and return <code>*this</code> by reference.</li>
+<li><strong>Friend functions &amp; operator overloading:</strong> a friend version is needed when the <strong>left operand is not an object of our class</strong> (the member version can't be used) — the classic case is stream operators.</li>
+</ul>
+<h3 id="144-stream-operators-and-lecture-19">14.4 Stream Operators <code>&lt;&lt;</code> and <code>&gt;&gt;</code> (Lecture 19)</h3>
+<ul>
+<li><strong>Stream insertion</strong> <code>cout &lt;&lt; obj;</code> and <strong>extraction</strong> <code>cin &gt;&gt; obj;</code> — here the left operand is <code>ostream</code>/<code>istream</code>, <strong>not</strong> our class, so these <strong>must</strong> be overloaded as <strong>non-member (friend)</strong> functions:</li>
+</ul>
+<pre><code class="language-cpp">ostream &amp; operator &lt;&lt; (ostream &amp; out, const Complex &amp; c) {
+    out &lt;&lt; c.real &lt;&lt; &quot; + &quot; &lt;&lt; c.img &lt;&lt; &quot;i&quot;;
+    return out;                    // return stream → chaining: cout &lt;&lt; a &lt;&lt; b;
+}
+istream &amp; operator &gt;&gt; (istream &amp; in, Complex &amp; c) {
+    in &gt;&gt; c.real &gt;&gt; c.img;
+    return in;
+}
+</code></pre>
+<p>(Friend declaration is needed because they access private members.)</p>
+<h3 id="145-subscript-and-function-call-operators-lecture-20">14.5 Subscript <code>[]</code> and Function-Call <code>()</code> Operators (Lecture 20)</h3>
+<ul>
+<li><strong>Subscript operator</strong> — used to give array-like access with <strong>bounds checking</strong>:</li>
+</ul>
+<pre><code class="language-cpp">int &amp; String::operator [] (int index);        // non-const: allows s[0] = 'A';
+const int &amp; String::operator [] (int index) const;  // const version for const objects
+</code></pre>
+<p>Returning a <strong>reference</strong> is essential — tab hi <code>s[2] = 'x';</code> kaam karega.
+- <strong>Function operator <code>operator()</code></strong> — makes an object callable like a function (<strong>function object / functor</strong>); it can take any number/type of parameters. Handout example: using <code>()</code> to extract a <strong>substring</strong> from a String object.</p>
+<h3 id="146-unary-operators-lectures-2021">14.6 Unary Operators, <code>++</code>/<code>--</code> (Lectures 20–21)</h3>
+<ul>
+<li>Unary operators (<code>-</code>, <code>!</code>, <code>~</code>) as member functions take <strong>no parameter</strong>.</li>
+<li><strong>Prefix vs Postfix <code>++</code> (⭐ pakka exam point):</strong></li>
+</ul>
+<pre><code class="language-cpp">Complex operator ++ ();        // prefix:  ++c  → increment, then return new value
+Complex operator ++ (int);     // postfix: c++  → dummy int parameter; return OLD value
+</code></pre>
+<p>The <strong>dummy <code>int</code> parameter</strong> is the only difference — it is not used, it just tells the compiler "this is postfix".</p>
+<h3 id="147-type-conversion-lecture-21">14.7 Type Conversion (Lecture 21)</h3>
+<ul>
+<li><strong>Basic → User-defined (conversion constructor):</strong> a constructor with a <strong>single parameter</strong> of another type converts that type into our class:</li>
+</ul>
+<pre><code class="language-cpp">class Complex { public: Complex(double r) { real = r; img = 0; } };
+// now: Complex c = 5.5;  works (double → Complex)
+</code></pre>
+<ul>
+<li><strong>User-defined → Basic/other (conversion operator):</strong> a member function with no return type named after the target type:</li>
+</ul>
+<pre><code class="language-cpp">operator double() { return real; }   // Complex → double
+</code></pre>
+<ul>
+<li><strong>Drawbacks:</strong> automatic conversions can cause <strong>ambiguity</strong> (if both a conversion constructor and a conversion operator can apply, compiler may not decide → error), and they can produce unexpected results — is liye soch samajh kar use karo.</li>
+</ul>
+<p><strong>Comparison — Overloading vs Overriding</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Overloading</th>
+<th>Overriding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where</td>
+<td>Same class (or scope)</td>
+<td>Base + derived class</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td><strong>Must differ</strong></td>
+<td><strong>Must be same</strong></td>
+</tr>
+<tr>
+<td>Return type</td>
+<td>May differ</td>
+<td>Same (generally)</td>
+</tr>
+<tr>
+<td>Needs inheritance</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Binding</td>
+<td>Compile time</td>
+<td>(Concept in midterm; virtual mechanism is Lecture 28)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam points / traps (Operator Overloading)</strong>
+- <code>&lt;&lt;</code> member function se overload <strong>nahi</strong> ho sakta jab left operand stream ho — friend lazmi hai.
+- Postfix <code>++</code> mein dummy <code>int</code> sirf pehchan ke liye hai; value purani return hoti hai.
+- Assignment operator aur copy constructor — dono ka kaam deep copy hai; pointer wali class mein <strong>dono</strong> khud likhne parte hain (warna shallow copy ke masle).
+- Operators ki precedence/arity <strong>change nahi</strong> ho sakti — ye statement MCQ mein true/false ban kar aata hai.</p>
+<hr />
+<h2 id="15-inheritance-in-c-lecture-22">15. Inheritance in C++ (Lecture 22)</h2>
+<ul>
+<li><strong>Syntax:</strong></li>
+</ul>
+<pre><code class="language-cpp">class Student : public Person {
+    // Student (derived/child) inherits from Person (base/parent)
+};
+</code></pre>
+<ul>
+<li>Inheritance represents the <strong>"IS-A" relationship</strong>: <em>a Student IS A Person</em> — "derived class IS A kind of base class."</li>
+<li><strong>UML notation:</strong> a line from derived class to base class with a <strong>hollow triangle (△)</strong> at the <strong>base class</strong> end.</li>
+<li><strong>What is inherited:</strong> the derived class contains <strong>all</strong> characteristics (data + functions) of the base class, plus its own new characteristics. In memory, a derived object <strong>contains a base-class sub-object</strong> inside it.</li>
+<li><strong>Access rules:</strong></li>
+<li><code>public</code> members of base → accessible in derived and through derived objects (with public inheritance).</li>
+<li><code>private</code> members of base → are inherited (present in memory) but <strong>NOT directly accessible</strong> in the derived class — only through base class's public/protected functions. (Information hiding yahan bhi apply hoti hai — common trap: "private members inherit nahi hote" <strong>ghalat</strong> hai; woh hote hain, bas access nahi hota.)</li>
+<li><strong>Three modes of inheritance in C++:</strong> <code>public</code>, <code>private</code>, <code>protected</code> — mode controls how base members appear in the derived class (tafseel Lectures 26–27 mein hai; midterm mein sirf pehchan rakho: <strong>public inheritance hi "is-a" ko sahi represent karti hai</strong> aur aam tor par yehi use hoti hai).</li>
+<li><strong>Constructor/Destructor order (⭐ pakka MCQ):</strong></li>
+<li>Construction: <strong>base class constructor first</strong>, then derived class constructor. (Pehle buniyad, phir building.)</li>
+<li>Destruction: <strong>reverse</strong> — derived destructor first, then base destructor.</li>
+<li>Member objects (composition) are constructed <strong>before</strong> the containing class's constructor body, in declaration order.</li>
+<li>Base class is initialized from the derived constructor using the <strong>member initializer list</strong>: <code>Student::Student(...) : Person(...) { }</code></li>
+</ul>
+<p><strong>Exam points / traps (Inheritance)</strong>
+- Constructor order: Base → Derived. Destructor order: Derived → Base. Ye pair har midterm mein aata hai.
+- <code>class Student : public Person</code> mein <code>public</code> inheritance mode hai, access specifier nahi — dono ka role alag hai.
+- Private base members derived class mein <strong>exist</strong> karte hain lekin directly <strong>access nahi</strong> hote.</p>
+<hr />
+<h2 id="quick-one-page-recap-exam-se-pehle-ye-parh-lena">Quick One-Page Recap (exam se pehle ye parh lena)</h2>
+<ol>
+<li>Object = identity + state (data members) + behavior (member functions). Class = blueprint; object = instance.</li>
+<li>Encapsulation = data + functions aik unit mein; Information hiding = us ka faida; Interface = what, Implementation = how.</li>
+<li>Abstraction = sirf <strong>relevant</strong> details, current perspective ke mutabiq.</li>
+<li>Inheritance ke 3 roop: Generalization (common → base), Extension/Sub-typing (naya add), Specialization/Restriction (modify/restrict). Overriding = derived mein same function dobara define.</li>
+<li>Abstract class ka object nahi banta; concrete ka banta hai.</li>
+<li>Association (weakest, plain line) &lt; Aggregation (hollow diamond, independent life) &lt; Composition (filled diamond, lifetime bound).</li>
+<li>UML: inheritance = hollow triangle parent ki taraf; diamond hamesha whole ki taraf.</li>
+<li>Constructor: no return type, object bante hi call; copy constructor ka parameter <strong>reference</strong>; destructor sirf aik, overload nahi.</li>
+<li>Pointer wali class → shallow copy khatarnak → apna copy constructor + assignment operator (deep copy) + self-assignment check.</li>
+<li><code>this</code> = current object ka pointer; static members class ke hain, <code>this</code> static function mein nahi hota.</li>
+<li>Initializer list lazmi: const member, reference member, member object without default constructor.</li>
+<li><code>new</code> = allocation + construction; <code>delete</code> = destruction + deallocation.</li>
+<li>Friend = non-member, private access, not inherited/transitive/mutual.</li>
+<li>Operator overloading: naye operator nahi ban sakte; precedence/arity change nahi; <code>. :: ?: sizeof .*</code> overload nahi hote; <code>&lt;&lt;</code>/<code>&gt;&gt;</code> friend se; postfix <code>++</code> mein dummy <code>int</code>.</li>
+<li>Inheritance: is-a; construction Base → Derived, destruction Derived → Base.</li>
+</ol>
+<p><em>Notes prepared from the official VU CS304 handouts (Lectures 1–22). Good luck, Hamza!</em></p>
+</article>
+<div class="foot">Made from the official VU handouts · Lectures 1–22 · <a href="midterm-notes-091.html">← Back to all notes</a></div>
+</div>
+
+<script>
+document.querySelectorAll('article table').forEach(function(t){
+  var w=document.createElement('div'); w.className='twrap';
+  t.parentNode.insertBefore(w,t); w.appendChild(t);
+});
+</script>
+
+</body>
+</html>
