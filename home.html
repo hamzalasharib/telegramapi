@@ -95,7 +95,21 @@ h2.sec{font-size:clamp(32px,5vw,46px);font-weight:700;text-align:center;margin:1
 .search input{flex:1;border:0;background:transparent;font:inherit;font-size:15.5px;color:var(--ink);outline:none;min-width:0}
 .search input::placeholder{color:#64748b}
 .count{text-align:center;font-size:13px;color:var(--mut);margin:0 0 30px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 18px}
+.thread{display:block;width:2px;height:30px;flex:none;position:relative;background:linear-gradient(180deg,rgba(148,163,184,.04),rgba(148,163,184,.6) 35%,rgba(148,163,184,.6))}
+.thread::after{content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);width:7px;height:7px;border:2px solid #94a3b8;border-radius:50%;background:#050510}
+.hang{display:flex;flex-direction:column;align-items:center;transform-origin:50% 0;animation:sway 6.5s ease-in-out infinite}
+.hang .tcard{width:100%}
+@keyframes sway{0%,100%{transform:rotate(1.1deg)}50%{transform:rotate(-1.1deg)}}
+.hang:nth-child(2n){animation-duration:7.4s;animation-delay:-2s}
+.hang:nth-child(3n){animation-duration:5.8s;animation-delay:-3.4s}
+.hang:nth-child(4n){animation-duration:7s;animation-delay:-1.2s}
+.hang:nth-child(5n){animation-duration:6.2s;animation-delay:-4.2s}
+.hangf{position:relative;margin-top:38px;transform-origin:50% -36px;animation:swayf 9s ease-in-out infinite}
+.hangf .thread{position:absolute;top:-36px;height:36px}
+.hangf .thread.t1{left:22%}.hangf .thread.t2{left:78%}
+@keyframes swayf{0%,100%{transform:rotate(.5deg)}50%{transform:rotate(-.5deg)}}
+@media(prefers-reduced-motion:reduce){.hang,.hangf,.stat{animation:none}}
 .tcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .2s,border-color .2s;display:flex;flex-direction:column;text-decoration:none}
 .tcard:hover{transform:translateY(-4px);border-color:var(--line2)}
 .tcard .thumb{height:132px;display:flex;align-items:center;justify-content:center;position:relative}
@@ -121,7 +135,10 @@ h2.sec{font-size:clamp(32px,5vw,46px);font-weight:700;text-align:center;margin:1
 
 /* ---------- stats ---------- */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 10px;text-align:center}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 10px;text-align:center;position:relative;transform-origin:50% -24px;animation:sway 7.5s ease-in-out infinite}
+.stat:nth-child(2n){animation-delay:-2.6s}.stat:nth-child(3n){animation-delay:-4.1s}
+.stat::before{content:"";position:absolute;left:50%;top:-24px;transform:translateX(-50%);width:2px;height:24px;background:linear-gradient(180deg,rgba(148,163,184,.04),rgba(148,163,184,.6) 40%,rgba(148,163,184,.6))}
+.stat::after{content:"";position:absolute;left:50%;top:-28px;transform:translateX(-50%);width:6px;height:6px;border:2px solid #94a3b8;border-radius:50%;background:#050510}
 .stat .n{font-family:"Space Grotesk",sans-serif;font-size:34px;font-weight:700;color:#fff}
 .stat .l{color:var(--mut);font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-top:5px}
 
@@ -223,58 +240,58 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
     </div>
     <p class="count rv" id="count">13 tools</p>
     <div class="grid" id="grid">
-      <a class="tcard rv" href="dhunn.html" data-name="dhunn music player songs lyrics eq">
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="dhunn.html" data-name="dhunn music player songs lyrics eq">
         <span class="thumb" style="background:linear-gradient(135deg,#f59e0b,#8b5cf6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="9" width="3.4" height="9" rx="1.7" fill="#fff" stroke="none"/><rect x="10.3" y="5" width="3.4" height="13" rx="1.7" fill="#fff" stroke="none"/><rect x="16.6" y="8" width="3.4" height="10" rx="1.7" fill="#fff" stroke="none"/></svg><span class="new">NEW</span></span>
         <span class="bd"><h3>Dhunn Music Player</h3><p>Music player with synced lyrics, cover-art designs and a full EQ.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="rdp-latest.html" data-name="new rdp latest method windows tailscale free rdp">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="rdp-latest.html" data-name="new rdp latest method windows tailscale free rdp">
         <span class="thumb" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2.5"/><path d="M8 21h8"/><path d="M12 17v4"/></svg><span class="new">NEW</span></span>
         <span class="bd"><h3>New RDP — Latest Method</h3><p>Latest free RDP method — video guide and ready-made code.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="domicile.html" data-name="domicile verify punjab cnic check record">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="domicile.html" data-name="domicile verify punjab cnic check record">
         <span class="thumb" style="background:linear-gradient(135deg,#22c55e,#84cc16)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg><span class="new">NEW</span></span>
         <span class="bd"><h3>Domicile Verify</h3><p>Check a Punjab domicile record by CNIC.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="jazz-claimer.html" data-name="jazz shake n win claimer rewards otp auto claim">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="jazz-claimer.html" data-name="jazz shake n win claimer rewards otp auto claim">
         <span class="thumb" style="background:linear-gradient(135deg,#ef4444,#f97316)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="new">NEW</span></span>
         <span class="bd"><h3>Jazz Shake N Win Claimer</h3><p>Claim daily Jazz Shake N Win rewards with OTP login.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="tiktokmenu.html" data-name="tiktok downloader without watermark video">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="tiktokmenu.html" data-name="tiktok downloader without watermark video">
         <span class="thumb" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m7 9 5 5 5-5"/><path d="M12 14V3"/><path d="M21 15v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3"/></svg></span>
         <span class="bd"><h3>TikTok Downloader</h3><p>Download TikTok videos without watermark, in original quality.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="youtube.html" data-name="youtube downloader video quality mp4">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="youtube.html" data-name="youtube downloader video quality mp4">
         <span class="thumb" style="background:linear-gradient(135deg,#ef4444,#b91c1c)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9.2 5 2.8-5 2.8z" fill="#fff" stroke="none"/></svg><span class="new">NEW</span></span>
         <span class="bd"><h3>YouTube Downloader</h3><p>Download YouTube videos in any quality, up to 4K.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="spotify.html" data-name="spotify downloader mp3 song track">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="spotify.html" data-name="spotify downloader mp3 song track">
         <span class="thumb" style="background:linear-gradient(135deg,#22c55e,#0ea5e9)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
         <span class="bd"><h3>Spotify Downloader</h3><p>Convert Spotify tracks to MP3.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="image.html" data-name="ai image generator picture art prompt">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="image.html" data-name="ai image generator picture art prompt">
         <span class="thumb" style="background:linear-gradient(135deg,#f43f5e,#f59e0b)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></span>
         <span class="bd"><h3>AI Image Generator</h3><p>Generate AI images from a text prompt.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="TvChannels.html" data-name="jazz tv live channels watch stream">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="TvChannels.html" data-name="jazz tv live channels watch stream">
         <span class="thumb" style="background:linear-gradient(135deg,#10b981,#84cc16)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2.5"/><path d="m17 2-5 5-5-5"/><path d="M10.2 11.2v5.6l4.8-2.8z" fill="#fff" stroke="none"/></svg></span>
         <span class="bd"><h3>Jazz TV</h3><p>Watch 100+ live TV channels, free.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="hadith.html" data-name="hadith collection book bukhari muslim search">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="hadith.html" data-name="hadith collection book bukhari muslim search">
         <span class="thumb" style="background:linear-gradient(135deg,#eab308,#f97316)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
         <span class="bd"><h3>Hadith Collection</h3><p>Read and search Hadith by book and chapter.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="RdpMethod.html" data-name="free windows rdp guide method step by step">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="RdpMethod.html" data-name="free windows rdp guide method step by step">
         <span class="thumb" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2.5"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span>
         <span class="bd"><h3>Free Windows RDP</h3><p>Step-by-step guide for a free Windows RDP.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="smsbomber.html" data-name="sms tool bomber message">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="smsbomber.html" data-name="sms tool bomber message">
         <span class="thumb" style="background:linear-gradient(135deg,#f97316,#ef4444)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></span>
         <span class="bd"><h3>SMS Tool</h3><p>Fast SMS utility.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
-      <a class="tcard rv" href="about.html" data-name="about creator hamza shafiq portfolio">
+      </a></div>
+      <div class="hang"><i class="thread"></i><a class="tcard rv" href="about.html" data-name="about creator hamza shafiq portfolio">
         <span class="thumb" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
         <span class="bd"><h3>About the Creator</h3><p>Portfolio of Hamza Shafiq — apps, projects and contact.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></span>
-      </a>
+      </a></div>
     </div>
     <p class="empty" id="empty">No tool matches your search.</p>
   </div>
@@ -286,7 +303,7 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
     <div class="kick rv">Featured App</div>
     <h2 class="sec rv">Featured</h2>
     <p class="secsub rv">The app everyone asks about</p>
-    <div class="feat rv">
+    <div class="hangf rv"><i class="thread t1"></i><i class="thread t2"></i><div class="feat">
       <div class="art"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="9" width="3.4" height="9" rx="1.7" fill="#fff" stroke="none"/><rect x="10.3" y="5" width="3.4" height="13" rx="1.7" fill="#fff" stroke="none"/><rect x="16.6" y="8" width="3.4" height="10" rx="1.7" fill="#fff" stroke="none"/></svg></div>
       <div class="bd">
         <span class="tag">ANDROID APP</span>
@@ -295,8 +312,8 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
         <div class="chips"><span>Synced Lyrics</span><span>Cover Art</span><span>EQ</span><span>Offline</span></div>
         <a class="btn solid" href="dhunn.html">Get the App <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
       </div>
-    </div>
-    <div class="stats" style="margin-top:56px">
+    </div></div>
+    <div class="stats" style="margin-top:84px">
       <div class="stat rv"><div class="n">13+</div><div class="l">Web Tools</div></div>
       <div class="stat rv"><div class="n">10+</div><div class="l">Apps Built</div></div>
       <div class="stat rv"><div class="n">3.6K</div><div class="l">YouTube Subs</div></div>
@@ -448,13 +465,14 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
 
 /* ---------- tool search ---------- */
 (function(){
-  var q=document.getElementById('q'), cards=[].slice.call(document.querySelectorAll('.tcard')),
+  var q=document.getElementById('q'), hangs=[].slice.call(document.querySelectorAll('.hang')),
       count=document.getElementById('count'), empty=document.getElementById('empty');
   q.addEventListener('input', function(){
     var needle=q.value.trim().toLowerCase(), shown=0;
-    cards.forEach(function(c){
+    hangs.forEach(function(w){
+      var c=w.querySelector('.tcard');
       var hit=!needle || c.dataset.name.indexOf(needle)>-1 || c.querySelector('h3').textContent.toLowerCase().indexOf(needle)>-1;
-      c.style.display=hit?'':'none'; if(hit) shown++;
+      w.style.display=hit?'':'none'; if(hit) shown++;
     });
     count.textContent = shown + (shown===1?' tool':' tools');
     empty.style.display = shown? 'none':'block';
