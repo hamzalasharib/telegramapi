@@ -13,6 +13,14 @@
       ]
     },
     {
+      "version": "2.38.0",
+      "date": "2026-11-12",
+      "changes": [
+        "Online section removed — Dhunn is a pure offline player again, focused on your own music",
+        "Startup cleaned up: the app opens straight into your library"
+      ]
+    },
+    {
       "version": "2.37.0",
       "versionName": "2.37.0",
       "versionCode": 45,
