@@ -2,14 +2,6 @@
   "app": "Dhunn",
   "changelog": [
     {
-      "version": "2.40.0",
-      "date": "2026-11-19",
-      "changes": [
-        "TEST update — this only tests the new animated update popup and the highlighted NEW card in Settings → Updates",
-        "No new features inside — the download is the same Dhunn 2.39.0"
-      ]
-    },
-    {
       "version": "2.39.0",
       "date": "2026-11-18",
       "changes": [
@@ -403,10 +395,10 @@
     }
   ],
   "latest": {
-    "versionName": "2.40.0",
-    "versionCode": 48,
+    "versionName": "2.39.0",
+    "versionCode": 47,
     "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.39.0.apk",
     "forceUpdate": false,
-    "notes": "This is a TEST update to try out the new update popup. Nothing new inside — tapping Later is completely fine."
+    "notes": "Delete, search history, the update popup and lock-screen lyrics — all fixed in this one."
   }
 }
