@@ -36,5 +36,15 @@
     "api/youtube.py": {
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/nexavpn",
+      "destination": "/nexa-vpn-download-091.html"
+    },
+    {
+      "source": "/nexavpn/",
+      "destination": "/nexa-vpn-download-091.html"
+    }
+  ]
 }
