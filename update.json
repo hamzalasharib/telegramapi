@@ -400,5 +400,11 @@
     "apkUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.39.0.apk",
     "forceUpdate": false,
     "notes": "Delete, search history, the update popup and lock-screen lyrics — all fixed in this one."
+  },
+  "pcLatest": {
+    "versionName": "1.3.0",
+    "versionCode": 4,
+    "exeUrl": "https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn-pc/DHUNN-PC-v1.3.0.exe",
+    "notes": "A professional Now Playing with lyrics and queue side panels, a draggable mini player with a cover-only island mode, and no more web-style pinch zoom."
   }
 }
