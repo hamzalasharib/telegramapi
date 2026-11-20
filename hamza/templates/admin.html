@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPA Need — Admin · Redeem Codes</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  .wrap{max-width:860px;margin:26px auto;padding:0 16px 40px}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+  .panel h2{font-size:18px;margin-bottom:12px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  select,input[type=number],input[type=text],input[type=password]{background:var(--bg2);border:1px solid var(--border);
+    border-radius:10px;padding:10px;color:var(--text);outline:0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border-bottom:1px solid var(--border);padding:8px 6px;text-align:left;word-break:break-all}
+  th{color:var(--muted);font-weight:600}
+  .st-unused{color:var(--warn)} .st-active{color:var(--ok)} .st-expired{color:var(--err)}
+  .code{font-family:ui-monospace,monospace;font-weight:700;letter-spacing:.05em}
+  .gen{background:#064e3b;border:1px solid var(--ok);border-radius:12px;padding:14px;margin-bottom:18px}
+  .gen p{font-family:ui-monospace,monospace;font-size:16px;line-height:1.9;word-break:break-all}
+  .err{background:#7f1d1d;border:1px solid var(--err);color:#fee2e2;border-radius:10px;padding:10px;font-size:14px;margin-bottom:14px}
+  .mini{padding:5px 10px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="bg-glow" aria-hidden="true"></div>
+<main class="wrap">
+  <div class="section-head"><h3>🔑 Redeem Codes — Admin</h3></div>
+
+  {% if error %}<div class="err">{{ error }}</div>{% endif %}
+
+  {% if not admin_enabled %}
+    <div class="panel">
+      <h2>Admin is not set up yet</h2>
+      <p class="muted">Open your hosting panel's <b>ENV</b> tab and add one variable, then restart the app:</p>
+      <p style="margin-top:10px"><span class="code">ADMIN_PASSWORD = your-own-password</span></p>
+      <p class="muted" style="margin-top:10px">After that, open this page again and log in to generate sellable weekly / monthly codes.</p>
+    </div>
+
+  {% elif not is_admin %}
+    <div class="panel">
+      <h2>Admin login</h2>
+      <form class="row" method="post" action="{{ url_for('admin_login') }}">
+        <input type="password" name="password" placeholder="Admin password" required>
+        <button class="btn btn-primary" type="submit">Login</button>
+      </form>
+    </div>
+
+  {% else %}
+    <div class="stats">
+      <div class="stat-card"><span class="stat-num">{{ stats.total }}</span><span class="stat-label">Total codes</span></div>
+      <div class="stat-card"><span class="stat-num">{{ stats.unused }}</span><span class="stat-label">Unused</span></div>
+      <div class="stat-card"><span class="stat-num">{{ stats.active }}</span><span class="stat-label">Active</span></div>
+      <div class="stat-card"><span class="stat-num">{{ stats.expired }}</span><span class="stat-label">Expired</span></div>
+    </div>
+
+    {% if generated %}
+    <div class="gen">
+      <b>✅ New codes — copy and sell these now (shown only once here):</b>
+      {% for c in generated %}<p>{{ c }}</p>{% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="panel">
+      <h2>Generate codes</h2>
+      <form class="row" method="post" action="{{ url_for('admin_generate') }}">
+        <select name="plan">
+          {% for key, p in plans.items() %}<option value="{{ key }}">{{ p.label }}</option>{% endfor %}
+        </select>
+        <input type="number" name="quantity" value="1" min="1" max="200" style="width:90px">
+        <input type="text" name="note" placeholder="Note (e.g. buyer name)" maxlength="120">
+        <button class="btn btn-primary" type="submit">Generate</button>
+      </form>
+      <form method="post" action="{{ url_for('admin_logout') }}" style="margin-top:12px">
+        <button class="btn btn-ghost mini" type="submit">Logout admin</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>All codes (newest first)</h2>
+      <table>
+        <tr><th>Code</th><th>Plan</th><th>Status</th><th>Expires</th><th>Note</th><th></th></tr>
+        {% for c in codes %}
+        <tr>
+          <td class="code">{{ c.code }}</td>
+          <td>{{ c.plan }}</td>
+          <td class="st-{{ c.status }}">{{ c.status }}</td>
+          <td>{{ c.expires_at or '—' }}</td>
+          <td>{{ c.note }}</td>
+          <td>
+            <form method="post" action="{{ url_for('admin_delete') }}" onsubmit="return confirm('Delete this code?')">
+              <input type="hidden" name="code" value="{{ c.code }}">
+              <button class="btn btn-ghost mini" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="muted">No codes yet — generate your first one above.</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  {% endif %}
+
+  <p><a href="{{ url_for('index') }}">← Back to dashboard</a></p>
+</main>
+</body>
+</html>
