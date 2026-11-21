@@ -228,7 +228,7 @@ html{overflow-x:clip}
       <div class="wel">Welcome to</div>
       <h1 class="big">Hamza<em>Editz</em></h1>
       <div class="typer"><span id="typer"></span><span class="cur"></span></div>
-      <p class="lede">Free tools, apps and guides — downloaders, live TV, AI images, RDP methods and a full music player. Everything free, no sign-up.</p>
+      <p class="lede">Free tools, apps and guides. No sign-up.</p>
       <div class="btns">
         <a class="btn solid" href="#tools">Explore Tools <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
         <a class="btn line" href="about.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Portfolio</a>
@@ -249,9 +249,9 @@ html{overflow-x:clip}
         <div class="ring"></div>
         <div class="hcard" id="hcard">
         <svg class="lg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="hzlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c67ed"/><stop offset=".5" stop-color="#0ea5e9"/><stop offset="1" stop-color="#00f0ff"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#hzlg)"/><rect x="27" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="62" y="25" width="11" height="50" rx="4" fill="#fff"/><rect x="38" y="44" width="24" height="11" rx="4" fill="#fff"/><path d="M46 38.5v23l20-11.5z" fill="#0b101d" opacity=".92"/></svg>
-        <div class="t1">FREE FOREVER</div>
-        <div class="t2">13 Tools.<br>One Site.</div>
-        <div class="t3">Every tool runs in your browser or its own app — nothing to install, no account, no cost.</div>
+        
+        <div class="t2">13 Free Tools</div>
+        
         <div class="ft"><span>HAMZAEDITZ.TECH</span><span>EST. 2023</span></div>
         </div>
       </div>
@@ -333,13 +333,13 @@ html{overflow-x:clip}
   <div class="wrap">
     <div class="kick rv">Featured App</div>
     <h2 class="sec rv">Featured</h2>
-    <p class="secsub rv">The app everyone asks about</p>
+    
     <div class="hangf rv"><i class="thread t1"></i><i class="thread t2"></i><div class="feat">
       <div class="art"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="9" width="3.4" height="9" rx="1.7" fill="#fff" stroke="none"/><rect x="10.3" y="5" width="3.4" height="13" rx="1.7" fill="#fff" stroke="none"/><rect x="16.6" y="8" width="3.4" height="10" rx="1.7" fill="#fff" stroke="none"/></svg></div>
       <div class="bd">
         <span class="tag">ANDROID APP</span>
         <h3>Dhunn — Music Player</h3>
-        <p>A full music player with synced lyrics, cover-art designs and a graphic EQ. Small, fast and completely free — made for listeners who love their music.</p>
+        <p>Music player with synced lyrics, cover-art designs and a graphic EQ.</p>
         <div class="chips"><span>Synced Lyrics</span><span>Cover Art</span><span>EQ</span><span>Offline</span></div>
         <a class="btn solid" href="dhunn.html">Get the App <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
       </div>
@@ -360,7 +360,7 @@ html{overflow-x:clip}
     <div class="fgrid">
       <div>
         <div class="logo">&gt;_ Hamza<em>Editz</em></div>
-        <p>Free tools, apps and guides — built with clean code and sharp design.</p>
+        <p>Free tools, apps and guides.</p>
       </div>
       <div>
         <h4>NAVIGATION</h4>
@@ -592,23 +592,19 @@ topBtn.addEventListener('click', function(){ scrollTo({top:0, behavior:'smooth'}
   var hideT=null;
   function say(txt,ms){ b.textContent=txt; b.classList.add('show'); clearTimeout(hideT); hideT=setTimeout(function(){ b.classList.remove('show'); }, ms||2600); }
   function cheer(){ m.classList.remove('excited'); void m.offsetWidth; m.classList.add('excited'); }
-  setTimeout(function(){ say('Hi! I am Hamzi 👋 Pick a tool — everything is free!',3400); },900);
-  var tips=['13 free tools — pick one! 🎁','Tap a tool and I will cheer!','No sign-up. Everything free.','Try the YouTube Downloader! ⬇️','Dhunn plays music with lyrics 🎵'];
-  var ti=0; setInterval(function(){ if(!b.classList.contains('show')) say(tips[ti++ % tips.length],2800); },7000);
   var pupils=m.querySelectorAll('.pupil');
   document.addEventListener('mousemove',function(e){
     var r=m.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height*.32;
     var dx=e.clientX-cx, dy=e.clientY-cy, d=Math.sqrt(dx*dx+dy*dy)||1, k=Math.min(2.3,d/40);
     for(var i=0;i<pupils.length;i++) pupils[i].style.transform='translate('+(dx/d*k)+'px,'+(dy/d*k)+'px)';
   });
-  var cheers=['Great pick! 🔥','Let\'s go! 🚀','My favourite! ⭐','Good choice! 😎','Opening it for you!'];
   document.querySelectorAll('.tcard').forEach(function(card){
     var nameEl=card.querySelector('h3'), name=nameEl?nameEl.textContent.trim():'Tool';
-    card.addEventListener('mouseenter',function(){ say(name+' — tap to open! 👆',2000); });
+    card.addEventListener('mouseenter',function(){ say(name,1500); });
     card.addEventListener('click',function(e){
       if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return;
       e.preventDefault(); cheer();
-      say(cheers[Math.floor(Math.random()*cheers.length)]+' Opening '+name+'…',1200);
+      say('Opening '+name+'…',1200);
       var href=card.href; setTimeout(function(){ window.location.href=href; },680);
     });
   });
