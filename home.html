@@ -171,6 +171,25 @@ footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(10,10,2
   .stats{grid-template-columns:1fr 1fr}
   nav.pillnav a{padding:8px 11px;font-size:13.5px}
 }
+
+/* ===== HamzaEditz mascot ===== */
+#mascot{position:fixed;right:14px;bottom:8px;width:160px;z-index:60;pointer-events:none;animation:mbob 3.6s ease-in-out infinite;filter:drop-shadow(0 12px 22px rgba(0,0,0,.45))}
+@keyframes mbob{50%{transform:translateY(-6px)}}
+#mbubble{position:absolute;left:50%;bottom:calc(100% + 4px);transform:translate(-50%,4px);background:#fff;color:#131722;font:600 12.5px/1.35 Inter,system-ui,sans-serif;padding:8px 12px;border-radius:13px;width:max-content;max-width:200px;text-align:center;box-shadow:0 10px 26px rgba(0,0,0,.35);opacity:0;transition:opacity .25s,transform .25s}
+#mbubble.show{opacity:1;transform:translate(-50%,0)}
+#mbubble::after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border:7px solid transparent;border-top-color:#fff;border-bottom:0}
+#mascot.excited #msvg{animation:mjump .55s ease}
+@keyframes mjump{30%{transform:translateY(-17px) scale(1.03)}60%{transform:translateY(0)}80%{transform:translateY(-7px)}}
+#waveArm{transform-box:view-box;transform-origin:140px 126px;animation:mwave 2.8s ease-in-out infinite}
+@keyframes mwave{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(11deg)}}
+#mascot.excited #waveArm{animation-duration:.5s}
+.meye{transform-box:fill-box;transform-origin:center;animation:mblink 4.6s infinite}
+@keyframes mblink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+.fbub{animation:fbob 3.4s ease-in-out infinite}
+.fbub.d1{animation-delay:-.8s}.fbub.d2{animation-delay:-1.7s}.fbub.d3{animation-delay:-2.5s}
+@keyframes fbob{50%{transform:translateY(-5px)}}
+@media(max-width:640px){#mascot{width:112px;right:6px}#mbubble{max-width:150px;font-size:11.5px}}
+@media(prefers-reduced-motion:reduce){#mascot,#waveArm,.meye,.fbub{animation:none}}
 </style>
 <link rel="canonical" href="https://hamzaeditz.tech/home">
 <meta property="og:type" content="website">
@@ -517,5 +536,83 @@ addEventListener('scroll', function(){ topBtn.style.display = scrollY>600 ? 'fle
 topBtn.addEventListener('click', function(){ scrollTo({top:0, behavior:'smooth'}); });
 </script>
 <script src="hamza-ads.js?v=3"></script>
+
+<div id="mascot" aria-hidden="true">
+  <div id="mbubble"></div>
+  <svg id="msvg" viewBox="0 0 220 240" fill="none">
+    <ellipse cx="110" cy="230" rx="54" ry="7" fill="rgba(0,0,0,.35)"/>
+    <g class="fbub"><circle cx="28" cy="58" r="15" fill="#12121f" stroke="#2b2b40" stroke-width="1.5"/><path d="M24 64v-9l10-2v9" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21.5" cy="64" r="3" fill="#7dd3fc"/><circle cx="31.5" cy="62" r="3" fill="#7dd3fc"/></g>
+    <g class="fbub d1"><circle cx="193" cy="50" r="15" fill="#12121f" stroke="#2b2b40" stroke-width="1.5"/><path d="M193 42v10m0 0l-4-4m4 4l4-4" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M186 58h14" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round"/></g>
+    <g class="fbub d2"><circle cx="197" cy="118" r="14" fill="#12121f" stroke="#2b2b40" stroke-width="1.5"/><path d="M193 111l9 7-9 7z" fill="#7dd3fc"/></g>
+    <g class="fbub d3"><circle cx="24" cy="122" r="14" fill="#12121f" stroke="#2b2b40" stroke-width="1.5"/><rect x="17" y="115" width="14" height="12" rx="2" stroke="#7dd3fc" stroke-width="2"/><circle cx="21" cy="119" r="1.6" fill="#7dd3fc"/><path d="M17 125l4-4 3 3 3-2 4 3" stroke="#7dd3fc" stroke-width="1.8" stroke-linejoin="round"/></g>
+    <rect x="87" y="176" width="16" height="32" rx="6" fill="#1c2942"/>
+    <rect x="117" y="176" width="16" height="32" rx="6" fill="#1c2942"/>
+    <rect x="80" y="203" width="28" height="12" rx="6" fill="#2c67ed"/>
+    <rect x="112" y="203" width="28" height="12" rx="6" fill="#2c67ed"/>
+    <path d="M80 128 L57 157" stroke="#2c67ed" stroke-width="15" stroke-linecap="round"/>
+    <circle cx="55" cy="161" r="8.5" fill="#f2c297"/>
+    <g>
+      <rect x="42" y="156" width="26" height="9" rx="4.5" fill="#b45309"/>
+      <rect x="26" y="163" width="58" height="31" rx="6" fill="#f97316"/>
+      <rect x="26" y="176" width="58" height="4" fill="#ea580c"/>
+      <rect x="50" y="173" width="11" height="10" rx="2" fill="#fde68a"/>
+      <path d="M72 163l7-9" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="80" cy="152" r="3.4" fill="#cbd5e1"/>
+    </g>
+    <rect x="74" y="116" width="72" height="68" rx="19" fill="#2c67ed"/>
+    <rect x="74" y="116" width="72" height="68" rx="19" fill="url(#hsh)" opacity=".35"/>
+    <rect x="93" y="152" width="34" height="21" rx="7" fill="rgba(255,255,255,.16)"/>
+    <path d="M110 118v64" stroke="rgba(255,255,255,.3)" stroke-width="2.5"/>
+    <defs><linearGradient id="hsh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="capg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00c2ff"/><stop offset="1" stop-color="#2c67ed"/></linearGradient></defs>
+    <g id="waveArm"><path d="M140 128 L165 105" stroke="#2c67ed" stroke-width="15" stroke-linecap="round"/><circle cx="168" cy="101" r="9" fill="#f2c297"/></g>
+    <rect x="99" y="102" width="22" height="18" rx="6" fill="#e0a878"/>
+    <circle cx="73" cy="76" r="7" fill="#f2c297"/>
+    <circle cx="147" cy="76" r="7" fill="#f2c297"/>
+    <circle cx="110" cy="72" r="37" fill="#f2c297"/>
+    <ellipse cx="94" cy="52" rx="17" ry="9" fill="rgba(255,255,255,.28)"/>
+    <path d="M71 68a39 36 0 0 1 78 0z" fill="url(#capg)"/>
+    <ellipse cx="110" cy="68" rx="45" ry="7.5" fill="#1d4ed8"/>
+    <circle cx="110" cy="33" r="5" fill="#e0f2fe"/>
+    <text x="110" y="60" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="19" fill="#fff">H</text>
+    <path d="M87 63q9-5 17 0M116 63q9-5 17 0" stroke="#263238" stroke-width="3" stroke-linecap="round"/>
+    <g class="meye"><ellipse cx="96" cy="78" rx="7.5" ry="9" fill="#fff"/><circle class="pupil" cx="96" cy="79" r="3.7" fill="#16202e"/><circle cx="97.5" cy="77" r="1.3" fill="#fff"/></g>
+    <g class="meye"><ellipse cx="124" cy="78" rx="7.5" ry="9" fill="#fff"/><circle class="pupil" cx="124" cy="79" r="3.7" fill="#16202e"/><circle cx="125.5" cy="77" r="1.3" fill="#fff"/></g>
+    <path d="M110 84q3.5 3.5 0 7" stroke="#d99a5f" stroke-width="2.4" stroke-linecap="round"/>
+    <ellipse cx="83" cy="90" rx="6.5" ry="3.6" fill="#ff9d9d" opacity=".55"/>
+    <ellipse cx="137" cy="90" rx="6.5" ry="3.6" fill="#ff9d9d" opacity=".55"/>
+    <path d="M95 92q15 13 30 0" stroke="#7c4a21" stroke-width="3.6" stroke-linecap="round"/>
+  </svg>
+</div>
+<script>
+(function(){
+  var m=document.getElementById('mascot'), b=document.getElementById('mbubble');
+  if(!m||!b) return;
+  var hideT=null;
+  function say(txt,ms){ b.textContent=txt; b.classList.add('show'); clearTimeout(hideT); hideT=setTimeout(function(){ b.classList.remove('show'); }, ms||2600); }
+  function cheer(){ m.classList.remove('excited'); void m.offsetWidth; m.classList.add('excited'); }
+  setTimeout(function(){ say('Hi! I am Hamzi 👋 Pick a tool — everything is free!',3400); },900);
+  var tips=['13 free tools — pick one! 🎁','Tap a tool and I will cheer!','No sign-up. Everything free.','Try the YouTube Downloader! ⬇️','Dhunn plays music with lyrics 🎵'];
+  var ti=0; setInterval(function(){ if(!b.classList.contains('show')) say(tips[ti++ % tips.length],2800); },7000);
+  var pupils=m.querySelectorAll('.pupil');
+  document.addEventListener('mousemove',function(e){
+    var r=m.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height*.32;
+    var dx=e.clientX-cx, dy=e.clientY-cy, d=Math.sqrt(dx*dx+dy*dy)||1, k=Math.min(2.3,d/40);
+    for(var i=0;i<pupils.length;i++) pupils[i].style.transform='translate('+(dx/d*k)+'px,'+(dy/d*k)+'px)';
+  });
+  var cheers=['Great pick! 🔥','Let\'s go! 🚀','My favourite! ⭐','Good choice! 😎','Opening it for you!'];
+  document.querySelectorAll('.tcard').forEach(function(card){
+    var nameEl=card.querySelector('h3'), name=nameEl?nameEl.textContent.trim():'Tool';
+    card.addEventListener('mouseenter',function(){ say(name+' — tap to open! 👆',2000); });
+    card.addEventListener('click',function(e){
+      if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return;
+      e.preventDefault(); cheer();
+      say(cheers[Math.floor(Math.random()*cheers.length)]+' Opening '+name+'…',1200);
+      var href=card.href; setTimeout(function(){ window.location.href=href; },680);
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
