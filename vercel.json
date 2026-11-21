@@ -41,11 +41,11 @@
   "rewrites": [
     {
       "source": "/nexavpn",
-      "destination": "/nexa-vpn-download-091.html"
+      "destination": "/nexa-vpn-download-091"
     },
     {
       "source": "/nexavpn/",
-      "destination": "/nexa-vpn-download-091.html"
+      "destination": "/nexa-vpn-download-091"
     }
   ]
 }
