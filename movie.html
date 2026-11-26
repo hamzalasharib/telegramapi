@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback -->
+<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) -->
 <title>Movie — API Test | HamzaEditz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -86,6 +86,9 @@ button.chip.watch:hover{background:#3d78f5;color:#fff}
 #playMsg{font-size:.85rem;color:var(--muted);margin-top:10px;min-height:1.2em}
 #playMsg.err{color:#ff8f8f}
 video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line);background:#000;display:block}
+.embedwrap{position:relative;width:100%;max-width:880px;aspect-ratio:16/9;background:#000;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.embedwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.embednote{font-size:.85rem;color:var(--muted);margin-top:10px}
 .season{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px}
 .season h3{font-size:1rem;margin-bottom:10px}
 .season h3 span{color:var(--muted);font-weight:400;font-size:.85rem}
@@ -389,6 +392,26 @@ function playDash(se, ep, label){
   wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+/* Embedded player: the source site's own play page in an iframe.
+   Their CDN (hakunaymatata) 426-blocks every non-browser fetch, so the
+   media can only ever play inside a real browser — the iframe runs
+   mzfi's own player in the visitor's browser. mzfi.me sends no
+   X-Frame-Options and no CSP frame-ancestors (checked 2026-11-26), so
+   framing from this origin is allowed. Route is /movies/:id for BOTH
+   movies and series; series pick season/episode via detailSe/detailEp
+   (the SPA reads those query params when subjectType != 1). */
+function mzUrl(se, ep){
+  return "https://mzfi.me/spa/videoPlayPage/movies/" + encodeURIComponent(curDetail.detailPath) +
+    "?id=" + encodeURIComponent(curDetail.id) + "&type=/movie/detail" +
+    "&detailSe=" + encodeURIComponent(se == null ? "" : se) +
+    "&detailEp=" + encodeURIComponent(ep == null ? "" : ep) + "&lang=en";
+}
+
+function setEmbed(se, ep){
+  const f = $("mzPlayer");
+  if(f) f.src = mzUrl(se, ep);
+}
+
 function relayWatchUrl(se, ep, res){
   const qs = new URLSearchParams({ mode: "watch", subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath, res: String(res) });
   return location.origin + "/api/movieplay?" + qs.toString();
@@ -466,6 +489,14 @@ async function openDetail(id){
       (s.imdbRatingValue ? '<div class="meta">IMDb <span class="imdb">★ ' + esc(s.imdbRatingValue) + '</span></div>' : '') +
       (s.description ? '<p class="desc">' + esc(s.description) + '</p>' : '') +
       '</div></div>';
+    if(curDetail.detailPath){
+      const initSe = curDetail.type === 1 ? "" : (seasons.length ? seasons[0].se : "");
+      const initEp = curDetail.type === 1 ? "" : (seasons.length ? 1 : "");
+      h += '<div class="lbl">WATCH — EMBEDDED PLAYER</div>' +
+        '<div class="embedwrap"><iframe id="mzPlayer" title="Embedded player" allowfullscreen ' +
+        'allow="autoplay; fullscreen; encrypted-media; picture-in-picture" src="' + esc(mzUrl(initSe, initEp)) + '"></iframe></div>' +
+        '<div class="embednote">Plays right here via the source site\u2019s own player.' + (curDetail.type === 1 ? '' : ' Pick an episode below to load it here.') + '</div>';
+    }
     h += '<div id="playerWrap"' + (trailer ? '' : ' hidden') + '><div class="lbl" id="playerLbl">TRAILER</div>' +
       '<video id="player" controls preload="none"' + (trailer ? ' src="' + esc(trailer) + '"' : '') + '></video></div>';
     h += '<div class="lbl">WATCH</div><div class="chips">' +
@@ -495,6 +526,9 @@ async function openDetail(id){
     if(wb) wb.addEventListener("click", () => { wb.disabled = true; loadStreams(0, 0, curDetail.title); });
     document.querySelectorAll(".epBtn").forEach(b => b.addEventListener("click", () => {
       document.querySelectorAll(".epBtn").forEach(x => x.classList.toggle("active", x === b));
+      setEmbed(Number(b.dataset.se), Number(b.dataset.ep));
+      const ew = document.querySelector(".embedwrap");
+      if(ew) ew.scrollIntoView({ behavior: "smooth", block: "nearest" });
       loadStreams(Number(b.dataset.se), Number(b.dataset.ep), "S" + b.dataset.se + " E" + b.dataset.ep);
       $("streamRow").scrollIntoView({ behavior: "smooth", block: "nearest" });
     }));
