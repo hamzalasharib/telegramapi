@@ -23,8 +23,7 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 
 def _get(url, headers):
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=25) as r:
-        return r
+    return urllib.request.urlopen(req, timeout=25)
 
 
 class handler(BaseHTTPRequestHandler):
