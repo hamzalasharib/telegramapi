@@ -212,6 +212,60 @@ class handler(BaseHTTPRequestHandler):
         ref = (qs.get("ref") or [""])[0].strip() or "home"
         self._relay(u, _media_headers(ref, item))
 
+    def _mode_probe(self, p):
+        """Diagnostic battery: egress-IP stability + media-fetch variants,
+        all inside ONE invocation against ONE fresh play response."""
+        out = {}
+
+        def ip(tag):
+            try:
+                with _get("https://api.ipify.org", {"User-Agent": UA},
+                          timeout=15) as r:
+                    out[tag] = r.read().decode("utf-8", "ignore").strip()
+            except Exception as e:
+                out[tag] = "ERR %s" % str(e)[:80]
+
+        def attempt(tag, url, headers, rng=True):
+            h = dict(headers)
+            if rng:
+                h["Range"] = "bytes=0-1023"
+            try:
+                with _get(url, h, timeout=20) as r:
+                    head = r.read(32)
+                    out[tag] = {"status": r.status,
+                                "head_hex": head[:16].hex()}
+            except urllib.error.HTTPError as e:
+                out[tag] = {"status": e.code}
+            except Exception as e:
+                out[tag] = {"error": str(e)[:120]}
+
+        ip("ip_before")
+        env = _fetch_play(p["subjectId"], p["se"], p["ep"], p["detailPath"])
+        data = (env or {}).get("data") or {}
+        streams = [s for s in (data.get("streams") or []) if s.get("url")]
+        dash = [d for d in (data.get("dash") or []) if d.get("url")]
+        out["play_code"] = (env or {}).get("code")
+        ip("ip_after_play")
+        if streams:
+            u = streams[0]["url"]
+            base = _media_headers(p["detailPath"], streams[0])
+            attempt("mp4_referer", u, base)
+            attempt("mp4_origin", u, dict(base, Origin="https://mzfi.me"))
+            attempt("mp4_secfetch", u, dict(
+                base, **{"Sec-Fetch-Dest": "video", "Sec-Fetch-Mode": "no-cors",
+                         "Sec-Fetch-Site": "cross-site",
+                         "Accept-Language": "en-US,en;q=0.9"}))
+            attempt("mp4_noref", u, {"User-Agent": UA, "Accept": "*/*"})
+        if dash:
+            d0 = dash[0]
+            base = _media_headers(p["detailPath"], d0)
+            attempt("dash_token_header", d0["url"], base, rng=False)
+            ck = {"User-Agent": UA, "Referer": _play_referer(p["detailPath"]),
+                  "Accept": "*/*", "Cookie": d0.get("signCookie") or ""}
+            attempt("dash_cookie_form", d0["url"], ck, rng=False)
+        ip("ip_after_media")
+        return self._send_json(out)
+
     # ---------- entry ----------
     def do_GET(self):
         qs = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
@@ -243,6 +297,8 @@ class handler(BaseHTTPRequestHandler):
              "res": (qs.get("res") or ["0"])[0]}
 
         try:
+            if mode == "probe":
+                return self._mode_probe(p)
             if mode == "watch":
                 return self._mode_watch(p)
             if mode == "dash":
