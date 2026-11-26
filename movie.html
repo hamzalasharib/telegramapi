@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) -->
+<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page -->
 <title>Movie — API Test | HamzaEditz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -88,6 +88,15 @@ button.chip.watch:hover{background:#3d78f5;color:#fff}
 video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line);background:#000;display:block}
 .embedwrap{position:relative;width:100%;max-width:880px;aspect-ratio:16/9;background:#000;border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .embedwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+/* play-v6 crop (phone widths): mzfi serves its H5 layout to phone UAs —
+   a ~54px account bar, then the player block at exactly
+   innerWidth x 0.5625 (16:9), then title/episodes/banners below.
+   Shifting the frame up by the bar height and extending it by the same
+   amount makes this 16:9 window show ONLY the player; the bar above and
+   everything below the player falls outside the visible area. */
+@media (max-width:640px){
+  .embedwrap iframe{top:-54px;bottom:auto;height:calc(100% + 54px)}
+}
 .embednote{font-size:.85rem;color:var(--muted);margin-top:10px}
 .season{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px}
 .season h3{font-size:1rem;margin-bottom:10px}
@@ -399,7 +408,16 @@ function playDash(se, ep, label){
    X-Frame-Options and no CSP frame-ancestors (checked 2026-11-26), so
    framing from this origin is allowed. Route is /movies/:id for BOTH
    movies and series; series pick season/episode via detailSe/detailEp
-   (the SPA reads those query params when subjectType != 1). */
+   (the SPA reads those query params when subjectType != 1).
+   play-v6: the iframe is sandboxed WITHOUT allow-popups and WITHOUT
+   allow-top-navigation — mzfi's popunder script (pufted) and smartlink
+   auto-jump ads then cannot open tabs or take over this page, while
+   allow-scripts + allow-same-origin keep their player, guest session
+   and localStorage working. On phone widths the frame is also cropped
+   to the player region only (see the .embedwrap CSS) and scrolling is
+   locked so the crop cannot drift. Their IN-PLAYER ads (pre-roll /
+   pause overlays inside the video frame itself) are part of the video
+   area and cannot be cropped away. */
 function mzUrl(se, ep){
   return "https://mzfi.me/spa/videoPlayPage/movies/" + encodeURIComponent(curDetail.detailPath) +
     "?id=" + encodeURIComponent(curDetail.id) + "&type=/movie/detail" +
@@ -492,10 +510,13 @@ async function openDetail(id){
     if(curDetail.detailPath){
       const initSe = curDetail.type === 1 ? "" : (seasons.length ? seasons[0].se : "");
       const initEp = curDetail.type === 1 ? "" : (seasons.length ? 1 : "");
+      const cropped = window.matchMedia("(max-width: 640px)").matches;
       h += '<div class="lbl">WATCH — EMBEDDED PLAYER</div>' +
         '<div class="embedwrap"><iframe id="mzPlayer" title="Embedded player" allowfullscreen ' +
-        'allow="autoplay; fullscreen; encrypted-media; picture-in-picture" src="' + esc(mzUrl(initSe, initEp)) + '"></iframe></div>' +
-        '<div class="embednote">Plays right here via the source site\u2019s own player.' + (curDetail.type === 1 ? '' : ' Pick an episode below to load it here.') + '</div>';
+        'sandbox="allow-scripts allow-same-origin allow-forms allow-presentation" ' +
+        'allow="autoplay; fullscreen; encrypted-media; picture-in-picture"' + (cropped ? ' scrolling="no"' : '') +
+        ' src="' + esc(mzUrl(initSe, initEp)) + '"></iframe></div>' +
+        '<div class="embednote">Only the player shows here — the source page around it and its popups are cut off.' + (curDetail.type === 1 ? '' : ' Pick an episode below to load it here.') + '</div>';
     }
     h += '<div id="playerWrap"' + (trailer ? '' : ' hidden') + '><div class="lbl" id="playerLbl">TRAILER</div>' +
       '<video id="player" controls preload="none"' + (trailer ? ' src="' + esc(trailer) + '"' : '') + '></video></div>';
