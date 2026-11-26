@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<!-- browse-v2: full catalogue via POST /subject/filter -->
+<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) -->
 <title>Movie — API Test | HamzaEditz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -76,6 +76,15 @@ details.api pre{font-family:"JetBrains Mono",monospace;font-size:.7rem;line-heig
 .chip{font-size:.78rem;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted)}
 .chip.ep{border-radius:9px;padding:6px 0;width:46px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:.75rem}
 .chip.res{color:var(--cyan);border-color:rgba(0,240,255,.35);font-family:"JetBrains Mono",monospace;font-size:.72rem}
+button.chip{background:none;cursor:pointer;font-family:inherit}
+button.chip:hover{border-color:var(--cyan);color:var(--cyan)}
+button.chip.ep{font-family:"JetBrains Mono",monospace}
+button.chip.ep.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,.08)}
+button.chip.watch{color:#fff;background:var(--blue);border-color:var(--blue);font-weight:600;padding:8px 18px;font-size:.85rem}
+button.chip.watch:hover{background:#3d78f5;color:#fff}
+#streamRow{margin-top:12px}
+#playMsg{font-size:.85rem;color:var(--muted);margin-top:10px;min-height:1.2em}
+#playMsg.err{color:#ff8f8f}
 video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line);background:#000;display:block}
 .season{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px}
 .season h3{font-size:1rem;margin-bottom:10px}
@@ -128,9 +137,14 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
     <button class="btn ghost back" id="backBtn">← Back</button>
     <div id="detailBody"></div>
     <details class="api" id="apiDetail" hidden>
-      <summary>API response</summary>
+      <summary>API response — detail</summary>
       <div class="url" id="apiDetailUrl"></div>
       <pre id="apiDetailJson"></pre>
+    </details>
+    <details class="api" id="apiPlay" hidden>
+      <summary>API response — play (streams)</summary>
+      <div class="url" id="apiPlayUrl"></div>
+      <pre id="apiPlayJson"></pre>
     </details>
   </section>
 
@@ -325,9 +339,72 @@ function splitList(v){
   return String(v).split(",").map(s => s.trim()).filter(Boolean);
 }
 
+/* ---------- Play: real streams via /api/movieplay ----------
+   The upstream subject/play endpoint only returns streams when the
+   request carries the mzfi.me play-page Referer, which a browser here
+   cannot set — so the call goes through our own /api/movieplay proxy
+   (server-side) and the returned MP4 URLs load straight into <video>. */
+let curDetail = { id: "", detailPath: "", title: "", type: 0, trailer: "" };
+
+function playStream(label, url){
+  if(!url) return;
+  const wrap = $("playerWrap"), v = $("player");
+  if(!wrap || !v) return;
+  wrap.hidden = false;
+  $("playerLbl").textContent = String(label).toUpperCase();
+  v.src = url;
+  v.play().catch(() => {});
+}
+
+function fmtSize(b){
+  b = Number(b) || 0;
+  if(!b) return "";
+  return b >= 1073741824 ? (b / 1073741824).toFixed(2) + " GB" : Math.round(b / 1048576) + " MB";
+}
+
+async function loadStreams(se, ep, label){
+  const row = $("streamRow"), msg = $("playMsg");
+  if(!row || !msg) return;
+  row.innerHTML = "";
+  msg.className = ""; msg.textContent = "Getting streams for " + label + "…";
+  const qs = new URLSearchParams({ subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath });
+  const proxyUrl = location.origin + "/api/movieplay?" + qs.toString();
+  try {
+    const r = await fetch(proxyUrl);
+    const json = await r.json();
+    showApi("apiPlay", { url: proxyUrl + "  →  " + API + "/subject/play?" + qs.toString() + "&streamSignType=1", json });
+    const d = (json && json.data) || null;
+    const streams = ((d && d.streams) || []).filter(s => s.url);
+    if(!d || !d.hasResource || !streams.length){
+      msg.className = "err";
+      msg.textContent = (d && d.limited)
+        ? "This one is locked for guest accounts (limited) — no stream returned."
+        : "No playable stream returned for " + label + ".";
+      return;
+    }
+    msg.textContent = label + " — pick a quality:";
+    streams.slice().sort((a, b) => Number(a.resolutions) - Number(b.resolutions)).forEach(s => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "chip res";
+      b.textContent = "▶ " + s.resolutions + "p" + (s.size ? " · " + fmtSize(s.size) : "");
+      b.addEventListener("click", () => playStream(label + " · " + s.resolutions + "p", s.url));
+      row.appendChild(b);
+    });
+    if((d.dash || []).length){
+      const note = document.createElement("span");
+      note.className = "chip";
+      note.textContent = "DASH manifest also returned — see API response below";
+      row.appendChild(note);
+    }
+  } catch(e){
+    msg.className = "err"; msg.textContent = "Play API error — try again.";
+  }
+}
+
 async function openDetail(id){
   $("listView").hidden = true;
   $("detailView").hidden = false;
+  $("apiPlay").hidden = true;
   $("detailBody").innerHTML = '<div id="status">Loading detail…</div>';
   window.scrollTo(0,0);
   try {
@@ -340,6 +417,7 @@ async function openDetail(id){
     const trailer = s.trailer && s.trailer.videoAddress && s.trailer.videoAddress.url;
     const subs = splitList(s.subtitles);
     const dubs = splitList(s.dubs);
+    curDetail = { id: String(s.subjectId || id), detailPath: s.detailPath || "", title: s.title || "", type: Number(s.subjectType) || 0, trailer: trailer || "" };
     const meta = [ year(s.releaseDate), (s.genre || "").split(",").map(x=>x.trim()).filter(Boolean).join(" · "), fmtDur(s.duration), s.countryName || "" ].filter(Boolean).join(" • ");
     let h = '<div class="dhead">' +
       (s.cover && s.cover.url ? '<img src="' + esc(s.cover.url) + '" alt="">' : '') +
@@ -348,12 +426,15 @@ async function openDetail(id){
       (s.imdbRatingValue ? '<div class="meta">IMDb <span class="imdb">★ ' + esc(s.imdbRatingValue) + '</span></div>' : '') +
       (s.description ? '<p class="desc">' + esc(s.description) + '</p>' : '') +
       '</div></div>';
-    if(trailer){
-      h += '<div class="lbl">TRAILER</div><video controls preload="none" src="' + esc(trailer) + '"></video>';
-    }
+    h += '<div id="playerWrap"' + (trailer ? '' : ' hidden') + '><div class="lbl" id="playerLbl">TRAILER</div>' +
+      '<video id="player" controls preload="none"' + (trailer ? ' src="' + esc(trailer) + '"' : '') + '></video></div>';
+    h += '<div class="lbl">WATCH</div><div class="chips">' +
+      (trailer ? '<button type="button" class="chip" id="trailerBtn">▶ Trailer</button>' : '') +
+      (curDetail.type === 1 ? '<button type="button" class="chip watch" id="watchBtn">▶ Watch movie — get streams</button>' : '<span class="chip">Pick an episode below to get its streams</span>') +
+      '</div><div class="chips" id="streamRow"></div><div id="playMsg"></div>';
     if(subs.length) h += '<div class="lbl">SUBTITLES</div><div class="chips">' + subs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
     if(dubs.length) h += '<div class="lbl">DUBS</div><div class="chips">' + dubs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
-    seasons.forEach(sn => {
+    if(curDetail.type !== 1) seasons.forEach(sn => {
       const maxEp = Number(sn.maxEp) || 0;
       h += '<div class="season"><h3>Season ' + esc(sn.se) + ' <span>— ' + maxEp + ' episode' + (maxEp === 1 ? "" : "s") + '</span></h3>';
       const resChips = (sn.resolutions || []).map(r => '<span class="chip res">' + esc(r.resolution) + 'p · ' + esc(r.epNum) + ' ep</span>').join("");
@@ -361,13 +442,22 @@ async function openDetail(id){
       if(maxEp){
         const cap = Math.min(maxEp, 100);
         let eps = "";
-        for(let i = 1; i <= cap; i++) eps += '<span class="chip ep">E' + i + '</span>';
+        for(let i = 1; i <= cap; i++) eps += '<button type="button" class="chip ep epBtn" data-se="' + esc(sn.se) + '" data-ep="' + i + '">E' + i + '</button>';
         if(maxEp > cap) eps += '<span class="chip">+' + (maxEp - cap) + ' more</span>';
         h += '<div class="chips">' + eps + '</div>';
       }
       h += '</div>';
     });
     $("detailBody").innerHTML = h;
+    const tb = $("trailerBtn");
+    if(tb) tb.addEventListener("click", () => playStream("Trailer", curDetail.trailer));
+    const wb = $("watchBtn");
+    if(wb) wb.addEventListener("click", () => { wb.disabled = true; loadStreams(0, 0, curDetail.title); });
+    document.querySelectorAll(".epBtn").forEach(b => b.addEventListener("click", () => {
+      document.querySelectorAll(".epBtn").forEach(x => x.classList.toggle("active", x === b));
+      loadStreams(Number(b.dataset.se), Number(b.dataset.ep), "S" + b.dataset.se + " E" + b.dataset.ep);
+      $("streamRow").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }));
   } catch(e){
     $("detailBody").innerHTML = '<div id="status" class="err">API error — go back and retry.</div>';
   }
