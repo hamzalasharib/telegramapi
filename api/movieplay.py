@@ -239,30 +239,69 @@ class handler(BaseHTTPRequestHandler):
             except Exception as e:
                 out[tag] = {"error": str(e)[:120]}
 
+        def mint(tag, base_url, sign_type, path):
+            """Play-style call against an arbitrary base; returns data dict."""
+            try:
+                with _get(base_url + "/home",
+                          {"User-Agent": UA,
+                           "Referer": "https://themoviebox.xyz/"}) as r:
+                    xu = r.headers.get("x-user")
+                token = json.loads(xu)["token"] if xu else ""
+                q = urllib.parse.urlencode({
+                    "subjectId": p["subjectId"], "se": p["se"], "ep": p["ep"],
+                    "detailPath": p["detailPath"], "streamSignType": sign_type,
+                    "supportCodecs[hevc]": 1, "supportCodecs[h264]": 1,
+                })
+                h = {"User-Agent": UA, "Accept": "application/json",
+                     "Referer": _play_referer(p["detailPath"]),
+                     "X-Client-Info": json.dumps({"timezone": "Asia/Karachi"}),
+                     "X-Source": ""}
+                if token:
+                    h["Authorization"] = "Bearer " + token
+                with _get(base_url + path + "?" + q, h) as r:
+                    env = json.loads(r.read().decode("utf-8", "ignore"))
+                out[tag + "_code"] = (env or {}).get("code")
+                return (env or {}).get("data") or {}
+            except Exception as e:
+                out[tag + "_error"] = str(e)[:120]
+                return {}
+
         ip("ip_before")
-        env = _fetch_play(p["subjectId"], p["se"], p["ep"], p["detailPath"])
-        data = (env or {}).get("data") or {}
+        # A) standard mint (direct API, streamSignType=1) — baseline variants
+        data = mint("A_direct_t1", API, 1, "/subject/play")
         streams = [s for s in (data.get("streams") or []) if s.get("url")]
         dash = [d for d in (data.get("dash") or []) if d.get("url")]
-        out["play_code"] = (env or {}).get("code")
         ip("ip_after_play")
         if streams:
             u = streams[0]["url"]
             base = _media_headers(p["detailPath"], streams[0])
-            attempt("mp4_referer", u, base)
-            attempt("mp4_origin", u, dict(base, Origin="https://mzfi.me"))
-            attempt("mp4_secfetch", u, dict(
-                base, **{"Sec-Fetch-Dest": "video", "Sec-Fetch-Mode": "no-cors",
-                         "Sec-Fetch-Site": "cross-site",
-                         "Accept-Language": "en-US,en;q=0.9"}))
-            attempt("mp4_noref", u, {"User-Agent": UA, "Accept": "*/*"})
+            attempt("A_mp4_referer", u, base)
         if dash:
             d0 = dash[0]
-            base = _media_headers(p["detailPath"], d0)
-            attempt("dash_token_header", d0["url"], base, rng=False)
-            ck = {"User-Agent": UA, "Referer": _play_referer(p["detailPath"]),
-                  "Accept": "*/*", "Cookie": d0.get("signCookie") or ""}
-            attempt("dash_cookie_form", d0["url"], ck, rng=False)
+            attempt("A_dash_no_token", d0["url"],
+                    {"User-Agent": UA,
+                     "Referer": _play_referer(p["detailPath"]),
+                     "Accept": "*/*"}, rng=False)
+        # B) mint via the mzfi.me origin proxy (the real player's path)
+        data_b = mint("B_mzfi_t1", "https://mzfi.me/wefeed-h5api-bff", 1,
+                      "/subject/play")
+        sb = [s for s in (data_b.get("streams") or []) if s.get("url")]
+        if sb:
+            attempt("B_mp4_referer", sb[0]["url"],
+                    _media_headers(p["detailPath"], sb[0]))
+        # C) mint with streamSignType=0 (app-webview style signs)
+        data_c = mint("C_direct_t0", API, 0, "/subject/play")
+        sc = [s for s in (data_c.get("streams") or []) if s.get("url")]
+        if sc:
+            out["C_first_url"] = sc[0]["url"][:110]
+            attempt("C_mp4_referer", sc[0]["url"],
+                    _media_headers(p["detailPath"], sc[0]))
+        # D) mint via the sibling subject/download endpoint
+        data_d = mint("D_download", API, 1, "/subject/download")
+        sd = [s for s in (data_d.get("streams") or []) if s.get("url")]
+        if sd:
+            attempt("D_mp4_referer", sd[0]["url"],
+                    _media_headers(p["detailPath"], sd[0]))
         ip("ip_after_media")
         return self._send_json(out)
 
