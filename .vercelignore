@@ -3,3 +3,9 @@
 # (repo APKs had grown to ~460 MB, which failed every deployment).
 *.apk
 *.aab
+# PC builds are delivered via GitHub raw links too, never from this domain.
+# The repo's .exe files (~195 MB) were being swept into the Python serverless
+# function bundle (233 MB total), which failed every deployment from
+# 26 Nov 2026 with RUNTIME_DEPENDENCY_INSTALLATION_FAILED.
+*.exe
+*.dll
