@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) -->
+<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback -->
 <title>Movie — API Test | HamzaEditz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -150,6 +150,7 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
 
 </div>
 
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 <script>
 const API = "https://h5-api.aoneroom.com/wefeed-h5api-bff";
 let token = null;
@@ -343,17 +344,54 @@ function splitList(v){
    The upstream subject/play endpoint only returns streams when the
    request carries the mzfi.me play-page Referer, which a browser here
    cannot set — so the call goes through our own /api/movieplay proxy
-   (server-side) and the returned MP4 URLs load straight into <video>. */
+   (server-side). The CDN also refuses to serve the media itself to a
+   browser on this origin, so playback goes through the same function's
+   relay modes (mode=watch for MP4, mode=dash/mode=seg for DASH). */
 let curDetail = { id: "", detailPath: "", title: "", type: 0, trailer: "" };
+
+let dashPlayer = null;
+
+function stopDash(){
+  if(dashPlayer){
+    try { dashPlayer.reset(); } catch(e){}
+    dashPlayer = null;
+  }
+}
 
 function playStream(label, url){
   if(!url) return;
   const wrap = $("playerWrap"), v = $("player");
   if(!wrap || !v) return;
+  stopDash();
   wrap.hidden = false;
   $("playerLbl").textContent = String(label).toUpperCase();
   v.src = url;
   v.play().catch(() => {});
+}
+
+/* DASH goes through the site relay too: /api/movieplay?mode=dash returns
+   the manifest with segment URLs rewritten to mode=seg on the same
+   function, because the CDN wants the mzfi Referer + X-MB-Token header
+   that a browser here cannot send. */
+function playDash(se, ep, label){
+  const wrap = $("playerWrap"), v = $("player"), msg = $("playMsg");
+  if(!wrap || !v) return;
+  if(typeof dashjs === "undefined"){
+    if(msg){ msg.className = "err"; msg.textContent = "DASH player library failed to load — use an MP4 quality instead."; }
+    return;
+  }
+  stopDash();
+  wrap.hidden = false;
+  $("playerLbl").textContent = String(label + " · DASH").toUpperCase();
+  const qs = new URLSearchParams({ mode: "dash", subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath });
+  dashPlayer = dashjs.MediaPlayer().create();
+  dashPlayer.initialize(v, location.origin + "/api/movieplay?" + qs.toString(), true);
+  wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function relayWatchUrl(se, ep, res){
+  const qs = new URLSearchParams({ mode: "watch", subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath, res: String(res) });
+  return location.origin + "/api/movieplay?" + qs.toString();
 }
 
 function fmtSize(b){
@@ -382,19 +420,21 @@ async function loadStreams(se, ep, label){
         : "No playable stream returned for " + label + ".";
       return;
     }
-    msg.textContent = label + " — pick a quality:";
+    msg.textContent = label + " — pick a quality (via site relay):";
     streams.slice().sort((a, b) => Number(a.resolutions) - Number(b.resolutions)).forEach(s => {
       const b = document.createElement("button");
       b.type = "button"; b.className = "chip res";
       b.textContent = "▶ " + s.resolutions + "p" + (s.size ? " · " + fmtSize(s.size) : "");
-      b.addEventListener("click", () => playStream(label + " · " + s.resolutions + "p", s.url));
+      b.addEventListener("click", () => playStream(label + " · " + s.resolutions + "p", relayWatchUrl(se, ep, s.resolutions)));
       row.appendChild(b);
     });
     if((d.dash || []).length){
-      const note = document.createElement("span");
-      note.className = "chip";
-      note.textContent = "DASH manifest also returned — see API response below";
-      row.appendChild(note);
+      const db = document.createElement("button");
+      db.type = "button"; db.className = "chip res";
+      const d0 = d.dash[0];
+      db.textContent = "▶ DASH adaptive" + (d0.resolutions ? " · " + d0.resolutions + "p" : "") + (d0.codecName ? " · " + d0.codecName : "");
+      db.addEventListener("click", () => playDash(se, ep, label));
+      row.appendChild(db);
     }
   } catch(e){
     msg.className = "err"; msg.textContent = "Play API error — try again.";
