@@ -31,7 +31,7 @@
     "api/quran.py": {
       "maxDuration": 30
     },
-    "api/instagram.py": {
+    "api/movieplay.py": {
       "maxDuration": 30
     },
     "api/youtube.py": {
