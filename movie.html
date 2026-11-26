@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
+<!-- browse-v2: full catalogue via POST /subject/filter -->
 <title>Movie — API Test | HamzaEditz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -36,6 +37,18 @@ a{color:var(--sky);text-decoration:none}
 .btn.ghost:hover{border-color:var(--cyan);color:var(--cyan)}
 #status{font-size:.88rem;color:var(--muted);min-height:1.3em;margin:10px 0}
 #status.err{color:#ff8f8f}
+.tabs{display:flex;gap:8px;margin:16px 0 4px}
+.tab{background:rgba(96,165,250,.08);border:1px solid var(--line);color:var(--muted);border-radius:999px;
+  padding:9px 22px;font:inherit;font-weight:600;font-size:.92rem;cursor:pointer}
+.tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 2px}
+.filters label{font-size:.72rem;font-weight:700;letter-spacing:1.5px;color:var(--muted2);display:flex;flex-direction:column;gap:5px}
+.filters select{background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--text);
+  padding:9px 10px;font:inherit;font-size:.88rem;font-weight:400;letter-spacing:0;outline:none;max-width:190px}
+.filters select:focus{border-color:var(--cyan)}
+#countLine{font-size:.85rem;color:var(--muted);margin:16px 0 10px;min-height:1.2em}
+#loadMoreBtn{width:100%;padding:14px}
+#loadMoreBtn[hidden]{display:none}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:16px;margin-top:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .15s,border-color .15s}
 .card:hover{transform:translateY(-3px);border-color:var(--cyan)}
@@ -84,8 +97,25 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
       <input id="q" type="search" placeholder="Search movies &amp; series…" autocomplete="off">
       <button class="btn" type="submit">Search</button>
     </form>
+    <div class="tabs" id="typeTabs">
+      <button class="tab active" data-ch="1" type="button">Movies</button>
+      <button class="tab" data-ch="2" type="button">Series</button>
+    </div>
+    <div class="filters">
+      <label>Sort <select id="fSort">
+        <option value="Latest" selected>Latest</option>
+        <option value="Hottest">Hottest</option>
+        <option value="Rating">Top rated</option>
+        <option value="ForYou">For you</option>
+      </select></label>
+      <label>Genre <select id="fGenre"><option value="All">All</option></select></label>
+      <label>Year <select id="fYear"><option value="All">All</option></select></label>
+      <label>Country <select id="fCountry"><option value="All">All</option></select></label>
+    </div>
     <div id="status">Loading…</div>
     <div class="grid" id="grid"></div>
+    <div id="countLine"></div>
+    <button class="btn ghost" id="loadMoreBtn" type="button" hidden>Load more</button>
     <details class="api" id="apiList" hidden>
       <summary>API response</summary>
       <div class="url" id="apiListUrl"></div>
@@ -109,7 +139,7 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
 <script>
 const API = "https://h5-api.aoneroom.com/wefeed-h5api-bff";
 let token = null;
-let lastListAction = () => loadTrending();
+let lastListAction = () => startBrowse(true);
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -171,21 +201,102 @@ function renderGrid(items){
   items.forEach(it => g.appendChild(card(it)));
 }
 
-async function loadTrending(){
-  lastListAction = loadTrending;
-  setStatus("Loading trending…");
+/* ---------- Full catalogue browse: POST /subject/filter ----------
+   channelId 1 = Movies, 2 = Series. perPage max 50, page max 100
+   (API answers 400 LIMIT_EXCEED past page 100 — narrow with the
+   Genre / Year / Country filters to reach deeper slices). */
+const browse = { channelId: 1, page: 0, total: 0, shown: 0, hasMore: false, loading: false, seen: new Set() };
+const PER_PAGE = 50, MAX_PAGE = 100;
+
+function browseBody(page){
+  const body = { channelId: browse.channelId, sort: $("fSort").value, page, perPage: PER_PAGE };
+  const g = $("fGenre").value, y = $("fYear").value, c = $("fCountry").value;
+  if(g && g !== "All") body.genre = g;
+  if(y && y !== "All") body.year = y;
+  if(c && c !== "All") body.country = c;
+  return body;
+}
+
+function setBrowseChrome(on){
+  $("loadMoreBtn").hidden = !on || !browse.hasMore || browse.loading;
+  if(!on) $("countLine").textContent = "";
+}
+
+function updateCount(endNote){
+  const totalTxt = browse.total && browse.total < 1000000 ? " of " + browse.total.toLocaleString("en-US") : "";
+  $("countLine").textContent = "Showing " + browse.shown.toLocaleString("en-US") + totalTxt + " titles." + (endNote ? " " + endNote : "");
+}
+
+async function loadFilterOptions(){
   try {
-    const { url, json } = await api("/subject/trending");
+    const { json } = await api("/filter?channelId=" + browse.channelId);
+    const lists = (json && json.data && json.data.filterItemsData && json.data.filterItemsData.typeList) || [];
+    const mine = lists.find(t => t.channelId === browse.channelId) || lists[0];
+    if(!mine) return;
+    const fill = (selId, type) => {
+      const grp = (mine.items || []).find(i => i.filterType === type);
+      const sel = $(selId), cur = sel.value;
+      sel.innerHTML = "";
+      ((grp && grp.filterVals) || [{ id: "All" }]).forEach(v => {
+        const o = document.createElement("option");
+        o.value = v.id; o.textContent = v.name || v.id;
+        sel.appendChild(o);
+      });
+      if([...sel.options].some(o => o.value === cur)) sel.value = cur;
+    };
+    fill("fGenre", "genre"); fill("fYear", "year"); fill("fCountry", "country");
+  } catch(e) { /* selects stay on All */ }
+}
+
+async function fetchBrowsePage(){
+  browse.loading = true; setBrowseChrome(true);
+  const page = browse.page + 1;
+  try {
+    const { url, json } = await api("/subject/filter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(browseBody(page))
+    });
     showApi("apiList", { url, json });
-    const items = (json && json.data && json.data.subjectList) || [];
-    if(!items.length){ setStatus("No results."); renderGrid([]); return; }
-    renderGrid(items);
-    setStatus("Trending now — " + items.length + " titles. Tap a poster for detail.");
+    if(!json || json.code !== 0 || !json.data){
+      browse.hasMore = false;
+      if(json && json.reason === "LIMIT_EXCEED"){
+        updateCount("The API stops browsing at page " + MAX_PAGE + " for one filter set — pick a Genre, Year or Country above to dig deeper.");
+      } else setStatus("API error — retry", true);
+      return;
+    }
+    const items = json.data.items || [];
+    const pager = json.data.pager || {};
+    browse.page = page;
+    if(pager.totalCount) browse.total = Number(pager.totalCount) || browse.total;
+    browse.hasMore = !!pager.hasMore && page < MAX_PAGE;
+    const g = $("grid");
+    let added = 0;
+    items.forEach(it => {
+      if(!it.subjectId || browse.seen.has(it.subjectId)) return;
+      browse.seen.add(it.subjectId); g.appendChild(card(it)); added++;
+    });
+    browse.shown += added;
+    if(!browse.shown){ setStatus("No titles match these filters."); updateCount(); return; }
+    setStatus(browse.channelId === 1 ? "Movies — full catalogue, newest first." : "Series — full catalogue, newest first.");
+    updateCount(!browse.hasMore && pager.hasMore ? "The API stops browsing at page " + MAX_PAGE + " for one filter set — pick a Genre, Year or Country above to dig deeper." : (!browse.hasMore ? "End of the catalogue." : ""));
   } catch(e){ setStatus("API error — retry", true); }
+  finally { browse.loading = false; setBrowseChrome(true); }
+}
+
+async function startBrowse(reset){
+  lastListAction = () => startBrowse(true);
+  if(reset){
+    browse.page = 0; browse.total = 0; browse.shown = 0; browse.hasMore = true; browse.seen = new Set();
+    $("grid").innerHTML = "";
+  }
+  setStatus("Loading catalogue…");
+  await fetchBrowsePage();
 }
 
 async function doSearch(q){
   lastListAction = () => doSearch(q);
+  setBrowseChrome(false);
   setStatus("Searching…");
   try {
     const { url, json } = await api("/subject/search", {
@@ -271,17 +382,30 @@ $("backBtn").addEventListener("click", () => {
 $("searchForm").addEventListener("submit", e => {
   e.preventDefault();
   const q = $("q").value.trim();
-  if(q) doSearch(q); else loadTrending();
+  if(q) doSearch(q); else startBrowse(true);
 });
 
 $("status").addEventListener("click", () => {
   if($("status").classList.contains("err")) lastListAction();
 });
 
+$("typeTabs").addEventListener("click", async e => {
+  const btn = e.target.closest(".tab");
+  if(!btn || Number(btn.dataset.ch) === browse.channelId) return;
+  document.querySelectorAll("#typeTabs .tab").forEach(t => t.classList.toggle("active", t === btn));
+  browse.channelId = Number(btn.dataset.ch);
+  await loadFilterOptions();
+  startBrowse(true);
+});
+
+["fSort", "fGenre", "fYear", "fCountry"].forEach(id => $(id).addEventListener("change", () => startBrowse(true)));
+$("loadMoreBtn").addEventListener("click", () => { if(!browse.loading && browse.hasMore) fetchBrowsePage(); });
+
 (async () => {
   try { await getToken(); }
   catch(e){ $("tokenStatus").textContent = "Guest token: failed"; }
-  loadTrending();
+  await loadFilterOptions();
+  startBrowse(true);
 })();
 </script>
 </body>
