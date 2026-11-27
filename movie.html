@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Watch movies and TV series online free in HD — a huge catalogue with an embedded player, no sign-up needed.">
 <title>MovieBox Premium — Watch Movies & Series Online Free</title>
-<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page · play-v7: relay playback removed (the CDN 426-blocks every non-browser fetch, so mode=watch/dash never played) — the per-quality buttons are now DIRECT download links to the stream URLs, which a real browser can fetch: IDM catches them on PC, the player menu / 1DM+ on Android (user-confirmed 2026-11-27) · play-v8: direct stream-URL download links REMOVED — the user's phone test (2026-11-27 22:22 PKT) proved a bare navigation to a stream URL from this origin is refused by the CDN with 429 Too Many Requests; the media only flows when the request comes from inside the mzfi.me player context (correct Referer + real browser). The Download button now opens the mzfi play page in a new tab (the exact URL the embed uses; series: retargeted to the picked episode) and the visitor uses that page's own download button / IDM there -->
+<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page · play-v7: relay playback removed (the CDN 426-blocks every non-browser fetch, so mode=watch/dash never played) — the per-quality buttons are now DIRECT download links to the stream URLs, which a real browser can fetch: IDM catches them on PC, the player menu / 1DM+ on Android (user-confirmed 2026-11-27) · play-v8: direct stream-URL download links REMOVED — the user's phone test (2026-11-27 22:22 PKT) proved a bare navigation to a stream URL from this origin is refused by the CDN with 429 Too Many Requests; the media only flows when the request comes from inside the mzfi.me player context (correct Referer + real browser). The Download button now opens the mzfi play page in a new tab (the exact URL the embed uses; series: retargeted to the picked episode) and the visitor uses that page's own download button / IDM there · play-v9: the WATCH-row button is replaced by an IDM-style floating Download chip overlaid on the player (top-right); its href is the mzUrl() play-page URL + "&utm_source=app-search" — mzfi's Android download guard reads utm_source from the play-page URL at load, and app-search unlocks the in-page quality list (360/480p for guests; 1080p stays vipLocked server-side), code-proven from mzfi's own SPA source (API-FINDINGS.md, 2026-11-27) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -100,6 +100,9 @@ a.chip.dl:hover{background:rgba(0,240,255,.08)}
 video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line);background:#000;display:block}
 .embedwrap{position:relative;width:100%;max-width:880px;aspect-ratio:16/9;background:#000;border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .embedwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+/* play-v9: IDM-style floating download chip over the player */
+.dlfloat{position:absolute;top:10px;right:10px;z-index:5;display:inline-flex;align-items:center;gap:6px;background:rgba(10,12,18,.88);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:8px 14px;font-size:.85rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+.dlfloat:hover{background:rgba(10,12,18,.97);color:#fff}
 /* play-v6 crop (phone widths): mzfi serves its H5 layout to phone UAs —
    a ~54px account bar, then the player block at exactly
    innerWidth x 0.5625 (16:9), then title/episodes/banners below.
@@ -377,16 +380,23 @@ function splitList(v){
 
 /* ---------- Play ----------
    In-page playback is the embedded mzfi player (below) plus the trailer.
-   play-v8: downloads go through the mzfi play page itself — the
-   Download button opens it in a new tab (the exact URL the embed uses,
-   retargeted to the picked episode for series) and the visitor uses
-   that page's own download button there. play-v7's direct stream-URL
-   download links were removed: the user's phone test (2026-11-27
-   22:22 PKT) showed a bare navigation to a stream URL from this origin
-   is refused by the CDN with 429 — the media only flows when the
-   request comes from inside the mzfi.me player context (correct
-   Referer + real browser). On PC, IDM works on this page only because
-   it captures the embedded player's own in-context media request. */
+   play-v8: downloads went through the mzfi play page itself (button in
+   the WATCH row). play-v7's direct stream-URL download links were
+   removed: the user's phone test (2026-11-27 22:22 PKT) showed a bare
+   navigation to a stream URL from this origin is refused by the CDN
+   with 429 — the media only flows when the request comes from inside
+   the mzfi.me player context (correct Referer + real browser).
+   play-v9: the Download control is now an IDM-style floating chip
+   overlaid on the player (top-right, .dlfloat). Its href is the mzUrl()
+   play-page URL + "&utm_source=app-search": mzfi's Android download
+   guard reads utm_source from the play-page URL at load, and
+   app-search unlocks that page's own quality list (360/480p for
+   guests; 1080p stays vipLocked server-side) instead of the
+   "download our app" popup — code-proven from mzfi's SPA source
+   (API-FINDINGS.md, 2026-11-27). The chip retargets with the embed
+   (title open + every episode pick). On PC, IDM also works on this
+   page directly because it captures the embedded player's own
+   in-context media request. */
 let curDetail = { id: "", detailPath: "", title: "", type: 0, trailer: "" };
 
 function playStream(label, url){
@@ -428,6 +438,12 @@ function setEmbed(se, ep){
   if(f) f.src = mzUrl(se, ep);
 }
 
+/* play-v9: download = the play page opened with utm_source=app-search,
+   which unlocks mzfi's own Android quality list (see Play note above). */
+function mzDlUrl(se, ep){
+  return mzUrl(se, ep) + "&utm_source=app-search";
+}
+
 async function openDetail(id){
   $("listView").hidden = true;
   $("detailView").hidden = false;
@@ -461,17 +477,16 @@ async function openDetail(id){
         '<div class="embedwrap"><iframe id="mzPlayer" title="Video player" allowfullscreen ' +
         'sandbox="allow-scripts allow-same-origin allow-forms allow-presentation" ' +
         'allow="autoplay; fullscreen; encrypted-media; picture-in-picture"' + (cropped ? ' scrolling="no"' : '') +
-        ' src="' + esc(mzUrl(initSe, initEp)) + '"></iframe></div>' +
-        '<div class="embednote">Watch in HD quality — free, no sign-up needed.' + (curDetail.type === 1 ? '' : ' Pick an episode below to watch it here.') + '</div>';
+        ' src="' + esc(mzUrl(initSe, initEp)) + '"></iframe>' +
+        '<a class="dlfloat" id="dlBtn" href="' + esc(mzDlUrl(initSe, initEp)) + '" target="_blank" rel="noopener">⬇ Download</a></div>' +
+        '<div class="embednote">Watch in HD quality — free, no sign-up needed.' + (curDetail.type === 1 ? '' : ' Pick an episode below to watch it here.') + '</div>' +
+        '<div class="dlhint">Tap Download, then choose a quality on the page that opens — the file saves to your phone. Free quality: up to 480p.</div>';
     }
     h += '<div id="playerWrap"' + (trailer ? '' : ' hidden') + '><div class="lbl" id="playerLbl">TRAILER</div>' +
       '<video id="player" controls preload="none"' + (trailer ? ' src="' + esc(trailer) + '"' : '') + '></video></div>';
     h += '<div class="lbl">WATCH</div><div class="chips">' +
       (trailer ? '<button type="button" class="chip" id="trailerBtn">▶ Trailer</button>' : '') +
-      (curDetail.detailPath ? '<a class="chip watch" id="dlBtn" href="' + esc(mzUrl(initSe, initEp)) + '" target="_blank" rel="noopener">⬇ Download</a>' : '') +
-      (curDetail.type === 1 ? '' : '<span class="chip">Pick an episode below — Download follows your pick</span>') +
-      '</div>' +
-      (curDetail.detailPath ? '<div class="dlhint">Opens the play page in a new tab — use its download button there (on PC, IDM catches it). On this page you can also just press play and let IDM grab it.</div>' : '');
+      '</div>';
     if(subs.length) h += '<div class="lbl">SUBTITLES</div><div class="chips">' + subs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
     if(dubs.length) h += '<div class="lbl">DUBS</div><div class="chips">' + dubs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
     if(curDetail.type !== 1) seasons.forEach(sn => {
@@ -495,7 +510,7 @@ async function openDetail(id){
       document.querySelectorAll(".epBtn").forEach(x => x.classList.toggle("active", x === b));
       setEmbed(Number(b.dataset.se), Number(b.dataset.ep));
       const db = $("dlBtn");
-      if(db) db.href = mzUrl(Number(b.dataset.se), Number(b.dataset.ep));
+      if(db) db.href = mzDlUrl(Number(b.dataset.se), Number(b.dataset.ep));
       const ew = document.querySelector(".embedwrap");
       if(ew) ew.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }));
