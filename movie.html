@@ -102,19 +102,26 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
 .embedwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 /* play-v10 crop (phone widths; extends the play-v6 crop): mzfi serves
    its H5 layout to phone UAs — a ~54px account bar, then the player
-   block at exactly innerWidth x 0.5625 (16:9), then the title +
-   Download/Share action row, then recommendations/banners. The frame
-   is shifted up by the bar height; the visible window is the player
-   PLUS ~120px below it, so the title + action row (mzfi's own
-   Download flow, unlocked in-frame by the utm_source=app-search param
-   on the embed URL — see mzUrl) becomes visible and tappable, while
-   everything below that row stays cropped out (overflow hidden).
-   One-number tweak: the +120px — raise it if the action row is cut,
-   lower it if extra content peeks through. The container height is
-   derived from the viewport width minus the .wrap side padding
-   (16px x 2), matching the embed's own width. */
+   block at exactly innerWidth x 0.5625 (16:9), then the title/info
+   block, then the Download/Share action row. The frame is shifted up
+   by the bar height; the visible window is the player PLUS the strip
+   below it, sized from mzfi's OWN CSS (id.8fc00214.css, measured
+   2026-11-27): detail-info margin-top 16 + title (20px Roboto) ~24 +
+   info-box 15 + its 4+4 margins + action-box height 48 = ~111px.
+   HARD CONSTRAINT (user, 2026-11-27): absolutely NO ads may show.
+   Immediately below the action row, inside the same acticonBar
+   component, mzfi renders a 32px gradient "See More" bar that is an
+   ad link (omg10.com) — recommendations/banners sit below that. The
+   window therefore ends at +108px: 3px INSIDE the action row's
+   bottom slack (its icon+label content is vertically centred with
+   ~7px slack, so the buttons stay fully visible and tappable) and
+   the ad bar can never peek through. One-number tweak: the +108px —
+   NEVER raise it past +111 (the ad bar starts there); lower it if a
+   screenshot ever shows a gradient sliver under the buttons.
+   The container height is derived from the viewport width minus the
+   .wrap side padding (16px x 2), matching the embed's own width. */
 @media (max-width:640px){
-  .embedwrap{aspect-ratio:auto;height:calc((100vw - 32px)*0.5625 + 120px)}
+  .embedwrap{aspect-ratio:auto;height:calc((100vw - 32px)*0.5625 + 108px)}
   .embedwrap iframe{top:-54px;bottom:auto;height:calc(100% + 54px)}
 }
 .embednote{font-size:.85rem;color:var(--muted);margin-top:10px}
