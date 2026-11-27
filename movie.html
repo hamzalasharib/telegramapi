@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Watch movies and TV series online free in HD — a huge catalogue with an embedded player, no sign-up needed.">
 <title>MovieBox Premium — Watch Movies & Series Online Free</title>
-<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page -->
+<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page · play-v7: relay playback removed (the CDN 426-blocks every non-browser fetch, so mode=watch/dash never played) — the per-quality buttons are now DIRECT download links to the stream URLs, which a real browser can fetch: IDM catches them on PC, the player menu / 1DM+ on Android (user-confirmed 2026-11-27) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -89,6 +89,9 @@ button.chip.ep{font-family:"JetBrains Mono",monospace}
 button.chip.ep.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,.08)}
 button.chip.watch{color:#fff;background:var(--blue);border-color:var(--blue);font-weight:600;padding:8px 18px;font-size:.85rem}
 button.chip.watch:hover{background:#3d78f5;color:#fff}
+a.chip.dl{color:var(--cyan);border-color:rgba(0,240,255,.35);font-weight:600;padding:8px 14px;font-size:.85rem}
+a.chip.dl:hover{background:rgba(0,240,255,.08)}
+.dlhint{width:100%;font-size:.82rem;color:var(--muted);line-height:1.55;margin-top:4px}
 #streamRow{margin-top:12px}
 #playMsg{font-size:.85rem;color:var(--muted);margin-top:10px;min-height:1.2em}
 #playMsg.err{color:#ff8f8f}
@@ -168,7 +171,6 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
 
 </div>
 
-<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 <script>
 const API = "https://h5-api.aoneroom.com/wefeed-h5api-bff";
 let token = null;
@@ -375,49 +377,25 @@ function splitList(v){
    The upstream subject/play endpoint only returns streams when the
    request carries the mzfi.me play-page Referer, which a browser here
    cannot set — so the call goes through our own /api/movieplay proxy
-   (server-side). The CDN also refuses to serve the media itself to a
-   browser on this origin, so playback goes through the same function's
-   relay modes (mode=watch for MP4, mode=dash/mode=seg for DASH). */
+   (server-side, JSON mode only) to obtain the stream URLs.
+   play-v7: the media itself is NOT relayed any more — the CDN
+   426-blocks every non-browser fetch, so the old mode=watch / mode=dash
+   relay buttons never played. Instead the stream URLs are handed
+   straight to the visitor's browser as download links: a real browser
+   passes the gate, IDM catches the file on PC, and on Android the
+   player's menu (or 1DM+) downloads it (user-confirmed 2026-11-27).
+   In-page playback stays with the embedded mzfi player above and the
+   trailer below. */
 let curDetail = { id: "", detailPath: "", title: "", type: 0, trailer: "" };
-
-let dashPlayer = null;
-
-function stopDash(){
-  if(dashPlayer){
-    try { dashPlayer.reset(); } catch(e){}
-    dashPlayer = null;
-  }
-}
 
 function playStream(label, url){
   if(!url) return;
   const wrap = $("playerWrap"), v = $("player");
   if(!wrap || !v) return;
-  stopDash();
   wrap.hidden = false;
   $("playerLbl").textContent = String(label).toUpperCase();
   v.src = url;
   v.play().catch(() => {});
-}
-
-/* DASH goes through the site relay too: /api/movieplay?mode=dash returns
-   the manifest with segment URLs rewritten to mode=seg on the same
-   function, because the CDN wants the mzfi Referer + X-MB-Token header
-   that a browser here cannot send. */
-function playDash(se, ep, label){
-  const wrap = $("playerWrap"), v = $("player"), msg = $("playMsg");
-  if(!wrap || !v) return;
-  if(typeof dashjs === "undefined"){
-    if(msg){ msg.className = "err"; msg.textContent = "This quality is not supported on this device — please pick another quality."; }
-    return;
-  }
-  stopDash();
-  wrap.hidden = false;
-  $("playerLbl").textContent = String(label + " · DASH").toUpperCase();
-  const qs = new URLSearchParams({ mode: "dash", subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath });
-  dashPlayer = dashjs.MediaPlayer().create();
-  dashPlayer.initialize(v, location.origin + "/api/movieplay?" + qs.toString(), true);
-  wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 /* Embedded player: the source site's own play page in an iframe.
@@ -449,11 +427,6 @@ function setEmbed(se, ep){
   if(f) f.src = mzUrl(se, ep);
 }
 
-function relayWatchUrl(se, ep, res){
-  const qs = new URLSearchParams({ mode: "watch", subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath, res: String(res) });
-  return location.origin + "/api/movieplay?" + qs.toString();
-}
-
 function fmtSize(b){
   b = Number(b) || 0;
   if(!b) return "";
@@ -479,22 +452,20 @@ async function loadStreams(se, ep, label){
         : "No video available for " + label + " right now.";
       return;
     }
-    msg.textContent = label + " — pick a quality:";
+    msg.textContent = label + " — pick a download quality:";
     streams.slice().sort((a, b) => Number(a.resolutions) - Number(b.resolutions)).forEach(s => {
-      const b = document.createElement("button");
-      b.type = "button"; b.className = "chip res";
-      b.textContent = "▶ " + s.resolutions + "p" + (s.size ? " · " + fmtSize(s.size) : "");
-      b.addEventListener("click", () => playStream(label + " · " + s.resolutions + "p", relayWatchUrl(se, ep, s.resolutions)));
-      row.appendChild(b);
+      const a = document.createElement("a");
+      a.className = "chip dl";
+      a.href = s.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "Download " + s.resolutions + "p" + (s.size ? " · " + fmtSize(s.size) : "");
+      row.appendChild(a);
     });
-    if((d.dash || []).length){
-      const db = document.createElement("button");
-      db.type = "button"; db.className = "chip res";
-      const d0 = d.dash[0];
-      db.textContent = "▶ DASH adaptive" + (d0.resolutions ? " · " + d0.resolutions + "p" : "") + (d0.codecName ? " · " + d0.codecName : "");
-      db.addEventListener("click", () => playDash(se, ep, label));
-      row.appendChild(db);
-    }
+    const hint = document.createElement("div");
+    hint.className = "dlhint";
+    hint.textContent = "Downloads open in a new tab. On PC, IDM catches the file automatically. On Android, tap a quality, then use the player's menu (⋮ → Download) — or 1DM+.";
+    row.appendChild(hint);
   } catch(e){
     msg.className = "err"; msg.textContent = "Could not load the video — please try again.";
   }
