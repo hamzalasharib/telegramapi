@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Watch movies and TV series online free in HD — a huge catalogue with an embedded player, no sign-up needed.">
 <title>MovieBox Premium — Watch Movies & Series Online Free</title>
-<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page · play-v7: relay playback removed (the CDN 426-blocks every non-browser fetch, so mode=watch/dash never played) — the per-quality buttons are now DIRECT download links to the stream URLs, which a real browser can fetch: IDM catches them on PC, the player menu / 1DM+ on Android (user-confirmed 2026-11-27) -->
+<!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page · play-v7: relay playback removed (the CDN 426-blocks every non-browser fetch, so mode=watch/dash never played) — the per-quality buttons are now DIRECT download links to the stream URLs, which a real browser can fetch: IDM catches them on PC, the player menu / 1DM+ on Android (user-confirmed 2026-11-27) · play-v8: direct stream-URL download links REMOVED — the user's phone test (2026-11-27 22:22 PKT) proved a bare navigation to a stream URL from this origin is refused by the CDN with 429 Too Many Requests; the media only flows when the request comes from inside the mzfi.me player context (correct Referer + real browser). The Download button now opens the mzfi play page in a new tab (the exact URL the embed uses; series: retargeted to the picked episode) and the visitor uses that page's own download button / IDM there -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -89,6 +89,8 @@ button.chip.ep{font-family:"JetBrains Mono",monospace}
 button.chip.ep.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,240,255,.08)}
 button.chip.watch{color:#fff;background:var(--blue);border-color:var(--blue);font-weight:600;padding:8px 18px;font-size:.85rem}
 button.chip.watch:hover{background:#3d78f5;color:#fff}
+a.chip.watch{color:#fff;background:var(--blue);border-color:var(--blue);font-weight:600;padding:8px 18px;font-size:.85rem}
+a.chip.watch:hover{background:#3d78f5;color:#fff}
 a.chip.dl{color:var(--cyan);border-color:rgba(0,240,255,.35);font-weight:600;padding:8px 14px;font-size:.85rem}
 a.chip.dl:hover{background:rgba(0,240,255,.08)}
 .dlhint{width:100%;font-size:.82rem;color:var(--muted);line-height:1.55;margin-top:4px}
@@ -373,19 +375,18 @@ function splitList(v){
   return String(v).split(",").map(s => s.trim()).filter(Boolean);
 }
 
-/* ---------- Play: real streams via /api/movieplay ----------
-   The upstream subject/play endpoint only returns streams when the
-   request carries the mzfi.me play-page Referer, which a browser here
-   cannot set — so the call goes through our own /api/movieplay proxy
-   (server-side, JSON mode only) to obtain the stream URLs.
-   play-v7: the media itself is NOT relayed any more — the CDN
-   426-blocks every non-browser fetch, so the old mode=watch / mode=dash
-   relay buttons never played. Instead the stream URLs are handed
-   straight to the visitor's browser as download links: a real browser
-   passes the gate, IDM catches the file on PC, and on Android the
-   player's menu (or 1DM+) downloads it (user-confirmed 2026-11-27).
-   In-page playback stays with the embedded mzfi player above and the
-   trailer below. */
+/* ---------- Play ----------
+   In-page playback is the embedded mzfi player (below) plus the trailer.
+   play-v8: downloads go through the mzfi play page itself — the
+   Download button opens it in a new tab (the exact URL the embed uses,
+   retargeted to the picked episode for series) and the visitor uses
+   that page's own download button there. play-v7's direct stream-URL
+   download links were removed: the user's phone test (2026-11-27
+   22:22 PKT) showed a bare navigation to a stream URL from this origin
+   is refused by the CDN with 429 — the media only flows when the
+   request comes from inside the mzfi.me player context (correct
+   Referer + real browser). On PC, IDM works on this page only because
+   it captures the embedded player's own in-context media request. */
 let curDetail = { id: "", detailPath: "", title: "", type: 0, trailer: "" };
 
 function playStream(label, url){
@@ -427,50 +428,6 @@ function setEmbed(se, ep){
   if(f) f.src = mzUrl(se, ep);
 }
 
-function fmtSize(b){
-  b = Number(b) || 0;
-  if(!b) return "";
-  return b >= 1073741824 ? (b / 1073741824).toFixed(2) + " GB" : Math.round(b / 1048576) + " MB";
-}
-
-async function loadStreams(se, ep, label){
-  const row = $("streamRow"), msg = $("playMsg");
-  if(!row || !msg) return;
-  row.innerHTML = "";
-  msg.className = ""; msg.textContent = "Loading " + label + "…";
-  const qs = new URLSearchParams({ subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath });
-  const proxyUrl = location.origin + "/api/movieplay?" + qs.toString();
-  try {
-    const r = await fetch(proxyUrl);
-    const json = await r.json();
-    const d = (json && json.data) || null;
-    const streams = ((d && d.streams) || []).filter(s => s.url);
-    if(!d || !d.hasResource || !streams.length){
-      msg.className = "err";
-      msg.textContent = (d && d.limited)
-        ? "This title is not available to watch right now."
-        : "No video available for " + label + " right now.";
-      return;
-    }
-    msg.textContent = label + " — pick a download quality:";
-    streams.slice().sort((a, b) => Number(a.resolutions) - Number(b.resolutions)).forEach(s => {
-      const a = document.createElement("a");
-      a.className = "chip dl";
-      a.href = s.url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.textContent = "Download " + s.resolutions + "p" + (s.size ? " · " + fmtSize(s.size) : "");
-      row.appendChild(a);
-    });
-    const hint = document.createElement("div");
-    hint.className = "dlhint";
-    hint.textContent = "Downloads open in a new tab. On PC, IDM catches the file automatically. On Android, tap a quality, then use the player's menu (⋮ → Download) — or 1DM+.";
-    row.appendChild(hint);
-  } catch(e){
-    msg.className = "err"; msg.textContent = "Could not load the video — please try again.";
-  }
-}
-
 async function openDetail(id){
   $("listView").hidden = true;
   $("detailView").hidden = false;
@@ -495,9 +452,10 @@ async function openDetail(id){
       (s.imdbRatingValue ? '<div class="meta">IMDb <span class="imdb">★ ' + esc(s.imdbRatingValue) + '</span></div>' : '') +
       (s.description ? '<p class="desc">' + esc(s.description) + '</p>' : '') +
       '</div></div>';
+    let initSe = "", initEp = "";
     if(curDetail.detailPath){
-      const initSe = curDetail.type === 1 ? "" : (seasons.length ? seasons[0].se : "");
-      const initEp = curDetail.type === 1 ? "" : (seasons.length ? 1 : "");
+      initSe = curDetail.type === 1 ? "" : (seasons.length ? seasons[0].se : "");
+      initEp = curDetail.type === 1 ? "" : (seasons.length ? 1 : "");
       const cropped = window.matchMedia("(max-width: 640px)").matches;
       h += '<div class="lbl">WATCH NOW</div>' +
         '<div class="embedwrap"><iframe id="mzPlayer" title="Video player" allowfullscreen ' +
@@ -510,8 +468,10 @@ async function openDetail(id){
       '<video id="player" controls preload="none"' + (trailer ? ' src="' + esc(trailer) + '"' : '') + '></video></div>';
     h += '<div class="lbl">WATCH</div><div class="chips">' +
       (trailer ? '<button type="button" class="chip" id="trailerBtn">▶ Trailer</button>' : '') +
-      (curDetail.type === 1 ? '<button type="button" class="chip watch" id="watchBtn">▶ Watch Now</button>' : '<span class="chip">Pick an episode below to watch</span>') +
-      '</div><div class="chips" id="streamRow"></div><div id="playMsg"></div>';
+      (curDetail.detailPath ? '<a class="chip watch" id="dlBtn" href="' + esc(mzUrl(initSe, initEp)) + '" target="_blank" rel="noopener">⬇ Download</a>' : '') +
+      (curDetail.type === 1 ? '' : '<span class="chip">Pick an episode below — Download follows your pick</span>') +
+      '</div>' +
+      (curDetail.detailPath ? '<div class="dlhint">Opens the play page in a new tab — use its download button there (on PC, IDM catches it). On this page you can also just press play and let IDM grab it.</div>' : '');
     if(subs.length) h += '<div class="lbl">SUBTITLES</div><div class="chips">' + subs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
     if(dubs.length) h += '<div class="lbl">DUBS</div><div class="chips">' + dubs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
     if(curDetail.type !== 1) seasons.forEach(sn => {
@@ -531,15 +491,13 @@ async function openDetail(id){
     $("detailBody").innerHTML = h;
     const tb = $("trailerBtn");
     if(tb) tb.addEventListener("click", () => playStream("Trailer", curDetail.trailer));
-    const wb = $("watchBtn");
-    if(wb) wb.addEventListener("click", () => { wb.disabled = true; loadStreams(0, 0, curDetail.title); });
     document.querySelectorAll(".epBtn").forEach(b => b.addEventListener("click", () => {
       document.querySelectorAll(".epBtn").forEach(x => x.classList.toggle("active", x === b));
       setEmbed(Number(b.dataset.se), Number(b.dataset.ep));
+      const db = $("dlBtn");
+      if(db) db.href = mzUrl(Number(b.dataset.se), Number(b.dataset.ep));
       const ew = document.querySelector(".embedwrap");
       if(ew) ew.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      loadStreams(Number(b.dataset.se), Number(b.dataset.ep), "S" + b.dataset.se + " E" + b.dataset.ep);
-      $("streamRow").scrollIntoView({ behavior: "smooth", block: "nearest" });
     }));
   } catch(e){
     $("detailBody").innerHTML = '<div id="status" class="err">Something went wrong — go back and try again.</div>';
