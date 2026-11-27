@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Watch movies and TV series online free in HD — a huge catalogue with an embedded player, no sign-up needed.">
-<title>Watch Movies & Series Online Free | HamzaEditz</title>
+<title>MovieBox Premium — Watch Movies & Series Online Free</title>
 <!-- browse-v2: full catalogue via POST /subject/filter · play-v3: real streams via /api/movieplay (subject/play) · play-v4: media relay (mode=watch/dash/seg) because the CDN refuses direct browser playback · play-v5: mzfi play page embedded via iframe (their CDN only passes a real browser; mzfi.me sends no X-Frame-Options / CSP frame-ancestors, verified 2026-11-26) · play-v6: phone-width crop — only the player region of the mzfi H5 page is shown (their ~54px account bar shifted out, everything below the player falls outside the frame) and the iframe is sandboxed without allow-popups / allow-top-navigation so their popunder + smartlink ads cannot open tabs or hijack the page -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,7 +26,14 @@ a{color:var(--sky);text-decoration:none}
 .top h1{font-size:1.5rem;font-weight:700;letter-spacing:.2px}
 .top h1 span{color:var(--cyan)}
 .tag{font-size:.65rem;font-weight:700;letter-spacing:2px;color:var(--cyan);border:1px solid rgba(0,240,255,.35);padding:5px 10px;border-radius:999px}
-#tokenStatus{margin-left:auto;font-size:.78rem;color:var(--muted)}
+.tagline{font-size:.85rem;color:var(--muted)}
+.hero .slider{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 12px;scrollbar-width:none}
+.hero .slider::-webkit-scrollbar{display:none}
+.slide{flex:0 0 auto;width:128px;scroll-snap-align:start;cursor:pointer}
+.slide img{width:128px;aspect-ratio:2/3;object-fit:cover;border-radius:12px;border:1px solid var(--line);display:block;background:var(--card2);transition:transform .15s,border-color .15s}
+.slide:hover img{transform:translateY(-3px);border-color:var(--cyan)}
+.slide .st{font-size:.78rem;font-weight:600;margin-top:7px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.slide .sm{font-size:.7rem;color:var(--muted);margin-top:3px}
 .searchbar{display:flex;gap:10px;margin:20px 0 8px}
 .searchbar input{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--text);
   padding:13px 16px;font:inherit;font-size:1rem;outline:none;min-width:0}
@@ -110,9 +117,23 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
   <!-- LIST VIEW -->
   <section id="listView">
     <div class="top">
-      <h1>Movie <span>Test</span></h1>
-      <span class="tag">API TEST</span>
-      <span id="tokenStatus">Guest token: loading…</span>
+      <h1>MovieBox <span>Premium</span></h1>
+      <span class="tagline">Watch movies &amp; series online — free, in HD.</span>
+    </div>
+    <div class="hero">
+      <div class="lbl" style="margin:16px 0 6px">TRENDING NOW</div>
+      <div class="slider" id="heroSlider">
+        <div class="slide" data-open="4286404369773483304"><img src="https://pbcdnw.aoneroom.com/image/2026/09/01/53db181f9d5073d8c713c5e782a7e014.jpeg" alt="The Unknown"><div class="st">The Unknown</div><div class="sm">2027 · <span class="imdb">★ 6.2</span></div></div>
+        <div class="slide" data-open="2696526846820249832"><img src="https://pbcdnw.aoneroom.com/image/2026/10/09/7fc74e0c61ac2421822d8bb986932d6d.jpg" alt="The History of Concrete"><div class="st">The History of Concrete</div><div class="sm">2027 · <span class="imdb">★ 7.7</span></div></div>
+        <div class="slide" data-open="8033840675546352344"><img src="https://pbcdnw.aoneroom.com/image/2026/01/26/3d903420c46cb9300925ec59c4f6e283.jpg" alt="The End"><div class="st">The End</div><div class="sm">2026 · <span class="imdb">★ 6.5</span></div></div>
+        <div class="slide" data-open="3192656073786376336"><img src="https://pbcdnw.aoneroom.com/image/2026/11/26/71282f83f3936d0033ba5ad738cdd09a.jpg" alt="Disco Kingpin"><div class="st">Disco Kingpin</div><div class="sm">2026 · <span class="imdb">★ 7.9</span></div></div>
+        <div class="slide" data-open="1319930206253107928"><img src="https://pbcdnw.aoneroom.com/image/2026/11/19/dffd94fcd9a6b94240da39f5cad635c1.jpg" alt="Avengers: Doomsday"><div class="st">Avengers: Doomsday</div><div class="sm">2026 · <span class="imdb">★ 6.5</span></div></div>
+        <div class="slide" data-open="7458612638449552072"><img src="https://pbcdnw.aoneroom.com/image/2026/11/23/446cc13eed3da900f8ced34eaa3efc93.jpg" alt="Josephine"><div class="st">Josephine</div><div class="sm">2026 · <span class="imdb">★ 8.0</span></div></div>
+        <div class="slide" data-open="6686589836578931328"><img src="https://pbcdnw.aoneroom.com/image/2026/11/26/1c8a1c8c0a3249b5828f184e350ef40a-s.jpg" alt="Bokshi"><div class="st">Bokshi</div><div class="sm">2026 · <span class="imdb">★ 6.6</span></div></div>
+        <div class="slide" data-open="6711891222094921840"><img src="https://pbcdnw.aoneroom.com/image/2026/10/04/bd79d602b5b7cc64e499d42100ec6b73.jpg" alt="DreamQuil"><div class="st">DreamQuil</div><div class="sm">2026 · <span class="imdb">★ 5.3</span></div></div>
+        <div class="slide" data-open="4601901273863050064"><img src="https://pbcdnw.aoneroom.com/image/2026/11/26/cad984d42aceb1d33726e89ccf322d0e.jpg" alt="La bola negra"><div class="st">La bola negra</div><div class="sm">2026 · <span class="imdb">★ 8.2</span></div></div>
+        <div class="slide" data-open="1653547451199936440"><img src="https://pbcdnw.aoneroom.com/image/2026/11/07/e24f7f7bf1c212d48174caa373db1447.jpg" alt="Gamitan"><div class="st">Gamitan</div><div class="sm">2026 · <span class="imdb">★ 6.0</span></div></div>
+      </div>
     </div>
     <form class="searchbar" id="searchForm">
       <input id="q" type="search" placeholder="Search movies &amp; series…" autocomplete="off">
@@ -137,27 +158,12 @@ video{width:100%;max-width:640px;border-radius:14px;border:1px solid var(--line)
     <div class="grid" id="grid"></div>
     <div id="countLine"></div>
     <button class="btn ghost" id="loadMoreBtn" type="button" hidden>Load more</button>
-    <details class="api" id="apiList" hidden>
-      <summary>API response</summary>
-      <div class="url" id="apiListUrl"></div>
-      <pre id="apiListJson"></pre>
-    </details>
   </section>
 
   <!-- DETAIL VIEW -->
   <section id="detailView" hidden>
     <button class="btn ghost back" id="backBtn">← Back</button>
     <div id="detailBody"></div>
-    <details class="api" id="apiDetail" hidden>
-      <summary>API response — detail</summary>
-      <div class="url" id="apiDetailUrl"></div>
-      <pre id="apiDetailJson"></pre>
-    </details>
-    <details class="api" id="apiPlay" hidden>
-      <summary>API response — play (streams)</summary>
-      <div class="url" id="apiPlayUrl"></div>
-      <pre id="apiPlayJson"></pre>
-    </details>
   </section>
 
 </div>
@@ -179,12 +185,10 @@ function setStatus(msg, isErr){
 }
 
 async function getToken(){
-  $("tokenStatus").textContent = "Guest token: loading…";
   const r = await fetch(API + "/home");
   const xu = r.headers.get("x-user");
-  if(!xu) throw new Error("no x-user header");
+  if(!xu) throw new Error("no session");
   token = JSON.parse(xu).token;
-  $("tokenStatus").textContent = "Guest token: loaded";
   return token;
 }
 
@@ -201,14 +205,18 @@ async function api(path, opts = {}, retry = true){
   return { url, json };
 }
 
-function showApi(box, data){
-  $(box).hidden = false;
-  $(box + "Url").textContent = data.url;
-  $(box + "Json").textContent = JSON.stringify(data.json, null, 2);
+/* Family-safe filter: the catalogue contains 18+ titles. The API's own
+   isPornographic flag is mostly unset in list responses, so titles and
+   genres are checked against adult markers as well. */
+const ADULT_RE = /(porn|xxx|erotic|fetish|carnal|prostitut|sexual|\bsex\b|uncensored|hardcore|softcore|18\s*\+|\badult\b)/i;
+function isAdult(it){
+  if(!it) return false;
+  if(it.isPornographic || it.webHighRisk) return true;
+  if(ADULT_RE.test((it.title || "") + " " + (it.genre || ""))) return true;
+  return /(pornograph|erotic|explicit sexual|sexual content|adults only)/i.test(it.description || "");
 }
 
-function card(it){
-  const el = document.createElement("div");
+function card(it){  const el = document.createElement("div");
   el.className = "card";
   const cover = it.cover && it.cover.url ? it.cover.url : "";
   el.innerHTML =
@@ -225,7 +233,7 @@ function card(it){
 function renderGrid(items){
   const g = $("grid");
   g.innerHTML = "";
-  items.forEach(it => g.appendChild(card(it)));
+  items.filter(it => !isAdult(it)).forEach(it => g.appendChild(card(it)));
 }
 
 /* ---------- Full catalogue browse: POST /subject/filter ----------
@@ -279,17 +287,16 @@ async function fetchBrowsePage(){
   browse.loading = true; setBrowseChrome(true);
   const page = browse.page + 1;
   try {
-    const { url, json } = await api("/subject/filter", {
+    const { json } = await api("/subject/filter", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(browseBody(page))
     });
-    showApi("apiList", { url, json });
     if(!json || json.code !== 0 || !json.data){
       browse.hasMore = false;
       if(json && json.reason === "LIMIT_EXCEED"){
-        updateCount("The API stops browsing at page " + MAX_PAGE + " for one filter set — pick a Genre, Year or Country above to dig deeper.");
-      } else setStatus("API error — retry", true);
+        updateCount("Use the Genre, Year or Country filters above to explore more titles.");
+      } else setStatus("Something went wrong — tap here to retry.", true);
       return;
     }
     const items = json.data.items || [];
@@ -300,14 +307,14 @@ async function fetchBrowsePage(){
     const g = $("grid");
     let added = 0;
     items.forEach(it => {
-      if(!it.subjectId || browse.seen.has(it.subjectId)) return;
+      if(!it.subjectId || browse.seen.has(it.subjectId) || isAdult(it)) return;
       browse.seen.add(it.subjectId); g.appendChild(card(it)); added++;
     });
     browse.shown += added;
-    if(!browse.shown){ setStatus("No titles match these filters."); updateCount(); return; }
-    setStatus(browse.channelId === 1 ? "Movies — full catalogue, newest first." : "Series — full catalogue, newest first.");
-    updateCount(!browse.hasMore && pager.hasMore ? "The API stops browsing at page " + MAX_PAGE + " for one filter set — pick a Genre, Year or Country above to dig deeper." : (!browse.hasMore ? "End of the catalogue." : ""));
-  } catch(e){ setStatus("API error — retry", true); }
+    if(!browse.shown){ setStatus("No titles found for these filters."); updateCount(); return; }
+    setStatus(browse.channelId === 1 ? "Latest Movies" : "Latest Series");
+    updateCount(!browse.hasMore && pager.hasMore ? "Use the Genre, Year or Country filters above to explore more titles." : (!browse.hasMore ? "You have reached the end." : ""));
+  } catch(e){ setStatus("Something went wrong — tap here to retry.", true); }
   finally { browse.loading = false; setBrowseChrome(true); }
 }
 
@@ -317,7 +324,7 @@ async function startBrowse(reset){
     browse.page = 0; browse.total = 0; browse.shown = 0; browse.hasMore = true; browse.seen = new Set();
     $("grid").innerHTML = "";
   }
-  setStatus("Loading catalogue…");
+  setStatus("Loading…");
   await fetchBrowsePage();
 }
 
@@ -326,17 +333,16 @@ async function doSearch(q){
   setBrowseChrome(false);
   setStatus("Searching…");
   try {
-    const { url, json } = await api("/subject/search", {
+    const { json } = await api("/subject/search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ keyword: q, page: 1, perPage: 30 })
     });
-    showApi("apiList", { url, json });
-    const items = (json && json.data && json.data.items) || [];
+    const items = ((json && json.data && json.data.items) || []).filter(it => !isAdult(it));
     if(!items.length){ setStatus("No results for “" + q + "”."); renderGrid([]); return; }
     renderGrid(items);
     setStatus(items.length + " result" + (items.length === 1 ? "" : "s") + " for “" + q + "”.");
-  } catch(e){ setStatus("API error — retry", true); }
+  } catch(e){ setStatus("Something went wrong — tap here to retry.", true); }
 }
 
 function fmtDur(sec){
@@ -389,7 +395,7 @@ function playDash(se, ep, label){
   const wrap = $("playerWrap"), v = $("player"), msg = $("playMsg");
   if(!wrap || !v) return;
   if(typeof dashjs === "undefined"){
-    if(msg){ msg.className = "err"; msg.textContent = "DASH player library failed to load — use an MP4 quality instead."; }
+    if(msg){ msg.className = "err"; msg.textContent = "This quality is not supported on this device — please pick another quality."; }
     return;
   }
   stopDash();
@@ -445,23 +451,22 @@ async function loadStreams(se, ep, label){
   const row = $("streamRow"), msg = $("playMsg");
   if(!row || !msg) return;
   row.innerHTML = "";
-  msg.className = ""; msg.textContent = "Getting streams for " + label + "…";
+  msg.className = ""; msg.textContent = "Loading " + label + "…";
   const qs = new URLSearchParams({ subjectId: curDetail.id, se: String(se), ep: String(ep), detailPath: curDetail.detailPath });
   const proxyUrl = location.origin + "/api/movieplay?" + qs.toString();
   try {
     const r = await fetch(proxyUrl);
     const json = await r.json();
-    showApi("apiPlay", { url: proxyUrl + "  →  " + API + "/subject/play?" + qs.toString() + "&streamSignType=1", json });
     const d = (json && json.data) || null;
     const streams = ((d && d.streams) || []).filter(s => s.url);
     if(!d || !d.hasResource || !streams.length){
       msg.className = "err";
       msg.textContent = (d && d.limited)
-        ? "This one is locked for guest accounts (limited) — no stream returned."
-        : "No playable stream returned for " + label + ".";
+        ? "This title is not available to watch right now."
+        : "No video available for " + label + " right now.";
       return;
     }
-    msg.textContent = label + " — pick a quality (via site relay):";
+    msg.textContent = label + " — pick a quality:";
     streams.slice().sort((a, b) => Number(a.resolutions) - Number(b.resolutions)).forEach(s => {
       const b = document.createElement("button");
       b.type = "button"; b.className = "chip res";
@@ -478,21 +483,20 @@ async function loadStreams(se, ep, label){
       row.appendChild(db);
     }
   } catch(e){
-    msg.className = "err"; msg.textContent = "Play API error — try again.";
+    msg.className = "err"; msg.textContent = "Could not load the video — please try again.";
   }
 }
 
 async function openDetail(id){
   $("listView").hidden = true;
   $("detailView").hidden = false;
-  $("apiPlay").hidden = true;
-  $("detailBody").innerHTML = '<div id="status">Loading detail…</div>';
+  $("detailBody").innerHTML = '<div id="status">Loading…</div>';
   window.scrollTo(0,0);
   try {
-    const { url, json } = await api("/detail?subjectId=" + encodeURIComponent(id));
-    showApi("apiDetail", { url, json });
+    const { json } = await api("/detail?subjectId=" + encodeURIComponent(id));
     const s = (json && json.data && json.data.subject) || null;
-    if(!s){ $("detailBody").innerHTML = '<div id="status" class="err">API error — go back and retry.</div>'; return; }
+    if(!s){ $("detailBody").innerHTML = '<div id="status" class="err">Something went wrong — go back and try again.</div>'; return; }
+    if(isAdult(s)){ $("detailBody").innerHTML = '<div id="status" class="err">This title is not available on MovieBox Premium.</div>'; return; }
     const res = (json.data && json.data.resource) || {};
     const seasons = res.seasons || [];
     const trailer = s.trailer && s.trailer.videoAddress && s.trailer.videoAddress.url;
@@ -511,18 +515,18 @@ async function openDetail(id){
       const initSe = curDetail.type === 1 ? "" : (seasons.length ? seasons[0].se : "");
       const initEp = curDetail.type === 1 ? "" : (seasons.length ? 1 : "");
       const cropped = window.matchMedia("(max-width: 640px)").matches;
-      h += '<div class="lbl">WATCH — EMBEDDED PLAYER</div>' +
-        '<div class="embedwrap"><iframe id="mzPlayer" title="Embedded player" allowfullscreen ' +
+      h += '<div class="lbl">WATCH NOW</div>' +
+        '<div class="embedwrap"><iframe id="mzPlayer" title="Video player" allowfullscreen ' +
         'sandbox="allow-scripts allow-same-origin allow-forms allow-presentation" ' +
         'allow="autoplay; fullscreen; encrypted-media; picture-in-picture"' + (cropped ? ' scrolling="no"' : '') +
         ' src="' + esc(mzUrl(initSe, initEp)) + '"></iframe></div>' +
-        '<div class="embednote">Only the player shows here — the source page around it and its popups are cut off.' + (curDetail.type === 1 ? '' : ' Pick an episode below to load it here.') + '</div>';
+        '<div class="embednote">Watch in HD quality — free, no sign-up needed.' + (curDetail.type === 1 ? '' : ' Pick an episode below to watch it here.') + '</div>';
     }
     h += '<div id="playerWrap"' + (trailer ? '' : ' hidden') + '><div class="lbl" id="playerLbl">TRAILER</div>' +
       '<video id="player" controls preload="none"' + (trailer ? ' src="' + esc(trailer) + '"' : '') + '></video></div>';
     h += '<div class="lbl">WATCH</div><div class="chips">' +
       (trailer ? '<button type="button" class="chip" id="trailerBtn">▶ Trailer</button>' : '') +
-      (curDetail.type === 1 ? '<button type="button" class="chip watch" id="watchBtn">▶ Watch movie — get streams</button>' : '<span class="chip">Pick an episode below to get its streams</span>') +
+      (curDetail.type === 1 ? '<button type="button" class="chip watch" id="watchBtn">▶ Watch Now</button>' : '<span class="chip">Pick an episode below to watch</span>') +
       '</div><div class="chips" id="streamRow"></div><div id="playMsg"></div>';
     if(subs.length) h += '<div class="lbl">SUBTITLES</div><div class="chips">' + subs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
     if(dubs.length) h += '<div class="lbl">DUBS</div><div class="chips">' + dubs.map(x => '<span class="chip">' + esc(x) + '</span>').join("") + '</div>';
@@ -554,7 +558,7 @@ async function openDetail(id){
       $("streamRow").scrollIntoView({ behavior: "smooth", block: "nearest" });
     }));
   } catch(e){
-    $("detailBody").innerHTML = '<div id="status" class="err">API error — go back and retry.</div>';
+    $("detailBody").innerHTML = '<div id="status" class="err">Something went wrong — go back and try again.</div>';
   }
 }
 
@@ -586,9 +590,25 @@ $("typeTabs").addEventListener("click", async e => {
 ["fSort", "fGenre", "fYear", "fCountry"].forEach(id => $(id).addEventListener("change", () => startBrowse(true)));
 $("loadMoreBtn").addEventListener("click", () => { if(!browse.loading && browse.hasMore) fetchBrowsePage(); });
 
+document.querySelectorAll(".slide").forEach(s => s.addEventListener("click", () => openDetail(s.dataset.open)));
+(() => {
+  const sl = $("heroSlider");
+  if(!sl) return;
+  let paused = false;
+  sl.addEventListener("pointerdown", () => { paused = true; }, { passive: true });
+  sl.addEventListener("mouseenter", () => { paused = true; });
+  sl.addEventListener("mouseleave", () => { paused = false; });
+  setInterval(() => {
+    if(paused || !$("listView") || $("listView").hidden) return;
+    const max = sl.scrollWidth - sl.clientWidth - 10;
+    if(sl.scrollLeft >= max) sl.scrollTo({ left: 0, behavior: "smooth" });
+    else sl.scrollBy({ left: 140, behavior: "smooth" });
+  }, 3200);
+})();
+
 (async () => {
   try { await getToken(); }
-  catch(e){ $("tokenStatus").textContent = "Guest token: failed"; }
+  catch(e){ setStatus("Could not connect — tap here to retry.", true); }
   await loadFilterOptions();
   startBrowse(true);
 })();
