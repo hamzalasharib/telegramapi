@@ -206,12 +206,20 @@ async function api(path, opts = {}, retry = true){
 }
 
 /* Family-safe filter: the catalogue contains 18+ titles. The API's own
-   isPornographic flag is mostly unset in list responses, so titles and
-   genres are checked against adult markers as well. */
-const ADULT_RE = /(porn|xxx|erotic|fetish|carnal|prostitut|sexual|\bsex\b|uncensored|hardcore|softcore|18\s*\+|\badult\b)/i;
+   isPornographic flag is mostly unset in list/search responses, so genre
+   tokens (adult titles here are tagged Erotic / Hot), title markers and a
+   small known-titles list are checked as well. */
+const ADULT_RE = /(porn|xxx|erotic|fetish|carnal|prostitut|sexual|\bsex\b|uncensored|hardcore|softcore|hentai|milf|f\*ck|fuck|18\s*\+|\badult\b)/i;
+const ADULT_TITLES = ["young mother", "female teacher closing the door", "shidoukan", "enjo kouhai", "yuugao", "secret of beauty", "after one night"];
+const ADULT_QUERY = /(porn|xxx|\bsex\b|sexual|erotic|hentai|milf|f\*ck|fuck|nude|\badult\b|hot wife)/i;
 function isAdult(it){
   if(!it) return false;
   if(it.isPornographic || it.webHighRisk) return true;
+  const genreToks = (it.genre || "").split(",").map(x => x.trim().toLowerCase());
+  if(genreToks.includes("erotic") || genreToks.includes("hot") || genreToks.includes("adult")) return true;
+  const t = (it.title || "").toLowerCase();
+  if(ADULT_TITLES.some(x => t.includes(x))) return true;
+  if(genreToks.includes("anime") && t.includes("the animation")) return true;
   if(ADULT_RE.test((it.title || "") + " " + (it.genre || ""))) return true;
   return /(pornograph|erotic|explicit sexual|sexual content|adults only)/i.test(it.description || "");
 }
@@ -331,6 +339,11 @@ async function startBrowse(reset){
 async function doSearch(q){
   lastListAction = () => doSearch(q);
   setBrowseChrome(false);
+  if(ADULT_QUERY.test(q)){
+    renderGrid([]);
+    setStatus("MovieBox Premium is family-safe — adult content is not available here.");
+    return;
+  }
   setStatus("Searching…");
   try {
     const { json } = await api("/subject/search", {
