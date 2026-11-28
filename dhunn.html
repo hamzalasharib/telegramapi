@@ -4,68 +4,91 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dhunn — Music Player</title>
-<meta name="description" content="Download Dhunn, Hamza's free Android music player — synced lyrics with live effects, 58 animated album art designs, themes, equalizer and HD covers. No account, works offline.">
-<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Download Dhunn, Hamza's free Android music player — synced lyrics with live effects, 58 animated album art designs, equalizer, HD covers and your personal Music Report. No account — your own music works fully offline.">
+<meta name="theme-color" content="#f5f5f7">
 <meta property="og:title" content="Dhunn — Music Player App">
-<meta property="og:description" content="Free Android music player with synced lyrics, 58 animated album art designs, themes and equalizer. No account — works offline.">
+<meta property="og:description" content="Free Android music player with synced lyrics, 58 animated album art designs, equalizer and a personal Music Report. No account — works offline.">
 <meta property="og:image" content="https://hamzaeditz.tech/assets/dhunn/hero.jpg">
 <link rel="icon" href="assets/dhunn/icon.jpg">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--green:#2c67ed;--green-d:#1f55c9;--ink:#f8fafc;--mut:#94a3b8;--line:#23232f;--chip:#171726}
-body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#050510;color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{max-width:880px;margin:0 auto;padding:28px 20px 40px}
+:root{
+  --ink:#1d1d1f;--mut:#6e6e73;--blue:#0071e3;--blue-d:#0060c9;
+  --glass:rgba(255,255,255,.62);--glass-brd:rgba(255,255,255,.65);
+  --shadow:0 8px 32px rgba(31,38,135,.10);
+}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,"Segoe UI",Arial,sans-serif;color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;background:#f5f5f7;position:relative;overflow-x:hidden}
+/* soft iOS-style colour wash behind the glass */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(560px 420px at 12% -6%,rgba(0,113,227,.20),transparent 65%),
+  radial-gradient(520px 420px at 96% 12%,rgba(175,82,222,.16),transparent 65%),
+  radial-gradient(640px 520px at 50% 108%,rgba(48,176,199,.15),transparent 65%),
+  linear-gradient(180deg,#fbfbfd,#f5f5f7)}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--glass-brd);box-shadow:var(--shadow)}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(251,251,253,.72);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(0,0,0,.06)}
+.topbar-in{max-width:880px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:10px}
+.topbar img{width:30px;height:30px;border-radius:8px;display:block}
+.topbar b{font-size:.98rem;font-weight:700;letter-spacing:-.01em}
+.topbar .get{margin-left:auto;background:var(--blue);color:#fff;font-weight:700;font-size:.85rem;padding:7px 18px;border-radius:999px;text-decoration:none;transition:background .2s}
+.topbar .get:hover{background:var(--blue-d)}
+.wrap{max-width:880px;margin:0 auto;padding:30px 20px 44px}
 .app-head{display:flex;gap:18px;align-items:flex-start}
-.app-icon{width:76px;height:76px;border-radius:18px;flex:none;box-shadow:0 4px 14px rgba(0,0,0,.18);display:block}
-.app-head h1{font-family:"Space Grotesk",Inter,system-ui,sans-serif;font-size:1.55rem;font-weight:600;line-height:1.2;letter-spacing:-.01em}
-.dev{color:#60a5fa;font-weight:600;font-size:.95rem;margin-top:3px}
-.cat{color:var(--mut);font-size:.85rem;margin-top:1px}
-.stats{display:flex;margin:22px 0 4px;border-bottom:1px solid var(--line);padding-bottom:18px}
+.app-icon{width:84px;height:84px;border-radius:20px;flex:none;box-shadow:0 10px 26px rgba(0,0,0,.16);display:block}
+.app-head h1{font-size:1.72rem;font-weight:800;line-height:1.15;letter-spacing:-.02em}
+.dev{color:var(--blue);font-weight:600;font-size:.95rem;margin-top:4px}
+.cat{color:var(--mut);font-size:.86rem;margin-top:2px}
+.stats{display:flex;margin:24px 0 6px;border-radius:20px;padding:16px 6px}
 .stat{flex:1;text-align:center;padding:0 6px}
-.stat+.stat{border-left:1px solid var(--line)}
-.stat b{display:block;font-size:.92rem;font-weight:600}
+.stat+.stat{border-left:1px solid rgba(0,0,0,.07)}
+.stat b{display:block;font-size:.95rem;font-weight:700}
 .stat span{font-size:.72rem;color:var(--mut)}
-.install{display:block;max-width:430px;background:var(--green);color:#fff;text-align:center;font-weight:600;font-size:1rem;padding:13px 20px;border-radius:10px;text-decoration:none;margin:20px 0 8px;transition:background .2s,transform .2s}
-.install:hover{background:var(--green-d);transform:translateY(-1px)}
+.install{display:block;max-width:430px;background:var(--blue);color:#fff;text-align:center;font-weight:700;font-size:1.02rem;padding:14px 20px;border-radius:999px;text-decoration:none;margin:22px 0 9px;box-shadow:0 10px 24px rgba(0,113,227,.32);transition:background .2s,transform .2s}
+.install:hover{background:var(--blue-d);transform:translateY(-1px)}
 .dl-note{font-size:.8rem;color:var(--mut)}
-.dl-note a{color:#60a5fa;text-decoration:none;font-weight:600}
-.shots{display:flex;gap:12px;overflow-x:auto;padding:22px 2px 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.dl-note a{color:var(--blue);text-decoration:none;font-weight:600}
+.shots{display:flex;gap:14px;overflow-x:auto;padding:24px 2px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .shots::-webkit-scrollbar{display:none}
-.shots img{height:470px;flex:none;border-radius:14px;border:1px solid var(--line);scroll-snap-align:start;display:block}
-@media(max-width:560px){.shots img{height:400px}.app-head h1{font-size:1.32rem}.app-icon{width:64px;height:64px;border-radius:15px}}
-section{padding:22px 0 4px;border-bottom:1px solid var(--line)}
-section:last-of-type{border-bottom:0}
-h2{font-family:"Space Grotesk",Inter,system-ui,sans-serif;font-size:1.13rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-h2 .arr{color:var(--mut);font-weight:400}
-p{color:#cbd5e1;font-size:.94rem;margin-bottom:10px}
-.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;margin-top:6px}
+.shots img{height:470px;flex:none;border-radius:22px;border:1px solid rgba(0,0,0,.05);box-shadow:0 14px 34px rgba(31,38,135,.14);scroll-snap-align:start;display:block}
+@media(max-width:560px){.shots img{height:400px}.app-head h1{font-size:1.4rem}.app-icon{width:66px;height:66px;border-radius:16px}}
+section{padding:26px 0 6px}
+h2{font-size:1.28rem;font-weight:800;letter-spacing:-.015em;margin-bottom:12px}
+p{color:#3a3a3c;font-size:.95rem;margin-bottom:10px}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
 @media(max-width:640px){.feat-grid{grid-template-columns:1fr}}
-.feat{display:flex;gap:11px;padding:9px 0}
-.feat .fic{width:38px;height:38px;flex:none;border-radius:11px;background:linear-gradient(135deg,#f59e0b,#8b5cf6);display:grid;place-items:center}
+.feat{display:flex;gap:12px;padding:16px;border-radius:20px}
+.feat .fic{width:40px;height:40px;flex:none;border-radius:12px;background:linear-gradient(135deg,#0a84ff,#bf5af2);display:grid;place-items:center;box-shadow:0 6px 14px rgba(10,132,255,.28)}
 .feat .fic svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.feat b{display:block;font-size:.92rem}
-.feat span{color:var(--mut);font-size:.84rem;display:block;line-height:1.5}
-.newbox{background:var(--chip);border-radius:14px;padding:16px 18px}
-.newbox ul{margin:4px 0 0 18px;color:#cbd5e1;font-size:.92rem}
+.feat b{display:block;font-size:.94rem;font-weight:700}
+.feat span{color:var(--mut);font-size:.85rem;display:block;line-height:1.5}
+.newbox{border-radius:20px;padding:18px 20px}
+.newbox b{font-size:1rem}
+.newbox ul{margin:6px 0 0 18px;color:#3a3a3c;font-size:.93rem}
 .newbox li{margin-bottom:5px}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:14px 30px}
-@media(max-width:560px){.info{grid-template-columns:1fr 1fr}}
-.info div b{display:block;font-size:.88rem;font-weight:600}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:14px 30px;border-radius:20px;padding:18px 20px}
+.info div b{display:block;font-size:.88rem;font-weight:700}
 .info div span{color:var(--mut);font-size:.86rem}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media(max-width:640px){.steps{grid-template-columns:1fr}}
-.step{background:var(--chip);border-radius:14px;padding:15px}
-.step b{display:flex;align-items:center;gap:9px;font-size:.92rem;margin-bottom:5px}
-.step b i{font-style:normal;width:24px;height:24px;flex:none;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:.78rem}
+.step{border-radius:20px;padding:16px}
+.step b{display:flex;align-items:center;gap:9px;font-size:.93rem;margin-bottom:5px}
+.step b i{font-style:normal;width:24px;height:24px;flex:none;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:.78rem}
 .step span{color:var(--mut);font-size:.85rem;line-height:1.5;display:block}
-.dev-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
-.dev-links a{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:9px 16px;color:var(--ink);text-decoration:none;font-size:.88rem;font-weight:600}
-.dev-links a svg{width:17px;height:17px;fill:var(--green)}
-footer{padding-top:22px;color:var(--mut);font-size:.78rem;text-align:center}
+.dev-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.dev-links a{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 18px;color:var(--ink);text-decoration:none;font-size:.88rem;font-weight:600}
+.dev-links a svg{width:17px;height:17px;fill:var(--blue)}
+footer{padding-top:26px;color:var(--mut);font-size:.78rem;text-align:center}
 </style>
 <link rel="canonical" href="https://hamzaeditz.tech/dhunn">
 </head>
 <body>
+
+<div class="topbar"><div class="topbar-in">
+<img src="assets/dhunn/icon.jpg" alt="">
+<b>Dhunn</b>
+<a class="get" href="https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.43.0.apk">GET</a>
+</div></div>
+
 <div class="wrap">
 
 <div class="app-head">
@@ -77,21 +100,21 @@ footer{padding-top:22px;color:var(--mut);font-size:.78rem;text-align:center}
 </div>
 </div>
 
-<div class="stats">
-<div class="stat"><b>12.3 MB</b><span>Size</span></div>
-<div class="stat"><b>v2.38.0</b><span>Version</span></div>
+<div class="stats glass">
+<div class="stat"><b>11.9 MB</b><span>Size</span></div>
+<div class="stat"><b>v2.43.0</b><span>Version</span></div>
 <div class="stat"><b>Android</b><span>Platform</span></div>
 <div class="stat"><b>Offline</b><span>Plays without internet</span></div>
 </div>
 
-<a class="install" href="https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.38.0.apk">Install</a>
-<div class="dl-note">Direct APK download · 12.3 MB · <a href="#install">How to install</a></div>
+<a class="install" href="https://raw.githubusercontent.com/hamzalasharib/telegramapi/main/dhunn/DHUNN-v2.43.0.apk">Install</a>
+<div class="dl-note">Direct APK download · 11.9 MB · <a href="#install">How to install</a></div>
 
 <div class="shots">
 <img src="assets/dhunn/shot-1.jpg" alt="Dhunn player — live lyrics card and cover-matched colours">
 <img src="assets/dhunn/shot-2.jpg" alt="Dhunn full-screen synced lyrics with focus effects">
 <img src="assets/dhunn/shot-3.jpg" alt="Dhunn library — Lyrics tab with every song that has lyrics">
-<img src="assets/dhunn/shot-4.jpg" alt="Dhunn home-screen widget that follows the cover colours">
+<img src="assets/dhunn/shot-4.jpg" alt="Dhunn home screen with quick picks and your Music Report">
 <img src="assets/dhunn/shot-5.jpg" alt="Dhunn Drive Mode — big controls, zero distraction">
 <img src="assets/dhunn/shot-6.jpg" alt="Dhunn progress bar styles — 24 designs to pick from">
 </div>
@@ -99,25 +122,28 @@ footer{padding-top:22px;color:var(--mut);font-size:.78rem;text-align:center}
 <section>
 <h2>About this app</h2>
 <p>Dhunn is a beautiful, completely free music player for the songs already on your phone. No account, no sign-up, no tracking — your music never leaves your device, and everything plays fully offline.</p>
-<p>What makes Dhunn different is how alive it feels: lyrics that follow the song with stunning live effects, 58 animated album art designs, HD covers fetched automatically, and themes that can take their colour from the cover of whatever is playing.</p>
+<p>What makes Dhunn different is how alive it feels: lyrics that follow the song with stunning live effects, 58 animated album art designs, HD covers fetched automatically, and a personal Music Report that knows your top songs and artists. YouTube Music search is built in too — songs play in the official YouTube player.</p>
 <div class="feat-grid">
-<div class="feat"><span class="fic"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h13"/></svg></span><div><b>Synced lyrics, 40 live effects</b><span>Lyrics follow the song line by line, with live previews and your own custom colour. Fetch once — offline forever.</span></div></div>
-<div class="feat"><span class="fic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></span><div><b>58 album art designs</b><span>Vinyl, CD, polaroid, glass, poster and more — every design animated, picked from a live gallery.</span></div></div>
-<div class="feat"><span class="fic"><svg viewBox="0 0 24 24"><path d="M6 4v16"/><path d="M12 4v16"/><path d="M18 4v16"/><circle cx="6" cy="14" r="2.2" fill="#fff"/><circle cx="12" cy="9" r="2.2" fill="#fff"/><circle cx="18" cy="16" r="2.2" fill="#fff"/></svg></span><div><b>Equalizer &amp; sleep timer</b><span>Full equalizer with your own saved presets, bass boost and a sleep timer for the night.</span></div></div>
-<div class="feat"><span class="fic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></span><div><b>HD covers, automatically</b><span>Missing or low-quality album art is replaced with crisp HD covers — one tap can fix the whole library.</span></div></div>
-<div class="feat"><span class="fic"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><div><b>Themes &amp; app icons</b><span>Colour presets, AMOLED pure black, switchable app icons — or let the app match the playing cover.</span></div></div>
-<div class="feat"><span class="fic"><svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><div><b>Private by design</b><span>No account, no sign-up, no tracking. Your songs and your data stay on your phone.</span></div></div>
+<div class="feat glass"><span class="fic"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h13"/></svg></span><div><b>Synced lyrics, 40 live effects</b><span>Lyrics follow the song line by line, with live previews and your own custom colour. Fetch once — offline forever.</span></div></div>
+<div class="feat glass"><span class="fic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></span><div><b>58 album art designs</b><span>Vinyl, CD, polaroid, glass, poster and more — every design animated, picked from a live gallery.</span></div></div>
+<div class="feat glass"><span class="fic"><svg viewBox="0 0 24 24"><path d="M6 4v16"/><path d="M12 4v16"/><path d="M18 4v16"/><circle cx="6" cy="14" r="2.2" fill="#fff"/><circle cx="12" cy="9" r="2.2" fill="#fff"/><circle cx="18" cy="16" r="2.2" fill="#fff"/></svg></span><div><b>Equalizer &amp; sleep timer</b><span>Full equalizer with your own saved presets, bass boost and a sleep timer for the night.</span></div></div>
+<div class="feat glass"><span class="fic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></span><div><b>HD covers, automatically</b><span>Missing or low-quality album art is replaced with crisp HD covers — one tap can fix the whole library.</span></div></div>
+<div class="feat glass"><span class="fic"><svg viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span><div><b>Your Music Report</b><span>Total plays, real listening time, your top songs and top artists — counted privately on your device.</span></div></div>
+<div class="feat glass"><span class="fic"><svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><div><b>Private by design</b><span>No account, no sign-up, no tracking. Your songs and your data stay on your phone.</span></div></div>
 </div>
 </section>
 
 <section>
 <h2>What's new</h2>
-<div class="newbox">
-<b>Version 2.38.0</b>
+<div class="newbox glass">
+<b>Version 2.43.0</b>
 <ul>
-<li>Removed: the Online tab — Dhunn is now a pure offline player for your own music library</li>
-<li>Online songs the old tab had saved in history, favorites or playlists are cleaned up automatically</li>
-<li>From 2.37.0: startup fix — the app opens instantly</li>
+<li>Your Music Report: total plays, listening time, top songs and top artists — on the Home screen</li>
+<li>Animated Home, Search and Library icons — with an on/off switch in Settings</li>
+<li>The Library now shows your total song count at the top</li>
+<li>Fixed: the song menu now scrolls, so Delete is always reachable</li>
+<li>Removed: song recognition</li>
+<li>From 2.42.0: YouTube Music songs play in the official YouTube player</li>
 </ul>
 </div>
 </section>
@@ -125,18 +151,18 @@ footer{padding-top:22px;color:var(--mut);font-size:.78rem;text-align:center}
 <section id="install">
 <h2>Install in 3 steps</h2>
 <div class="steps">
-<div class="step"><b><i>1</i>Download</b><span>Tap the Install button above and wait for the 12.3 MB APK to download.</span></div>
-<div class="step"><b><i>2</i>Allow &amp; install</b><span>Open the file. If asked, allow "Install unknown apps" for your browser once, then tap Install.</span></div>
-<div class="step"><b><i>3</i>Play</b><span>Open Dhunn and allow the Music &amp; audio permission — your library appears automatically.</span></div>
+<div class="step glass"><b><i>1</i>Download</b><span>Tap the Install button above and wait for the 11.9 MB APK to download.</span></div>
+<div class="step glass"><b><i>2</i>Allow &amp; install</b><span>Open the file. If asked, allow "Install unknown apps" for your browser once, then tap Install.</span></div>
+<div class="step glass"><b><i>3</i>Play</b><span>Open Dhunn and allow the Music &amp; audio permission — your library appears automatically.</span></div>
 </div>
 </section>
 
 <section>
 <h2>App info</h2>
-<div class="info">
-<div><b>Version</b><span>2.35.0</span></div>
-<div><b>Updated on</b><span>8 Nov 2026</span></div>
-<div><b>Size</b><span>12.3 MB</span></div>
+<div class="info glass">
+<div><b>Version</b><span>2.43.0</span></div>
+<div><b>Updated on</b><span>28 Nov 2026</span></div>
+<div><b>Size</b><span>11.9 MB</span></div>
 <div><b>Developer</b><span>Hamza Shafiq</span></div>
 <div><b>Category</b><span>Music &amp; Audio</span></div>
 <div><b>Price</b><span>Free</span></div>
@@ -147,26 +173,13 @@ footer{padding-top:22px;color:var(--mut);font-size:.78rem;text-align:center}
 <h2>Developer</h2>
 <p>Hamza Shafiq — follow for Dhunn updates, new features and more apps.</p>
 <div class="dev-links">
-<a href="https://www.youtube.com/@hamzashafiq786" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M23 12s0-3.85-.46-5.58a2.9 2.9 0 0 0-2-2C18.75 4 12 4 12 4s-6.75 0-8.54.42a2.9 2.9 0 0 0-2 2C1 8.15 1 12 1 12s0 3.85.46 5.58a2.9 2.9 0 0 0 2 2C5.25 20 12 20 12 20s6.75 0 8.54-.42a2.9 2.9 0 0 0 2-2C23 15.85 23 12 23 12ZM9.75 15.5v-7L15.5 12Z"/></svg>YouTube</a>
-<a href="https://t.me/hamzaeditz2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M21.9 4.4 18.8 19c-.23 1.03-.85 1.28-1.72.8l-4.76-3.51-2.3 2.21c-.25.26-.47.47-.96.47l.35-4.93 8.97-8.1c.39-.35-.08-.54-.6-.2L6.6 13.34 1.83 11.85c-1.04-.32-1.06-1.04.22-1.54l18.66-7.19c.86-.32 1.62.2 1.19 1.28Z"/></svg>Telegram</a>
+<a class="glass" href="https://www.youtube.com/@hamzashafiq786" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M23 12s0-3.85-.46-5.58a2.9 2.9 0 0 0-2-2C18.75 4 12 4 12 4s-6.75 0-8.54.42a2.9 2.9 0 0 0 2 2C1 8.15 1 12 1 12s0 3.85.46 5.58a2.9 2.9 0 0 0 2 2C5.25 20 12 20 12 20s6.75 0 8.54-.42a2.9 2.9 0 0 0 2-2C23 15.85 23 12 23 12ZM9.75 15.5v-7L15.5 12Z"/></svg>YouTube</a>
+<a class="glass" href="https://t.me/hamzaeditz2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M21.9 4.4 18.8 19c-.23 1.03-.85 1.28-1.72.8l-4.76-3.51-2.3 2.21c-.25.26-.47.47-.96.47l.35-4.93 8.97-8.1c.39-.35-.08-.54-.6-.2L6.6 13.34 1.83 11.85c-1.04-.32-1.06-1.04.22-1.54l18.66-7.19c.86-.32 1.62.2 1.19 1.28Z"/></svg>Telegram</a>
 </div>
 </section>
 
 <footer>© 2026 Dhunn · Made by Hamza Shafiq</footer>
 
 </div>
-<canvas id="sp-stars" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
-<div style="position:fixed;width:460px;height:460px;border-radius:50%;filter:blur(120px);background:#123a8f;top:-160px;left:-120px;z-index:0;pointer-events:none;opacity:.45"></div>
-<div style="position:fixed;width:400px;height:400px;border-radius:50%;filter:blur(120px);background:#0b3b4d;bottom:-140px;right:-120px;z-index:0;pointer-events:none;opacity:.45"></div>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<script>
-(function(){var cv=document.getElementById('sp-stars'),cx=cv.getContext('2d'),W,H,st=[];
-function sz(){W=cv.width=innerWidth;H=cv.height=innerHeight;st=[];var n=Math.min(140,Math.floor(W*H/10000));for(var i=0;i<n;i++)st.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.3,p:Math.random()*6.28,s:.4+Math.random()*1.2});}
-sz();addEventListener('resize',sz);
-(function tick(t){cx.clearRect(0,0,W,H);for(var i=0;i<st.length;i++){var s=st[i];cx.globalAlpha=.3+.65*Math.abs(Math.sin(t*.0004*s.s+s.p));cx.fillStyle='#dbeafe';cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.29);cx.fill();}requestAnimationFrame(tick);})(0);
-var m=document.querySelector('.wrap');if(m){m.style.position='relative';m.style.zIndex='1';}
-})();
-</script>
 </body>
 </html>
